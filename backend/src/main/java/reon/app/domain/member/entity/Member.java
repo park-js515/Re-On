@@ -56,5 +56,10 @@ public class Member extends BaseEntity {
     public void updateRefreshToken(String refreshToken){
         this.refreshToken = refreshToken;
     }
-
+    public void updateDeleted(){
+        this.deleted = 1;
+    }
+    public void updateBanned(){
+        this.deleted = 1;
+    }
 }
