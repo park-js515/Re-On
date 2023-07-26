@@ -1,52 +1,128 @@
-import styled from "styled-components";
+import { useEffect, useState, useRef } from "react";
+import { Box1, Box2 } from "./ProfileTemplete";
+import { ProfileImg, ProfileTier } from "./ProfileImg/index";
+import { Nickname, Text, ImgInfo, InfoDetail, ImgModify } from "./ProfileInfo";
+import { Button, ModalOverlay, ModalContent } from "./ProfileModify/index";
+import {
+  SRowProfileImg,
+  SColProfileImg,
+  SRowInfo,
+  SRowModify,
+  SRowClose,
+  SCol,
+} from "./style";
 
-const SBox1 = styled.div`
-  box-sizing: border-box;
-  background-color: #2f2c2c;
-  height: 80vh;
-  width: 25vw;
-  border-radius: 15px;
-  padding: 10px;
+const useModal = () => {
+  const [isOpen, setIsOpen] = useState(false);
 
-  margin: 10px;
-`;
+  const changeOpen = () => {
+    setIsOpen((current) => !current);
+  };
 
-const SBox2 = styled.div`
-  box-sizing: border-box;
-  background-color: #808080d1;
-  width: 100%;
-  aspect-ratio: 4 / 3; /* 원하는 가로: 세로 비율을 지정 */ 
-  border-radius: 15px;
-`;
+  useEffect(() => {
+    document.body.style.overflow = isOpen ? "hidden" : "auto";
+  }, [isOpen]);
 
-const SBox3 = styled.div`
-  box-sizing: border-box;
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  background-color: #f0f0f0;
-`;
+  return { isOpen, changeOpen };
+};
 
-// const InnerCircle = styled`
-//   position: absolute;
-//   width: 100%;
-//   height: 100%;
-// `
+const useInput = (initialValue) => {
+  const [input, setInput] = useState({
+    src: initialValue,
+  });
+
+  const handleInput = (event) => {
+    const file = event.target.files[0];
+    setInput((current) => {return {...current, src: URL.createObjectURL(file)}})
+    console.log(URL.createObjectURL(file));
+  };
+
+  return [input, handleInput];
+};
 
 const Profile = () => {
-  // const imagePath = "images/cat-551554_1280.jpg";
+  const [pic1, setPic1] = useInput("images/aespa.jpg");
+
+  const pic2 = {
+    src: "images/medal.jpg",
+  };
+
+  const text =
+    "최애의스폰지밥을먹는뚱이가잡는해파리를회쳐먹는쯔양을보고있는나를\n바라보는팀원들의따까운눈빛으로구운소시지를먹는희창이의한숨😢";
+
+  const instagram = {
+    src: "images/instagram.png",
+  };
+
+  const meta = {
+    src: "images/meta.png",
+  };
+
+  const gmail = {
+    src: "images/gmail.png",
+  };
+
+  const { isOpen, changeOpen } = useModal();
+
+  const modify = {
+    src: "images/modify.png",
+    onClick: changeOpen,
+  };
+
+  const example = "admin@admin.kr";
+  const fileInput = useRef(null);
 
   return (
-    <div>
-      <SBox1>
-        <SBox2>
-          <SBox3/>
-            {/* <InnerCircle></InnerCircle> */}
-        </SBox2>
-      </SBox1>
-    </div>
+    <>
+      <Box1>
+        <Box2>
+          <SRowProfileImg>
+            <SColProfileImg>
+              <ProfileImg {...pic1}></ProfileImg>
+            </SColProfileImg>
+            <SCol>
+              <ProfileTier {...pic2}></ProfileTier>
+            </SCol>
+          </SRowProfileImg>
+        </Box2>
+
+        <Nickname>주성시치</Nickname>
+        <Text>{text}</Text>
+
+        <SRowInfo>
+          <ImgInfo {...instagram}></ImgInfo>
+          <InfoDetail>{example}</InfoDetail>
+        </SRowInfo>
+        <SRowInfo>
+          <ImgInfo {...meta}></ImgInfo>
+          <InfoDetail>{example}</InfoDetail>
+        </SRowInfo>
+        <SRowInfo>
+          <ImgInfo {...gmail}></ImgInfo>
+          <InfoDetail>{example}</InfoDetail>
+        </SRowInfo>
+        <SRowModify>
+          <ImgModify {...modify}></ImgModify>
+        </SRowModify>
+      </Box1>
+
+      {isOpen ? (
+        <ModalOverlay>
+          <ModalContent>
+            <SRowClose>
+              <Button onClick={changeOpen}>X</Button>
+            </SRowClose>
+            <input
+              type="file"
+              accept="image/jpg, image/png, image/jpeg"
+              name="profileImg"
+              ref={fileInput}
+              onChange={setPic1}
+            ></input>
+          </ModalContent>
+        </ModalOverlay>
+      ) : null}
+    </>
   );
 };
 
