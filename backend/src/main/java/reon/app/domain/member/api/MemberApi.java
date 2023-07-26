@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.*;
 import reon.app.domain.member.entity.Member;
 import reon.app.domain.member.service.MemberService;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 
 @Api(tags = {"User"})
 @RestController
@@ -23,5 +26,13 @@ public class MemberApi {
     public ResponseEntity<Member> getMember(@PathVariable Long id){
         Member member = memberService.findById(id);
         return new ResponseEntity<>(member,HttpStatus.OK);
+    }
+
+    @ApiOperation(value="로그아웃", notes = "로그아웃")
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(HttpServletRequest httpServletRequest){
+        HttpSession session = httpServletRequest.getSession();
+        session.invalidate();
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
