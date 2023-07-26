@@ -28,7 +28,7 @@ public class SwaggerConfiguration {
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("RE:On REST API")
+                .title("RE:ON REST API")
                 .description("연기 연습 플랫폼 RE:ON의 swagger api 입니다")
                 .version("1.0.0")
 //                .termsOfServiceUrl("https://antstudy.tistory.com/")
