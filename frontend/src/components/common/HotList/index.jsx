@@ -1,26 +1,9 @@
 import React from "react";
-import VideoItem from "./VideoItem";
-import SGrid4 from "./style";
+import VideoItem from "../VideoList/VideoItem/index";
+import SCarousel from "./style";
 
-const VideoList = (props) => {
-    const LIST_TYPE = props.type
-    let apiURL = null;
-
-    if (LIST_TYPE === "public"){
-        apiURL = "https://"
-    }
-    else if (LIST_TYPE === "private"){
-        apiURL = "https://"
-    }
-    else if (LIST_TYPE === "like"){
-        apiURL = "https://"
-    }
-    else if (LIST_TYPE === "feed"){
-        apiURL = "https://"
-    }
-    else if (LIST_TYPE === "normal"){
-        apiURL = "https://"
-    }
+const HotList = () => {
+    const API_URL = "https://"
 
     function getVideoInfos() {
         // axios({
@@ -41,7 +24,7 @@ const VideoList = (props) => {
                 like_cnt:3,
                 comments_cnt:5,
         }
-        for (let i = 1; i<=20; i++){
+        for (let i = 1; i<=10; i++){
             TEMPINFO.key = i
             ret.push({...TEMPINFO})
         }
@@ -61,10 +44,11 @@ const VideoList = (props) => {
     })
 
     return (
-        <SGrid4>
+        <SCarousel>
+            <h3>Weekly TOP 10</h3>
             {VIDEOINFOS}
-        </SGrid4>
+        </SCarousel>
     )
 }
 
-export default VideoList
+export default HotList;

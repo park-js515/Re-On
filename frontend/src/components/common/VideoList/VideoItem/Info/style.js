@@ -7,7 +7,26 @@ const SInfo = styled.div`
 `
 
 const SImg = styled.img`
-    width: 2.5rem;
-    height: 2.5rem;
-    border-radius: 1rem;
+    width: 40px;
+    height: 40px;
+    border-radius: 20px;
 `
+const SDiv = styled.div`
+    display: flex;
+`
+
+const STitle = styled.span`
+    font-size: 14px;
+`
+const SName = styled.span`
+    font-size: 12px;
+`
+
+const SExtraInfo = styled.span`
+    text-align: right;
+`
+const SLink = styled.a`
+    text-decoration: none;
+    color: black;
+`
+export {SInfo, SImg, SDiv, STitle, SName, SExtraInfo, SLink};

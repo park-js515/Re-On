@@ -1,7 +1,9 @@
 import styled from "styled-components";
 
 const SThumbNail = styled.img`
-    border-radius : 20px;
-    width : 100px;
-    height : 100px;
+    border-radius : 10px;
+    width : 200px;
+    height : 200px;
 `
+
+export default SThumbNail;

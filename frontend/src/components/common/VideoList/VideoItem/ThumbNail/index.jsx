@@ -1,5 +1,5 @@
 import React from "react"
-import { SThumbNail } from "./style"
+import SThumbNail from "./style"
 
 const ThumbNail = (props) => {
     return (
