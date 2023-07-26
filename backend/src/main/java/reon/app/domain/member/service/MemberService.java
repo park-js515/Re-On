@@ -8,6 +8,6 @@ public interface MemberService {
 //    void modify(MemberModifyRequest memberModifyRequest);
     void updateProfileImg(MultipartFile multipartFile, Long memberId);
     void removeProfileImg(Long memberId);
-    void delete(Long loginId);
+    void delete();
     void ban(Long memberId);
 }

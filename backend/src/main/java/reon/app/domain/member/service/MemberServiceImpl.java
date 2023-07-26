@@ -31,7 +31,7 @@ public class MemberServiceImpl implements MemberService{
     }
 
     @Override
-    public void delete(Long loginId) {
+    public void delete() {
 
     }
 
