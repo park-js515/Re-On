@@ -1,10 +1,12 @@
-import Button from "components/common/NavBar/Button";
+import BackStage from "components/BackStage";
 
 const BackStagePage = () => {
   return (
     <div>
-      <div>BackStagePage</div>
-      <Button to="/rank">입장</Button>
+      <div>
+        <BackStage />
+      </div>
+      {/* <Button to="/rank">입장</Button> */}
     </div>
   );
 };
