@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import FAQItem from "./FAQItem";
-import FAQPage from "./FAQPage";
+import Pagination from "./Pagination";
 
 const FAQList = ({ selectedTab, faqData }) => {
   const itemsPerPage = 5;
@@ -31,7 +31,7 @@ const FAQList = ({ selectedTab, faqData }) => {
             content={faqData.content}
           />
         ))}
-      <FAQPage
+      <Pagination
         totalPages={totalPages}
         handleClick={handleClick}
         currentPage={currentPage}

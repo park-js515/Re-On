@@ -6,7 +6,7 @@ const SButton = styled.button`
   padding: 10px;
   border-radius: 5px;
   border: none;
-  background-color: ${(props) => (props.isActive ? "#b9ceac" : "#f0f0f0")};
+  background-color: ${(props) => (props.$isActive ? "#b9ceac" : "#f0f0f0")};
   cursor: pointer;
 
   &:hover {
@@ -24,14 +24,14 @@ const PaginationWrapper = styled.div`
   padding: 20px;
 `;
 
-const FAQPage = ({ totalPages, handleClick, currentPage }) => {
+const Pagenation = ({ totalPages, handleClick, currentPage }) => {
   return (
     <PaginationWrapper>
       {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
         <SButton
           key={page}
           onClick={(event) => handleClick(event, page)}
-          isActive={page === currentPage}
+          $isActive={page === currentPage}
         >
           {page}
         </SButton>
@@ -40,4 +40,4 @@ const FAQPage = ({ totalPages, handleClick, currentPage }) => {
   );
 };
 
-export default FAQPage;
+export default Pagenation;
