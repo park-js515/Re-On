@@ -12,7 +12,7 @@ const NavBar = () => {
       <Button to="/feed">투표해줘</Button>
       <Button to="/faq">FAQ</Button>
       <Button to="/mypage">마이페이지</Button>
-      {/* <Button to="/login">로그인</Button> */}
+      <Button to="/login">로그인</Button>
       {/* <Button to="/register">회원가입</Button> */}
     </SNavBar>
   );
