@@ -1,5 +1,12 @@
+import UserVideo from "components/common/UserVideo/index";
+
 const RankPage = () => {
-  return <div>RankPage</div>;
+  return (
+    <div>
+      RankPage
+      <UserVideo />;
+    </div>
+  );
 };
 
 export default RankPage;
