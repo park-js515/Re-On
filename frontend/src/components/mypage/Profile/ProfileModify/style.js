@@ -25,11 +25,17 @@ const SModalContent = styled(SDiv)`
 `;
 
 const SButton = styled.button`
-	background-color: none;
-	border: none;
-	&:hover {
-		background-color: #9d9292ee;
-	}
+  background-color: none;
+  border: none;
+  &:hover {
+    background-color: #9d9292ee;
+  }
 `;
 
-export { SModalOverlay, SModalContent, SButton };
+// 스타일은 추후에 설정 에정.
+const SInput = styled.input``;
+const SInputText = styled.textarea`
+	border: 1px solid black;
+`;
+
+export { SModalOverlay, SModalContent, SButton, SInput, SInputText };
