@@ -10,7 +10,7 @@ const Nickname = ({ children }) => {
   return <SNickname>{children}</SNickname>;
 };
 
-const Text = ({ children }) => {
+const StatusText = ({ children }) => {
   return <SText>{children}</SText>;
 };
 
@@ -26,4 +26,4 @@ const ImgModify = ({ src, onClick }) => {
   return <SImgModify src={src} onClick={() => {onClick()}}></SImgModify>;
 };
 
-export { Nickname, Text, ImgInfo, InfoDetail, ImgModify };
+export { Nickname, StatusText, ImgInfo, InfoDetail, ImgModify };
