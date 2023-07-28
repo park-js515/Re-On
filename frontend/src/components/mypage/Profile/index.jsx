@@ -1,13 +1,7 @@
 import { useModal, useInputImg, useInputText } from "./hooks";
 import { Box1, Box2 } from "./ProfileTemplete";
-import { ProfileImg, ProfileTier } from "./ProfileImg/index";
-import {
-  Nickname,
-  StatusText,
-  ImgInfo,
-  InfoDetail,
-  ImgModify,
-} from "./ProfileInfo";
+import { ProfileImg } from "./ProfileImg/index";
+import { Nickname, StatusText, ImgModify } from "./ProfileInfo";
 import {
   Modal,
   Button,
@@ -16,12 +10,11 @@ import {
   InputNick,
 } from "./ProfileModify/index";
 import {
-  SRowProfileImg,
+  SRowProfile,
   SColProfileImg,
-  SRowInfo,
   SRowModify,
   SRowClose,
-  SCol,
+  SColw100,
 } from "./style";
 
 // 문제점
@@ -37,10 +30,6 @@ const Profile = () => {
 
   const [Img1, setImg1] = useInputImg("images/tes.jpg");
 
-  const pic2 = {
-    src: "images/medal.jpg",
-  };
-
   const message =
     "최애의스폰지밥을먹는뚱이가잡는해파리를회쳐먹는쯔양을보고있는나를\n바라보는팀원들의따까운눈빛으로구운소시지를먹는희창이의한숨😢";
   const [statusMessage, setStatusMessage] = useInputText(
@@ -54,57 +43,28 @@ const Profile = () => {
     return length <= 16;
   });
 
-  const instagram = {
-    src: "images/instagram.png",
-  };
-
-  const meta = {
-    src: "images/meta.png",
-  };
-
-  const gmail = {
-    src: "images/gmail.png",
-  };
-
   const modify = {
     src: "images/modify.png",
     onClick: handleIsOpen,
   };
 
-  const example = "admin@admin.kr";
-
   return (
     <>
       <Box1>
         <Box2>
-          <SRowProfileImg>
+          <SRowProfile>
             <SColProfileImg>
               <ProfileImg {...Img1}></ProfileImg>
             </SColProfileImg>
-            <SCol>
-              <ProfileTier {...pic2}></ProfileTier>
-            </SCol>
-          </SRowProfileImg>
+            <SColw100>
+              <Nickname>{nickName}</Nickname>
+              <StatusText>{statusMessage}</StatusText>
+              <SRowModify>
+                <ImgModify {...modify}></ImgModify>
+              </SRowModify>
+            </SColw100>
+          </SRowProfile>
         </Box2>
-
-        <Nickname>{nickName}</Nickname>
-        <StatusText>{statusMessage}</StatusText>
-
-        <SRowInfo>
-          <ImgInfo {...instagram}></ImgInfo>
-          <InfoDetail>{example}</InfoDetail>
-        </SRowInfo>
-        <SRowInfo>
-          <ImgInfo {...meta}></ImgInfo>
-          <InfoDetail>{example}</InfoDetail>
-        </SRowInfo>
-        <SRowInfo>
-          <ImgInfo {...gmail}></ImgInfo>
-          <InfoDetail>{example}</InfoDetail>
-        </SRowInfo>
-        <SRowModify>
-          <ImgModify {...modify}></ImgModify>
-        </SRowModify>
       </Box1>
 
       <Modal isOpen={isOpen} handleIsOpen={handleIsOpen}>

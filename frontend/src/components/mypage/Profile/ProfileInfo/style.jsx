@@ -12,6 +12,7 @@ const SText = styled(SDiv)`
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 5px;
+  word-wrap: break-word;
 `;
 
 const SInfoDetail = styled(SDiv)`

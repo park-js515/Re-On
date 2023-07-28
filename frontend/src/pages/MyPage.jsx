@@ -1,10 +1,11 @@
-import { Profile } from "components/mypage/Profile/index";
+import { Profile } from "components/MyPage/Profile/index";
+import { MyFeed } from "components/MyPage/MyFeed/index";
 
 const MyPage = () => {
   return (
     <div>
-      <h1>MyPage</h1>
       <Profile />
+      <MyFeed/>
     </div>
   );
 };

@@ -1,44 +1,38 @@
-import { useState } from "react";
+import { useTabs } from "./hooks";
 import * as Tab from "./Tabs/index";
+import * as Sty from "./style";
 
 const contents = ["Public", "Private", "Like", "Uploaded"];
-
-const useTabs = (initialTab, allTabs) => {
-  const [currentIndex, setCurrentIndex] = useState(initialTab);
-
-  if (!allTabs || !Array.isArray(allTabs)) {
-    return;
-  }
-
-  return {
-    currentTab: allTabs[currentIndex],
-    changeTab: setCurrentIndex,
-  };
-};
 
 const MyFeed = () => {
   const { currentTab, changeTab } = useTabs(0, contents);
 
   return (
-    <>
-      {contents.map((tab, index) => {
-        return (
-          <div key={index}>
+    <Sty.SRoww100>
+      <Sty.SColTab>
+        {contents.map((tab, index) => {
+          return (
             <Tab.TabButton
-              isActive={() => {return currentTab === index}}
-              onClick={() => {
-                changeTab(index);
-              }}
+              key={index}
+              selected={currentTab === tab}
+              onClick={() => changeTab(index)}
             >
               {tab}
             </Tab.TabButton>
-            <Tab.TabContent isActive={index === currentTab}>
+          );
+        })}
+      </Sty.SColTab>
+
+      <Sty.SColFeedList>
+        {contents.map((tab, index) => {
+          return (
+            <Tab.TabContent key={index} isActive={currentTab === tab}>
               {tab}
             </Tab.TabContent>
-          </div>
-        );
-      })}
-    </>
+          );
+        })}
+      </Sty.SColFeedList>
+    </Sty.SRoww100>
   );
 };
 
