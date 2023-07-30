@@ -22,6 +22,7 @@ const SModalContent = styled(SDiv)`
   background-color: #fff;
   padding: 2.5px;
   border-radius: 5px;
+  z-index: 9998;
 `;
 
 const SButton = styled.button`

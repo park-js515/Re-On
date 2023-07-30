@@ -10,14 +10,20 @@ const SRow = styled(SDiv)`
 `;
 const SCol = styled(SDiv)`
   display: flex;
+  flex-direction: column;
 `;
 
-const SRowProfileImg = styled(SRow)`
+const SColw100 = styled(SCol)`
+  width: 100%;
+`
+
+const SRowProfile = styled(SRow)`
   height: 100%;
   width: 100%;
 `;
 
 const SColProfileImg = styled(SCol)`
+  justify-content: center;
   align-items: center;
   margin: 5px;
 `;
@@ -34,4 +40,4 @@ const SRowClose = styled(SRow)`
 	justify-content: end;
 `
 
-export { SRowProfileImg, SColProfileImg, SRowInfo, SRowModify, SCol, SRowClose };
+export { SRowProfile, SColProfileImg, SRowInfo, SColw100, SRowModify, SCol, SRowClose };

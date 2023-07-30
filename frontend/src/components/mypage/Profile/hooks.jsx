@@ -9,6 +9,9 @@ const useModal = () => {
 
   useEffect(() => {
     document.body.style.overflow = isOpen ? "hidden" : "auto";
+    return () => {
+      document.body.style.overflow = "auto";
+    }
   }, [isOpen]);
 
   return { isOpen, handleIsOpen };

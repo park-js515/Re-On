@@ -1,4 +1,4 @@
-import { useRef, forwardRef } from "react";
+import { useRef, forwardRef, useEffect } from "react";
 import {
   SModalOverlay,
   SModalContent,
@@ -34,6 +34,23 @@ const Modal = ({ children, isOpen, handleIsOpen }) => {
     }
   };
 
+  useEffect(() => {
+    if (!isOpen) {
+      return;
+    }
+    const handleESC = (event) => {
+      if (event.key === "Escape") {
+        handleIsOpen();
+      }
+    };
+
+    document.addEventListener("keydown", handleESC);
+
+    return () => {
+      document.removeEventListener("keydown", handleESC);
+    };
+  }, [isOpen, handleIsOpen]);
+
   return (
     <ModalOverlay isOpen={isOpen} onDoubleClick={onDoubleClick}>
       <ModalContent ref={modalRef} isOpen={isOpen}>
@@ -64,15 +81,15 @@ const InputText = ({ value, onChange }) => {
   return <SInputText value={value} onChange={onChange} {...props}></SInputText>;
 };
 
-const InputNick = ({value, onChange}) => {
+const InputNick = ({ value, onChange }) => {
   const props = {
     type: "text",
     name: "nickName",
     id: "nickName",
-  }
+  };
 
-  return <SInput value={value} onChange={onChange} {...props}></SInput>
-}
+  return <SInput value={value} onChange={onChange} {...props}></SInput>;
+};
 
 const Button = ({ children, onClick }) => {
   return <SButton onClick={onClick}>{children}</SButton>;

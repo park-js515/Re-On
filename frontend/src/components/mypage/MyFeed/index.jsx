@@ -1,44 +1,45 @@
-import { useState } from "react";
+import { useTabs } from "./hooks";
 import * as Tab from "./Tabs/index";
+import * as FeedList from "./FeedList";
+import * as Sty from "./style";
 
 const contents = ["Public", "Private", "Like", "Uploaded"];
 
-const useTabs = (initialTab, allTabs) => {
-  const [currentIndex, setCurrentIndex] = useState(initialTab);
-
-  if (!allTabs || !Array.isArray(allTabs)) {
-    return;
-  }
-
-  return {
-    currentTab: allTabs[currentIndex],
-    changeTab: setCurrentIndex,
-  };
-};
-
 const MyFeed = () => {
   const { currentTab, changeTab } = useTabs(0, contents);
+  const scrollTop = () => {window.scroll({ top: 0, left: 0, behavior: "smooth" })};
 
   return (
-    <>
-      {contents.map((tab, index) => {
-        return (
-          <div key={index}>
-            <Tab.TabButton
-              isActive={() => {return currentTab === index}}
-              onClick={() => {
-                changeTab(index);
-              }}
-            >
-              {tab}
-            </Tab.TabButton>
-            <Tab.TabContent isActive={index === currentTab}>
-              {tab}
+    <Sty.SRoww100>
+      <Sty.SColTab>
+        <Sty.SBottom>
+          {contents.map((tab, index) => {
+            return (
+              <Tab.TabButton
+                key={index}
+                selected={currentTab === tab}
+                onClick={() => {
+                  scrollTop();
+                  changeTab(index);
+                }}
+              >
+                {tab}
+              </Tab.TabButton>
+            );
+          })}
+        </Sty.SBottom>
+      </Sty.SColTab>
+
+      <Sty.SColFeedList>
+        {contents.map((tab, index) => {
+          return (
+            <Tab.TabContent key={index} isActive={currentTab === tab}>
+              <FeedList.FeedList tabNum={index}></FeedList.FeedList>
             </Tab.TabContent>
-          </div>
-        );
-      })}
-    </>
+          );
+        })}
+      </Sty.SColFeedList>
+    </Sty.SRoww100>
   );
 };
 
