@@ -14,7 +14,7 @@ const SLayout = styled.div`
 `;
 
 const SLogContainer = styled.div`
-  height: 100px; /* 원하는 높이 설정 */
+  height: 300px; /* 원하는 높이 설정 */
   font-size: 15px;
   overflow-y: auto; /* 스크롤 설정 */
 `;
@@ -205,7 +205,9 @@ const BattleRoom = () => {
       videoRef.current.addEventListener("ended", handleEnded); // ended면 handleEnded() 실행
       // 클린업 함수에서 이벤트 리스너 제거
       return () => {
-        videoRef.current.removeEventListener("ended", handleEnded);
+        if (videoRef.current) {
+          videoRef.current.removeEventListener("ended", handleEnded);
+        }
       };
     }
   }, [videoRef, stage]); // videoRef 변화 시 useEffect 실행
