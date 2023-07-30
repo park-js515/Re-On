@@ -31,31 +31,48 @@ const SVideo = styled.video`
 `;
 
 const BattleRoom = () => {
+  // #################### 유저 더미 ################
+  const [userOne, setUserOne] = useState({
+    id: "1",
+    name: "종상",
+    expression: 0,
+    voice: 0,
+    total: 0,
+  });
+
+  const [userTwo, setUserTwo] = useState({
+    id: "2",
+    name: "시치",
+    expression: 0,
+    voice: 0,
+    total: 0,
+  });
+
   // #################       모달      ####################
   const [saveStat, setSaveStat] = useState("");
-  const { modalVisible: saveModalVisible, toggleModal: toggleSaveModal } =
-    useModal(); // use the hook
-  const { modalVisible: publicModalVisible, toggleModal: togglePublicModal } =
-    useModal(); // use the hook
+  const { modalVisible: saveModalVisible, toggleModal: toggleSaveModal } = useModal(); // use the hook
+  const { modalVisible: publicModalVisible, toggleModal: togglePublicModal } = useModal(); // use the hook
 
   const [isSave, SetIsSave] = useState(false);
   const [isPublic, SetIsPublic] = useState(false);
 
   const handleSave = () => {
     SetIsSave(true); // Save = True
-    toggleSaveModal(); // Save모달 꺼짐
-    togglePublicModal(); // Public모달 켜짐
+    toggleSaveModal(); // Save모달 on/off
+    togglePublicModal(); // Public모달 on/off
   };
 
   const handlePublic = () => {
     SetIsPublic(true); // Public = True
-    togglePublicModal(); // Public모달 꺼짐
+    togglePublicModal(); // Public모달 on/off
   };
 
   // 모달 상태 변화 감지
   useEffect(() => {
     setSaveStat(`isSave : '${isSave}' / isPublic : '${isPublic}'`);
+    setLog((prevLog) => [...prevLog, `${logMessageTime} | 저장 : ${isSave}, 공개 : ${isPublic}`]);
   }, [isSave, isPublic]);
+
   // #################################################
 
   // // #################       게임 로그 저장      ####################
@@ -105,10 +122,7 @@ const BattleRoom = () => {
       setLog((prevLog) => [...prevLog, `${logMessageTime} | 이미 연결중.`]);
     } else {
       if (userOneListen) {
-        setLog((prevLog) => [
-          ...prevLog,
-          `${logMessageTime} | 유저1 이미 Listen.`,
-        ]);
+        setLog((prevLog) => [...prevLog, `${logMessageTime} | 유저1 이미 Listen.`]);
       } else if (userTwoListen) {
         setLog((prevLog) => [...prevLog, `${logMessageTime} | 연결!`]);
         setUserOneListen(true);
@@ -126,10 +140,7 @@ const BattleRoom = () => {
       setLog((prevLog) => [...prevLog, `${logMessageTime} | 이미 연결중.`]);
     } else {
       if (userTwoListen) {
-        setLog((prevLog) => [
-          ...prevLog,
-          `${logMessageTime} | 유저2 이미 Listen.`,
-        ]);
+        setLog((prevLog) => [...prevLog, `${logMessageTime} | 유저2 이미 Listen.`]);
       } else if (userOneListen) {
         setLog((prevLog) => [...prevLog, `${logMessageTime} | 연결!`]);
         setUserTwoListen(true);
@@ -147,8 +158,7 @@ const BattleRoom = () => {
   const [userCamOneBorder, setUserCamOneBorder] = useState(false); // 유저1 플레이시 테두리
   const [userCamTwoBorder, setUserCamTwoBorder] = useState(false); // 유저2 플레이시 테두리
 
-  const { videoRef, videoDuration, isPlaying, handlePlayVideo } =
-    useVideoPlayer(); // 비디오 플레이 훅
+  const { videoRef, videoDuration, isPlaying, handlePlayVideo } = useVideoPlayer(); // 비디오 플레이 훅
 
   // 턴 시작
   useEffect(() => {
@@ -163,8 +173,11 @@ const BattleRoom = () => {
     } else if (stage === "USER_TWO_TURN") {
       setLog((prevLog) => [...prevLog, `${logMessageTime} | 두번째 연기 시작`]);
       userTwoPlay();
+    } else if (stage === "CALCULATION") {
+      setLog((prevLog) => [...prevLog, `${logMessageTime} | 계산 시작`]);
+      caculateScore(); // 점수계산
     } else if (stage === "END") {
-      setLog((prevLog) => [...prevLog, `${logMessageTime} | 연기 종료`]);
+      setLog((prevLog) => [...prevLog, `${logMessageTime} | 게임 종료`]);
     }
   }, [stage]);
 
@@ -183,8 +196,9 @@ const BattleRoom = () => {
           // 유저2 턴 종료
         } else if (stage === "USER_TWO_TURN") {
           setLog((prevLog) => [...prevLog, `${logMessageTime} | 유저 2 종료`]);
+          setLog((prevLog) => [...prevLog, `${logMessageTime} | 연기 종료`]);
           setUserCamTwoBorder(false);
-          setStage("END");
+          setStage("CALCULATION");
         }
       };
       // 비디오 요소에 이벤트 리스너 추가
@@ -225,7 +239,33 @@ const BattleRoom = () => {
     handlePlayVideo();
   };
 
-  console.log(stage);
+  // 점수 계산
+  const caculateScore = async () => {
+    //  AI계산
+    const getUserOneExpression = 92;
+    const getUserOneVoice = 81;
+    setUserOne((prevState) => ({
+      ...prevState,
+      expression: getUserOneExpression,
+      voice: getUserOneVoice,
+      total: getUserOneExpression + getUserOneVoice,
+    }));
+
+    const getUserTwoExpression = 12;
+    const getUserTwoVoice = 23;
+    setUserTwo((prevState) => ({
+      ...prevState,
+      expression: getUserTwoExpression,
+      voice: getUserTwoVoice,
+      total: getUserTwoExpression + getUserTwoVoice,
+    }));
+
+    setLog((prevLog) => [...prevLog, `${logMessageTime} | 계산 완료`]);
+    setStage("END");
+    await startLoading(3000);
+    toggleSaveModal(); // 저장 모달
+  };
+
   return (
     <div>
       <div>컴포넌트 확인용</div>
@@ -241,21 +281,26 @@ const BattleRoom = () => {
       </SLayout>
       <hr />
       <SLayout>
-        <SVideo
-          ref={videoRef}
-          src="video/ISawTheDevil.mp4"
-          $isPlaying={isPlaying}
-        />
-        <UserCam
-          onClick={handleClickUserOneCam}
-          isOn={userOneListen}
-          border={userCamOneBorder}
-        />
-        <UserCam
-          onClick={handleClickUserTwoCam}
-          isOn={userTwoListen}
-          border={userCamTwoBorder}
-        />
+        <SVideo ref={videoRef} src="video/ISawTheDevil.mp4" $isPlaying={isPlaying} />
+        <UserCam onClick={handleClickUserOneCam} isOn={userOneListen} border={userCamOneBorder} />
+        <UserCam onClick={handleClickUserTwoCam} isOn={userTwoListen} border={userCamTwoBorder} />
+        <>
+          {stage === "END" && (
+            <div>
+              <h2>게임결과</h2>
+              <div>
+                {userOne.name}의 표정: {userOne.expression}
+                {userOne.name}의 음성: {userOne.voice}
+                {userOne.name}의 총점: {userOne.total}
+              </div>
+              <div>
+                {userTwo.name}의 표정: {userTwo.expression}
+                {userTwo.name}의 음성: {userTwo.voice}
+                {userTwo.name}의 총점: {userTwo.total}
+              </div>
+            </div>
+          )}
+        </>
       </SLayout>
       <hr />
       <SLayout>

@@ -22,16 +22,22 @@ const SButton = styled(Button)``;
 const STypography = styled(Typography)``;
 const SModal = styled(Modal)``;
 
-const CustomModal = ({ open, title, description, onConfirm, onClose }) => {
+const SDescriptionTypography = styled(Typography)`
+  font-size: 18px;
+  color: #333;
+  // 이곳에 원하는 스타일을 추가하십시오.
+`;
+
+const CustomModal = ({ open, title, description, onConfirm, onClose, showCancel = true }) => {
   return (
     <div>
       <SModal open={open}>
         <SBox>
           <STypography>{title}</STypography>
-          <STypography>{description}</STypography>
+          <SDescriptionTypography>{description}</SDescriptionTypography>
           <div>
             <SButton onClick={onConfirm}>확인</SButton>
-            <SButton onClick={onClose}>취소</SButton>
+            {showCancel && <SButton onClick={onClose}>취소</SButton>}
           </div>
         </SBox>
       </SModal>
