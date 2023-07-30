@@ -35,6 +35,9 @@ const Modal = ({ children, isOpen, handleIsOpen }) => {
   };
 
   useEffect(() => {
+    if (!isOpen) {
+      return;
+    }
     const handleESC = (event) => {
       if (event.key === "Escape") {
         handleIsOpen();
@@ -46,7 +49,7 @@ const Modal = ({ children, isOpen, handleIsOpen }) => {
     return () => {
       document.removeEventListener("keydown", handleESC);
     };
-  }, [handleIsOpen]);
+  }, [isOpen, handleIsOpen]);
 
   return (
     <ModalOverlay isOpen={isOpen} onDoubleClick={onDoubleClick}>

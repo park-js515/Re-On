@@ -22,7 +22,15 @@ const SColTab = styled(SColw10)`
 const SColFeedList = styled.div`
   width: 90%;
   margin: 15px;
-  border: 1px solid black;
 `;
 
-export { SDiv, SFlex, SRoww100, SColw10, SColTab, SColFeedList };
+const SBottom = styled(SDiv)`
+  left: 0;
+  bottom: 0;
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  z-index: 0; 
+`
+
+export { SDiv, SFlex, SRoww100, SColw10, SColTab, SColFeedList, SBottom };

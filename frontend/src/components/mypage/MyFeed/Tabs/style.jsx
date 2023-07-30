@@ -10,7 +10,6 @@ const STabButton = styled.button`
   border-radius: 5px;
   height: 50px;
   cursor: pointer;
-	
   &:hover {
     background-color: #8888dd;
   }
@@ -18,7 +17,7 @@ const STabButton = styled.button`
 
 const STabContent = styled.div`
   box-sizing: border-box;
-  border: 1px solid #ccc;
+  /* border: 1px solid #ccc; */
   border-radius: 5px;
 `;
 

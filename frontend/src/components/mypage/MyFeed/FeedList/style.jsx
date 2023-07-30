@@ -4,9 +4,11 @@ const SContainer = styled.div`
   box-sizing: border-box;
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: space-evenly;
   flex-wrap: wrap;
   gap: 20px;
+
+  overflow: hidden;
 `;
 const SItem = styled.div`
   box-sizing: border-box;

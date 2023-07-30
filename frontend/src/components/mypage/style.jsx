@@ -5,8 +5,7 @@ const SFlex = styled.div`
   display: flex;
 `;
 
-const SRow = styled(SFlex)`
-`;
+const SRow = styled(SFlex)``;
 
 const SCol = styled(SFlex)``;
 
@@ -14,4 +13,9 @@ const SRoww100 = styled(SRow)`
   width: 100%;
 `;
 
-export { SRow, SCol, SRoww100};
+const SSticky = styled(SRoww100)`
+  overflow-y: scroll;
+  height:100vh;
+`
+
+export { SRow, SCol, SRoww100, SSticky};

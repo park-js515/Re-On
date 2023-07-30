@@ -28,7 +28,7 @@ import {
 const Profile = () => {
   const { isOpen, handleIsOpen } = useModal();
 
-  const [Img1, setImg1] = useInputImg("images/tes.jpg");
+  const [Img1, setImg1] = useInputImg("image/profile/아이유.jpg");
 
   const message =
     "최애의스폰지밥을먹는뚱이가잡는해파리를회쳐먹는쯔양을보고있는나를\n바라보는팀원들의따까운눈빛으로구운소시지를먹는희창이의한숨😢";
@@ -44,7 +44,7 @@ const Profile = () => {
   });
 
   const modify = {
-    src: "images/modify.png",
+    src: "image/profile/modify.png",
     onClick: handleIsOpen,
   };
 
@@ -57,7 +57,7 @@ const Profile = () => {
               <ProfileImg {...Img1}></ProfileImg>
             </SColProfileImg>
             <SColw100>
-              <Nickname>{nickName}</Nickname>
+              {nickName.length < 3 ? <Nickname>3글자+</Nickname> : <Nickname>{nickName}</Nickname>}
               <StatusText>{statusMessage}</StatusText>
               <SRowModify>
                 <ImgModify {...modify}></ImgModify>
