@@ -1,18 +1,22 @@
 package reon.app.domain.member.entity;
 
+import com.sun.xml.bind.v2.TODO;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
+import reon.app.domain.member.dto.request.MemberUpdateInfoRequest;
 import reon.app.global.entity.BaseEntity;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 @Getter
-@Entity
+@Setter
 @NoArgsConstructor
 @SuperBuilder
 @DynamicInsert
@@ -21,59 +25,37 @@ public class MemberInfo extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
-    @Column(name = "nickName", nullable = false)
-    private String nickName;
-    
-    @Column(name = "profileImg")
-    private String profileImg;
-    
-    @Column(name = "tier")
-    // TODO: 2023-07-25 티어 결정 시 기본 티어 default 생성
-//    @ColumnDefault("브론즈")
-    private String tier;
-    
-    @Column(name = "introduce")
-    private String introduce;
-    
-    @Column(name = "gameCnt")
-    @ColumnDefault("0")
-    private int gameCnt;
-    
-    @Column(name = "win")
-    @ColumnDefault("0")
-    private int win;
 
-    @Column(name = "lose")
-    @ColumnDefault("0")
-    private int lose;
+    private String nickName; //닉네임
+    private String introduce;//자기소개
+    private String profileImg;//프로필 이미지
 
-    @Column(name = "reported")
-    @ColumnDefault("0")
-    private int reported;
+    // TODO: 2023-07-31 battleInfo로 나눌지 고민
+    private String tier;//현재 티어
+    private int score;//누적 점수
+    private int gameCnt;//게임 수
+    private int win;//승리
+    private int lose;//패배
 
-    public void updateNickName(String nickName){
-        this.nickName = nickName;
+    private int reported;//재제 수
+    private int deleted;//탈퇴 여부
+    private int banned;//신고 여부
+
+    public void updateMemberInfo(MemberUpdateInfoRequest memberUpdateRequest){
+        this.nickName = memberUpdateRequest.getNickName();
+        this.introduce = memberUpdateRequest.getIntroduce();
     }
-    public void updateProfileImg(String profileImg){
+
+    public void updateProfileImg(String profileImg) {
         this.profileImg = profileImg;
     }
-    public void updateTier(String tier){
-        this.tier = tier;
+    public void updateReported(int reported){
+        this.reported = reported;
     }
-    public void updateContent(String introduce){
-        this.introduce = introduce;
+    public void updateDeleted(int deleted){
+        this.deleted = deleted;
     }
-    public void updateGameCnt(){
-        this.gameCnt += 1;
-    }
-    public void updateWin(){
-        this.win += 1;
-    }
-    public void updateLose(){
-        this.lose += 1;
-    }
-    public void updateReported(int reportCnt){
-        this.reported = reportCnt;
+    public void updateBanned(int banned){
+        this.banned = banned;
     }
 }
