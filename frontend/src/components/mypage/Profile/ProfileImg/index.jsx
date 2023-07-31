@@ -1,4 +1,4 @@
-import { SImgProfile, SImgTier } from "./style.js";
+import { SImgProfile, SImgTier } from "./style";
 
 const ProfileImg = ({ src }) => {
   return <SImgProfile src={src}></SImgProfile>;

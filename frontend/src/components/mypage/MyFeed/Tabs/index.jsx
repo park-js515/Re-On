@@ -1,8 +1,8 @@
 import * as Sty from "./style";
 
-const TabButton = ({ children, isActive, onClick }) => {
+const TabButton = ({ children, selected, onClick }) => {
   return (
-    <Sty.STabButton isActive={isActive} onClick={onClick}>
+    <Sty.STabButton selected={selected} onClick={onClick}>
       {children}
     </Sty.STabButton>
   );

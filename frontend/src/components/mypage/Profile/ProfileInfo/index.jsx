@@ -4,7 +4,7 @@ import {
   SNickname,
   SImgInfo,
   SImgModify,
-} from "./style.js";
+} from "./style";
 
 const Nickname = ({ children }) => {
   return <SNickname>{children}</SNickname>;

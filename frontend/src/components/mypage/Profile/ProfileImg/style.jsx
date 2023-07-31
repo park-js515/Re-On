@@ -5,7 +5,7 @@ const SImg = styled.img`
 `;
 
 const SImgProfile = styled(SImg)`
-  height: 95%;
+  height: 266px;
   aspect-ratio: 1;
   border-radius: 100%;
 `;
