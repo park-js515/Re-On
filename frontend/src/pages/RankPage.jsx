@@ -1,10 +1,9 @@
-import UserVideo from "components/common/UserVideo/index";
+import BattleRoom from "components/BattleRoom";
 
 const RankPage = () => {
   return (
     <div>
-      RankPage
-      <UserVideo />;
+      <BattleRoom />
     </div>
   );
 };

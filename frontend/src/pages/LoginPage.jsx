@@ -11,7 +11,7 @@ const LoginPage = () => {
       </div>
       <div className="w-1/2  h-full  p-4 flex justify-center items-center flex-col relative">
         <img src='/image/logo/logo.png' style={{ height: "100px" }} alt="" />
-        {<NotLogin />}
+        <NotLogin />
       </div>
     </div>
   </div>
