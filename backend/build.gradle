@@ -40,6 +40,8 @@ dependencies {
 	runtimeOnly 'com.mysql:mysql-connector-j'
 	annotationProcessor 'org.projectlombok:lombok'
 
+	//객체 ToString을 위한 @ToStringBuilder
+	implementation 'org.apache.commons:commons-lang3:3.12.0'
 
 
 
