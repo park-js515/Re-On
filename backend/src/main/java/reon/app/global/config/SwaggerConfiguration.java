@@ -11,16 +11,13 @@ import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @Configuration
-@EnableSwagger2
 public class SwaggerConfiguration {
     @Bean
     public Docket api() {
-        return new Docket(DocumentationType.SWAGGER_2)
+        return new Docket(DocumentationType.OAS_30)
+                .useDefaultResponseMessages(false)
                 .select()
-//                .apis(RequestHandlerSelectors.any())
-                .apis(RequestHandlerSelectors.basePackage("reon.app"))
-                // 스웨거가 RestController를 전부 스캔을 한다.
-                // basePackage => 어디를 범위로 스캔을 할 것인지 작성
+                .apis(RequestHandlerSelectors.basePackage("com.example.springswagger.controller"))
                 .paths(PathSelectors.any())
                 .build()
                 .apiInfo(apiInfo());
@@ -29,11 +26,8 @@ public class SwaggerConfiguration {
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
                 .title("RE:ON REST API")
-                .description("연기 연습 플랫폼 RE:ON의 swagger api 입니다")
+                .description("연기 연습 플랫폼 RE:ON의 API 명세서 입니다")
                 .version("1.0.0")
-//                .termsOfServiceUrl("https://antstudy.tistory.com/")
-//                .license("LICENSE")
-//                .licenseUrl("")
                 .build();
     }
 }
