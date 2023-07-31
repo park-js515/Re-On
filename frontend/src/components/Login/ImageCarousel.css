@@ -6,7 +6,7 @@
   .marquee {
     --duration: 60s;
     --gap: var(--space);
-  
+    
     display: flex;
     overflow: hidden;
     user-select: none;
@@ -22,6 +22,7 @@
     justify-content: space-around;
     gap: var(--gap);
     min-width: 100%;
+    
     animation: scroll var(--duration) linear infinite;
   }
   
@@ -37,9 +38,11 @@
     object-fit: cover;
     border-radius: 1rem;
     width: 17vh;
+    
   }
   
   .marquee__group p {
+    border: 1px solid black;
     background-image: linear-gradient(
       75deg,
       hsl(240deg 70% 49%) 0%,
