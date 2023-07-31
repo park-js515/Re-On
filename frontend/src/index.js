@@ -5,23 +5,20 @@ import { store } from "./redux/store";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import "./index.css";
-import { StyledEngineProvider } from "@mui/styled-engine";
-import "flowbite"
+
 import { BrowserRouter } from "react-router-dom";
 
 const container = document.getElementById("root");
 const root = createRoot(container);
 
 root.render(
-  <StyledEngineProvider injectFirst>
-    <React.StrictMode>
-      <Provider store={store}>
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
-      </Provider>
-    </React.StrictMode>
-  </StyledEngineProvider>,
+  <React.StrictMode>
+    <Provider store={store}>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </Provider>
+  </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function

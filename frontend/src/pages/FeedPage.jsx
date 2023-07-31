@@ -1,13 +1,5 @@
-import React from "react";
-import VideoList from "components/common/VideoList/index";
-import HotList from "components/common/HotList/index"
 const FeedPage = () => {
-  return (
-    <div>
-      <HotList></HotList>
-      <VideoList></VideoList>
-    </div>
-  );
+  return <div>피드페이지</div>;
 };
 
 export default FeedPage;

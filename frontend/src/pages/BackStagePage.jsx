@@ -1,12 +1,7 @@
-import BackStage from "components/BackStage";
-
 const BackStagePage = () => {
   return (
     <div>
-      <div>
-        <BackStage />
-      </div>
-      {/* <Button to="/rank">입장</Button> */}
+      <div>벡스테이지</div>
     </div>
   );
 };
