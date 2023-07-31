@@ -6,7 +6,7 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import "./index.css";
 import { StyledEngineProvider } from "@mui/styled-engine";
-
+import "flowbite"
 import { BrowserRouter } from "react-router-dom";
 
 const container = document.getElementById("root");

@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -10,4 +14,54 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+div {
+  font-family: "Noto Sans KR", sans-serif;
+}
+
+.top3 {
+  background: linear-gradient(
+    -45deg,
+    #ffffffc8,
+    #a9a78a8e,
+    #ffffffc8,
+    #ffffff9e
+  );
+  background-size: 400% 400%;
+  animation: gradient 3s ease infinite;
+}
+.top1 {
+  background: linear-gradient(
+    -45deg,
+    #ffffffc8,
+    #bba6dc8e,
+    #ffffffc8,
+    #ffffff9e
+  );
+  background-size: 400% 400%;
+  animation: gradient 3s ease infinite;
+}
+
+.top2 {
+  background: linear-gradient(
+    -45deg,
+    #ffffffc8,
+    #dca6cd8e,
+    #ffffffc8,
+    #ffffff9e
+  );
+  background-size: 400% 400%;
+  animation: gradient 3s ease infinite;
+}
+
+@keyframes gradient {
+  0% {
+    background-position: 10% 50%;
+  }
+  50% {
+    background-position: 95% 50%;
+  }
+  100% {
+    background-position: 10% 50%;
+  }
 }
