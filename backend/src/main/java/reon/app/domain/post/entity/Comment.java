@@ -1,9 +1,10 @@
-package reon.app.domain.comment.entity;
+package reon.app.domain.post.entity;
 
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.experimental.SuperBuilder;
+import reon.app.global.entity.BaseEntity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,20 +14,20 @@ import javax.persistence.Id;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@ToString
-public class Comment {
+@SuperBuilder
+public class Comment extends BaseEntity {
 
     @Id
     @GeneratedValue
     @Column(name="id")
     private Long id;
 
-//    TODO: 2023-07-25 action entity 생성 시 주석 해제 필요
+//    TODO: 2023-07-25 post entity 생성 시 주석 해제 필요
 //    @ManyToOne(fetch = FetchType.LAZY)
 //    @JoinColumn(name ="action_id")
-//    private ActionPost actionPost;
+//    private Post post;
 
-//    TODO: 2023-07-25 Membere Entity 생성 시 주석 해제 필요
+//    TODO: 2023-07-25 Member Entity 생성 시 주석 해제 필요
 //    @ManyToOne(fetch = FetchType.LAZY)
 //    @JoinColumn(name ="member_id")
 //    private Member member;
@@ -42,5 +43,6 @@ public class Comment {
 
     @Column(name = "group") // group -> "group by" 와 충돌 가능성 / 대체 가능 컬럼명 : parent_id
     private Long group;
+
 
 }
