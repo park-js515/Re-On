@@ -1,11 +1,5 @@
-import BattleRoom from "components/BattleRoom";
-
 const RankPage = () => {
-  return (
-    <div>
-      <BattleRoom />
-    </div>
-  );
+  return <div>랭크페이지</div>;
 };
 
 export default RankPage;

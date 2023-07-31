@@ -1,11 +1,5 @@
-// import { Profile } from "components/MyPage/Profile/index";
-// import { MyFeed } from "components/MyPage/MyFeed/index";
-import { MyPageComponent } from "components/MyPage/index";
-
 const MyPage = () => {
-  return (
-    <MyPageComponent></MyPageComponent>
-  );
+  return <div>마이페이지</div>;
 };
 
 export default MyPage;
