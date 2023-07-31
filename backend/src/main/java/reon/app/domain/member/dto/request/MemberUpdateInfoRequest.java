@@ -10,7 +10,7 @@ import reon.app.domain.member.entity.MemberInfo;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class MemberUpdateRequest {
+public class MemberUpdateInfoRequest {
     private String nickName;
     private String introduce;
 

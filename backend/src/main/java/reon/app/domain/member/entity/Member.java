@@ -5,13 +5,10 @@ import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.DynamicInsert;
 import reon.app.global.entity.BaseEntity;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
+@Entity
 @Getter
-@Setter
 @NoArgsConstructor
 @SuperBuilder
 @DynamicInsert
