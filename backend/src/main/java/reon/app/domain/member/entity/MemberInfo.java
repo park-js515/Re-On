@@ -1,5 +1,6 @@
 package reon.app.domain.member.entity;
 
+import com.sun.xml.bind.v2.TODO;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -29,6 +30,7 @@ public class MemberInfo extends BaseEntity {
     private String introduce;//자기소개
     private String profileImg;//프로필 이미지
 
+    // TODO: 2023-07-31 battleInfo로 나눌지 고민
     private String tier;//현재 티어
     private int score;//누적 점수
     private int gameCnt;//게임 수

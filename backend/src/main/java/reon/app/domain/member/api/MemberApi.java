@@ -12,11 +12,11 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/member-management")
 public class MemberApi {
 
-    @GetMapping("/user/{email}")
-    public ApiResult<MemberResponse> findMemberByEmail(@PathVariable("email") String email){
-
-        return OK(loginMember);
-    }
+//    @GetMapping("/user/{email}")
+//    public ApiResult<MemberResponse> findMemberByEmail(@PathVariable("email") String email){
+//
+//        return OK(loginMember);
+//    }
 
 
 }
