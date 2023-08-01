@@ -12,13 +12,15 @@ const RankGame = () => {
   return (
     <div>
       {stage === 'BACK_STAGE' ? (
-        <BackStage setStage={setStage} />
+        <>
+          <BackStage setStage={setStage} />
+          <MUIButton variant="contained" onClick={handleClick}>
+            입장
+          </MUIButton>
+        </>
       ) : (
         <BattleRoom setStage={setStage} />
       )}
-      <MUIButton variant="contained" onClick={handleClick}>
-        입장
-      </MUIButton>
     </div>
   );
 };
