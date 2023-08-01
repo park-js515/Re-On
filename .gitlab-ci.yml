@@ -32,11 +32,9 @@ build:  # JOB 이름
 
 test:  # JOB 이름
     # 사용될 이미지 설정
-    image:
-        - gradle:8.1.1
+    image: gradle:8.1.1
     # stage 설정
-    stage:
-        - be-test
+    stage: be-test
     # 실행될 script 설정
     script:
         - mvn test
