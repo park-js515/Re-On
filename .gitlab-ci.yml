@@ -63,7 +63,7 @@ package:  # JOB 이름
   # 실행될 script 설정
   script:
     - docker build -t $IMAGE_NAME .   # Dockerfile로 build
-    - docker push $IMAGE_NAME   # Container Registry에 image push
+    - docker push $IMAGE_NAME   # Container Registry에 image push한다.
   # script가 실행된 후 수행 될 script
   after_script:
     - docker logout   # GitLab Container Registry 로그아웃
