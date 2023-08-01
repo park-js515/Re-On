@@ -1,7 +1,7 @@
 const DummyData = {
-  name: "종상시치",
-  image: "image URL",
-  tier: "Diamond",
+  name: '종상시치',
+  image: 'image URL',
+  tier: 'Diamond',
   win: 1,
   lose: 999,
   draw: 0,
