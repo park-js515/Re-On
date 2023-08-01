@@ -2,7 +2,6 @@ const ProfileOuter = ({ children }) => {
   const Div = ({ children }) => {
     return (
       <div
-        className="bg-blue-950"
         style={{
           boxSizing: "border-box",
           minHeight: "300px",
@@ -11,6 +10,7 @@ const ProfileOuter = ({ children }) => {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
+          backgroundColor: "black",
         }}
       >
         {children}
