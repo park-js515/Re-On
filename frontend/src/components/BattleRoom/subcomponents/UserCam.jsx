@@ -1,5 +1,7 @@
-import { useEffect, useRef } from "react";
-import { OpenVidu, Publisher } from "openvidu-browser";
+import { useEffect, useRef } from 'react';
+import { OpenVidu, Publisher } from 'openvidu-browser';
+
+import MUIButton from '@mui/material/Button';
 
 const UserCam = ({ onClick, isOn, border }) => {
   const publisherRef = useRef(null);
@@ -11,8 +13,8 @@ const UserCam = ({ onClick, isOn, border }) => {
       let publisher = OV.initPublisher(videoRef.current, {
         audio: true,
         video: true,
-        quality: "MEDIUM",
-        resolution: "200x200",
+        quality: 'MEDIUM',
+        resolution: '200x200',
       });
 
       publisherRef.current = publisher;
@@ -29,10 +31,12 @@ const UserCam = ({ onClick, isOn, border }) => {
   return (
     <div>
       유저캠
-      <div>
+      <div className={`${border ? 'border-2 border-red-500' : ''}`}>
         <div ref={videoRef} />
       </div>
-      <button onClick={onClick}>유저 입장 이벤트</button>
+      <MUIButton variant="contained" onClick={onClick}>
+        유저 입장 이벤트
+      </MUIButton>
     </div>
   );
 };
