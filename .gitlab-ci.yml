@@ -1,12 +1,10 @@
 stages :
     - be-build
+    - be-test
 
 build:  # JOB 이름
     # 사용될 이미지 설정
     image: gradle:8.1.1
-
-    
-    
     # stage 설정
     stage: be-build
     # tag 설정 (수행이 이루어질 GitLab-Runner tag 등록)
@@ -24,6 +22,25 @@ build:  # JOB 이름
         # 유효기간 설정
         expire_in: 1 days
     # JOB 수행 조건 설정
+    only:
+        # JOB이 수행 될 branch 설정
+        refs:
+            - dev
+        # JOB이 수행될 폴더 경로 설정
+        changes:
+            - backend/**/*
+
+test:  # JOB 이름
+    # 사용될 이미지 설정
+    image:
+        - gradle:8.1.1
+    # stage 설정
+    stage:
+        - be-test
+    # 실행될 script 설정
+    script:
+        - mvn test
+    # JOB이 수행될 branch 설정 (설정된 branch에 push가 발생될 시 JOB 수행)
     only:
         # JOB이 수행 될 branch 설정
         refs:
