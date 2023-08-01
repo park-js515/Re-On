@@ -37,7 +37,8 @@ test:  # JOB 이름
     stage: be-test
     # 실행될 script 설정
     script:
-        - mvn test
+        - cd backend
+        - gradle bootJar
     # JOB이 수행될 branch 설정 (설정된 branch에 push가 발생될 시 JOB 수행)
     only:
         # JOB이 수행 될 branch 설정
