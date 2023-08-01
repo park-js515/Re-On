@@ -1,0 +1,74 @@
+stages :
+    - be-build
+    # - be-test
+    - be-package
+
+build:  # JOB 이름
+    # 사용될 이미지 설정
+    image: gradle:8.1.1
+    # stage 설정
+    stage: be-build
+    # 실행될 script 설정
+    script:
+        - cd backend
+        - gradle bootJar
+    # artifacts 설정 (bulld를 통해 생성된 파일을 job artifacts에 보관하여 다음에 수행되는 JOB에서 가져다 활용할 수 있게 도와줌)
+    artifacts:
+        # 보관이 이루어질 경로 설정
+        paths:
+            - backend/build/libs/*.jar
+        # 유효기간 설정
+        expire_in: 1 days
+    # JOB 수행 조건 설정
+    only:
+        # JOB이 수행 될 branch 설정
+        refs:
+            - dev
+        # JOB이 수행될 폴더 경로 설정
+        changes:
+            - backend/**/*
+
+# test:  # JOB 이름
+#     # 사용될 이미지 설정
+#     image: gradle:8.1.1
+#     # stage 설정
+#     stage: be-test
+#     # 실행될 script 설정
+#     script:
+#         - cd backend
+#         - gradle bootJar
+#     # JOB이 수행될 branch 설정 (설정된 branch에 push가 발생될 시 JOB 수행)
+#     only:
+#         # JOB이 수행 될 branch 설정
+#         refs:
+#             - dev
+#         # JOB이 수행될 폴더 경로 설정
+#         changes:
+#             - backend/**/*
+
+package:  # JOB 이름
+  # 사용될 이미지 설정
+  image: docker:latest
+  # stage 설정
+  stage: be-package
+  # service 설정 (설정한 image가 작업이 이루어지는 동안 실행되는 docker 이미지)
+  services:
+    - docker:dind
+  # script가 실행 전 수행 될 script
+  before_script:
+    - docker login $CI_REGISTRY -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD   # GitLab Container Registry에 로그인
+  # 실행될 script 설정
+  script:
+    - docker build -t $IMAGE_NAME .   # Dockerfile로 build
+    - docker push $IMAGE_NAME   # Container Registry에 image push한다.
+  # script가 실행된 후 수행 될 script
+  after_script:
+    - docker logout   # GitLab Container Registry 로그아웃
+  # JOB이 수행될 branch 설정 (설정된 branch에 push가 발생될 시 JOB 수행)
+  only:
+        # JOB이 수행 될 branch 설정
+        refs:
+            - dev
+        # JOB이 수행될 폴더 경로 설정
+        changes:
+            - backend/**/*
