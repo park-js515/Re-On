@@ -1,7 +1,11 @@
+import BackStage from "components/BackStage";
+
 const BackStagePage = () => {
   return (
     <div>
-      <div>벡스테이지</div>
+      <div>
+        <BackStage />
+      </div>
     </div>
   );
 };
