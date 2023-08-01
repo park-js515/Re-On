@@ -11,12 +11,12 @@ import NormalListPage from "./pages/NormalListPage";
 import RankPage from "./pages/RankPage";
 import RegisterPage from "./pages/RegisterPage";
 
-import NavBar from "components/common/NavBar";
+import ResponsiveAppBar from "components/common/NavBar";
 
 function App() {
   return (
     <>
-      <NavBar />
+      <ResponsiveAppBar />
       <Routes>
         <Route path="/backstage" element={<BackStagePage />} />
         <Route path="/faq" element={<FAQPage />} />
