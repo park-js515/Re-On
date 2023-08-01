@@ -17,14 +17,14 @@ be-build:  # JOB 이름
     artifacts:
         # 보관이 이루어질 경로 설정
         paths:
-        - backend/build/libs/*.jar
+            - backend/build/libs/*.jar
         # 유효기간 설정
         expire_in: 1 days
     # JOB 수행 조건 설정
     only:
         # JOB이 수행 될 branch 설정
         refs:
-        - dev
+            - dev
         # JOB이 수행될 폴더 경로 설정
         changes:
-        - backend/**/*
+            - backend/**/*
