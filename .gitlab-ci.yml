@@ -26,7 +26,7 @@ build:  # JOB 이름
     only:
         # JOB이 수행 될 branch 설정
         refs:
-            - dev
+            - deploy
         # JOB이 수행될 폴더 경로 설정
         changes:
             - backend/**/*
@@ -71,7 +71,7 @@ package:  # JOB 이름
   only:
         # JOB이 수행 될 branch 설정
         refs:
-            - dev
+            - deploy
         # JOB이 수행될 폴더 경로 설정
         changes:
             - backend/**/*
