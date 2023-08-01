@@ -48,6 +48,7 @@ build:  # JOB 이름
 #         # JOB이 수행될 폴더 경로 설정
 #         changes:
 #             - backend/**/*
+
 package:  # JOB 이름
   # 사용될 이미지 설정
   image: docker:latest
