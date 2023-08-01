@@ -4,6 +4,8 @@ stages :
 build:  # JOB 이름
     # 사용될 이미지 설정
     image: gradle:8.1.1
+
+    
     
     # stage 설정
     stage: be-build
