@@ -1,5 +1,5 @@
 stages :
-    - build
+    - be-build
 
 be-build:  # JOB 이름
     # 사용될 이미지 설정
