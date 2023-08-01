@@ -5,7 +5,7 @@ be-build:  # JOB 이름
     # 사용될 이미지 설정
     image: gradle:8.1.1
     # stage 설정
-    stage: be-build
+    stage: build
     # tag 설정 (수행이 이루어질 GitLab-Runner tag 등록)
     tags:
         - dev-all
