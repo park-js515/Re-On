@@ -31,7 +31,7 @@ const UserCam = ({ onClick, isOn, border }) => {
   return (
     <div>
       유저캠
-      <div className={`${border ? 'border-2 border-red-500' : ''}`}>
+      <div className={`${border ? 'border-4 border-danger' : ''}`}>
         <div ref={videoRef} />
       </div>
       <MUIButton variant="contained" onClick={onClick}>

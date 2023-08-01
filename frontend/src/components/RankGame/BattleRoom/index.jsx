@@ -277,7 +277,7 @@ const BattleRoom = () => {
           ref={videoRef}
           src="video/ISawTheDevil.mp4"
           className={`max-h-[300px] ${
-            isPlaying ? 'border-2 border-red-500' : ''
+            isPlaying ? 'border-4 border-danger' : ''
           }`}
         />
         <UserCam
