@@ -1,9 +1,10 @@
 package reon.app.domain.member.api;
 
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import reon.app.domain.member.dto.response.MemberResponse;
+import reon.app.global.api.ApiResponse;
 
 
 @Api(tags = {"member"})
@@ -13,10 +14,7 @@ import org.springframework.web.bind.annotation.*;
 public class MemberApi {
 
     @GetMapping("/user/{email}")
-    public ApiResult<MemberResponse> findMemberByEmail(@PathVariable("email") String email){
-
-        return OK(loginMember);
+    public ApiResponse<MemberResponse> findMemberByEmail(@PathVariable("email") String email){
+        return ApiResponse.OK(new MemberResponse());
     }
-
-
 }

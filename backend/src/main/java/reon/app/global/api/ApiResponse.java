@@ -8,7 +8,6 @@ public class  ApiResponse<T> {
     private final boolean success;
     private final T response;
     private final ApiError error;
-
     private ApiResponse(boolean success, T response, ApiError error) {
         this.success = success;
         this.response = response;
