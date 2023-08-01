@@ -139,7 +139,7 @@ const BattleRoom = () => {
   };
 
   // 유저 매칭 후 이벤트 ##########
-  const [stage, setStage] = useState('NOT_READY'); // 현재 게임 상태 관리
+  const [stage, setStage] = useState('BACK_STAGE'); // 현재 게임 상태 관리
   const [userCamOneBorder, setUserCamOneBorder] = useState(false); // 유저1 플레이시 테두리
   const [userCamTwoBorder, setUserCamTwoBorder] = useState(false); // 유저2 플레이시 테두리
 
