@@ -1,17 +1,18 @@
-import { useState, useEffect, useRef } from "react";
-import useModal from "hooks/useModal";
-import useLoading from "hooks/useLoading";
-import useVideoPlayer from "hooks/useVideoPlayer";
+import { useState, useEffect, useRef } from 'react';
+import useModal from 'hooks/useModal';
+import useLoading from 'hooks/useLoading';
+import useVideoPlayer from 'hooks/useVideoPlayer';
 
-import CustomModal from "./subcomponents/CustomModal";
-import UserCam from "./subcomponents/UserCam";
+import CustomModal from './subcomponents/CustomModal';
+import UserCam from './subcomponents/UserCam';
+import MUIButton from '@mui/material/Button';
 
 const BattleRoom = () => {
   // 게임 로그 저장 ##########
   const currentTime = new Date();
   const logMessageTime = `${currentTime.getHours()}:${currentTime.getMinutes()}:${currentTime.getSeconds()}`;
 
-  const [log, setLog] = useState(["게임 상태를 기록합니다."]);
+  const [log, setLog] = useState(['게임 상태를 기록합니다.']);
   const logContainerRef = useRef(null); // log 스크롤 유지
   useEffect(() => {
     if (logContainerRef.current) {
@@ -38,27 +39,27 @@ const BattleRoom = () => {
     return () => clearInterval(intervalId);
   }, [isLoading]);
 
-  const logMessage = "No one in the room.";
+  const logMessage = 'No one in the room.';
 
   // 유저 더미 ##########
   const [userOne, setUserOne] = useState({
-    id: "1",
-    name: "종상",
+    id: '1',
+    name: '종상',
     expression: 0,
     voice: 0,
     total: 0,
   });
 
   const [userTwo, setUserTwo] = useState({
-    id: "2",
-    name: "시치",
+    id: '2',
+    name: '시치',
     expression: 0,
     voice: 0,
     total: 0,
   });
 
   // 모달 ##########
-  const [saveStat, setSaveStat] = useState("");
+  const [saveStat, setSaveStat] = useState('');
   const { modalVisible: saveModalVisible, toggleModal: toggleSaveModal } =
     useModal(); // use the hook
   const { modalVisible: publicModalVisible, toggleModal: togglePublicModal } =
@@ -138,7 +139,7 @@ const BattleRoom = () => {
   };
 
   // 유저 매칭 후 이벤트 ##########
-  const [stage, setStage] = useState("NOT_READY"); // 현재 게임 상태 관리
+  const [stage, setStage] = useState('NOT_READY'); // 현재 게임 상태 관리
   const [userCamOneBorder, setUserCamOneBorder] = useState(false); // 유저1 플레이시 테두리
   const [userCamTwoBorder, setUserCamTwoBorder] = useState(false); // 유저2 플레이시 테두리
 
@@ -148,20 +149,20 @@ const BattleRoom = () => {
   // 턴 시작 ##########
   useEffect(() => {
     // 영화 미리보기
-    if (stage === "PREVIEW") {
+    if (stage === 'PREVIEW') {
       setLog((prevLog) => [...prevLog, `${logMessageTime} | 작품 미리보기`]);
       // 유저 1 차례
-    } else if (stage === "USER_ONE_TURN") {
+    } else if (stage === 'USER_ONE_TURN') {
       setLog((prevLog) => [...prevLog, `${logMessageTime} | 첫번째 연기 시작`]);
       userOnePlay();
       // 유저 2 차례
-    } else if (stage === "USER_TWO_TURN") {
+    } else if (stage === 'USER_TWO_TURN') {
       setLog((prevLog) => [...prevLog, `${logMessageTime} | 두번째 연기 시작`]);
       userTwoPlay();
-    } else if (stage === "CALCULATION") {
+    } else if (stage === 'CALCULATION') {
       setLog((prevLog) => [...prevLog, `${logMessageTime} | 계산 시작`]);
       caculateScore(); // 점수계산
-    } else if (stage === "END") {
+    } else if (stage === 'END') {
       setLog((prevLog) => [...prevLog, `${logMessageTime} | 게임 종료`]);
     }
   }, [stage]);
@@ -171,27 +172,27 @@ const BattleRoom = () => {
     if (videoRef.current) {
       const handleEnded = () => {
         // 영화 미리보기 종료
-        if (stage === "PREVIEW") {
-          setStage("USER_ONE_TURN");
+        if (stage === 'PREVIEW') {
+          setStage('USER_ONE_TURN');
           // 유저1 턴 종료
-        } else if (stage === "USER_ONE_TURN") {
+        } else if (stage === 'USER_ONE_TURN') {
           setLog((prevLog) => [...prevLog, `${logMessageTime} | 유저 1 종료`]);
           setUserCamOneBorder(false);
-          setStage("USER_TWO_TURN");
+          setStage('USER_TWO_TURN');
           // 유저2 턴 종료
-        } else if (stage === "USER_TWO_TURN") {
+        } else if (stage === 'USER_TWO_TURN') {
           setLog((prevLog) => [...prevLog, `${logMessageTime} | 유저 2 종료`]);
           setLog((prevLog) => [...prevLog, `${logMessageTime} | 연기 종료`]);
           setUserCamTwoBorder(false);
-          setStage("CALCULATION");
+          setStage('CALCULATION');
         }
       };
       // 비디오 요소에 이벤트 리스너 추가
-      videoRef.current.addEventListener("ended", handleEnded); // ended면 handleEnded() 실행
+      videoRef.current.addEventListener('ended', handleEnded); // ended면 handleEnded() 실행
       // 클린업 함수에서 이벤트 리스너 제거
       return () => {
         if (videoRef.current) {
-          videoRef.current.removeEventListener("ended", handleEnded);
+          videoRef.current.removeEventListener('ended', handleEnded);
         }
       };
     }
@@ -206,7 +207,7 @@ const BattleRoom = () => {
     ]);
     setLog((prevLog) => [...prevLog, `${logMessageTime} | 작품 미리보기`]);
     handlePlayVideo(); // 영화시작
-    setStage("PREVIEW");
+    setStage('PREVIEW');
   };
 
   // 유저1 플레이 함수 생성 ##########
@@ -249,7 +250,7 @@ const BattleRoom = () => {
     }));
 
     setLog((prevLog) => [...prevLog, `${logMessageTime} | 계산 완료`]);
-    setStage("END");
+    setStage('END');
     await startLoading(3000);
     toggleSaveModal(); // 저장 모달
   };
@@ -259,7 +260,10 @@ const BattleRoom = () => {
       <div>컴포넌트 확인용</div>
       <div>
         <h5>게임상태로그</h5>
-        <div ref={logContainerRef}>
+        <div
+          ref={logContainerRef}
+          className="overflow-y-scroll h-[300px] w-1/2"
+        >
           {log.map((log, index) => (
             <p key={index}>{log}</p>
           ))}
@@ -268,8 +272,14 @@ const BattleRoom = () => {
 
       <hr />
 
-      <div>
-        <video ref={videoRef} src="video/ISawTheDevil.mp4" />
+      <div className="flex">
+        <video
+          ref={videoRef}
+          src="video/ISawTheDevil.mp4"
+          className={`max-h-[300px] ${
+            isPlaying ? 'border-2 border-red-500' : ''
+          }`}
+        />
         <UserCam
           onClick={handleClickUserOneCam}
           isOn={userOneListen}
@@ -281,7 +291,7 @@ const BattleRoom = () => {
           border={userCamTwoBorder}
         />
         <>
-          {stage === "END" && (
+          {stage === 'END' && (
             <div>
               <h2>게임결과</h2>
               <div>
@@ -302,7 +312,9 @@ const BattleRoom = () => {
       <hr />
 
       <div>
-        <button name="모달 이벤트" onClick={toggleSaveModal} />
+        <MUIButton variant="contained" onClick={toggleSaveModal}>
+          모달 이벤트
+        </MUIButton>
         <CustomModal
           open={saveModalVisible}
           title="저장?"
