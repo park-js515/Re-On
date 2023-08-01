@@ -7,7 +7,7 @@ const BackStage = () => {
       <div className="w-128">
         <LeftSide />
       </div>
-      <div className="w-64">
+      <div className="w-128">
         <RightSide />
       </div>
     </div>
