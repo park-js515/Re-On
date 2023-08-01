@@ -42,7 +42,8 @@ const RowProfile = ({ children }) => {
 const Colw100 = ({ children }) => {
   return <Col
     style={{
-      width: "100%",
+      // width: "100%",
+      maxWidth: "520px"
     }}
   >
     {children}
@@ -73,8 +74,10 @@ const RowClose = ({ children }) => {
 const ColProfileImg = ({ children }) => {
   return <Col
   style={{
+    boxSizing: "border-box",
     justifyContent: "center",
     alignItems: "center",
+    width: "280px", 
     margin: "10px",
   }}
   >
@@ -82,4 +85,13 @@ const ColProfileImg = ({ children }) => {
   </Col>;
 };
 
-export { Row, Col, RowProfile, RowModify, RowClose, Colw100, ColProfileImg };
+const Rolw100CC = ({children}) => {
+  return <Row
+  style={{
+    justifyContent: "center",
+    alignItems: "center"
+  }}
+  >{children}</Row>
+}
+
+export { Row, Col, RowProfile, RowModify, RowClose, Colw100, Rolw100CC, ColProfileImg };

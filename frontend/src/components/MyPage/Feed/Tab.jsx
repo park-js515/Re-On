@@ -3,6 +3,7 @@ const TabButton = ({ children, selected, onClick }) => {
   const color = selected ? "#fff" : "#333";
 
   return (
+    <>
     <button
       style={{
         border: "none",
@@ -12,15 +13,17 @@ const TabButton = ({ children, selected, onClick }) => {
         cursor: "pointer",
         backgroundColor,
         color,
+        
       }}
       onClick={onClick}
     >
       {children}
     </button>
+    </>
   );
 };
 
-const TabContent = ({children, isActive}) => {
+const TabContent = ({ children, isActive }) => {
   if (!isActive) {
     return null;
   }

@@ -6,8 +6,8 @@ const ProfileImg = ({ src, alt }) => {
         style={{
           boxSizing: "border-box",
           height: "266px",
-          aspectRatio: 1,
-          // borderRadius: "100%",
+          width: "266px",
+          borderRadius: "100%",
         }}
         alt={alt}
       />

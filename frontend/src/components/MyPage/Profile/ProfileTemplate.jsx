@@ -2,6 +2,7 @@ const ProfileOuter = ({ children }) => {
   const Div = ({ children }) => {
     return (
       <div
+        className="bg-blue-950"
         style={{
           boxSizing: "border-box",
           minHeight: "300px",
@@ -20,13 +21,16 @@ const ProfileOuter = ({ children }) => {
   return <Div>{children}</Div>;
 };
 
-const ProfileInner = ({children}) => {
-  const Div = ({children}) => {
-    return <div style={{
-      maxWidth: "800px",
-      minHeight: "300px",
-      padding: "5px",
-    }}>
+const ProfileInner = ({ children }) => {
+  const Div = ({ children }) => {
+    return <div
+      className="bg-white"
+      style={{
+        borderRadius: "15px",
+        maxWidth: "800px",
+        minHeight: "300px",
+        padding: "5px",
+      }}>
       {children}
     </div>
   }
@@ -34,4 +38,4 @@ const ProfileInner = ({children}) => {
   return <Div>{children}</Div>
 }
 
-export {ProfileOuter, ProfileInner};
+export { ProfileOuter, ProfileInner };

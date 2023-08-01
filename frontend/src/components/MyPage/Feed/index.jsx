@@ -3,7 +3,7 @@ import * as Tab from "./Tab";
 import * as FeedList from "./FeedList";
 import * as Sty from "./style";
 
-const contents = ["Public", "Private", "Like", "Uploaded"];
+const contents = ["Public", "Private", "Like"];
 
 const Feed = () => {
   const { currentTab, changeTab } = hooks.useTabs(0, contents);

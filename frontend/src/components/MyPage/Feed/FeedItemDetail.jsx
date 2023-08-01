@@ -40,6 +40,8 @@ const ModalContent = forwardRef(({ children, isOpen }, ref) => {
         backgroundColor: "#fff",
         padding: "2.5px",
         zIndex: 9998,
+        height:"100%",
+        width: "800px",
       }}
       ref={ref}
     >
@@ -83,5 +85,7 @@ const Modal = ({ children, isOpen, handleIsOpen }) => {
     </ModalOverlay>
   );
 };
+
+
 
 export { Modal };

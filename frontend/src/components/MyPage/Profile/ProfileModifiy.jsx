@@ -34,12 +34,15 @@ const ModalContent = forwardRef(({ children, isOpen }, ref) => {
       style={{
         boxSizing: "border-box",
         position: "fixed",
-        top: "50%",
-        left: "50%",
-        transform: "translate(-50%, -50%)",
+        bottom: "10px",
+        right: "10px",
         backgroundColor: "#fff",
         padding: "2.5px",
         zIndex: 9998,
+        borderRadius: "5px",
+        height: "270px",
+        width: "550px",
+        border: "thick double #00000038",
       }}
       ref={ref}
     >
@@ -102,7 +105,9 @@ const InputText = ({ value, onChange }) => {
     id: "statusText",
   };
 
-  return <textarea value={value} onChange={onChange} {...props} />;
+  return <textarea 
+  style={{height: "120px", width: "500px", resize: "none"}}
+  value={value} onChange={onChange} {...props} placeholder="상태 메시지를 입력하세요!"/>;
 };
 
 const InputNick = ({ value, onChange }) => {
@@ -112,11 +117,13 @@ const InputNick = ({ value, onChange }) => {
     id: "nickName",
   };
 
-  return <input value={value} onChange={onChange} {...props} />;
+  return <input value={value} onChange={onChange} {...props} placeholder=" 3 <= Nickname <= 16"/>;
 };
 
 const Button = ({ children, onClick }) => {
-  return <button onClick={onClick}>{children}</button>;
+  return <button 
+  className="hover:bg-slate-300"
+  onClick={onClick}>{children}</button>;
 };
 
 export { Modal, InputImg, InputNick, InputText, Button };

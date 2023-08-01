@@ -37,7 +37,12 @@ const Profile = () => {
               ) : (
                 <Info.NickName>{nickName}</Info.NickName>
               )}
-              <Info.StatusText>{statusMessage}</Info.StatusText>
+              <br />
+
+              <div>
+                <Info.StatusText>{statusMessage}</Info.StatusText>
+              </div>
+
               <Sty.RowModify>
                 <Info.Modify {...modify}></Info.Modify>
               </Sty.RowModify>
@@ -48,15 +53,17 @@ const Profile = () => {
 
       <Modify.Modal isOpen={isOpen} handleIsOpen={handleIsOpen}>
         <Sty.RowClose>
-        <Modify.Button onClick={handleIsOpen}>X</Modify.Button>
+          <Modify.Button onClick={handleIsOpen}>(❁´◡`❁)</Modify.Button>
         </Sty.RowClose>
-        <label htmlFor="profileImg">이미지 변경</label>
+        <label htmlFor="profileImg">이미지 변경: </label>
         <Modify.InputImg onChange={setImg1}></Modify.InputImg>
         <br />
-        <label htmlFor="statusText">상태메시지</label>
-        <Modify.InputText value={statusMessage} onChange={setStatusMessage}></Modify.InputText>
+        <label htmlFor="statusText">상태메시지: </label>
+        <Sty.Rolw100CC>
+          <Modify.InputText value={statusMessage} onChange={setStatusMessage}></Modify.InputText>
+        </Sty.Rolw100CC>
         <br />
-        <label htmlFor="nickName">닉네임</label>
+        <label htmlFor="nickName">닉네임: </label>
         <Modify.InputNick value={nickName} onChange={setNickName}></Modify.InputNick>
       </Modify.Modal>
     </>
