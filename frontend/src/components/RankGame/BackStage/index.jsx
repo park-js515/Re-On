@@ -1,5 +1,5 @@
-import LeftSide from "./subcomponents/LeftSide";
-import RightSide from "./subcomponents/RightSide";
+import LeftSide from './subcomponents/LeftSide';
+import RightSide from './subcomponents/RightSide';
 
 const BackStage = () => {
   return (

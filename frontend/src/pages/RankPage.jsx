@@ -1,9 +1,9 @@
-import BattleRoom from "components/BattleRoom";
+import RankGame from 'components/RankGame';
 
 const RankPage = () => {
   return (
     <div>
-      <BattleRoom />
+      <RankGame />
     </div>
   );
 };

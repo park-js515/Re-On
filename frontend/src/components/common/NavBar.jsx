@@ -1,6 +1,5 @@
-
 // const NavBar = () => {
-  //   return (
+//   return (
 //     <div>
 //       <Link to="/backstage">
 //         <button>랭크게임</button>
@@ -26,22 +25,19 @@
 
 // export default NavBar;
 
-
-
-import { Fragment } from 'react'
-import { Disclosure, Menu, Transition } from '@headlessui/react'
-
+import { Fragment } from 'react';
+import { Disclosure, Menu, Transition } from '@headlessui/react';
 
 const navigation = [
   { name: '메인페이지', href: '/', current: true },
-  { name: '랭크게임', href: '/backstage', current: false },
+  { name: '랭크게임', href: '/rank', current: false },
   { name: '일반게임', href: '/normallist', current: false },
   { name: '투표해줘', href: '/feed', current: false },
   { name: '로그인', href: '/login', current: false },
-]
+];
 
 function classNames(...classes) {
-  return classes.filter(Boolean).join(' ')
+  return classes.filter(Boolean).join(' ');
 }
 
 export default function Example() {
@@ -51,17 +47,13 @@ export default function Example() {
         <>
           <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
             <div className="relative flex h-16 items-center justify-between">
-           
               <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
                 <div className="flex flex-shrink-0 items-center">
-                
                   <img
                     className="h-10 w-auto"
                     src="/image/logo/logo.png"
                     alt="Your Company"
-
                   />
-         
                 </div>
                 <div className="hidden sm:ml-6 sm:block">
                   <div className="flex space-x-4">
@@ -70,8 +62,10 @@ export default function Example() {
                         key={item.name}
                         href={item.href}
                         className={classNames(
-                          item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
-                          'rounded-md px-3 py-2 text-sm font-medium'
+                          item.current
+                            ? 'bg-gray-900 text-white'
+                            : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+                          'rounded-md px-3 py-2 text-sm font-medium',
                         )}
                         aria-current={item.current ? 'page' : undefined}
                       >
@@ -82,8 +76,6 @@ export default function Example() {
                 </div>
               </div>
               <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-                
-
                 {/* Profile dropdown */}
                 <Menu as="div" className="relative ml-3">
                   <div>
@@ -97,16 +89,16 @@ export default function Example() {
                       />
                     </Menu.Button>
                   </div>
-                  <Transition
-                    as={Fragment}
-                 
-                  >
+                  <Transition as={Fragment}>
                     <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                       <Menu.Item>
                         {({ active }) => (
                           <a
                             href="/"
-                            className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
+                            className={classNames(
+                              active ? 'bg-gray-100' : '',
+                              'block px-4 py-2 text-sm text-gray-700',
+                            )}
                           >
                             마이페이지
                           </a>
@@ -116,7 +108,10 @@ export default function Example() {
                         {({ active }) => (
                           <a
                             href="/"
-                            className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
+                            className={classNames(
+                              active ? 'bg-gray-100' : '',
+                              'block px-4 py-2 text-sm text-gray-700',
+                            )}
                           >
                             로그아웃
                           </a>
@@ -137,8 +132,10 @@ export default function Example() {
                   as="a"
                   href={item.href}
                   className={classNames(
-                    item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
-                    'block rounded-md px-3 py-2 text-base font-medium'
+                    item.current
+                      ? 'bg-gray-900 text-white'
+                      : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+                    'block rounded-md px-3 py-2 text-base font-medium',
                   )}
                   aria-current={item.current ? 'page' : undefined}
                 >
@@ -150,5 +147,5 @@ export default function Example() {
         </>
       )}
     </Disclosure>
-  )
+  );
 }
