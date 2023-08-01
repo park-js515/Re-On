@@ -5,10 +5,10 @@ import reon.app.domain.member.entity.Member;
 public interface MemberService {
     Member findById(Long id);
     Member findByEmail(String email);
-    void modify(MemberModifyRequest memberModifyRequest);
-
-
-    void updateProfileImg(MultipartFile multipartFile, Long memberId);
+//    void modify(MemberModifyRequest memberModifyRequest);
+//
+//
+//    void updateProfileImg(MultipartFile multipartFile, Long memberId);
 
     void removeProfileImg(Long memberId);
 
