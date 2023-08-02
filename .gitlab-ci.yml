@@ -8,9 +8,6 @@ build:  # JOB 이름
     image: gradle:8.1.1
     # stage 설정
     stage: be-build
-    # tag 설정 (수행이 이루어질 GitLab-Runner tag 등록)
-    tags:
-        - dev-all
     # 실행될 script 설정
     script:
         - cd backend
