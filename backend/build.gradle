@@ -25,15 +25,19 @@ dependencies {
 	//jpa 의존성
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	//ouath 의존성
-//	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
-	// security
-//	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+	//security
+	implementation 'org.springframework.boot:spring-boot-starter-security'
 	// validation
 //	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	// 기본 web
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	//swagger
 	implementation 'io.springfox:springfox-boot-starter:3.0.0'
+	// jwt 관련
+	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+	implementation 'io.jsonwebtoken:jjwt-impl:0.11.5'
+	implementation 'io.jsonwebtoken:jjwt-jackson:0.11.5'
 
 	// web
 	compileOnly 'org.projectlombok:lombok'
