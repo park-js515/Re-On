@@ -17,7 +17,7 @@ public class SwaggerConfiguration {
         return new Docket(DocumentationType.OAS_30)
                 .useDefaultResponseMessages(false)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.example.springswagger.controller"))
+                .apis(RequestHandlerSelectors.basePackage("reon.app.domain"))
                 .paths(PathSelectors.any())
                 .build()
                 .apiInfo(apiInfo());

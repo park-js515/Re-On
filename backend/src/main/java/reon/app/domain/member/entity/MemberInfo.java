@@ -1,47 +1,38 @@
 package reon.app.domain.member.entity;
 
-import com.sun.xml.bind.v2.TODO;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.DynamicInsert;
-import reon.app.domain.member.dto.request.MemberUpdateInfoRequest;
+import reon.app.domain.member.dto.request.MemberInfoUpdateRequest;
 import reon.app.global.entity.BaseEntity;
 
-import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Getter
-@Setter
+@Entity
 @NoArgsConstructor
 @SuperBuilder
 @DynamicInsert
 @ToString
 public class MemberInfo extends BaseEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String nickName; //닉네임
     private String introduce;//자기소개
     private String profileImg;//프로필 이미지
 
-    // TODO: 2023-07-31 battleInfo로 나눌지 고민
-    private String tier;//현재 티어
-    private int score;//누적 점수
-    private int gameCnt;//게임 수
-    private int win;//승리
-    private int lose;//패배
 
     private int reported;//재제 수
     private int deleted;//탈퇴 여부
     private int banned;//신고 여부
 
-    public void updateMemberInfo(MemberUpdateInfoRequest memberUpdateRequest){
+    public void updateMemberInfo(MemberInfoUpdateRequest memberUpdateRequest){
         this.nickName = memberUpdateRequest.getNickName();
         this.introduce = memberUpdateRequest.getIntroduce();
     }

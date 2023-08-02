@@ -5,7 +5,7 @@
 //import reon.app.domain.post.dto.request.CommentCreateRequest;
 //import reon.app.domain.post.entity.Comment;
 //import reon.app.domain.post.repository.CommentRepository;
-//import reon.app.domain.post.service.CommentService;
+//import service.post.domain.app.CommentService;
 //
 //import javax.transaction.Transactional;
 //import java.util.List;

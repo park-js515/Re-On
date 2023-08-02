@@ -1,15 +1,4 @@
-package reon.app.domain.post.entity;
-
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
-import reon.app.global.entity.BaseEntity;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+//package reon.app.domain.post.entity;
 
 //@Entity
 //@Getter

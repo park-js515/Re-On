@@ -8,7 +8,7 @@
 //import org.springframework.http.ResponseEntity;
 //import org.springframework.web.bind.annotation.*;
 //import reon.app.domain.post.dto.request.CommentCreateRequest;
-//import reon.app.domain.post.service.CommentService;
+//import service.post.domain.app.CommentService;
 //
 //@Api(tags = "Comment")
 //@RestController
