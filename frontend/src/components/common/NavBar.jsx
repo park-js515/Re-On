@@ -1,30 +1,3 @@
-// const NavBar = () => {
-//   return (
-//     <div>
-//       <Link to="/backstage">
-//         <button>랭크게임</button>
-//       </Link>
-//       <Link to="/normallist">
-//         <button>일반게임</button>
-//       </Link>
-//       <Link to="/feed">
-//         <button>투표해줘</button>
-//       </Link>
-//       <Link to="/faq">
-//         <button>FAQ</button>
-//       </Link>
-//       <Link to="/mypage">
-//         <button>마이페이지</button>
-//       </Link>
-//       <Link to="/login">
-//         <button>로그인</button>
-//       </Link>
-//     </div>
-//   );
-// };
-
-// export default NavBar;
-
 import { Fragment } from 'react';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
 import { Link } from 'react-router-dom';
@@ -44,7 +17,7 @@ function classNames(...classes) {
 export default function Example() {
   return (
     <div className="sticky top-0 z-50">
-      <Disclosure as="nav" className="bg-dark-800">
+      <Disclosure as="nav" className="bg-white">
         {({ open }) => (
           <>
             <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
@@ -95,11 +68,16 @@ export default function Example() {
                         <Menu.Item>
                           {({ active }) => (
                             <Link
+<<<<<<< HEAD
                               to="/mypage"
                               className={classNames(
                                 active ? 'bg-gray-100' : '',
                                 'block px-4 py-2 text-sm text-gray-700',
                               )}
+=======
+                              to="/MyPage"
+                              className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
+>>>>>>> 2f4962446af11ec010d469605feb0214c9edc9aa
                             >
                               마이페이지
                             </Link>
@@ -109,10 +87,7 @@ export default function Example() {
                           {({ active }) => (
                             <Link
                               to="/logout"
-                              className={classNames(
-                                active ? 'bg-gray-100' : '',
-                                'block px-4 py-2 text-sm text-gray-700',
-                              )}
+                              className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
                             >
                               로그아웃
                             </Link>
@@ -123,27 +98,27 @@ export default function Example() {
                   </Menu>
                 </div>
               </div>
+              <Disclosure.Panel className="sm:hidden">
+                <div className="space-y-1 px-2 pb-3 pt-2">
+                  {navigation.map((item) => (
+                    <Disclosure.Button
+                      as={Link}
+                      key={item.name}
+                      to={item.to}
+                      className={classNames(
+                        item.current
+                          ? 'bg-gray-900 text-white'
+                          : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+                        'block rounded-md px-3 py-2 text-base font-medium',
+                      )}
+                      aria-current={item.current ? 'page' : undefined}
+                    >
+                      {item.name}
+                    </Disclosure.Button>
+                  ))}
+                </div>
+              </Disclosure.Panel>
             </div>
-            <Disclosure.Panel className="sm:hidden">
-              <div className="space-y-1 px-2 pb-3 pt-2">
-                {navigation.map((item) => (
-                  <Disclosure.Button
-                    as={Link}
-                    key={item.name}
-                    to={item.to}
-                    className={classNames(
-                      item.current
-                        ? 'bg-gray-900 text-white'
-                        : 'text-gray-300 hover:bg-gray-700 hover:text-white',
-                      'block rounded-md px-3 py-2 text-base font-medium',
-                    )}
-                    aria-current={item.current ? 'page' : undefined}
-                  >
-                    {item.name}
-                  </Disclosure.Button>
-                ))}
-              </div>
-            </Disclosure.Panel>
           </>
         )}
       </Disclosure>

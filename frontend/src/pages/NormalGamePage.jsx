@@ -1,17 +1,9 @@
 
-import React from "react";
-import { useLottie } from "lottie-react";
-import animationData from '../assets/animation/test';
+const NoramalGamePage = () => {
+  return(
+    <p className="truncate hover:text-clip">일반게임일반게임일반게임일반게임일반게임</p>
+  )
 
-const NormalGamePage = () => {
-  const options = {
-    animationData: animationData,
-    loop: true
-  };
-
-  const { View } = useLottie(options);
-
-  return <>{View}</>;
 };
 
-export default NormalGamePage;
+export default NoramalGamePage;
