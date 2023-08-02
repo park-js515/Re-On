@@ -16,6 +16,9 @@ const RecentGameList = () => {
     { category: 'None', user1: 'None', user2: 'None', videoId: 0, point: 0 },
   ];
 
+  // API
+  // 현재 유저 => 최근 10개의 게임정보
+
   return (
     <div>
       최근전적
