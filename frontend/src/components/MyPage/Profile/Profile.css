@@ -1,0 +1,98 @@
+/* ProfileTemplate */
+.Profile-ProfileOuter {
+  box-sizing: border-box;
+  min-height: 300px;
+  width: 100%;
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: black;
+}
+
+.Profile-ProfileInner {
+  border-radius: 15px;
+  max-width: 800px;
+  min-height: 300px;
+  padding: 5px;
+  background-color: white;
+}
+
+/* ProfileImg */
+.Profile-ProfileImg {
+  box-sizing: border-box;
+  height: 266px;
+  width: 266px;
+  border-radius: 100%;
+}
+
+/* ProfileInfo */
+.Profile-NickName {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bolder;
+  font-size: 1.75rem;
+  height: 3rem;
+}
+
+.Profile-StatusText {
+  padding: 10px;
+  border-width: 1px;
+  border-color: black;
+  word-wrap: break-word;
+  width: 500px;
+  border-radius: 5px;
+}
+
+.Profile-Modify {
+  height: 5vh;
+  aspect-ratio: 1;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.Profile-Modify:hover {
+  background-color: rgb(165, 155, 155);
+  transition: ease-in-out 150ms;
+}
+
+/* ProfileModify */
+.Proflie-ModalOverlay {
+  box-sizing: border-box;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.125);
+  z-index: 9999;
+}
+
+.Profile-ModalContent {
+  box-sizing: border-box;
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+  background-color: #fff;
+  padding: 2.5px;
+  z-index: 9998;
+  border-radius: 5px;
+  height: 270px;
+  width: 550px;
+  border: thick double #00000038;
+}
+
+.Profile-InputText {
+  height: 120px;
+  width: 500px;
+  resize: none;
+}
+
+.Profile-CloseButton {
+  transition: ease-in-out 150ms;
+}
+
+.Profile-CloseButton:hover {
+  background-color: rgb(153, 138, 138);
+}

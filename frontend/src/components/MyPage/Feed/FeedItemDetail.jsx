@@ -1,4 +1,5 @@
-import { useRef, forwardRef, useEffect } from "react";
+import './Feed.css';
+import { useRef, forwardRef, useEffect } from 'react';
 
 const ModalOverlay = ({ children, isOpen, onDoubleClick }) => {
   if (!isOpen) {
@@ -6,19 +7,7 @@ const ModalOverlay = ({ children, isOpen, onDoubleClick }) => {
   }
 
   return (
-    <div
-      style={{
-        boxSizing: "border-box",
-        position: "fixed",
-        top: 0,
-        left: 0,
-        width: "100%",
-        height: "100%",
-        backgroundColor: "rgba(0, 0, 0, 1)",
-        zIndex: 9999,
-      }}
-      onDoubleClick={onDoubleClick}
-    >
+    <div className="Feed-ModalOverlay" onDoubleClick={onDoubleClick}>
       {children}
     </div>
   );
@@ -30,21 +19,7 @@ const ModalContent = forwardRef(({ children, isOpen }, ref) => {
   }
 
   return (
-    <div
-      style={{
-        boxSizing: "border-box",
-        position: "fixed",
-        top: "50%",
-        left: "50%",
-        transform: "translate(-50%, -50%)",
-        backgroundColor: "#fff",
-        padding: "2.5px",
-        zIndex: 9998,
-        height:"100%",
-        width: "800px",
-      }}
-      ref={ref}
-    >
+    <div className="Feed-ModalContent" ref={ref}>
       {children}
     </div>
   );
@@ -65,15 +40,15 @@ const Modal = ({ children, isOpen, handleIsOpen }) => {
     }
 
     const handleESC = (event) => {
-      if (event.key === "Escape") {
+      if (event.key === 'Escape') {
         handleIsOpen();
       }
     };
 
-    document.addEventListener("keydown", handleESC);
+    document.addEventListener('keydown', handleESC);
 
     return () => {
-      document.removeEventListener("keydown", handleESC);
+      document.removeEventListener('keydown', handleESC);
     };
   }, [isOpen, handleIsOpen]);
 
@@ -85,7 +60,5 @@ const Modal = ({ children, isOpen, handleIsOpen }) => {
     </ModalOverlay>
   );
 };
-
-
 
 export { Modal };
