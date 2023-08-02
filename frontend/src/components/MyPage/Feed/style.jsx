@@ -2,8 +2,8 @@ const Roww100 = ({ children, style }) => {
   return (
     <div
       style={{
-        display: "flex",
-        width: "100%",
+        display: 'flex',
+        width: '100%',
         ...style,
       }}
     >
@@ -17,7 +17,7 @@ const ColTab = ({ children, style }) => {
     <div
       style={{
         // display: "flex",
-        width: "10%",
+        width: '10%',
         // flexDirection: "column",
         ...style,
       }}
@@ -31,12 +31,12 @@ const Bottom = ({ children, style }) => {
   return (
     <div
       style={{
-        boxSizing: "border-box",
+        boxSizing: 'border-box',
         left: 0,
         bottom: 0,
-        position: "fixed",
-        display: "flex",
-        flexDirection: "column",
+        position: 'fixed',
+        display: 'flex',
+        flexDirection: 'column',
         zIndex: 0,
         ...style,
       }}
@@ -46,16 +46,70 @@ const Bottom = ({ children, style }) => {
   );
 };
 
-const ColFeedList = ({ children, ...style }) => {
+const ColFeedList = ({ children, style }) => {
   return (
     <div
       style={{
-        width: "90%",
-        margin: "15px",
-        ...style
+        width: '90%',
+        margin: '15px',
+        ...style,
       }}
-    >{children}</div>
+    >
+      {children}
+    </div>
   );
 };
 
-export { Roww100, ColTab, Bottom, ColFeedList };
+const RowJscEnd = ({ children, style }) => {
+  return (
+    <div
+      style={{
+        display: 'flex',
+        width: '100%',
+        justifyContent: 'end',
+        ...style,
+      }}
+    >
+      {children}
+    </div>
+  );
+};
+
+const RowJscCenter = ({ children, style }) => {
+  return (
+    <div
+      style={{
+        boxSizing: 'border-box',
+        display: 'flex',
+        width: '100%',
+        justifyContent: 'center',
+        ...style,
+      }}
+    >
+      {children}
+    </div>
+  );
+};
+
+const RowTrimmed = ({ children, style }) => {
+  return (
+    <div
+      style={{
+        width: "640px",
+        ...style,
+      }}  
+    >
+      <div style={{}}>{children}</div>
+    </div>
+  );
+};
+
+export {
+  Roww100,
+  ColTab,
+  Bottom,
+  ColFeedList,
+  RowJscEnd,
+  RowJscCenter,
+  RowTrimmed,
+};
