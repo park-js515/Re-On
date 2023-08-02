@@ -5,7 +5,7 @@ import { useState } from "react";
 const Commentlist = ({video_id}) => {
 
     // 댓글은 영상 식별자로 조회
-    const comments = [
+    const testdata = [
         {
             comment_id : 1,
             content : "랄로 기다린 랄붕이면 개추",
@@ -31,27 +31,31 @@ const Commentlist = ({video_id}) => {
             recomments_cnt : 0
         },
     ]
+    const [comments, setComments] = useState(testdata)
     const [userInput, setUserInput] = useState("");
     const onChange = (event) => {
         event.preventDefault();
         setUserInput(event.target.value)
         console.log(userInput)
     }
-    const addComment = (event) => {
+    const addComments = (comments, newComments) => {
+        comments.push(newComments)
+        return comments
+    }
+    const renewComments = (event) => {
         event.preventDefault();
         // axios.post(data=userInput)
-        console.log(userInput)
+        // setComments((comments)=>{return [...addComments(comments,userInput)]})
         setUserInput("")
     }
     return (
-        <div className="border mt-1 w-2/3">
-            <label htmlFor="">댓글</label>
+        <div className="border mt-1">
             <div className="flex mb-2">
                 <input className="mx-1 mt-1 px-3 py-2 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-green-500 focus:ring-green-500 block w-5/6 rounded-md sm:text-sm focus:ring-1"
                 type="text" placeholder="댓글 추가..."
                 value={userInput} onInput={onChange}
                 />
-                <button type="button" className="mx-1 mt-1 px-3 py-2 ml-1 h-9 bg-green-400 rounded-md active:bg-green-500 w-1/6" onClick={addComment}>추가</button>
+                <button type="button" className="mx-1 mt-1 px-3 py-2 ml-1 h-9 bg-green-400 rounded-md active:bg-green-500 w-1/6" onClick={renewComments}>추가</button>
             </div>
             <div>
                 {comments.map((item,idx)=>{
