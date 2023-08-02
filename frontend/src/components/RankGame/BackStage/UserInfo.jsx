@@ -7,6 +7,9 @@ const DummyData = {
   draw: 0,
 };
 
+// API
+// 현재 유저 정보(프로필이미지, 이름, 티어, 전적451)
+
 const UserInfo = () => {
   return (
     <div className="border border-black w-32">

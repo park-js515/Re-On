@@ -12,8 +12,6 @@ import RegisterPage from './pages/RegisterPage';
 
 import ResponsiveAppBar from 'components/common/NavBar';
 
-import OpenViduApp from 'components/NewRank/OpenViduApp';
-
 function App() {
   return (
     <>
@@ -28,7 +26,6 @@ function App() {
         <Route path="/normallist" element={<NormalListPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/rank" element={<RankPage />} />
-        <Route path="/newrank" element={<OpenViduApp />} />
       </Routes>
     </>
   );
