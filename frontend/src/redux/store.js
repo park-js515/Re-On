@@ -1,7 +1,10 @@
-import { configureStore } from "@reduxjs/toolkit";
+import { configureStore } from '@reduxjs/toolkit';
+import sessionReducer from './sessionSlice'; // Path should be updated according to your folder structure
 
-const emptyReducer = (state = null) => state;
-
-export const store = configureStore({
-  reducer: { empty: emptyReducer },
+const store = configureStore({
+  reducer: {
+    session: sessionReducer,
+  },
 });
+
+export default store;

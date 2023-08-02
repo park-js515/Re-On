@@ -7,10 +7,14 @@ import UserVideoComponent from './UserVideoComponent';
 import LeftSide from './BackStage/LeftSide';
 import RightSide from './BackStage/RightSide';
 
+import { useDispatch } from 'react-redux';
+import { setSessionStarted } from 'redux/sessionSlice';
+
 const APPLICATION_SERVER_URL =
   process.env.NODE_ENV === 'production' ? '' : 'https://demos.openvidu.io/';
 
 export default function OpenViduApp() {
+  const dispatch = useDispatch();
   const [mySessionId, setMySessionId] = useState('REON');
   const [myUserName, setMyUserName] = useState(
     `연기자${Math.floor(Math.random() * 100)}`,
@@ -57,6 +61,8 @@ export default function OpenViduApp() {
     });
 
     setSession(mySession);
+
+    dispatch(setSessionStarted(true));
   }, []);
 
   useEffect(() => {
@@ -119,6 +125,8 @@ export default function OpenViduApp() {
     setMyUserName('연기자' + Math.floor(Math.random() * 100));
     setMainStreamManager(undefined);
     setPublisher(undefined);
+
+    dispatch(setSessionStarted(false));
   }, [session]);
 
   const switchCamera = useCallback(async () => {
@@ -234,12 +242,11 @@ export default function OpenViduApp() {
 
               <div className="w-128">
                 <button onClick={joinSession}>입장</button>
-                <RightSide />
-
                 <div>
                   <label>{myUserName}</label>
                   <label>{mySessionId}</label>
                 </div>
+                <RightSide />
               </div>
             </div>
           </div>
