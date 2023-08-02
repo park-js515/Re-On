@@ -1,22 +1,9 @@
-import { useState } from "react";
-import * as hooks from "./hooks";
+import './Feed.css';
+import { useState } from 'react';
+import * as hooks from './hooks';
 
 const Container = ({ children }) => {
-  return (
-    <div
-      style={{
-        boxSizing: "border-box",
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "space-evenly",
-        flexWrap: "wrap",
-        gap: "20px",
-        overflow: "hidden",
-      }}
-    >
-      {children}
-    </div>
-  );
+  return <div className="Feed-Container">{children}</div>;
 };
 
 // const Item = ({ children }) => {
@@ -47,9 +34,9 @@ const FeedList = ({ tabNum }) => {
 
   const setLists = [setList0, setList1, setList2];
   const srcs = [
-    "images/MyPage/0002.jpg",
-    "images/MyPage/0003.jpg",
-    "images/MyPage/0004.jpg",
+    'images/MyPage/0002.jpg',
+    'images/MyPage/0003.jpg',
+    'images/MyPage/0004.jpg',
   ];
   const IDivs = createIDivs(4, setLists, srcs);
 
