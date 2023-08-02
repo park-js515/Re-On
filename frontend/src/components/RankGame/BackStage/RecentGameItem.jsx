@@ -5,6 +5,7 @@ const RecentGameItem = ({ game }) => {
   let backgroundColor;
   let hoverColor;
 
+  // 게임 전적에 따른 버튼 색깔 변경
   switch (game.category) {
     case 'win':
       backgroundColor = 'blue';

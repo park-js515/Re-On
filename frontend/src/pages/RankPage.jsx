@@ -1,9 +1,9 @@
-import RankGame from 'components/RankGame';
+import OpenViduApp from 'components/RankGame/OpenViduApp';
 
 const RankPage = () => {
   return (
     <div>
-      <RankGame />
+      <OpenViduApp />
     </div>
   );
 };
