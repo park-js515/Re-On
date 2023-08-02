@@ -22,4 +22,8 @@ EXPOSE 3000
 CMD ["npm", "start"]
 
 # 그리고 Dockerfile로 docker 이미지를 빌드해야한다.
+<<<<<<< HEAD
 # $ docker build .
+=======
+# $ docker build .
+>>>>>>> ef5986e05b3e8722d77b6ccd261e6878ff9f766f
