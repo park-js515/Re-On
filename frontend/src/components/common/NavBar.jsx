@@ -47,7 +47,7 @@ function classNames(...classes) {
 export default function Example() {
   return (
     <div className="sticky top-0 z-50">
-    <Disclosure as="nav" className="bg-dark-800">
+    <Disclosure as="nav" className="bg-white ">
       {({ open }) => (
         <>
           <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
@@ -96,7 +96,7 @@ export default function Example() {
                       <Menu.Item>
                         {({ active }) => (
                           <Link
-                            to="/profile"
+                            to="/MyPage"
                             className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
                           >
                             마이페이지
