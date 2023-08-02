@@ -11,6 +11,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import reon.app.domain.auth.dto.res.NaverInfoResponse;
 import reon.app.domain.auth.dto.res.OAuthInfoResponse;
+import reon.app.domain.auth.params.NaverTokens;
 import reon.app.domain.auth.params.OAuthLoginParams;
 import reon.app.domain.member.entity.OAuthProvider;
 
@@ -51,7 +52,6 @@ public class NaverApiClient implements OAuthApiClient{
         body.add("client_secret", clientSecret);
 
         HttpEntity<?> request = new HttpEntity<>(body, httpHeaders);
-        //TODO : 2023.08.03 NaverTokens 생성 후 import
         NaverTokens response = restTemplate.postForObject(url, request, NaverTokens.class);
 
         assert response != null;

@@ -32,7 +32,7 @@ public class JwtTokenProvider {
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 
-    // claim 토큰 권한 필요 ? .. .-> ?
+    // TODO 2023.08.03 : claim 토큰 권한 필요 ? .. .-> ?
     public String generate(String subject, Date expiredAt) {
         return Jwts.builder()
                 .setSubject(subject)

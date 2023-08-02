@@ -15,11 +15,17 @@ public class NaverInfoResponse implements OAuthInfoResponse {
     @Getter
     @JsonIgnoreProperties(ignoreUnknown = true)
     static class Response {
+        private String name;
         private String email;
         private String nickname;
         private String gender;
         private String birthday;
         private String profile_image;
+    }
+
+    @Override
+    public String getName() {
+        return response.getName();
     }
 
     @Override
@@ -44,6 +50,7 @@ public class NaverInfoResponse implements OAuthInfoResponse {
 
     @Override
     public String getProfileImage() {
+
         return response.getProfile_image();
     }
 
