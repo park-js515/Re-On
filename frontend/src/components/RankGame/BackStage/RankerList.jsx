@@ -1,37 +1,60 @@
 import RankerItem from './RankerItem';
+import { SContainer, SSNSContainer, SRank } from "../BackStage/UserInfo/style";
 
 const DummyData = [
   {
     name: '유저1',
-    tier: 'M',
+    tier: 'Gold',
   },
   {
     name: '유저2',
-    tier: 'D5',
+    tier: 'Gold',
   },
   {
     name: '유저3',
-    tier: 'D5',
+    tier: 'Gold',
   },
   {
     name: '유저4',
-    tier: 'P5',
+    tier: 'silver',
   },
   {
     name: '유저5',
-    tier: 'G5',
+    tier: 'silver',
   },
 ];
-
 const RankerList = () => {
+
+//   return (
+
+//     <div className="">
+//       🏆랭크순위
+//       {DummyData.map((ranker, index) => (
+//         <RankerItem key={index} result={ranker} />
+//       ))}
+//     </div>
+  
+//   ); 
+// };
+
+
   return (
-    <div className="border border-black w-32">
-      <div>랭크순위</div>
-      {DummyData.map((ranker, index) => (
+    <SContainer>
+     
+  
+      <div className="profile-container">
+      
+        🏆랭크순위
+   
+        {DummyData.map((ranker, index) => (
         <RankerItem key={index} result={ranker} />
-      ))}
-    </div>
+        ))}
+      </div>
+
+    
+    </SContainer>
   );
 };
+
 
 export default RankerList;

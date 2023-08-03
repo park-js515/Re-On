@@ -6,7 +6,7 @@ import UserVideoComponent from './UserVideoComponent';
 
 import LeftSide from './BackStage/LeftSide';
 import RightSide from './BackStage/RightSide';
-
+import { Container } from "@mui/system";
 import { useDispatch } from 'react-redux';
 import { setSessionStarted } from 'redux/sessionSlice';
 
@@ -229,28 +229,31 @@ export default function OpenViduApp() {
     );
     return response.data; // The token
   };
+
+
   return (
     <div className="container">
       {session === undefined ? (
         <div id="join">
           <div id="img-div"></div>
-          <div id="join-dialog" className="jumbotron vertical-center">
+            <div id="join-dialog">
             <div className="flex justify-around h-screen">
-              <div className="w-128">
+              <div className="w-128 flex flex-col justify-center">
                 <LeftSide />
               </div>
-
-              <div className="w-128">
-                <button onClick={joinSession}>입장</button>
-                <div>
-                  <label>{myUserName}</label>
-                  <label>{mySessionId}</label>
-                </div>
+              <div className="w-128 flex flex-col justify-center">
                 <RightSide />
               </div>
             </div>
-          </div>
+     
         </div>
+        {/* <label>{myUserName}</label>
+        <label>{mySessionId}</label>
+        <button onClick={joinSession}>입장</button> 
+      */}
+      </div>
+         
+          
       ) : null}
 
       {session !== undefined ? (

@@ -31,16 +31,16 @@ const StyledSlider = styled(Slider)`
 `;
 
 const Pre = styled.div`
-  width: 50px;
-  height: 50px;
+  width: 30px;
+  height: 30px;
   position: absolute;
   left: 2%;
   z-index: 3;
 `;
 
 const NextTo = styled.div`
-  width: 50px;
-  height: 50px;
+  width: 30px;
+  height: 30px;
   position: absolute;
   right: 2%;
   z-index: 3;

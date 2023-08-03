@@ -7,13 +7,13 @@ export const SContainer = styled.main`
     position: relative;
     width: 100%;
     height: 550px;
-    background: linear-gradient(to top left, beige, lightBlue);
+    background: linear-gradient(to right top, beige, lightBlue);
     display: flex;
     justify-content: center;
     align-items: center;
   }
   
-  }
+  
     h1 {
       
 
@@ -49,7 +49,7 @@ export const SContainer = styled.main`
       width: calc(2vw + 600px);
       margin-left: calc(2vw + 80px);
     }
-  }
+  
 
   .typing__action {
     width: 100%;
