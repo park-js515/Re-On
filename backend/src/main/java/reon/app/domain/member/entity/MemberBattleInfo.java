@@ -5,7 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.DynamicInsert;
-import reon.app.domain.member.dto.request.MemberBattleInfoUpdateRequest;
+import reon.app.domain.member.dto.req.MemberBattleInfoUpdateRequest;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;

@@ -5,12 +5,10 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.DynamicInsert;
-import reon.app.domain.member.dto.request.MemberInfoUpdateRequest;
+import reon.app.domain.member.dto.req.MemberInfoUpdateRequest;
 import reon.app.global.entity.BaseEntity;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Getter

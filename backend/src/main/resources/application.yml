@@ -1,11 +1,13 @@
 spring:
   datasource:
-#    driver-class-name: com.mysql.cj.jdbc.Driver
-    driver-class-name: org.mariadb.jdbc.Driver
-  #    url: jdbc:mysql://127.0.0.1:3306/reon_local?useUnicode=true&characterEncoding=utf8&autoReconnect=true&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true&useSSL=false
-    url: jdbc:mariadb://stg-yswa-kr-practice-db-master.mariadb.database.azure.com:3306/S09P12C203?useUnicode=true&characterEncoding=utf8&autoReconnect=true&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true&useSSL=false
-    username: "S09P12C203"
-    password: "3iNtyHIJCM"
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/reon_local?useUnicode=true&characterEncoding=utf8&autoReconnect=true&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true&useSSL=false
+    username : "reon"
+    password : "reon"
+#    driver-class-name: org.mariadb.jdbc.Driver
+#    url: jdbc:mariadb://stg-yswa-kr-practice-db-master.mariadb.database.azure.com:3306/S09P12C203?useUnicode=true&characterEncoding=utf8&autoReconnect=true&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true&useSSL=false
+#    username: "S09P12C203"
+#    password: "3iNtyHIJCM"
 
   mvc:
     pathmatch:
@@ -16,10 +18,13 @@ spring:
       ddl-auto: create
     # show-sql: true # DDL 출력
 
-  oauth:
-    naver:
-      secret: WRf9Tvwu7z
-      client-id: EJLfPmAn1c9dXfThcDEl
-      url:
-        auth: https://nid.naver.com
-        api: https://openapi.naver.com
+oauth:
+  naver:
+    secret: WRf9Tvwu7z
+    client-id: EJLfPmAn1c9dXfThcDEl
+    url:
+      auth: https://nid.naver.com
+      api: https://openapi.naver.com
+jwt:
+  secret-key: VvbHNpyb3JodG9kZbWhKZ29nby10Atam9vbmdhbmpaGFsZ2VveW8duaW0teWbS1zZXJ2ZXItZGxyamVvYW9290c3
+

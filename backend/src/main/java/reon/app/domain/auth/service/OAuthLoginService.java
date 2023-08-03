@@ -10,13 +10,13 @@ import reon.app.domain.auth.tokens.AuthTokens;
 import reon.app.domain.auth.tokens.AuthTokensGenerator;
 import reon.app.domain.member.entity.Member;
 import reon.app.domain.member.entity.MemberInfo;
+import reon.app.domain.member.repository.MemberRepository;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class OAuthLoginService {
-    //TODO 2023.08.03 : 멤버 repo 추가 후 작성 필요
-//    private final MemberRepository memberRepository;
+    private final MemberRepository memberRepository;
     private final AuthTokensGenerator authTokensGenerator;
     private final OAuthInfoService oAuthInfoService;
 
@@ -26,9 +26,8 @@ public class OAuthLoginService {
         log.info(oAuthInfoResponse.toString());
         log.info(oAuthInfoResponse.getProfileImage());
         //TODO 2023.08.03 : 멤버 repo 추가 후 작성 필요
-        Member member = null;
-//        Member member = findOrCreateMember(oAuthInfoResponse);
-//        log.info(member.toString());
+        Member member = findOrCreateMember(oAuthInfoResponse);
+        log.info(member.toString());
 
         AuthTokens authTokens = authTokensGenerator.generate(member.getId());
         member.updateRefreshToken(authTokens.getRefreshToken());
@@ -49,6 +48,7 @@ public class OAuthLoginService {
         MemberInfo memberInfo = MemberInfo.builder()
                 .nickName(oAuthInfoResponse.getNickName())
                 .build();
+
         return memberRepository.save(member);
     }
 

@@ -51,8 +51,14 @@ public class NaverApiClient implements OAuthApiClient{
         body.add("client_id", clientId);
         body.add("client_secret", clientSecret);
 
+        System.out.println("code : " + body.get("code"));
+        System.out.println("state : " + body.get("state"));
+
+
+
         HttpEntity<?> request = new HttpEntity<>(body, httpHeaders);
         NaverTokens response = restTemplate.postForObject(url, request, NaverTokens.class);
+        System.out.println("accessToken : " + response.getAccessToken());
 
         assert response != null;
         return response.getAccessToken();
@@ -60,6 +66,7 @@ public class NaverApiClient implements OAuthApiClient{
 
     @Override
     public OAuthInfoResponse requestOAuthInfo(String accessToken) {
+
         String url = apiUrl + "/v1/nid/me";
 
         HttpHeaders httpHeaders = new HttpHeaders();
