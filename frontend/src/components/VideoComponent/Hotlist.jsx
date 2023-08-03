@@ -1,6 +1,5 @@
 import React from "react";
 import Videoitem from "./Videoitem";
-import Slider from "react-slick";
 
 const Hotlist = ({injectVideoID, changeShow}) => {
   // 실질 데이터는 API 완성 후 axios로
@@ -21,42 +20,22 @@ const Hotlist = ({injectVideoID, changeShow}) => {
     })
   }
 
-  const settings = {
-    dots: true,
-    infinite: true,
-    speed: 100,
-    slidesToShow: 4,
-    slidesToScroll: 1,
-    nextArrow: (
-      <div>
-      </div>
-    ),
-    prevArrow: (
-      <div>
-      </div>
-    ),
-    draggable: false,
-  };
   return (
     <div className="">
       <h3 className="my-4 text-center font-bold text-3xl text-info">이달의 인기영상</h3>
-      <div className="mx-auto">
-        <Slider {...settings}>
-            {TESTDATA.map((item,idx)=>{
-              return (
-                <div className="mx-1" key={idx}>
-                  <Videoitem
-                    key={item.video_id}
-                    props={item}
-                    changeMode={()=>{
-                      injectVideoID(item.video_id)
-                      changeShow()
-                    }}
-                  />
-                </div>
-              )
-            })}
-        </Slider>
+      <div className="mx-auto flex overflow-x-scroll items-bw">
+          {TESTDATA.map((item)=>{
+            return (
+                <Videoitem
+                  key={item.video_id}
+                  props={item}
+                  changeMode={()=>{
+                    injectVideoID(item.video_id)
+                    changeShow()
+                  }}
+                />
+            )
+          })}
       </div>
     </div>
   )
