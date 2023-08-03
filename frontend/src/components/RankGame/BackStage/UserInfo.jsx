@@ -12,7 +12,7 @@ const DummyData = {
 
 const UserInfo = () => {
   return (
-    <div className="border border-black w-32">
+    <div className="border border-danger w-32">
       <div>{DummyData.image}</div>
       <div>{DummyData.name}</div>
       <div>{DummyData.tier}</div>
