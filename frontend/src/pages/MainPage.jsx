@@ -1,9 +1,11 @@
 import React from "react";
 import { useLottie } from "lottie-react";
 import animationData from '../assets/animation/animationlogo';
-import { SContainer } from "./styles";
+import { SContainer } from "../components/home/styles";
 import Typing from "../components/Typing/index";
 import Homepage from "../components/home/HomePage"
+import Banner from "../components/home/Banner"
+import { Container } from "@mui/system";
 
 const Home = () => {
   const defaultOptions = {
@@ -34,6 +36,7 @@ const Home = () => {
         </div>
       </section>
       <Typing />
+      <Banner />
       <div
         style={{
           backgroundColor: "#f8f8f8",
@@ -41,7 +44,11 @@ const Home = () => {
           borderRadius: "20% 20% 0 0",
         }}
       >
-      <Homepage/>
+      <div>
+      <Container>
+        <Homepage/>
+      </Container>
+      </div>
       </div>
     </SContainer>
   );
