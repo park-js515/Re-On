@@ -19,6 +19,7 @@ public class NaverInfoResponse implements OAuthInfoResponse {
         private String email;
         private String nickname;
         private String gender;
+        private String id; // Code -> naver에서 주는 값은 id로 되어있음
         private String birthday;
         private String profile_image;
     }
@@ -44,13 +45,16 @@ public class NaverInfoResponse implements OAuthInfoResponse {
     }
 
     @Override
+    public  String getCode() {
+        return response.getId();
+    }
+    @Override
     public String getBirthday() {
         return response.getBirthday();
     }
 
     @Override
     public String getProfileImage() {
-
         return response.getProfile_image();
     }
 

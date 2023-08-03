@@ -9,7 +9,7 @@ import javax.persistence.*;
 
 @Entity
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @SuperBuilder
 @DynamicInsert
 @ToString
@@ -17,7 +17,7 @@ public class Member extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(unique = true)
+    @Column(nullable = false, unique = true)
     private String code;
     @Column(nullable = false)
     private String name;
@@ -31,7 +31,13 @@ public class Member extends BaseEntity {
     private OAuthProvider oAuthProvider;
     @Column(nullable = true) // 초기에는 없음
     private String refresh_token;
+    @Embedded
+    private MemberBattleInfo memberBattleInfo;
+    @Embedded
+    private MemberInfo memberInfo;
 
+
+    // 비즈니스 로직
     public void updateRefreshToken(String refreshToken) {
         this.refresh_token = refreshToken;
     }
