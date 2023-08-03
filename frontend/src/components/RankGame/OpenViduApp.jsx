@@ -4,8 +4,7 @@ import axios from 'axios';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import UserVideoComponent from './UserVideoComponent';
 
-import LeftSide from './BackStage/LeftSide';
-import RightSide from './BackStage/RightSide';
+import BackStage from './BackStage';
 import { Container } from '@mui/system';
 import Paper from '@mui/material/Paper';
 import { useDispatch } from 'react-redux';
@@ -54,6 +53,10 @@ export default function OpenViduApp() {
     mySession.on('streamCreated', (event) => {
       const subscriber = mySession.subscribe(event.stream, undefined);
       setSubscribers((subscribers) => [...subscribers, subscriber]);
+      setLog((prevLog) => [
+        ...prevLog,
+        `${logMessageTime} | 상대방이 참여했습니다.`,
+      ]);
     });
 
     mySession.on('streamDestroyed', (event) => {
@@ -377,21 +380,11 @@ export default function OpenViduApp() {
     <div className="m-8">
       {session === undefined ? (
         <div id="join">
-          <div id="img-div"></div>
-          <div id="join-dialog">
-            <div className="flex justify-around h-screen">
-              <div className="w-128 flex flex-col justify-center">
-                <LeftSide />
-              </div>
-              <div className="w-128 flex flex-col justify-center">
-                <RightSide />
-              </div>
-            </div>
-          </div>
-          {/* <label>{myUserName}</label>
-        <label>{mySessionId}</label>
-        <button onClick={joinSession}>입장</button> 
-      */}
+          <BackStage
+            myUserName={myUserName}
+            mySessionId={mySessionId}
+            joinSession={joinSession}
+          />
         </div>
       ) : null}
 
