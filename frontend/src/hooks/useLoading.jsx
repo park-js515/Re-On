@@ -1,5 +1,5 @@
 // useLoading.js
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
 
 const useLoading = (initialState, duration) => {
   const [isLoading, setLoading] = useState(initialState);

@@ -11,10 +11,10 @@ export default function UserVideoComponent({ streamManager }) {
     <div>
       {streamManager !== undefined ? (
         <div className="streamcomponent">
-          <OpenViduVideoComponent streamManager={streamManager} />
           <div>
-            <p>{getNicknameTag()}</p>
+            <p className="text-white b">{getNicknameTag()}</p>
           </div>
+          <OpenViduVideoComponent streamManager={streamManager} />
         </div>
       ) : null}
     </div>

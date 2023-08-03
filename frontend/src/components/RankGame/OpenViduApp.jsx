@@ -7,15 +7,19 @@ import UserVideoComponent from './UserVideoComponent';
 import LeftSide from './BackStage/LeftSide';
 import RightSide from './BackStage/RightSide';
 import { Container } from "@mui/system";
+import Paper from '@mui/material/Paper';
 import { useDispatch } from 'react-redux';
 import { setSessionStarted } from 'redux/sessionSlice';
+
+import useLoading from 'hooks/useLoading';
+import useVideoPlayer from 'hooks/useVideoPlayer';
 
 const APPLICATION_SERVER_URL =
   process.env.NODE_ENV === 'production' ? '' : 'https://demos.openvidu.io/';
 
 export default function OpenViduApp() {
   const dispatch = useDispatch();
-  const [mySessionId, setMySessionId] = useState('REON');
+  const [mySessionId, setMySessionId] = useState('REON1');
   const [myUserName, setMyUserName] = useState(
     `연기자${Math.floor(Math.random() * 100)}`,
   );
@@ -63,6 +67,7 @@ export default function OpenViduApp() {
     setSession(mySession);
 
     dispatch(setSessionStarted(true));
+    setLog((prevLog) => [...prevLog, `${logMessageTime} | 참가했습니다.`]);
   }, []);
 
   useEffect(() => {
@@ -77,7 +82,7 @@ export default function OpenViduApp() {
             videoSource: undefined,
             publishAudio: true,
             publishVideo: true,
-            resolution: '300x300',
+            resolution: '300x400',
             frameRate: 30,
             insertMode: 'APPEND',
             mirror: true,
@@ -121,7 +126,7 @@ export default function OpenViduApp() {
     OV.current = new OpenVidu();
     setSession(undefined);
     setSubscribers([]);
-    setMySessionId('REON');
+    setMySessionId('REON1');
     setMyUserName('연기자' + Math.floor(Math.random() * 100));
     setMainStreamManager(undefined);
     setPublisher(undefined);
@@ -174,6 +179,10 @@ export default function OpenViduApp() {
         return prevSubscribers;
       }
     });
+    setLog((prevLog) => [
+      ...prevLog,
+      `${logMessageTime} | 상대방이 나갔습니다.`,
+    ]);
   }, []);
 
   useEffect(() => {
@@ -230,9 +239,145 @@ export default function OpenViduApp() {
     return response.data; // The token
   };
 
+<<<<<<< frontend/src/components/RankGame/OpenViduApp.jsx
+=======
+  // // #################       게임 로그 저장      ####################
+  const currentTime = new Date();
+  const logMessageTime = `${currentTime.getHours()}:${currentTime.getMinutes()}:${currentTime.getSeconds()}`;
+  const [log, setLog] = useState(['게임 상태를 기록합니다.']);
+  const logRef = useRef(null);
+  useEffect(() => {
+    logRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [log]);
+
+  // ################# useLoading 훅 사용 #################
+  const { isLoading, startLoading } = useLoading(false, 5000);
+
+  useEffect(() => {
+    let intervalId;
+    if (isLoading) {
+      setLog((prevLog) => [...prevLog, ` ${logMessageTime} | 로딩 시작`]);
+      let counter = 0;
+      intervalId = setInterval(() => {
+        setLog((prevLog) => [...prevLog, `${counter}초`]);
+        counter++;
+      }, 1000);
+    } else {
+      clearInterval(intervalId);
+      setLog((prevLog) => [...prevLog, `${logMessageTime} | 로딩 종료`]);
+    }
+    return () => clearInterval(intervalId);
+  }, [isLoading]);
+
+  const logMessage = 'No one in the room.';
+
+  useEffect(() => {
+    setLog((prevLog) => [...prevLog, logMessage]);
+  }, [logMessage]);
+
+  // ############ 상태 관리 ###############
+  const [stage, setStage] = useState('NOT_READY'); // 현재 게임 상태 관리
+  const [userCamOneBorder, setUserCamOneBorder] = useState(false); // 유저1 플레이시 테두리
+  const [userCamTwoBorder, setUserCamTwoBorder] = useState(false); // 유저2 플레이시 테두리
+  const videoRef = useRef(null);
+
+  // ############ 턴 시작 ###############
+  useEffect(() => {
+    // 영화 미리보기
+    if (stage === 'WATCHING_MOVIE') {
+      setLog((prevLog) => [...prevLog, `${logMessageTime} | 작품 미리보기`]);
+      // 유저 1 차례
+    } else if (stage === 'USER_ONE_TURN') {
+      setLog((prevLog) => [...prevLog, `${logMessageTime} | 첫번째 연기 시작`]);
+      handleUserOnePlay();
+      // 유저 2 차례
+    } else if (stage === 'USER_TWO_TURN') {
+      setLog((prevLog) => [...prevLog, `${logMessageTime} | 두번째 연기 시작`]);
+      handleUserTwoPlay();
+      // 점수계산
+    } else if (stage === 'CALCULATION') {
+      setLog((prevLog) => [...prevLog, `${logMessageTime} | 계산 시작`]);
+      // caculateScore();
+    } else if (stage === 'END') {
+      setLog((prevLog) => [...prevLog, `${logMessageTime} | 게임 종료`]);
+    }
+  }, [stage]);
+
+  // ############ 턴 종료 ###############
+  useEffect(() => {
+    if (videoRef.current) {
+      const handleEnded = () => {
+        // 영화 미리보기 종료
+        if (stage === 'WATCHING_MOVIE') {
+          setLog((prevLog) => [
+            ...prevLog,
+            `${logMessageTime} | 작품 미리보기 종료`,
+          ]);
+          setStage('USER_ONE_TURN');
+          // 유저1 턴 종료
+        } else if (stage === 'USER_ONE_TURN') {
+          setLog((prevLog) => [
+            ...prevLog,
+            `${logMessageTime} | 첫번째 연기 종료`,
+          ]);
+          setUserCamOneBorder(false);
+          setStage('USER_TWO_TURN');
+          // 유저2 턴 종료
+        } else if (stage === 'USER_TWO_TURN') {
+          setLog((prevLog) => [
+            ...prevLog,
+            `${logMessageTime} | 두번째 연기 종료`,
+          ]);
+          setLog((prevLog) => [...prevLog, `${logMessageTime} | 연기 종료`]);
+          setUserCamTwoBorder(false);
+          setStage('CALCULATION');
+        }
+      };
+      videoRef.current.addEventListener('ended', handleEnded);
+      return () => {
+        if (videoRef.current) {
+          videoRef.current.removeEventListener('ended', handleEnded);
+        }
+      };
+    }
+  }, [videoRef, stage]);
+
+  // ############# 비디오 플레이 함수 ##############
+  const { videoDuration, isPlaying, handleUseVideoPlayerHook } =
+    useVideoPlayer(videoRef);
+
+  const handlePlayVideo = async () => {
+    await startLoading(3000); // 로딩
+    setLog((prevLog) => [
+      ...prevLog,
+      `${logMessageTime} |  작품 : ${videoRef.current.src} 작품 길이 : ${videoDuration} `,
+    ]);
+    setLog((prevLog) => [...prevLog, `${logMessageTime} | 작품 미리보기`]);
+    handleUseVideoPlayerHook(); // 영화시작
+    setStage('WATCHING_MOVIE');
+  };
+
+  // ############# 유저1 플레이 함수 ##############
+  const handleUserOnePlay = async () => {
+    setLog((prevLog) => [...prevLog, `${logMessageTime} | 유저 1 대기`]);
+    await startLoading(3000); // 로딩
+    setUserCamOneBorder(true);
+    setLog((prevLog) => [...prevLog, `${logMessageTime} | 유저 1 시작`]);
+    handlePlayVideo();
+  };
+
+  // ############# 유저2 플레이 함수 ##############
+  const handleUserTwoPlay = async () => {
+    setLog((prevLog) => [...prevLog, `${logMessageTime} | 유저 2 대기`]);
+    await startLoading(3000); // 로딩
+    setUserCamTwoBorder(true);
+    setLog((prevLog) => [...prevLog, `${logMessageTime} | 유저 2 시작`]);
+    handlePlayVideo();
+  };
+>>>>>>> frontend/src/components/RankGame/OpenViduApp.jsx
 
   return (
-    <div className="container">
+    <div className="m-8">
       {session === undefined ? (
         <div id="join">
           <div id="img-div"></div>
@@ -257,8 +402,8 @@ export default function OpenViduApp() {
       ) : null}
 
       {session !== undefined ? (
-        <div id="session">
-          <div id="session-header">
+        <div id="session" className="flex justify-around">
+          {/* <div id="session-header">
             <h1 id="session-title">{mySessionId}</h1>
             <input
               className="btn btn-large btn-danger"
@@ -267,13 +412,44 @@ export default function OpenViduApp() {
               onClick={leaveSession}
               value="Leave session"
             />
-            {/* <input
+            <input
               className="btn btn-large btn-success"
               type="button"
               id="buttonSwitchCamera"
               onClick={switchCamera}
               value="Switch Camera"
-            /> */}
+            />
+          </div> */}
+          {/* <button onClick={leaveSession}>임시 나가기</button> */}
+          <div
+            id="movie-container"
+            className="border rounded-lg
+            flex-col flex justify-evenly w-[400px] "
+          >
+            <button
+              onClick={handlePlayVideo}
+              className="border-4 border-mainBlue"
+            >
+              세션 사람 2명 되면 발생하는 이벤트
+            </button>
+            <video
+              ref={videoRef}
+              src="video/ISawTheDevil.mp4"
+              className={`h-[450px] mx-4 border rounded-lg ${
+                isPlaying ? 'border-4 border-danger' : ''
+              }`}
+            />
+
+            <Paper
+              style={{ backgroundColor: '#f5f5f5' }}
+              className="h-[100px] mx-4 overflow-auto"
+            >
+              {log.map((item, index) => (
+                <div key={index} ref={logRef}>
+                  {item}
+                </div>
+              ))}
+            </Paper>
           </div>
 
           {/* {mainStreamManager !== undefined ? (
@@ -281,10 +457,19 @@ export default function OpenViduApp() {
               <UserVideoComponent streamManager={mainStreamManager} />
             </div>
           ) : null} */}
-          <div id="video-container" className="col-md-6">
+          <div
+            id="video-container"
+            className="flex flex-wrap border rounded-lg h-[600px] w-[900px]
+            place-content-center bg-darkGray"
+            style={{
+              backgroundImage: `url('image/rank/rank-video-bg.png')`,
+            }}
+          >
             {publisher !== undefined ? (
               <div
-                className="stream-container col-md-6 col-xs-6"
+                className={`${
+                  userCamOneBorder ? 'border-4 border-danger' : ''
+                }`}
                 onClick={() => handleMainVideoStream(publisher)}
               >
                 <UserVideoComponent streamManager={publisher} />
@@ -293,11 +478,16 @@ export default function OpenViduApp() {
             {subscribers.map((sub, i) => (
               <div
                 key={sub.id}
-                className="stream-container col-md-6 col-xs-6"
+                className="stream-container"
                 onClick={() => handleMainVideoStream(sub)}
               >
                 <span>{sub.id}</span>
-                <UserVideoComponent streamManager={sub} />
+                <UserVideoComponent
+                  streamManager={sub}
+                  className={`${
+                    userCamTwoBorder ? 'border-4 border-danger' : ''
+                  }`}
+                />
               </div>
             ))}
           </div>
