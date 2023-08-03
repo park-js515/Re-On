@@ -1,31 +1,27 @@
-// useVideoPlayer.js
-import { useRef, useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
 
-const useVideoPlayer = () => {
-  const videoRef = useRef();
+const useVideoPlayer = (videoRef) => {
   const [videoDuration, setVideoDuration] = useState(null);
-  const [isPlaying, setIsPlaying] = useState(false); // new state for tracking play status
+  const [isPlaying, setIsPlaying] = useState(false);
 
-  const handlePlayVideo = () => {
-    videoRef.current.play();
-    setIsPlaying(true); // update the state when the video starts playing
+  const handleUseVideoPlayerHook = () => {
+    if (videoRef.current) {
+      videoRef.current.play();
+      setIsPlaying(true);
+    }
   };
 
   useEffect(() => {
-    videoRef.current.onloadedmetadata = () => {
-      setVideoDuration(videoRef.current.duration);
-    };
-    videoRef.current.onpause = () => {
-      setIsPlaying(false); // update the state when the video is paused
-    };
-  }, []);
+    const videoNode = videoRef.current;
+    if (videoNode) {
+      const handleMetadataLoaded = () => setVideoDuration(videoNode.duration);
+      videoNode.addEventListener('loadedmetadata', handleMetadataLoaded);
+      return () =>
+        videoNode.removeEventListener('loadedmetadata', handleMetadataLoaded);
+    }
+  }, [videoRef]);
 
-  return {
-    videoRef,
-    videoDuration,
-    isPlaying,
-    handlePlayVideo,
-  };
+  return { videoDuration, isPlaying, handleUseVideoPlayerHook };
 };
 
 export default useVideoPlayer;
