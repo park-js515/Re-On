@@ -35,3 +35,9 @@
 .featured-item:hover .featured-title {
     background: rgba(0, 0, 0, 0.7);
 }
+
+.lottie-container {
+    cursor: pointer;
+    width: calc(2vw + 600px);
+    margin-left: calc(2vw + 80px);
+  }
