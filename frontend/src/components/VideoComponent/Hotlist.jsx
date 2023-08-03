@@ -1,7 +1,6 @@
 import React from "react";
 import Videoitem from "./Videoitem";
 import Slider from "react-slick";
-import styled from "@emotion/styled";
 
 const Hotlist = ({injectVideoID, changeShow}) => {
   // 실질 데이터는 API 완성 후 axios로
@@ -21,22 +20,6 @@ const Hotlist = ({injectVideoID, changeShow}) => {
       isLike : (i % 2 === 0 ? true : false)
     })
   }
-  
-  const Pre = styled.div`
-  width: 50px;
-  height: 50px;
-  position: absolute;
-  left: 2%;
-  z-index: 3;
-  `;
-
-  const NextTo = styled.div`
-    width: 50px;
-    height: 50px;
-    position: absolute;
-    right: 2%;
-    z-index: 3;
-  `;
 
   const settings = {
     dots: true,
@@ -45,12 +28,12 @@ const Hotlist = ({injectVideoID, changeShow}) => {
     slidesToShow: 4,
     slidesToScroll: 1,
     nextArrow: (
-      <NextTo>
-      </NextTo>
+      <div>
+      </div>
     ),
     prevArrow: (
-      <Pre>
-      </Pre>
+      <div>
+      </div>
     ),
     draggable: false,
   };
@@ -58,7 +41,7 @@ const Hotlist = ({injectVideoID, changeShow}) => {
     <div className="">
       <h3 className="my-4 text-center font-bold text-3xl text-info">이달의 인기영상</h3>
       <div className="mx-auto">
-        <Slider {...settings} className="mx-auto">
+        <Slider {...settings}>
             {TESTDATA.map((item,idx)=>{
               return (
                 <div className="mx-1" key={idx}>

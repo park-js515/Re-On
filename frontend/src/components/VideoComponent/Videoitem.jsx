@@ -7,6 +7,7 @@ const Videoitem = ({props, changeMode}) => {
         event.preventDefault();
         navigate('/mypage')
     }
+    
     return (
         <div>
             <div className="rounded-md border border-indigo-600 hover:bg-slate-100 w-64 h-56">

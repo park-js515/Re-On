@@ -17,13 +17,11 @@ const FeedPage = () => {
       <div className="w-3/4 mx-auto">
 
         <Hotlist
-          enable={show}
           injectVideoID={injectVideoID}
           changeShow={changeShow}
         />
 
         <Videolist
-          enable={show}
           injectVideoID={injectVideoID}
           changeShow={changeShow}
         />
