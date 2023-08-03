@@ -6,7 +6,7 @@ import UserVideoComponent from './UserVideoComponent';
 
 import LeftSide from './BackStage/LeftSide';
 import RightSide from './BackStage/RightSide';
-import { Container } from "@mui/system";
+import { Container } from '@mui/system';
 import Paper from '@mui/material/Paper';
 import { useDispatch } from 'react-redux';
 import { setSessionStarted } from 'redux/sessionSlice';
@@ -239,8 +239,6 @@ export default function OpenViduApp() {
     return response.data; // The token
   };
 
-<<<<<<< frontend/src/components/RankGame/OpenViduApp.jsx
-=======
   // // #################       게임 로그 저장      ####################
   const currentTime = new Date();
   const logMessageTime = `${currentTime.getHours()}:${currentTime.getMinutes()}:${currentTime.getSeconds()}`;
@@ -374,14 +372,13 @@ export default function OpenViduApp() {
     setLog((prevLog) => [...prevLog, `${logMessageTime} | 유저 2 시작`]);
     handlePlayVideo();
   };
->>>>>>> frontend/src/components/RankGame/OpenViduApp.jsx
 
   return (
     <div className="m-8">
       {session === undefined ? (
         <div id="join">
           <div id="img-div"></div>
-            <div id="join-dialog">
+          <div id="join-dialog">
             <div className="flex justify-around h-screen">
               <div className="w-128 flex flex-col justify-center">
                 <LeftSide />
@@ -390,15 +387,12 @@ export default function OpenViduApp() {
                 <RightSide />
               </div>
             </div>
-     
-        </div>
-        {/* <label>{myUserName}</label>
+          </div>
+          {/* <label>{myUserName}</label>
         <label>{mySessionId}</label>
         <button onClick={joinSession}>입장</button> 
       */}
-      </div>
-         
-          
+        </div>
       ) : null}
 
       {session !== undefined ? (
