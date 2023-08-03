@@ -1,11 +1,8 @@
 import OpenViduApp from 'components/RankGame/OpenViduApp';
+import { SContainer } from './styles';
 
 const RankPage = () => {
-  return (
-    <div>
-      <OpenViduApp />
-    </div>
-  );
+  return <OpenViduApp />;
 };
 
 export default RankPage;
