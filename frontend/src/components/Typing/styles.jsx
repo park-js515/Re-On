@@ -11,7 +11,7 @@ export const SSection = styled.section`
     
     font-weight: 700;
     font-size: calc(1vw + 28px);
-    background: linear-gradient(to left top, #ff4f23, #ffaa00, #f5ca4a);
+    background: linear-gradient(to right top, #D4E6A0, #8ccfd5);
     color: transparent;
     -webkit-background-clip: text;
   }
@@ -20,7 +20,7 @@ export const SSection = styled.section`
     display: inline-block;
     font-size: calc(1vw + 32px);
     animation: moveCursor 500ms infinite;
-    color: #ffaa00;
+    color: #D4E6A0;
   }
 
   @keyframes moveCursor {

@@ -68,16 +68,11 @@ export default function Example() {
                         <Menu.Item>
                           {({ active }) => (
                             <Link
-<<<<<<< HEAD
                               to="/mypage"
                               className={classNames(
                                 active ? 'bg-gray-100' : '',
                                 'block px-4 py-2 text-sm text-gray-700',
                               )}
-=======
-                              to="/MyPage"
-                              className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
->>>>>>> 2f4962446af11ec010d469605feb0214c9edc9aa
                             >
                               마이페이지
                             </Link>

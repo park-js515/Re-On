@@ -24,7 +24,7 @@ const Home = () => {
           <div className="main__content">
             <h3>됬다리</h3>
             <h3>희창이 얼굴 두꺼비</h3>
-            <h1>카멜레온 헤헤</h1>
+            <h1>희창이</h1>
             <h4>#실시간 &nbsp;#연기 &nbsp;#플랫폼 &nbsp;#AI</h4>
             <h4>#친구들과 즐겨요 &nbsp;#희창시치</h4>
           </div>
