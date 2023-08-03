@@ -1,7 +1,7 @@
 import React from "react";
 import Videoitem from "./Videoitem";
 
-const Hotlist = () => {
+const Hotlist = ({injectVideoID, changeShow}) => {
   // 실질 데이터는 API 완성 후 axios로
 
   // 테스트 데이터
@@ -13,7 +13,7 @@ const Hotlist = () => {
       author_id : i,
       author : `랄로상-${i}`,
       profile_url : "https://yt3.ggpht.com/ytc/AOPolaQEivCeo8OdmA0NhR3XhlRVybG6CTVeeA4YEL75Ug=s68-c-k-c0x00ffffff-no-rj",
-      title : `어쩌라고-${i}`,
+      title : `어쩌라고-${i}dfasdfasdfasdgsagasdgsadfasddfasdfasd`,
       like_cnt : 2400,
       comments_cnt : 20,
       isLike : (i % 2 === 0 ? true : false)
@@ -21,17 +21,21 @@ const Hotlist = () => {
   }
 
   return (
-    <div className="flex flex-col items-center">
-      <h3>Monthly TOP10</h3>
-      <div className="flex overflow-scroll">
-        {TESTDATA.map((item)=>{
-          return (
-            <Videoitem
-              key={item.video_id}
-              props={item}
-            />
-          )
-        })}
+    <div className="">
+      <h3 className="my-4 text-center font-bold text-3xl text-info">이달의 인기영상</h3>
+      <div className="mx-auto flex overflow-x-scroll items-bw">
+          {TESTDATA.map((item)=>{
+            return (
+                <Videoitem
+                  key={item.video_id}
+                  props={item}
+                  changeMode={()=>{
+                    injectVideoID(item.video_id)
+                    changeShow()
+                  }}
+                />
+            )
+          })}
       </div>
     </div>
   )
