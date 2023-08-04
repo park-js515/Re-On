@@ -35,6 +35,7 @@ public class MemberInfo {
     }
 
     public void updateProfileImg(String profileImg) {
+
         this.profileImg = profileImg;
     }
     public void updateReported(int reported){

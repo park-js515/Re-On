@@ -1,6 +1,9 @@
 package reon.app.domain.member.api;
 
+import io.swagger.v3.oas.annotations.Parameter;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import reon.app.domain.member.dto.req.MemberBattleInfoUpdateRequest;
 import reon.app.domain.member.dto.req.MemberUpdateRequest;
 import reon.app.domain.member.dto.res.BackStageMemberResponse;
@@ -60,15 +63,17 @@ public class MemberApi {
 
     // TODO: 2023-08-01 로그인 구현 후 AuthenticationPrincipal 적용
     @Operation(tags = "회원", description = "회원 프로필 이미지를 수정한다.")
-    @PostMapping("/images/update")
-//    public ApiResponse<Void> updateProfileImg(@RequestPart MultipartFile profileImg, @Parameter(hidden = true) @AuthenticationPrincipal User user) {
-    public ApiResponse<Void> updateProfileImg(@RequestPart @ApiParam("수정할 이미지") MultipartFile profileImg) {
+    @PutMapping("/images/update")
+    public ApiResponse<Void> updateProfileImg(@RequestPart MultipartFile profileImg, @Parameter(hidden = true) @AuthenticationPrincipal User user) {
+//    public ApiResponse<Void> updateProfileImg(@RequestPart @ApiParam("수정할 이미지") MultipartFile profileImg) {
+//        memberService.updateProfileImg(profileImg, Long.parseLong(user.getUsername()));
         return ApiResponse.OK(null);
     }
     @Operation(tags = "회원", description = "회원 프로필 이미지를 삭제한다.")
     @DeleteMapping("/images/delete")
 //    public ApiResponse<Void> removeProfileImg(@Parameter(hidden = true) @AuthenticationPrincipal User user) {
     public ApiResponse<Void> removeProfileImg() {
+//        memberService.removeProfileImg(Long.parseLong(user.getUsername()));
         return ApiResponse.OK(null);
     }
     
