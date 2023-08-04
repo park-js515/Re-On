@@ -2,7 +2,10 @@ package reon.app.domain.member.api;
 
 import reon.app.domain.member.dto.req.MemberBattleInfoUpdateRequest;
 import reon.app.domain.member.dto.req.MemberInfoUpdateRequest;
+import reon.app.domain.member.dto.res.BackStageMemberResponse;
 import reon.app.domain.member.dto.res.MemberBattleInfoResponse;
+import reon.app.domain.member.service.MemberQueryService;
+import reon.app.domain.member.service.MemberService;
 import reon.app.global.api.ApiResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiParam;
@@ -20,12 +23,28 @@ import javax.servlet.http.HttpSession;
 @RequiredArgsConstructor
 @RequestMapping("/api/member-management")
 public class MemberApi {
-
-    @Operation(tags = "회원", description = "이메일로 유저 정보를 조회한다")
-    @GetMapping("/member/{email}")
-    public ApiResponse<MemberResponse> findMemberByEmail(@PathVariable("email") @ApiParam("유저 이메일") String email){
-        return ApiResponse.OK(null);
+//    private final MemberService memberService;
+    private final MemberQueryService memberQueryService;
+    @Operation(tags = "회원", description = "ID로 마이페이지 상세 정보 조회")
+    @GetMapping("/member/{id}")
+    public ApiResponse<MemberResponse> findMemberById(@PathVariable("id") @ApiParam("유저 id") Long id){
+        MemberResponse memberResponse = memberQueryService.findById(id);
+        return ApiResponse.OK(memberResponse);
     }
+
+    @Operation(tags = "백스테이지", description = "ID로 백스테이지 제공 정보 조회")
+    @GetMapping("/back-stage/{id}")
+    public ApiResponse<BackStageMemberResponse> findBackStageMemberById(@PathVariable("id") @ApiParam("유저 ID") Long id){
+        BackStageMemberResponse backStageMemberResponse = memberQueryService.findBackStageMembereById(id);
+        return ApiResponse.OK(backStageMemberResponse);
+    }
+
+
+//    @Operation(tags = "회원", description = "이메일로 유저 정보를 조회한다")
+//    @GetMapping("/member/{email}")
+//    public ApiResponse<MemberResponse> findMemberByEmail(@PathVariable("email") @ApiParam("유저 이메일") String email){
+//        return ApiResponse.OK(null);
+//    }
     @Operation(tags = "회원", description = "회원 정보(닉네임, 자기소개)를 수정한다.")
     @PutMapping("/member/update")
     public ApiResponse<Void> update(@RequestBody @ApiParam("수정할 회원 정보") MemberInfoUpdateRequest memberModifyRequest){
