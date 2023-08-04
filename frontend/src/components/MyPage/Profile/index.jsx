@@ -1,25 +1,25 @@
-import * as Template from "./ProfileTemplate";
-import * as Img from "./ProfileImg";
-import * as Info from "./ProfileInfo";
-import * as Modify from "./ProfileModifiy";
-import * as hooks from "./hooks";
-import * as Sty from "./style";
+import * as Template from './ProfileTemplate';
+import * as Img from './ProfileImg';
+import * as Info from './ProfileInfo';
+import * as Modify from './ProfileModifiy';
+import * as hooks from './hooks';
+import * as Sty from './style';
 
 const Profile = () => {
   const { isOpen, handleIsOpen } = hooks.useModal();
-  const [Img1, setImg1] = hooks.useInputImg("images/MyPage/0001.jpg");
+  const [Img1, setImg1] = hooks.useInputImg('images/MyPage/0001.jpg');
   const message =
-    "최애의스폰지밥을먹는뚱이가잡는해파리를회쳐먹는쯔양을보고있는나를\n바라보는팀원들의따까운눈빛으로구운소시지를먹는희창이의한숨😢";
+    '네이버 이메일, 티어, 티어-프로그레스바, 수정기능: onchange -> onSubmit, 회원탈퇴, 기타 alert...';
   const [statusMessage, setStatusMessage] = hooks.useInputText(
     message,
-    (value) => value.length <= 150
+    (value) => value.length <= 150,
   );
   const [nickName, setNickName] = hooks.useInputText(
-    "주성시치",
-    (value) => value.length <= 16
+    '주성시치',
+    (value) => value.length <= 16,
   );
   const modify = {
-    src: "images/MyPage/modify.png",
+    src: 'images/MyPage/modify.png',
     onClick: handleIsOpen,
   };
 
@@ -53,18 +53,24 @@ const Profile = () => {
 
       <Modify.Modal isOpen={isOpen} handleIsOpen={handleIsOpen}>
         <Sty.RowClose>
-          <Modify.Button onClick={handleIsOpen}>(❁´◡`❁)</Modify.Button>
+          <Modify.Button onClick={handleIsOpen}>❌</Modify.Button>
         </Sty.RowClose>
         <label htmlFor="profileImg">이미지 변경: </label>
         <Modify.InputImg onChange={setImg1}></Modify.InputImg>
         <br />
         <label htmlFor="statusText">상태메시지: </label>
         <Sty.Rolw100CC>
-          <Modify.InputText value={statusMessage} onChange={setStatusMessage}></Modify.InputText>
+          <Modify.InputText
+            value={statusMessage}
+            onChange={setStatusMessage}
+          ></Modify.InputText>
         </Sty.Rolw100CC>
         <br />
         <label htmlFor="nickName">닉네임: </label>
-        <Modify.InputNick value={nickName} onChange={setNickName}></Modify.InputNick>
+        <Modify.InputNick
+          value={nickName}
+          onChange={setNickName}
+        ></Modify.InputNick>
       </Modify.Modal>
     </>
   );
