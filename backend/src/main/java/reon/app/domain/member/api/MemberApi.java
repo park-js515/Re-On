@@ -1,9 +1,11 @@
 package reon.app.domain.member.api;
 
+import org.springframework.http.HttpStatus;
 import reon.app.domain.member.dto.req.MemberBattleInfoUpdateRequest;
-import reon.app.domain.member.dto.req.MemberInfoUpdateRequest;
+import reon.app.domain.member.dto.req.MemberUpdateRequest;
 import reon.app.domain.member.dto.res.BackStageMemberResponse;
 import reon.app.domain.member.dto.res.MemberBattleInfoResponse;
+import reon.app.domain.member.entity.Member;
 import reon.app.domain.member.service.MemberQueryService;
 import reon.app.domain.member.service.MemberService;
 import reon.app.global.api.ApiResponse;
@@ -23,7 +25,7 @@ import javax.servlet.http.HttpSession;
 @RequiredArgsConstructor
 @RequestMapping("/api/member-management")
 public class MemberApi {
-//    private final MemberService memberService;
+    private final MemberService memberService;
     private final MemberQueryService memberQueryService;
     @Operation(tags = "회원", description = "ID로 마이페이지 상세 정보 조회")
     @GetMapping("/member/{id}")
@@ -39,16 +41,21 @@ public class MemberApi {
         return ApiResponse.OK(backStageMemberResponse);
     }
 
-
 //    @Operation(tags = "회원", description = "이메일로 유저 정보를 조회한다")
 //    @GetMapping("/member/{email}")
 //    public ApiResponse<MemberResponse> findMemberByEmail(@PathVariable("email") @ApiParam("유저 이메일") String email){
 //        return ApiResponse.OK(null);
 //    }
+
     @Operation(tags = "회원", description = "회원 정보(닉네임, 자기소개)를 수정한다.")
     @PutMapping("/member/update")
-    public ApiResponse<Void> update(@RequestBody @ApiParam("수정할 회원 정보") MemberInfoUpdateRequest memberModifyRequest){
-        return ApiResponse.OK(null);
+    public ApiResponse<?> update(@RequestBody @ApiParam("수정할 회원 정보") MemberUpdateRequest memberUpdateRequest){
+        // TODO 2023.08.04 : ERROR처리 어떻게 ?
+        Member updateMember = memberService.updateMember(memberUpdateRequest);
+        if(updateMember == null){
+            return ApiResponse.ERROR("회원이 존재하지 않습니다", HttpStatus.BAD_REQUEST);
+        }
+        return ApiResponse.OK(updateMember);
     }
 
     // TODO: 2023-08-01 로그인 구현 후 AuthenticationPrincipal 적용
