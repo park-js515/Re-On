@@ -19,7 +19,7 @@ const APPLICATION_SERVER_URL =
 
 export default function OpenViduApp() {
   const dispatch = useDispatch();
-  const [mySessionId, setMySessionId] = useState('NEW1');
+  const [mySessionId, setMySessionId] = useState('1234');
   const [myUserName, setMyUserName] = useState(
     `연기자${Math.floor(Math.random() * 100)}`,
   );
@@ -130,7 +130,7 @@ export default function OpenViduApp() {
     OV.current = new OpenVidu();
     setSession(undefined);
     setSubscribers([]);
-    setMySessionId('NEW1');
+    setMySessionId('1234');
     setMyUserName('연기자' + Math.floor(Math.random() * 100));
     setMainStreamManager(undefined);
     setPublisher(undefined);
