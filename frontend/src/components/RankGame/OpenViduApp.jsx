@@ -1,12 +1,13 @@
 import { OpenVidu } from 'openvidu-browser';
-
 import axios from 'axios';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import UserVideoComponent from './UserVideoComponent';
-
 import BackStage from './BackStage';
+import UserVideoComponent from './UserVideoComponent';
+import Modal from 'components/common/Modal';
+
 import { Container } from '@mui/system';
 import Paper from '@mui/material/Paper';
+
 import { useDispatch } from 'react-redux';
 import { setSessionStarted } from 'redux/sessionSlice';
 
@@ -14,11 +15,11 @@ import useLoading from 'hooks/useLoading';
 import useVideoPlayer from 'hooks/useVideoPlayer';
 
 const APPLICATION_SERVER_URL =
-  process.env.NODE_ENV === 'production' ? '' : 'https://demos.openvidu.io/';
+  process.env.NODE_ENV === 'production' ? '' : 'https://i9c203.p.ssafy.io';
 
 export default function OpenViduApp() {
   const dispatch = useDispatch();
-  const [mySessionId, setMySessionId] = useState('REON1');
+  const [mySessionId, setMySessionId] = useState('NEW1');
   const [myUserName, setMyUserName] = useState(
     `연기자${Math.floor(Math.random() * 100)}`,
   );
@@ -30,13 +31,13 @@ export default function OpenViduApp() {
 
   const OV = useRef(new OpenVidu());
 
-  const handleChangeSessionId = useCallback((e) => {
-    setMySessionId(e.target.value);
-  }, []);
+  // const handleChangeSessionId = useCallback((e) => {
+  //   setMySessionId(e.target.value);
+  // }, []);
 
-  const handleChangeUserName = useCallback((e) => {
-    setMyUserName(e.target.value);
-  }, []);
+  // const handleChangeUserName = useCallback((e) => {
+  //   setMyUserName(e.target.value);
+  // }, []);
 
   const handleMainVideoStream = useCallback(
     (stream) => {
@@ -129,7 +130,7 @@ export default function OpenViduApp() {
     OV.current = new OpenVidu();
     setSession(undefined);
     setSubscribers([]);
-    setMySessionId('REON1');
+    setMySessionId('NEW1');
     setMyUserName('연기자' + Math.floor(Math.random() * 100));
     setMainStreamManager(undefined);
     setPublisher(undefined);
@@ -220,25 +221,66 @@ export default function OpenViduApp() {
     );
   }, [mySessionId]);
 
+  // const createSession = (sessionId) => {
+  //   return new Promise((resolve, reject) => {
+  //     const data = JSON.stringify({ customSessionId: sessionId });
+  //     axios
+  //       .post(APPLICATION_SERVER_URL + '/openvidu/api/sessions', data, {
+  //         headers: {
+  //           'Content-Type': 'application/json',
+  //           Authorization: 'Basic T1BFTlZJRFVBUFA6b3BlbnZpZHVyZW9uYzIwMw==',
+  //         },
+  //       })
+  //       .then((response) => {
+  //         console.log('CREATE SESSION', response);
+  //         resolve(response.data.id);
+  //       })
+  //       .catch((response) => {
+  //         const error = Object.assign({}, response);
+  //         if (error?.response?.status === 409) {
+  //           resolve(sessionId);
+  //         } else {
+  //           console.warn(
+  //             'No connection to OpenVidu Server. This may be a certificate error at ' +
+  //               APPLICATION_SERVER_URL,
+  //           );
+  //         }
+  //       });
+  //   });
+  // };
+
   const createSession = async (sessionId) => {
     const response = await axios.post(
-      APPLICATION_SERVER_URL + 'api/sessions',
+      APPLICATION_SERVER_URL + '/openvidu/api/sessions',
       { customSessionId: sessionId },
       {
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Basic T1BFTlZJRFVBUFA6b3BlbnZpZHVyZW9uYzIwMw==',
+        },
       },
     );
+    await startLoading(5000);
+    console.log('SessionSession', response);
     return response.data; // The sessionId
   };
 
   const createToken = async (sessionId) => {
     const response = await axios.post(
-      APPLICATION_SERVER_URL + 'api/sessions/' + sessionId + '/connections',
+      APPLICATION_SERVER_URL +
+        '/openvidu/api/sessions/' +
+        sessionId +
+        '/connections',
       {},
       {
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Basic T1BFTlZJRFVBUFA6b3BlbnZpZHVyZW9uYzIwMw==',
+        },
       },
     );
+    await startLoading(5000);
+    console.log('TokenToken', response);
     return response.data; // The token
   };
 
@@ -298,7 +340,7 @@ export default function OpenViduApp() {
       // 점수계산
     } else if (stage === 'CALCULATION') {
       setLog((prevLog) => [...prevLog, `${logMessageTime} | 계산 시작`]);
-      // caculateScore();
+      handleCaculateScore();
     } else if (stage === 'END') {
       setLog((prevLog) => [...prevLog, `${logMessageTime} | 게임 종료`]);
     }
@@ -341,7 +383,7 @@ export default function OpenViduApp() {
         }
       };
     }
-  }, [videoRef, stage]);
+  }, [stage]);
 
   // ############# 비디오 플레이 함수 ##############
   const { videoDuration, isPlaying, handleUseVideoPlayerHook } =
@@ -376,8 +418,23 @@ export default function OpenViduApp() {
     handlePlayVideo();
   };
 
+  // ############# 점수 계산 ##############
+  const handleCaculateScore = async () => {
+    //  AI계산
+    setLog((prevLog) => [...prevLog, `${logMessageTime} | AI 점수 계산`]);
+    setStage('END');
+    await startLoading(3000);
+    // toggleModal(); // 저장 모달
+  };
+
+  // ############# 모달 ##############
+  // handleSaveVideo = () => {
+  //   setLog((prevLog) => [...prevLog, `${logMessageTime} | 녹화 저장`]);
+  // }
+
   return (
     <div className="m-8">
+      {/* <Modal open={open} title={"녹화저장"} description={"녹화를 하시겠습니까??"}/> */}
       {session === undefined ? (
         <div id="join">
           <BackStage
@@ -390,6 +447,7 @@ export default function OpenViduApp() {
 
       {session !== undefined ? (
         <div id="session" className="flex justify-around">
+          {/* <Modal /> */}
           {/* <div id="session-header">
             <h1 id="session-title">{mySessionId}</h1>
             <input

@@ -16,8 +16,6 @@ import ResponsiveAppBar from 'components/common/NavBar';
 function App() {
   const { sessionStarted } = useSelector((state) => state.session);
 
-  console.log(sessionStarted);
-
   return (
     <>
       {!sessionStarted && <ResponsiveAppBar />}
