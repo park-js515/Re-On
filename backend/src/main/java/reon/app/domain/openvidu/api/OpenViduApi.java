@@ -21,7 +21,7 @@ import io.openvidu.java.client.SessionProperties;
 @CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/openvidu-management")
-public class Controller {
+public class OpenViduApi {
 
     @Value("${OPENVIDU_URL}")
     private String OPENVIDU_URL;
@@ -62,6 +62,24 @@ public class Controller {
         }
         ConnectionProperties properties = ConnectionProperties.fromJson(params).build();
         Connection connection = session.createConnection(properties);
+        return new ResponseEntity<>(connection.getToken(), HttpStatus.OK);
+    }
+
+    @PostMapping("/test")
+    public ResponseEntity<String> test(@RequestBody(required = false) Map<String, Object> params)
+            throws OpenViduJavaClientException, OpenViduHttpException {
+        SessionProperties properties = SessionProperties.fromJson(params).build();
+        Session session = openvidu.createSession(properties);
+
+        String sessionId = session.getSessionId();
+
+        Session findSession = openvidu.getActiveSession(sessionId);
+
+        if (findSession == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        ConnectionProperties cproperties = ConnectionProperties.fromJson(params).build();
+        Connection connection = findSession.createConnection(cproperties);
         return new ResponseEntity<>(connection.getToken(), HttpStatus.OK);
     }
 
