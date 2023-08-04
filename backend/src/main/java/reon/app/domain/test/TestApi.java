@@ -2,6 +2,7 @@ package reon.app.domain.test;
 
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,11 +12,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/test")
+@Slf4j
 public class TestApi {
     @Value("${OPENVIDU_SECRET}")
     private String OPENVIDU_SECRET;
     @GetMapping("/")
     public String test(){
+        System.out.println("ss");
         return this.OPENVIDU_SECRET;
     }
 }

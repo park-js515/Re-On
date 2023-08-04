@@ -8,11 +8,7 @@ import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import io.openvidu.java.client.Connection;
 import io.openvidu.java.client.ConnectionProperties;
@@ -24,6 +20,7 @@ import io.openvidu.java.client.SessionProperties;
 
 @CrossOrigin(origins = "*")
 @RestController
+@RequestMapping("/api/openvidu-management")
 public class Controller {
 
     @Value("${OPENVIDU_URL}")
@@ -38,7 +35,6 @@ public class Controller {
     public void init() {
         this.openvidu = new OpenVidu(OPENVIDU_URL, OPENVIDU_SECRET);
     }
-
     /**
      * @param params The Session properties
      * @return The Session ID
