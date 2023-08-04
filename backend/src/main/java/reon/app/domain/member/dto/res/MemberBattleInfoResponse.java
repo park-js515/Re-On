@@ -1,4 +1,4 @@
-package reon.app.domain.member.dto.response;
+package reon.app.domain.member.dto.res;
 
 import lombok.Getter;
 import lombok.ToString;
