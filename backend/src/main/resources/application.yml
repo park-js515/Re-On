@@ -15,7 +15,8 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: none
+      #ddl-auto: create
     # show-sql: true # DDL 출력
 
 oauth:
