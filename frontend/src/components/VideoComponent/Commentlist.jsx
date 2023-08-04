@@ -1,84 +1,104 @@
 import React from "react";
 import Comment from "./Comment";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import './videocomponent.css'
-const Commentlist = ({video_id, changeShow}) => {
 
-    // 댓글은 영상 식별자로 조회
-    const testdata = [
-        {
-            comment_id : 1,
-            content : "랄로 기다린 랄붕이면 개추",
-            author : "마루쉐",
-            author_id : 1,
-            profile_url : "https://yt3.googleusercontent.com/ytc/AOPolaRGljY8JqJqiskPWVM_bOh2Lon8sbDWwD__idDP=s176-c-k-c0x00ffffff-no-rj-mo",
-            recomments_cnt : 1
-        },
-        {
-            comment_id : 2,
-            content : "이따 봐야지 ㅋㅋ",
-            author : "마루쉐",
-            author_id : 1,
-            profile_url : "https://yt3.googleusercontent.com/ytc/AOPolaRGljY8JqJqiskPWVM_bOh2Lon8sbDWwD__idDP=s176-c-k-c0x00ffffff-no-rj-mo",
-            recomments_cnt : 0
-        },
-        {
-            comment_id : 3,
-            content : "산책 시켜줘",
-            author : "마루쉐",
-            author_id : 1,
-            profile_url : "https://yt3.googleusercontent.com/ytc/AOPolaRGljY8JqJqiskPWVM_bOh2Lon8sbDWwD__idDP=s176-c-k-c0x00ffffff-no-rj-mo",
-            recomments_cnt : 0
-        },
-    ]
-    const [comments, setComments] = useState(testdata)
+const Commentlist = ({post_id, changeShow, hierarchy}) => {
+    // 댓글은 게시글 식별자로 조회
+    const [comments, setComments] = useState([])
     const [userInput, setUserInput] = useState("");
+    const [page, setPage] = useState(0)
+    const [more, setMore] = useState(true) // 댓글 더보기 가능 여부
 
-    const onChange = (event) => {
-        event.preventDefault();
-        setUserInput(event.target.value)
-        console.log(userInput)
+    useEffect(()=>{
+        getComment()
+    }, []);
+
+    if (hierarchy > 1) {
+        return
     }
 
-    const renewComments = (event) => {
-        event.preventDefault();
-        // axios.post(data=userInput)
-        const temp = {
-            comment_id : Math.round(Math.random()*100),
-            content : userInput,
-            author : "마루쉐",
-            author_id : 1,
-            profile_url : "https://yt3.googleusercontent.com/ytc/AOPolaRGljY8JqJqiskPWVM_bOh2Lon8sbDWwD__idDP=s176-c-k-c0x00ffffff-no-rj-mo",
-            recomments_cnt : Math.round(Math.random()*10),
+    const onChange = (event) => {
+        setUserInput(event.target.value)
+    }
+
+    const getComment = () => {
+        if (more) {
+            // axios로 10개씩 받아오기 post_id, page
+            let data = []
+            for (let i = 0; i < 10; i++) {
+                data.push(
+                    {
+                        comment_id : i,
+                        content : `랄로 기다린 랄붕이면 개추-${i}`,
+                        author : "마루쉐",
+                        author_id : 1,
+                        profile_url : "https://yt3.googleusercontent.com/ytc/AOPolaRGljY8JqJqiskPWVM_bOh2Lon8sbDWwD__idDP=s176-c-k-c0x00ffffff-no-rj-mo",
+                    }
+                )
+            }
+            setComments((comments) => {return [...data, ...comments]})
+            setPage((page)=>{return page+1})
+            if (data.length < 10){
+                setMore(false)
+            }
         }
-        setComments((comments)=>{return [...comments, temp]})
-        setUserInput("")
+    }
+
+    const addComment = () => {
+        if (userInput.length < 1) {
+            alert("댓글 작성 후 눌러주세요")
+            return
+        }
+        else {
+            // axios로 API 서버에 댓글 생성 보내기
+            // 필요 내용 받아서 다시 렌더링 (실제로는 리턴으로 받을 가장 최신 댓글 10개로 다시 랜더링)
+            const temp = {
+                comment_id : Math.round(Math.random()*100),
+                content : userInput,
+                author : "마루쉐",
+                author_id : 1,
+                profile_url : "https://yt3.googleusercontent.com/ytc/AOPolaRGljY8JqJqiskPWVM_bOh2Lon8sbDWwD__idDP=s176-c-k-c0x00ffffff-no-rj-mo",
+            }
+            setComments((comments)=>{return [temp, ...comments]})
+            setUserInput("")
+        }
     }
 
     const deleteComment = (id) => {
         const newComments = comments.filter((comment)=> comment.comment_id !== id)
-        console.log(newComments)
         setComments([...newComments])
     }
 
+    const MoreButton = () => {
+        return (
+            <div onClick={getComment} className="rounded text-center hover:cursor-pointer hover:ring-2">
+                더 보기
+            </div>
+        )
+    }
     return (
         <div className="mt-1 h-full rounded ring-2 ring-info hover:scroll-auto overflow-y-scroll non-scroll-bar">
+
             {/* 댓글 입력 창 */}
             <div className="flex"> 
                 <input className="mx-1 mt-2 mb-1 px-3 py-2 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-green-500 focus:ring-green-500 block w-5/6 rounded-md sm:text-sm focus:ring-1"
                 type="text" placeholder="댓글 추가..."
                 value={userInput} onInput={onChange}
                 />
-                <button type="button" className="" onClick={renewComments}>추가</button>
+                <button type="button" className="" onClick={addComment}>추가</button>
             </div>
+
             {/* 댓글 리스트 */}
             <div className="m-1">
                 {comments.map((comment)=>{
                     return (
-                        <Comment comment={comment} key={comment.comment_id} deleteComment={deleteComment} changeShow={changeShow}/>
+                        <Comment comment={comment} key={comment.comment_id} deleteComment={deleteComment} changeShow={changeShow} hierarchy={hierarchy}/>
                     )
                 })}
+                { more ? <MoreButton/> : null }
             </div>
+            
         </div>
     )
 }
