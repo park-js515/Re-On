@@ -15,11 +15,12 @@ import useLoading from 'hooks/useLoading';
 import useVideoPlayer from 'hooks/useVideoPlayer';
 
 const APPLICATION_SERVER_URL =
-  process.env.NODE_ENV === 'production' ? '' : 'https://i9c203.p.ssafy.io';
+  process.env.NODE_ENV === 'production' ? '' : 'https://demos.openvidu.io';
+// process.env.NODE_ENV === 'production' ? '' : 'https://i9c203.p.ssafy.io';
 
 export default function OpenViduApp() {
   const dispatch = useDispatch();
-  const [mySessionId, setMySessionId] = useState('1234');
+  const [mySessionId, setMySessionId] = useState('REON');
   const [myUserName, setMyUserName] = useState(
     `연기자${Math.floor(Math.random() * 100)}`,
   );
@@ -130,7 +131,7 @@ export default function OpenViduApp() {
     OV.current = new OpenVidu();
     setSession(undefined);
     setSubscribers([]);
-    setMySessionId('1234');
+    setMySessionId('REON');
     setMyUserName('연기자' + Math.floor(Math.random() * 100));
     setMainStreamManager(undefined);
     setPublisher(undefined);
@@ -251,7 +252,8 @@ export default function OpenViduApp() {
 
   const createSession = async (sessionId) => {
     const response = await axios.post(
-      APPLICATION_SERVER_URL + '/openvidu/api/sessions',
+      APPLICATION_SERVER_URL + '/api/sessions',
+      // APPLICATION_SERVER_URL + '/openvidu/api/sessions',
       { customSessionId: sessionId },
       {
         headers: {
@@ -268,7 +270,8 @@ export default function OpenViduApp() {
   const createToken = async (sessionId) => {
     const response = await axios.post(
       APPLICATION_SERVER_URL +
-        '/openvidu/api/sessions/' +
+        '/api/sessions/' +
+        // '/openvidu/api/sessions/' +
         sessionId +
         '/connections',
       {},
@@ -279,7 +282,7 @@ export default function OpenViduApp() {
         },
       },
     );
-    await startLoading(5000);
+    await startLoading(3000);
     console.log('TokenToken', response);
     return response.data; // The token
   };
@@ -385,12 +388,19 @@ export default function OpenViduApp() {
     }
   }, [stage]);
 
+  // ############# 비디오 불러오기 함수 #############
+  // 비디오 불러온 상태 true // false 에 따라 안불러왔을 때 디폴트 이미지 보여주기
+  // 비디오 불러오기
+
   // ############# 비디오 플레이 함수 ##############
   const { videoDuration, isPlaying, handleUseVideoPlayerHook } =
     useVideoPlayer(videoRef);
 
   const handlePlayVideo = async () => {
     await startLoading(3000); // 로딩
+    console.log('비디오길이', videoDuration);
+    console.log('비디오알이엪', videoRef);
+    console.log('비디오컬', videoRef.current);
     setLog((prevLog) => [
       ...prevLog,
       `${logMessageTime} |  작품 : ${videoRef.current.src} 작품 길이 : ${videoDuration} `,
@@ -424,17 +434,29 @@ export default function OpenViduApp() {
     setLog((prevLog) => [...prevLog, `${logMessageTime} | AI 점수 계산`]);
     setStage('END');
     await startLoading(3000);
-    // toggleModal(); // 저장 모달
+    toggleModal(); // 저장 모달
   };
 
   // ############# 모달 ##############
-  // handleSaveVideo = () => {
-  //   setLog((prevLog) => [...prevLog, `${logMessageTime} | 녹화 저장`]);
-  // }
+  const [modalVisible, setModalVisible] = useState(false);
+  const toggleModal = () => {
+    setModalVisible(!modalVisible);
+  };
+  const handleSaveVideo = () => {
+    setLog((prevLog) => [...prevLog, `${logMessageTime} | 녹화 저장`]);
+    toggleModal();
+  };
 
   return (
     <div className="m-8">
-      {/* <Modal open={open} title={"녹화저장"} description={"녹화를 하시겠습니까??"}/> */}
+      <Modal
+        open={modalVisible}
+        title={'녹화저장'}
+        description={'녹화를 하시겠습니까??'}
+        onConfirm={handleSaveVideo}
+        onClose={toggleModal}
+        showCancel={true}
+      />
       {session === undefined ? (
         <div id="join">
           <BackStage
