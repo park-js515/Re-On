@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 
 const FeedPage = () => {
   const [show, setShow] = useState(false);
-  const [vi, setVi] = useState(null);
+  const [post_id, setPostId] = useState(null);
 
   const changeShow = () => {
     if (show) {
@@ -18,8 +18,8 @@ const FeedPage = () => {
     }
   }
 
-  const injectVideoID = () => {
-    setVi()
+  const injectPostId = (arg) => {
+    setPostId(arg)
   }
 
   const preventScroll = () => {
@@ -52,17 +52,17 @@ const FeedPage = () => {
 
       <div className={show? "w-3/4 mx-auto blur-md" : "w-3/4 mx-auto"}>
         <Hotlist
-          injectVideoID={injectVideoID}
+          injectPostId={injectPostId}
           changeShow={changeShow}
           />
 
         <Videolist
-          injectVideoID={injectVideoID}
+          injectPostId={injectPostId}
           changeShow={changeShow}
           />
       </div>
 
-      {show ? <Videoplayer changeShow={changeShow} vi={vi}/> : null}
+      {show ? <Videoplayer changeShow={changeShow} post_id={post_id}/> : null}
 
     </div>
   );
