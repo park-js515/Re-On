@@ -1,7 +1,7 @@
-package reon.app.domain.member.repository;
+package reon.app.domain.member.service;
 
 import reon.app.domain.member.dto.res.MemberResponse;
 
-public interface MemberQueryRepository {
+public interface MemberQueryService {
     MemberResponse findById(Long id);
 }

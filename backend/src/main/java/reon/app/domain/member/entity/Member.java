@@ -28,9 +28,10 @@ public class Member extends BaseEntity {
     @Column(nullable = false)
     private String gender;
     @Embedded
+    @Column(name="oauth_provider")
     private OAuthProvider oAuthProvider;
-    @Column(nullable = true) // 초기에는 없음
-    private String refresh_token;
+    @Column(nullable = true, name = "refresh_token") // 초기에는 없음
+    private String refreshToken;
     @Embedded
     private MemberBattleInfo memberBattleInfo;
     @Embedded
@@ -39,6 +40,6 @@ public class Member extends BaseEntity {
 
     // 비즈니스 로직
     public void updateRefreshToken(String refreshToken) {
-        this.refresh_token = refreshToken;
+        this.refreshToken = refreshToken;
     }
 }

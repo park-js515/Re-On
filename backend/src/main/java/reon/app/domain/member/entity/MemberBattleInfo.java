@@ -20,7 +20,7 @@ public class MemberBattleInfo {
     private Tier tier;//현재 티어
     @Column(nullable = false, columnDefinition = "INT DEFAULT 0")
     private int score;//누적 점수
-    @Column(nullable = false, columnDefinition = "INT DEFAULT 0")
+    @Column(name = "game_cnt", nullable = false, columnDefinition = "INT DEFAULT 0")
     private int gameCnt;//게임 수
     @Column(nullable = false, columnDefinition = "INT DEFAULT 0")
     private int win;//승리

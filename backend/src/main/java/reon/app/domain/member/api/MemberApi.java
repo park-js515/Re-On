@@ -3,6 +3,8 @@ package reon.app.domain.member.api;
 import reon.app.domain.member.dto.req.MemberBattleInfoUpdateRequest;
 import reon.app.domain.member.dto.req.MemberInfoUpdateRequest;
 import reon.app.domain.member.dto.res.MemberBattleInfoResponse;
+import reon.app.domain.member.service.MemberQueryService;
+import reon.app.domain.member.service.MemberService;
 import reon.app.global.api.ApiResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiParam;
@@ -20,6 +22,17 @@ import javax.servlet.http.HttpSession;
 @RequiredArgsConstructor
 @RequestMapping("/api/member-management")
 public class MemberApi {
+//    private final MemberService memberService;
+    private final MemberQueryService memberQueryService;
+//    private final
+    @Operation(tags = "회원", description = "ID로 마이페이지 상세 정보 조회")
+    @GetMapping("/user/{id}")
+    public ApiResponse<MemberResponse> findMemberById(@PathVariable("id") @ApiParam("유저 id") Long id){
+        MemberResponse memberResponse = memberQueryService.findById(id);
+        return ApiResponse.OK(memberResponse);
+    }
+
+
 
     @Operation(tags = "회원", description = "이메일로 유저 정보를 조회한다")
     @GetMapping("/member/{email}")
