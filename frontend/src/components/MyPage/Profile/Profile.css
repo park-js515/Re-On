@@ -46,8 +46,8 @@
 }
 
 .Profile-Modify {
-  height: 5vh;
-  aspect-ratio: 1;
+  height: 37.5px;
+  width: 37.5px;
   cursor: pointer;
   border-radius: 5px;
 }

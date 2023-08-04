@@ -6,11 +6,18 @@ import * as hooks from './hooks';
 import * as Sty from './style';
 
 const Profile = () => {
+  // 데이터 받아오기
+  // useEffect(() => {
+  //   axios...
+  // }, [])
+
   const { isOpen, handleIsOpen } = hooks.useModal();
-  const [Img1, setImg1] = hooks.useInputImg('images/MyPage/0001.jpg');
+  const [profileImg, setProfileImg] = hooks.useInputImg(
+    'images/MyPage/0001.jpg',
+  );
   const message =
     '네이버 이메일, 티어, 티어-프로그레스바, 수정기능: onchange -> onSubmit, 회원탈퇴, 기타 alert...';
-  const [statusMessage, setStatusMessage] = hooks.useInputText(
+  const [introduce, setIntroduce] = hooks.useInputText(
     message,
     (value) => value.length <= 150,
   );
@@ -18,6 +25,8 @@ const Profile = () => {
     '주성시치',
     (value) => value.length <= 16,
   );
+  const eMail = 'admin@naver.com';
+
   const modify = {
     src: 'images/MyPage/modify.png',
     onClick: handleIsOpen,
@@ -29,7 +38,7 @@ const Profile = () => {
         <Template.ProfileInner>
           <Sty.RowProfile>
             <Sty.ColProfileImg>
-              <Img.ProfileImg {...Img1}></Img.ProfileImg>
+              <Img.ProfileImg {...profileImg}></Img.ProfileImg>
             </Sty.ColProfileImg>
             <Sty.Colw100>
               {nickName.length < 3 ? (
@@ -40,7 +49,8 @@ const Profile = () => {
               <br />
 
               <div>
-                <Info.StatusText>{statusMessage}</Info.StatusText>
+                <p>{`eMail: ${eMail}`}</p>
+                <Info.StatusText>{introduce}</Info.StatusText>
               </div>
 
               <Sty.RowModify>
@@ -56,13 +66,13 @@ const Profile = () => {
           <Modify.Button onClick={handleIsOpen}>❌</Modify.Button>
         </Sty.RowClose>
         <label htmlFor="profileImg">이미지 변경: </label>
-        <Modify.InputImg onChange={setImg1}></Modify.InputImg>
+        <Modify.InputImg onChange={setProfileImg}></Modify.InputImg>
         <br />
         <label htmlFor="statusText">상태메시지: </label>
         <Sty.Rolw100CC>
           <Modify.InputText
-            value={statusMessage}
-            onChange={setStatusMessage}
+            value={introduce}
+            onChange={setIntroduce}
           ></Modify.InputText>
         </Sty.Rolw100CC>
         <br />
