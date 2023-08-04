@@ -2,7 +2,7 @@ import React from "react";
 import Comment from "./Comment";
 import { useState } from "react";
 import './videocomponent.css'
-const Commentlist = ({video_id}) => {
+const Commentlist = ({video_id, changeShow}) => {
 
     // 댓글은 영상 식별자로 조회
     const testdata = [
@@ -75,7 +75,7 @@ const Commentlist = ({video_id}) => {
             <div className="m-1">
                 {comments.map((comment)=>{
                     return (
-                        <Comment comment={comment} key={comment.comment_id} deleteComment={deleteComment}/>
+                        <Comment comment={comment} key={comment.comment_id} deleteComment={deleteComment} changeShow={changeShow}/>
                     )
                 })}
             </div>

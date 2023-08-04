@@ -21,7 +21,6 @@ const Videoplayer = ({vi, changeShow}) => {
     const [getIsLike, setIsLike] = useState(data.isLike)
 
     const moveToMyPage = (event) => {
-        event.preventDefault();
         navigate('/mypage')
     }
 
@@ -58,15 +57,15 @@ const Videoplayer = ({vi, changeShow}) => {
                 {/* 왼쪽 분할 */}
                 <div className="w-8/12">
                     {/* 영상 */}
-                    <iframe width="652" height="400" src={data.video_url} allowFullScreen></iframe>
+                    <iframe title="Youtube" width="652" height="400" src={data.video_url} allowFullScreen></iframe>
 
                     {/* 영상 정보 창 제목 + 내용 + 게시자*/}
                     <div className="my-1 rounded-lg bg-lightGray p-3 truncate">
                         <span className="font-bold text-2xl">{data.title}</span>
                         <div className="flex">
                             <div className="flex items-center">
-                                <img className="rounded-full w-16 h-16 hover:cursor-pointer" src={data.profile_url} alt="" />
-                                <a className="text-lg truncate hover:cursor-pointer" onClick={moveToMyPage}>{data.author}</a>
+                                <img className="rounded-full w-16 h-16 hover:cursor-pointer" src={data.profile_url} alt="" onClick={()=>{changeShow(); moveToMyPage();}} />
+                                <p className="text-lg truncate hover:cursor-pointer" onClick={()=>{changeShow(); moveToMyPage();}}>{data.author}</p>
                             </div>
                             <button className={getIsLike ? "w-1/6 rounded-md border ml-10 mr-1 bg-green-500 text-white" : "w-1/6 rounded-md border ml-10 mr-1 outline-green-500 text-green-500"} type="button" onClick={likeVideo}>Like : {convertToK(data.like_cnt)}</button>
                         </div>
@@ -76,7 +75,7 @@ const Videoplayer = ({vi, changeShow}) => {
 
                 {/* 오른쪽 분할 */}
                 <div className="w-4/12 ml-4 non-scroll-bar h-5/6">
-                    <Commentlist video_id={vi} />
+                    <Commentlist video_id={vi} changeShow={changeShow} />
                     <button className="bg-danger rounded h-10 w-full text-xl mt-3" onClick={changeShow}>나가기</button>
                 </div>
             </div>

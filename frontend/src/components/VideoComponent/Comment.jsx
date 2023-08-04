@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import { useNavigate } from 'react-router-dom';
 
-const Comment = ({comment, deleteComment}) => {
+const Comment = ({comment, deleteComment, changeShow}) => {
     const navigate = useNavigate()
     const [content, setContent] = useState(comment.content)
     const [updateMode, setUpdateMode] = useState(false)
 
     const moveToMyPage = (event) => {
         event.preventDefault();
+        changeShow();
         navigate('/mypage')
     }
     const changeUpdateMode = () => {

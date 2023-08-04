@@ -4,10 +4,10 @@ import { useState, useRef, useEffect } from "react";
 
 const Videolist = ({injectVideoID, changeShow}) => {
 
-    const addData = (input) => {
-        // 테스트 데이터, API 완성 후 axios 요청
+    const addData = () => {
+        let temp = []
         for (let i = 1; i <= 20; i++){
-            input.push({
+            temp.push({
             video_id : i,
             thumbnail_url : "https://i.ytimg.com/vi/PJSH-r7uPfo/hq720.jpg?sqp=-oaymwEcCNAFEJQDSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLCP2xrC0yhdf70ORJ37lHEpZAPWCA",
             author_id : i,
@@ -19,17 +19,17 @@ const Videolist = ({injectVideoID, changeShow}) => {
             isLike : (i % 2 === 0 ? true : false)
             })
         }
-        return input
+        return temp
     }
 
-    const [data, setData] = useState(addData([]))
-    const [page, setPage] = useState(1)
+    const [data, setData] = useState([])
+    const [page, setPage] = useState(0)
     const target = useRef()
     const options = {
         threshold: 1.0
     };
     const renewData = () => {
-        setData((data) => {return [...addData(data)]})
+        setData((data) => {return [...data, ...addData()]})
         setPage((page) => {return page + 1})
     }
     const observer = new IntersectionObserver(renewData, options)
