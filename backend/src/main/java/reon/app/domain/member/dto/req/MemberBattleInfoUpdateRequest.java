@@ -1,4 +1,4 @@
-package reon.app.domain.member.dto.request;
+package reon.app.domain.member.dto.req;
 
 import reon.app.domain.member.entity.MemberBattleInfo;
 import lombok.AllArgsConstructor;

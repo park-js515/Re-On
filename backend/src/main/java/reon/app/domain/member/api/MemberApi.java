@@ -1,8 +1,8 @@
 package reon.app.domain.member.api;
 
-import reon.app.domain.member.dto.request.MemberBattleInfoUpdateRequest;
-import reon.app.domain.member.dto.request.MemberInfoUpdateRequest;
-import reon.app.domain.member.dto.response.MemberBattleInfoResponse;
+import reon.app.domain.member.dto.req.MemberBattleInfoUpdateRequest;
+import reon.app.domain.member.dto.req.MemberInfoUpdateRequest;
+import reon.app.domain.member.dto.res.MemberBattleInfoResponse;
 import reon.app.global.api.ApiResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiParam;
@@ -10,7 +10,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import reon.app.domain.member.dto.response.MemberResponse;
+import reon.app.domain.member.dto.res.MemberResponse;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -49,6 +49,7 @@ public class MemberApi {
     @Operation(tags = "회원", description = "로그아웃")
     @GetMapping("/logout")
     public ApiResponse<Void> logout(HttpServletRequest httpServletRequest){
+        System.out.println("로그아웃실행");
         HttpSession session = httpServletRequest.getSession();
         session.invalidate();
         return ApiResponse.OK(null);
