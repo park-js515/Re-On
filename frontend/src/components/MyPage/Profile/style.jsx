@@ -50,15 +50,16 @@ const Colw100 = ({ children }) => {
   </Col>;
 };
 
-const RowModify = ({ children }) => {
-  return <Row
+const DivModify = ({ children }) => {
+  return <div
     style={{
       margin: "10px 0",
-      justifyContent: "end",
+      height: "100%",
+      position: "relative"
     }}
   >
     {children}
-  </Row>;
+  </div>;
 };
 
 const RowClose = ({ children }) => {
@@ -94,4 +95,11 @@ const Rolw100CC = ({children}) => {
   >{children}</Row>
 }
 
-export { Row, Col, RowProfile, RowModify, RowClose, Colw100, Rolw100CC, ColProfileImg };
+const DivAbs0 = ({children, style}) => {
+  return <div style={{
+    position: "absolute",
+    bottom: 0,
+  }}>{children}</div>
+}
+
+export { Row, Col, RowProfile, DivModify, RowClose, Colw100, Rolw100CC, ColProfileImg, DivAbs0 };

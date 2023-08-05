@@ -4,6 +4,7 @@ import * as Info from './ProfileInfo';
 import * as Modify from './ProfileModifiy';
 import * as hooks from './hooks';
 import * as Sty from './style';
+import * as ProgressBar from './ProfileProgressBar';
 
 const Profile = () => {
   // 데이터 받아오기
@@ -32,6 +33,8 @@ const Profile = () => {
     onClick: handleIsOpen,
   };
 
+  const per = Math.min(88, 100);
+
   return (
     <>
       <Template.ProfileOuter>
@@ -39,6 +42,7 @@ const Profile = () => {
           <Sty.RowProfile>
             <Sty.ColProfileImg>
               <Img.ProfileImg {...profileImg}></Img.ProfileImg>
+              <ProgressBar.ProgressBar per={per}></ProgressBar.ProgressBar>
             </Sty.ColProfileImg>
             <Sty.Colw100>
               {nickName.length < 3 ? (
@@ -49,13 +53,20 @@ const Profile = () => {
               <br />
 
               <div>
-                <p>{`eMail: ${eMail}`}</p>
                 <Info.StatusText>{introduce}</Info.StatusText>
               </div>
 
-              <Sty.RowModify>
+              <Sty.DivModify>
+                <Sty.DivAbs0>
+                  <img
+                    src={'./images/MyPage/naver.png'}
+                    style={{ height: '35px', display: 'inline' }}
+                    alt="naver"
+                  />{' '}
+                  {`${eMail}`}
+                </Sty.DivAbs0>
                 <Info.Modify {...modify}></Info.Modify>
-              </Sty.RowModify>
+              </Sty.DivModify>
             </Sty.Colw100>
           </Sty.RowProfile>
         </Template.ProfileInner>
