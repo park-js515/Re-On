@@ -1,97 +1,68 @@
-const Row = ({ children, style }) => {
-  return (
-    <div
-      style={{
-        boxSizing: "border-box",
-        display: "flex",
-        flexDirection: "row",
-        ...style
-      }}
-    >
-      {children}
-    </div>
-  );
+import styled from 'styled-components';
+
+const Row = styled.div`
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+`;
+
+const Col = styled.div`
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+`;
+
+const RowProfile = styled(Row)`
+  height: 100%;
+  width: 100%;
+`;
+
+const Colw100 = styled(Col)`
+  width: 100%;
+  max-width: 520px;
+`;
+
+const DivModify = styled.div`
+  margin: 10px 0;
+  height: 100%;
+  position: relative;
+`;
+
+const RowClose = styled(Row)`
+  justify-content: end;
+`;
+
+const ColProfileImg = styled(Col)`
+  box-sizing: border-box;
+  justify-content: center;
+  align-items: center;
+  width: 280px;
+  margin: 10px;
+`;
+
+const Roww100CC = styled(Row)`
+  justify-content: center;
+  align-items: center;
+`;
+
+const DivAbs0 = styled.div`
+  position: absolute;
+  bottom: 0;
+`;
+
+const ImgWrapper = styled.div`
+  position: relative;
+`
+
+export {
+  Row,
+  Col,
+  RowProfile,
+  DivModify,
+  RowClose,
+  Colw100,
+  Roww100CC,
+  ColProfileImg,
+  DivAbs0,
+  ImgWrapper
 };
-
-const Col = ({ children, style }) => {
-  return (
-    <div
-      style={{
-        boxSizing: "border-box",
-        display: "flex",
-        flexDirection: "column",
-        ...style
-      }}
-    >
-      {children}
-    </div>
-  );
-};
-
-const RowProfile = ({ children }) => {
-  return <Row
-    style={{
-      height: "100%",
-      width: "100%",
-    }}
-  >
-    {children}
-  </Row>;
-};
-
-const Colw100 = ({ children }) => {
-  return <Col
-    style={{
-      // width: "100%",
-      maxWidth: "520px"
-    }}
-  >
-    {children}
-  </Col>;
-};
-
-const RowModify = ({ children }) => {
-  return <Row
-    style={{
-      margin: "10px 0",
-      justifyContent: "end",
-    }}
-  >
-    {children}
-  </Row>;
-};
-
-const RowClose = ({ children }) => {
-  return <Row
-    style={{
-      justifyContent: "end",
-    }}
-  >
-    {children}
-  </Row>;
-};
-
-const ColProfileImg = ({ children }) => {
-  return <Col
-  style={{
-    boxSizing: "border-box",
-    justifyContent: "center",
-    alignItems: "center",
-    width: "280px", 
-    margin: "10px",
-  }}
-  >
-    {children}
-  </Col>;
-};
-
-const Rolw100CC = ({children}) => {
-  return <Row
-  style={{
-    justifyContent: "center",
-    alignItems: "center"
-  }}
-  >{children}</Row>
-}
-
-export { Row, Col, RowProfile, RowModify, RowClose, Colw100, Rolw100CC, ColProfileImg };

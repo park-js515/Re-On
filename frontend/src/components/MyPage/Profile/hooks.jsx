@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
 const useModal = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -8,28 +8,13 @@ const useModal = () => {
   };
 
   useEffect(() => {
-    document.body.style.overflow = isOpen ? "hidden" : "auto";
+    document.body.style.overflow = isOpen ? 'hidden' : 'auto';
     return () => {
-      document.body.style.overflow = "auto";
+      document.body.style.overflow = 'auto';
     };
   }, [isOpen]);
 
   return { isOpen, handleIsOpen };
-};
-
-const useInputImg = (initialValue) => {
-  const [img, setImg] = useState({
-    src: initialValue,
-  });
-
-  const handleSetImg = (event) => {
-    const file = event.target.files[0];
-    setImg((current) => {
-      return { ...current, src: URL.createObjectURL(file) };
-    });
-  };
-
-  return [img, handleSetImg];
 };
 
 const useInputText = (initialValue, validator) => {
@@ -41,7 +26,7 @@ const useInputText = (initialValue, validator) => {
     } = event;
     let willUpdate = true;
 
-    if (typeof validator === "function") {
+    if (typeof validator === 'function') {
       willUpdate = validator(value);
     }
 
@@ -53,4 +38,4 @@ const useInputText = (initialValue, validator) => {
   return [text, handleSetText];
 };
 
-export { useModal, useInputImg, useInputText };
+export { useModal, useInputText };
