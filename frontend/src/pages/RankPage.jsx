@@ -1,7 +1,7 @@
-import OpenViduApp from 'components/RankGame/OpenViduApp';
+import FixOpenViduApp from 'components/RankGame/FixOpenViduApp';
 
 const RankPage = () => {
-  return <OpenViduApp />;
+  return <FixOpenViduApp />;
 };
 
 export default RankPage;
