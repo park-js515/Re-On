@@ -20,8 +20,6 @@ public class AuthController {
 
     @PostMapping("/naver")
     public ResponseEntity<AuthTokens> loginNaver(@RequestBody NaverLoginParams params){
-        System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@들어왔따@@@@@@@@@@@@@@@@@@");
-//        System.out.println(params.toString());
         return ResponseEntity.ok(oAuthLoginService.login(params));
     }
 }
