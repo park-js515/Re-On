@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import * as Template from './ProfileTemplate';
 import * as Img from './ProfileImg';
 import * as Info from './ProfileInfo';
@@ -13,27 +14,43 @@ const Profile = () => {
   // }, [])
 
   const { isOpen, handleIsOpen } = hooks.useModal();
-  const [profileImg, setProfileImg] = hooks.useInputImg(
-    'images/MyPage/0001.jpg',
-  );
-  const message =
-    '네이버 이메일, 티어, 티어-프로그레스바, 수정기능: onchange -> onSubmit, 회원탈퇴, 기타 alert...';
-  const [introduce, setIntroduce] = hooks.useInputText(
-    message,
-    (value) => value.length <= 150,
-  );
-  const [nickName, setNickName] = hooks.useInputText(
-    '주성시치',
-    (value) => value.length <= 16,
-  );
+
+  // profile
+
+  // img
+  const [profileImg, setProfileImg] = useState({
+    src: 'images/MyPage/0001.jpg',
+    alt: 'profileImg',
+  });
+  const tier = {
+    src: 'images/MyPage/gold-medal.png',
+  };
+  const per = Math.min(88, 100);
+
+  // introduce
+  const message = ' 기타 alert...';
+  const [introduce, setIntroduce] = useState(message);
+
+  // nick
+  const nick = '주성시치';
+  const [nickName, setNickName] = useState(nick);
+
+  // email
   const eMail = 'admin@naver.com';
 
+  // modify button
   const modify = {
     src: 'images/MyPage/modify.png',
     onClick: handleIsOpen,
   };
 
-  const per = Math.min(88, 100);
+  const formProps = {
+    setProfileImg: setProfileImg,
+    introduce: introduce,
+    setIntroduce: setIntroduce,
+    nickName: nickName,
+    setNickName: setNickName,
+  };
 
   return (
     <>
@@ -41,7 +58,10 @@ const Profile = () => {
         <Template.ProfileInner>
           <Sty.RowProfile>
             <Sty.ColProfileImg>
-              <Img.ProfileImg {...profileImg}></Img.ProfileImg>
+              <Sty.ImgWrapper>
+                <Img.ProfileImg {...profileImg}></Img.ProfileImg>
+                <Img.ProfiletierImg {...tier}></Img.ProfiletierImg>
+              </Sty.ImgWrapper>
               <ProgressBar.ProgressBar per={per}></ProgressBar.ProgressBar>
             </Sty.ColProfileImg>
             <Sty.Colw100>
@@ -76,22 +96,7 @@ const Profile = () => {
         <Sty.RowClose>
           <Modify.Button onClick={handleIsOpen}>❌</Modify.Button>
         </Sty.RowClose>
-        <label htmlFor="profileImg">이미지 변경: </label>
-        <Modify.InputImg onChange={setProfileImg}></Modify.InputImg>
-        <br />
-        <label htmlFor="statusText">상태메시지: </label>
-        <Sty.Rolw100CC>
-          <Modify.InputText
-            value={introduce}
-            onChange={setIntroduce}
-          ></Modify.InputText>
-        </Sty.Rolw100CC>
-        <br />
-        <label htmlFor="nickName">닉네임: </label>
-        <Modify.InputNick
-          value={nickName}
-          onChange={setNickName}
-        ></Modify.InputNick>
+        <Modify.ModifyForm {...formProps}></Modify.ModifyForm>
       </Modify.Modal>
     </>
   );
