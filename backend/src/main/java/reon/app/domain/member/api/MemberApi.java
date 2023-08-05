@@ -78,18 +78,19 @@ public class MemberApi {
     }
     
     @Operation(tags = "회원", description = "로그아웃")
-    @GetMapping("/logout")
-    public ApiResponse<Void> logout(HttpServletRequest httpServletRequest){
-        System.out.println("로그아웃실행");
+    @GetMapping("/member/logout/{id}")
+    public ApiResponse<Void> logout(@PathVariable("id") Long id, HttpServletRequest httpServletRequest){
         HttpSession session = httpServletRequest.getSession();
         session.invalidate();
+        memberService.deleteRefreshToken(id);
         return ApiResponse.OK(null);
     }
 
     // TODO: 2023-08-01 아이디를 인자로 받을지 그냥 Authentication으로 처리할지 결정
     @Operation(tags = "회원", description = "회원 탈퇴")
-    @DeleteMapping("/member/{loginId}")
-    public ApiResponse<Void> delete(@PathVariable("loginId") @ApiParam("탈퇴를 진행할 유저의 아이디") String loginId){
+    @DeleteMapping("/member/{id}")
+    public ApiResponse<Void> delete(@PathVariable("id") @ApiParam("탈퇴를 진행할 유저의 아이디") Long id){
+        memberService.delete(id);
         return ApiResponse.OK(null);
     }
 

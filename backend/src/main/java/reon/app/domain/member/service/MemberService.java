@@ -15,10 +15,11 @@ public interface MemberService {
 //
 //
 //    void updateProfileImg(MultipartFile multipartFile, Long memberId);
+    void deleteRefreshToken(Long id);
 
-    void removeProfileImg(Long memberId);
+    void removeProfileImg(Long id);
 
-    void delete(String loginId);
+    void delete(Long id);
 
 
 }

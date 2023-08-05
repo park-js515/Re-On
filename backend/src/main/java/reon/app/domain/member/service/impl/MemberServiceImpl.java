@@ -40,6 +40,13 @@ public class MemberServiceImpl implements MemberService {
         return findMember;
     }
 
+    @Override
+    public void deleteRefreshToken(Long id) {
+        Member findMember = memberRepository.findById(id)
+                .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+        findMember.deleteRefreshToken();
+    }
+
 //    @Override
 //    public void updateProfileImg(MultipartFile profileImg, long id) {
 //        Member findMember = memberRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
@@ -60,8 +67,8 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public void delete(String loginId) {
-
+    public void delete(Long id) {
+        memberRepository.deleteById(id);
     }
 
 
