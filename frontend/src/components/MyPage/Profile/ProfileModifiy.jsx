@@ -1,5 +1,7 @@
 import './Profile.css';
-import { useRef, forwardRef, useEffect } from 'react';
+import { useRef, forwardRef, useEffect, useState } from 'react';
+import * as hooks from './hooks';
+import * as Sty from './style';
 
 const ModalOverlay = ({ children, isOpen, onDoubleClick }) => {
   if (!isOpen) {
@@ -115,4 +117,80 @@ const Button = ({ children, onClick }) => {
   );
 };
 
-export { Modal, InputImg, InputNick, InputText, Button };
+const ModifyForm = ({
+  setProfileImg,
+  introduce,
+  setIntroduce,
+  nickName,
+  setNickName,
+}) => {
+  const [tempInputImg, setTempInputImg] = useState(null);
+  const [tempInputText, setTempInputText] = hooks.useInputText(
+    introduce,
+    (value) => value.length <= 150,
+  );
+  const [tempInputNick, setTempInputNick] = hooks.useInputText(
+    nickName,
+    (value) => value.length <= 16,
+  );
+
+  const handleTempImg = (event) => {
+    const file = event.target.files[0];
+    const reader = new FileReader();
+
+    reader.onloadend = () => {
+      setTempInputImg(reader.result);
+    };
+
+    if (file) {
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const onSubmit = (event) => {
+    event.preventDefault();
+    const willChange = window.confirm('변경하시겠습니까?');
+
+    if (willChange) {
+      if (tempInputImg) {
+        setProfileImg((current) => {
+          return { ...current, src: tempInputImg };
+        });
+      }
+      setIntroduce(tempInputText);
+      setNickName(tempInputNick);
+    }
+  };
+
+  return (
+    <form onSubmit={onSubmit}>
+      <label htmlFor="profileImg">이미지 변경: </label>
+      <InputImg onChange={handleTempImg}></InputImg>
+      <br />
+      <label htmlFor="statusText">상태메시지: </label>
+      <Sty.Roww100CC>
+        <InputText
+          value={tempInputText}
+          onChange={setTempInputText}
+        ></InputText>
+      </Sty.Roww100CC>
+      <br />
+      <div style={{ position: 'relative' }}>
+        <label htmlFor="nickName">닉네임: </label>
+        <InputNick
+          value={tempInputNick}
+          onChange={setTempInputNick}
+        ></InputNick>
+
+        <button
+          className="bg-white hover:bg-lightGray border rounded"
+          style={{ position: 'fixed', right: '20px' }}
+        >
+          Update
+        </button>
+      </div>
+    </form>
+  );
+};
+
+export { Modal, InputImg, InputNick, InputText, Button, ModifyForm };
