@@ -7,17 +7,16 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
 @SuperBuilder
-public class MemberInfoUpdateRequest {
+public class MemberUpdateRequest {
+    private Long id;
     private String nickName;
     private String introduce;
 
-    public MemberInfo toEntity(){
-        return MemberInfo.builder()
-                .nickName(this.nickName)
-                .introduce(this.introduce)
-                .build();
+    public MemberUpdateRequest(Long id, String nickName, String introduce) {
+        this.id = id;
+        this.nickName = nickName;
+        this.introduce = introduce;
     }
 }

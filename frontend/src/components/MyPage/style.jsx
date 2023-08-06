@@ -1,31 +1,12 @@
-const Row = ({ children, style }) => {
-  return (
-    <div
-      style={{
-        ...style,
-      }}
-    >
-      {children}
-    </div>
-  );
-};
+import styled from 'styled-components';
 
-const Roww100 = ({ children, style }) => {
-  return <Row style={{ ...style }}>{children}</Row>;
-};
+const Row = styled.div``;
 
-const SSticky = ({ children, style }) => {
-  return (
-    <Roww100
-      style={{
-        overflowY: "scroll",
-        height: "100vh",
-        ...style,
-      }}
-    >
-      {children}
-    </Roww100>
-  );
-};
+const Roww100 = styled(Row)``;
+
+const SSticky = styled.div`
+  overflow-y: scroll;
+  height: 100vh;
+`;
 
 export { Row, Roww100, SSticky };

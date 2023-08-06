@@ -2,29 +2,27 @@ package reon.app.domain.member.dto.res;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import reon.app.domain.member.entity.Member;
-import lombok.Getter;
-import lombok.ToString;
 import reon.app.domain.member.entity.Tier;
 
 @Data
 @NoArgsConstructor
-public class MemberResponse {
+public class BackStageMemberResponse {
+    //닉네임, 프로필 사진, 티어, 통산전적
     private Long id;
     private String nickName;
-    private String introduce;
     private String profileImg;
-    private String email;
     private Tier tier;
+    private int gameCnt;
+    private int win;
+    private int lose;
 
-    public MemberResponse(Long id, String nickName, String introduce, String profileImg, String email, Tier tier) {
+    public BackStageMemberResponse(Long id, String nickName, String profileImg, Tier tier, int gameCnt, int win, int lose) {
         this.id = id;
         this.nickName = nickName;
-        this.introduce = introduce;
         this.profileImg = profileImg;
-        this.email = email;
         this.tier = tier;
+        this.gameCnt = gameCnt;
+        this.win = win;
+        this.lose = lose;
     }
-
-
 }

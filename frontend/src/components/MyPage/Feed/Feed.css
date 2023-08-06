@@ -75,3 +75,38 @@
 }
 
 /* FeedItemDetailInfo */
+
+/* FeedComment */
+.Feed-CommentContainer {
+  box-sizing: border-box;
+  width: 100%;
+  border-left: 2px solid rgb(160, 160, 160);
+  margin-bottom: 1rem;
+}
+
+.Feed-Comment {
+  box-sizing: border-box;
+  position: relative;
+  left: 0.5rem;
+  width: calc(100% - 0.5rem);
+  height: min(50px);
+  border: 1px solid rgb(170, 170, 170);
+  border-radius: 5px;
+  margin: 5px 0;
+}
+
+.Feed-Comment:hover {
+  background-color: rgb(170, 170, 170);
+  transition: ease-in-out 150ms;
+}
+
+.Feed-CommentChild {
+  box-sizing: border-box;
+  position: relative;
+  left: 3rem;
+  width: calc(100% - 3rem);
+  height: min(50px);
+  border: 1px solid rgb(170, 170, 170);
+  border-radius: 5px;
+  margin: 5px 0;
+}

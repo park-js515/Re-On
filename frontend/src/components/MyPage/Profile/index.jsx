@@ -1,26 +1,55 @@
-import * as Template from "./ProfileTemplate";
-import * as Img from "./ProfileImg";
-import * as Info from "./ProfileInfo";
-import * as Modify from "./ProfileModifiy";
-import * as hooks from "./hooks";
-import * as Sty from "./style";
+import { useState } from 'react';
+import * as Template from './ProfileTemplate';
+import * as Img from './ProfileImg';
+import * as Info from './ProfileInfo';
+import * as Modify from './ProfileModifiy';
+import * as hooks from './hooks';
+import * as Sty from './style';
+import * as ProgressBar from './ProfileProgressBar';
 
 const Profile = () => {
+  // 데이터 받아오기
+  // useEffect(() => {
+  //   axios...
+  // }, [])
+
   const { isOpen, handleIsOpen } = hooks.useModal();
-  const [Img1, setImg1] = hooks.useInputImg("images/MyPage/0001.jpg");
-  const message =
-    "최애의스폰지밥을먹는뚱이가잡는해파리를회쳐먹는쯔양을보고있는나를\n바라보는팀원들의따까운눈빛으로구운소시지를먹는희창이의한숨😢";
-  const [statusMessage, setStatusMessage] = hooks.useInputText(
-    message,
-    (value) => value.length <= 150
-  );
-  const [nickName, setNickName] = hooks.useInputText(
-    "주성시치",
-    (value) => value.length <= 16
-  );
+
+  // profile
+
+  // img
+  const [profileImg, setProfileImg] = useState({
+    src: 'images/MyPage/0001.jpg',
+    alt: 'profileImg',
+  });
+  const tier = {
+    src: 'images/MyPage/gold-medal.png',
+  };
+  const per = Math.min(88, 100);
+
+  // introduce
+  const message = ' 기타 alert...';
+  const [introduce, setIntroduce] = useState(message);
+
+  // nick
+  const nick = '주성시치';
+  const [nickName, setNickName] = useState(nick);
+
+  // email
+  const eMail = 'admin@naver.com';
+
+  // modify button
   const modify = {
-    src: "images/MyPage/modify.png",
+    src: 'images/MyPage/modify.png',
     onClick: handleIsOpen,
+  };
+
+  const formProps = {
+    setProfileImg: setProfileImg,
+    introduce: introduce,
+    setIntroduce: setIntroduce,
+    nickName: nickName,
+    setNickName: setNickName,
   };
 
   return (
@@ -29,7 +58,11 @@ const Profile = () => {
         <Template.ProfileInner>
           <Sty.RowProfile>
             <Sty.ColProfileImg>
-              <Img.ProfileImg {...Img1}></Img.ProfileImg>
+              <Sty.ImgWrapper>
+                <Img.ProfileImg {...profileImg}></Img.ProfileImg>
+                <Img.ProfiletierImg {...tier}></Img.ProfiletierImg>
+              </Sty.ImgWrapper>
+              <ProgressBar.ProgressBar per={per}></ProgressBar.ProgressBar>
             </Sty.ColProfileImg>
             <Sty.Colw100>
               {nickName.length < 3 ? (
@@ -40,12 +73,20 @@ const Profile = () => {
               <br />
 
               <div>
-                <Info.StatusText>{statusMessage}</Info.StatusText>
+                <Info.StatusText>{introduce}</Info.StatusText>
               </div>
 
-              <Sty.RowModify>
+              <Sty.DivModify>
+                <Sty.DivAbs0>
+                  <img
+                    src={'./images/MyPage/naver.png'}
+                    style={{ height: '35px', display: 'inline' }}
+                    alt="naver"
+                  />{' '}
+                  {`${eMail}`}
+                </Sty.DivAbs0>
                 <Info.Modify {...modify}></Info.Modify>
-              </Sty.RowModify>
+              </Sty.DivModify>
             </Sty.Colw100>
           </Sty.RowProfile>
         </Template.ProfileInner>
@@ -53,18 +94,9 @@ const Profile = () => {
 
       <Modify.Modal isOpen={isOpen} handleIsOpen={handleIsOpen}>
         <Sty.RowClose>
-          <Modify.Button onClick={handleIsOpen}>(❁´◡`❁)</Modify.Button>
+          <Modify.Button onClick={handleIsOpen}>❌</Modify.Button>
         </Sty.RowClose>
-        <label htmlFor="profileImg">이미지 변경: </label>
-        <Modify.InputImg onChange={setImg1}></Modify.InputImg>
-        <br />
-        <label htmlFor="statusText">상태메시지: </label>
-        <Sty.Rolw100CC>
-          <Modify.InputText value={statusMessage} onChange={setStatusMessage}></Modify.InputText>
-        </Sty.Rolw100CC>
-        <br />
-        <label htmlFor="nickName">닉네임: </label>
-        <Modify.InputNick value={nickName} onChange={setNickName}></Modify.InputNick>
+        <Modify.ModifyForm {...formProps}></Modify.ModifyForm>
       </Modify.Modal>
     </>
   );
