@@ -1,4 +1,4 @@
-//package reon.app.domain.post.service;
-//
-//public interface PostQueryService {
-//}
+package reon.app.domain.post.service;
+
+public interface PostQueryService {
+}
