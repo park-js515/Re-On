@@ -1,6 +1,7 @@
 package reon.app.domain.member.api;
 
 import io.swagger.v3.oas.annotations.Parameter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
@@ -25,14 +26,16 @@ import javax.servlet.http.HttpSession;
 
 @Api(tags = "회원")
 @RestController
+@Slf4j
 @RequiredArgsConstructor
 @RequestMapping("/api/member-management")
 public class MemberApi {
     private final MemberService memberService;
     private final MemberQueryService memberQueryService;
     @Operation(tags = "회원", description = "ID로 마이페이지 상세 정보 조회")
-    @GetMapping("/member/{id}")
-    public ApiResponse<MemberResponse> findMemberById(@PathVariable("id") @ApiParam("유저 id") Long id){
+    @GetMapping("/member/{id}") // 시큐리티를 사용한다면 로그인이 됐으면 ? user 있을꺼고 나도 사용하고싶당~
+    public ApiResponse<MemberResponse> findMemberById(@PathVariable("id") @ApiParam("유저 id") Long id, @AuthenticationPrincipal User user){
+        log.info(user.toString());
         MemberResponse memberResponse = memberQueryService.findById(id);
         return ApiResponse.OK(memberResponse);
     }

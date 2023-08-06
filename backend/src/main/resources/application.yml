@@ -1,4 +1,12 @@
 spring:
+  cloud:
+    gcp:
+      storage:
+        credentials:
+          location: ninth-botany-395113-5f24f3555342.json
+    project-id: 5f24f35553425ba271e94c142c197a698e90f0dc
+    bucket: reon-bucket
+
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://127.0.0.1:3306/reon_local?useUnicode=true&characterEncoding=utf8&autoReconnect=true&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true&useSSL=false
@@ -15,9 +23,11 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: none
-      #ddl-auto: create
+      ddl-auto : update
+#      ddl-auto: create
+#      ddl-auto: none
     # show-sql: true # DDL 출력
+    generate-ddl: true
 
 oauth:
   naver:
