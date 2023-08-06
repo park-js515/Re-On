@@ -44,7 +44,7 @@ const Home = () => {
         </div>
         <div className="lottie-container">{View}</div>
       </section>
-      <Typing />
+      <Typing typingContent="명인, 인쓰, 명인쓰" />
       <Banner />
       <div
         style={{
