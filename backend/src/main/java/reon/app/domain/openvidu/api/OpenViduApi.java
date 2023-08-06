@@ -40,13 +40,11 @@ public class OpenViduApi {
      * @return The Session ID
      */
     @PostMapping("/api/sessions")
-    public ResponseEntity<String> initializeSession(@RequestBody(required = false) Map<String, Object> params)
-            throws OpenViduJavaClientException, OpenViduHttpException {
+    public ResponseEntity<String> initializeSession(@RequestBody(required = false) Map<String, Object> params)  throws OpenViduJavaClientException, OpenViduHttpException {
         SessionProperties properties = SessionProperties.fromJson(params).build();
         Session session = openvidu.createSession(properties);
         return new ResponseEntity<>(session.getSessionId(), HttpStatus.OK);
     }
-
     /**
      * @param sessionId The Session in which to create the Connection
      * @param params    The Connection properties
@@ -64,7 +62,7 @@ public class OpenViduApi {
         Connection connection = session.createConnection(properties);
         return new ResponseEntity<>(connection.getToken(), HttpStatus.OK);
     }
-
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     @PostMapping("/test")
     public ResponseEntity<String> test(@RequestBody(required = false) Map<String, Object> params)
             throws OpenViduJavaClientException, OpenViduHttpException {
