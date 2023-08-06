@@ -3,9 +3,9 @@ spring:
     gcp:
       storage:
         credentials:
-          location: ninth-botany-395113-5f24f3555342.json
-    project-id: 5f24f35553425ba271e94c142c197a698e90f0dc
-    bucket: reon-bucket
+          location: classpath:ninth-botany-395113-5f24f3555342.json
+        project-id: 5f24f35553425ba271e94c142c197a698e90f0dc
+        bucket: reon-bucket
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver

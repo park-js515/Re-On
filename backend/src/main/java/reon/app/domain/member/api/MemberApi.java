@@ -70,13 +70,13 @@ public class MemberApi {
     public ApiResponse<Void> updateProfileImg(@RequestPart MultipartFile profileImg, @Parameter(hidden = true) @AuthenticationPrincipal User user) {
 //    public ApiResponse<Void> updateProfileImg(@RequestPart @ApiParam("수정할 이미지") MultipartFile profileImg) {
 //        memberService.updateProfileImg(profileImg, Long.parseLong(user.getUsername()));
+        memberService.updateProfileImg(profileImg, Long.parseLong(user.getUsername()));
         return ApiResponse.OK(null);
     }
     @Operation(tags = "회원", description = "회원 프로필 이미지를 삭제한다.")
     @DeleteMapping("/images/delete")
-//    public ApiResponse<Void> removeProfileImg(@Parameter(hidden = true) @AuthenticationPrincipal User user) {
-    public ApiResponse<Void> removeProfileImg() {
-//        memberService.removeProfileImg(Long.parseLong(user.getUsername()));
+    public ApiResponse<Void> removeProfileImg(@Parameter(hidden = true) @AuthenticationPrincipal User user) {
+        memberService.removeProfileImg(Long.parseLong(user.getUsername()));
         return ApiResponse.OK(null);
     }
     
