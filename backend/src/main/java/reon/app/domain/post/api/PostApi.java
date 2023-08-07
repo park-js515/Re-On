@@ -27,7 +27,7 @@ public class PostApi {
 
     @Operation(summary = "post 생성", description = "post를 생성하는 API입니다")
     @PostMapping
-    public ApiResponse<?> savePost(@RequestPart MultipartFile actionVideo,@RequestParam Long videoId,
+    public ApiResponse<?> savePost(@RequestPart MultipartFile actionVideo,@RequestParam("videoId") Long videoId,
                                    @Parameter(hidden = true) @AuthenticationPrincipal User user){
         PostSaveDto postSaveDto = PostSaveDto.builder()
                 .memberId(Long.parseLong(user.getUsername()))

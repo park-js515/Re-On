@@ -24,12 +24,10 @@ public class PostServiceImpl implements PostService {
     private FileManger fileManger = new FileManger();
     @Override
     public Long save(PostSaveDto postSaveDto) {
-        // TODO: 2023-08-07 action 도 추가해야함
-        // TODO: 2023-08-07 파일업로드 클래스화
         String actionPath = fileManger.updateImgFile(postSaveDto.getActionVideo(), storage);
 
         Post post = Post.builder()
-                .scope(Scope.PUBLIC)
+                .scope(Scope.PRIVATE)
                 .actionPath(actionPath)
                 .deleted(0)
                 .member(Member.builder().id(postSaveDto.getMemberId()).build())
