@@ -49,14 +49,30 @@ export default function OpenViduApp() {
   const joinSession = useCallback(() => {
     const mySession = OV.current.initSession();
 
-    mySession.on('streamCreated', (event) => {
+    mySession.on('streamCreated', async (event) => {
       const subscriber = mySession.subscribe(event.stream, undefined);
       setSubscribers((subscribers) => [...subscribers, subscriber]);
       setLog((prevLog) => [
         ...prevLog,
         `${logMessageTime} | 상대방이 참여했습니다.`,
       ]);
-      handlePlayVideo(); // 비디오 플레이
+
+      // 시그널 보내기
+      mySession.signal({
+        data: 'playVideo', // Optional, any string to send to the other participant
+        type: 'playVideo', // Optional, used to define custom signal types
+      });
+    });
+
+    // 시그널 받기
+    mySession.on('signal:playVideo', async (event) => {
+      // 시그널을 받으면 비디오 재생을 처리
+      setLog((prevLog) => [
+        ...prevLog,
+        `${logMessageTime} | 게임을 시작합니다.`,
+      ]);
+      await startLoading(5000); // 로딩 5초
+      handlePlayVideo(); // 영상 시작
     });
 
     mySession.on('streamDestroyed', (event) => {
