@@ -1,4 +1,4 @@
-package reon.app.domain.post.dto.request;
+package reon.app.domain.post.dto.req;
 
 import lombok.Data;
 
