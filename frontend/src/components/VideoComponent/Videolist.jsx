@@ -21,6 +21,7 @@ const Videolist = ({injectPostId, changeShow}) => {
         }
         return temp
     }
+    
 
     const [data, setData] = useState([])
     const [page, setPage] = useState(0)
@@ -37,34 +38,53 @@ const Videolist = ({injectPostId, changeShow}) => {
     useEffect(()=>{
         observer.observe(target.current)
     }, []);
+    // 검색
+    const [searchTerm, setSearchTerm] = useState(""); // 검색어를 저장하는 상태
+  
 
-    return(
-    
+    const filteredData = data.filter(item => 
+        item.title.toLowerCase().includes(searchTerm.toLowerCase())
+    );
 
-        
-        <div className="bg-white py-12 sm:py-">
-            <h1 className="my-4 text-center font-bold text-3xl text-dark">💌투표해줘</h1>
-            <div className="mx-auto max-w-7xl px-6 lg:px-8">
-                <div className="mx-auto mt-10 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 pt-10 sm:mt-16 sm:pt-16 lg:mx-0 lg:max-w-none lg:grid-cols-3">
-
-                {data.map((item,idx)=>{
-                    return (
-                        <Videoitem
-                            key={idx}
-                            props={item}
-                            changeMode={()=>{
-                                injectPostId(item.post_id)
-                                changeShow()
-                            }}
+    return (
+        <div className="py-12 sm:py-8 ">
+            <div className="bg-begie mx-auto max-w-7xl px-2 lg:px-8">
+                <h1 className="mt-24 text-center font-bold text-3xl text-dark">💌투표해줘</h1>
+                
+                <div className="flex justify-end my-4"> {/* flex를 사용하여 우측으로 정렬 */}
+                    <div className="relative">
+                        <input 
+                            type="text" 
+                            placeholder="Search by title..." 
+                            value={searchTerm} 
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            className="py-2 px-4 w-64 border rounded-md shadow-sm focus:ring focus:ring-opacity-50" 
                         />
-                    )   
-                })}
-          
-                <div className="text-center" ref={target}>더 보기...</div>
+                        <span className="absolute inset-y-0 right-4 flex items-center text-gray-400">
+                            🔍
+                        </span>
+                    </div>
+                </div>
+    
+                <div className=" mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:mt-8 sm:pt-8 lg:mx-0 lg:max-w-none lg:grid-cols-3">
+                    {filteredData.map((item, idx) => {
+                        return (
+                            <Videoitem
+                                key={idx}
+                                props={item}
+                                changeMode={() => {
+                                    injectPostId(item.post_id);
+                                    changeShow();
+                                }}
+                            />
+                        );
+                    })}
+                    <div className="text-center" ref={target}>더 보기...</div>
                 </div>
             </div>
         </div>
-
-)}
+    );
+    }
+    
 
 export default Videolist

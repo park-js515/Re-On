@@ -45,6 +45,7 @@ const Hotlist = ({injectPostId, changeShow}) => {
       speed: 500,
       slidesToShow: 3,
       slidesToScroll: 1,
+      draggable : true,
       adaptiveHeight: true,
       autoplay: true,
       autoplaySpeed: 1500,
@@ -53,9 +54,9 @@ const Hotlist = ({injectPostId, changeShow}) => {
     };
 
   return (
-    <div className="bg-white py-12 sm:py-16">
-      <h1 className="my-4 text-center font-bold text-3xl text-dark">🎁인기영상</h1>
-      <div className="mx-auto max-w-7xl px-6 lg:px-8">
+    <div className="bg-inss my-4 py-12 sm:py-16 ">
+      <h1 className="my-4 py-8 text-center font-bold text-3xl text-dark ">🎁인기영상</h1>
+      <div className="mx-auto max-w-7xl px-6 lg:px-8 ">
           <Slider ref={sliderRef} {...settings}>
               {TESTDATA.map((item) => (
                   <div key={item.video_id}>
