@@ -26,8 +26,6 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Transactional
 public class MemberServiceImpl implements MemberService {
-//    @Value("${spring.cloud.gcp.storage.bucket}")
-//    private String bucketName;
     private FileManger fileManger = new FileManger();
 //    private final String imgPath = "https://storage.googleapis.com/reon-bucket/";
 

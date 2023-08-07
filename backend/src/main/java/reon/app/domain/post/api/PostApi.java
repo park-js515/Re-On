@@ -30,12 +30,11 @@ public class PostApi {
     private final PostLikeService postLikeService;
 
     @Operation(summary = "post 생성", description = "post를 생성하는 API입니다")
-    @PostMapping
-    public ApiResponse<?> savePost(@RequestPart PostSaveRequest postSaveRequest, @RequestPart MultipartFile actionVideo,
+    @PostMapping //@RequestPart PostSaveRequest postSaveRequest
+    public ApiResponse<?> savePost(@RequestPart MultipartFile actionVideo,
                                    @Parameter(hidden = true) @AuthenticationPrincipal User user){
         PostSaveDto postSaveDto = PostSaveDto.builder()
                 .memberId(Long.parseLong(user.getUsername()))
-                .actionId(postSaveRequest.getVideoId())
                 .actionVideo(actionVideo)
                 .build();
         postService.save(postSaveDto);
