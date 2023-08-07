@@ -50,7 +50,7 @@ const FeedPage = () => {
   return (
     <div>
 
-      <div className={show? "w-3/4 mx-auto blur-md" : "w-3/4 mx-auto"}>
+      {/* <div className={show? "w-3/4 mx-auto blur-md" : "w-3/4 mx-auto"}> */}
         <Hotlist
           injectPostId={injectPostId}
           changeShow={changeShow}
@@ -60,7 +60,7 @@ const FeedPage = () => {
           injectPostId={injectPostId}
           changeShow={changeShow}
           />
-      </div>
+      {/* </div> */}
 
       {show ? <Videoplayer changeShow={changeShow} post_id={post_id}/> : null}
 
