@@ -1,27 +1,29 @@
-import { useState, useEffect } from 'react';
+// useVideoPlayer.js
+import { useRef, useState, useEffect } from 'react';
 
-const useVideoPlayer = (videoRef) => {
-  const [videoDuration, setVideoDuration] = useState(null);
-  const [isPlaying, setIsPlaying] = useState(false);
+const useVideoPlayer = () => {
+  const videoRef = useRef();
+  const [isPlaying, setIsPlaying] = useState(false); // new state for tracking play status
 
-  const handleUseVideoPlayerHook = () => {
-    if (videoRef.current) {
-      videoRef.current.play();
-      setIsPlaying(true);
-    }
+  const handlePlayVideo = () => {
+    videoRef.current.play();
+    setIsPlaying(true); // update the state when the video starts playing
   };
 
   useEffect(() => {
-    const videoNode = videoRef.current;
-    if (videoNode) {
-      const handleMetadataLoaded = () => setVideoDuration(videoNode.duration);
-      videoNode.addEventListener('loadedmetadata', handleMetadataLoaded);
-      return () =>
-        videoNode.removeEventListener('loadedmetadata', handleMetadataLoaded);
+    if (videoRef.current) {
+      videoRef.current.onpause = () => {
+        setIsPlaying(false);
+      };
     }
-  }, [videoRef]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [videoRef.current]); // videoRef.current 변화 시 useEffect 실행
 
-  return { videoDuration, isPlaying, handleUseVideoPlayerHook };
+  return {
+    videoRef,
+    isPlaying,
+    handlePlayVideo,
+  };
 };
 
 export default useVideoPlayer;

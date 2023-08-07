@@ -1,12 +1,11 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
-import { SSection } from './styles';
+import { SMatchingTyping } from './matchingStyles';
 
-const Typing = () => {
+const Typing = ({ typingContent }) => {
   const [typingInnerContent, setTypingInnerContent] = useState('');
   const [count, setCount] = useState(0);
   const [typingChangeFlag, setTypingChangeFlag] = useState(false);
-  const typingContent = '명인, 인쓰, 명인쓰';
 
   useEffect(() => {
     let typingInterval;
@@ -59,11 +58,11 @@ const Typing = () => {
   });
 
   return (
-    <SSection>
+    <SMatchingTyping>
       <div>
-        <span className="content">{typingInnerContent}</span>
+        <span className="content">게임 찾는 중{typingInnerContent}</span>
       </div>
-    </SSection>
+    </SMatchingTyping>
   );
 };
 
