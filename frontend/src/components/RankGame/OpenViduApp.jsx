@@ -56,6 +56,7 @@ export default function OpenViduApp() {
         ...prevLog,
         `${logMessageTime} | 상대방이 참여했습니다.`,
       ]);
+      handlePlayVideo(); // 비디오 플레이
     });
 
     mySession.on('streamDestroyed', (event) => {
@@ -216,21 +217,24 @@ export default function OpenViduApp() {
   // };
 
   // 테스트 요청
-  const getToken = useCallback(async () => {
-    const response = await axios.post(
-      APPLICATION_SERVER_URL + '/api/openvidu-management/test',
-      {}, // body
-      {
-        headers: {
-          Authorization: 'Basic T1BFTlZJRFVBUFA6b3BlbnZpZHVyZW9uYzIwMw==',
-          'Content-Type': 'application/json',
+  const getToken = async () => {
+    try {
+      const response = await axios.post(
+        APPLICATION_SERVER_URL + '/api/openvidu-management/test',
+        {}, // body
+        {
+          headers: {
+            Authorization: 'Basic T1BFTlZJRFVBUFA6b3BlbnZpZHVyZW9uYzIwMw==',
+            'Content-Type': 'application/json',
+          },
         },
-      },
-    );
-    console.log('응답', response);
-    return response.data;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+      );
+      console.log('응답', response);
+      return response.data;
+    } catch (error) {
+      console.error('에러', error); // 오류 로깅
+    }
+  };
 
   // 작업중인 요청
   // const getToken = useCallback(async () => {
