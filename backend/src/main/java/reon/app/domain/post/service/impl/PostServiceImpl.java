@@ -26,9 +26,9 @@ public class PostServiceImpl implements PostService {
 
         Post post = Post.builder()
                 .scope(Scope.PUBLIC)
-                .vote(0)
+//                .actionPath(postSaveDto.getActionVideo())
+                .deleted(0)
                 .member(Member.builder().id(postSaveDto.getMemberId()).build())
-                .action(Action.builder().id(postSaveDto.getActionId()).build())
 //              비디오도 추가해야함
                 .build();
 

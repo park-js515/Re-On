@@ -15,6 +15,8 @@ import reon.app.domain.member.repository.MemberRepository;
 import reon.app.domain.member.service.MemberService;
 import reon.app.global.error.entity.CustomException;
 import reon.app.global.error.entity.ErrorCode;
+import reon.app.global.util.FileManger;
+//import reon.app.global.util.FileManger;
 
 import java.io.IOException;
 import java.util.UUID;
@@ -24,9 +26,10 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Transactional
 public class MemberServiceImpl implements MemberService {
-    private final String imgPath = "https://storage.googleapis.com/reon-bucket/";
-    @Value("${spring.cloud.gcp.storage.bucket}")
-    private String bucketName;
+//    @Value("${spring.cloud.gcp.storage.bucket}")
+//    private String bucketName;
+    private FileManger fileManger = new FileManger();
+//    private final String imgPath = "https://storage.googleapis.com/reon-bucket/";
 
     private final Storage storage;
     private final MemberRepository memberRepository;
@@ -54,9 +57,11 @@ public class MemberServiceImpl implements MemberService {
     public void updateProfileImg(MultipartFile profileImg, Long id) {
         Member findMember = memberRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
         if(findMember.getMemberInfo().getProfileImg() != null){
-            removeImgFile(findMember.getMemberInfo().getProfileImg());
+            fileManger.removeImgFile(findMember.getMemberInfo().getProfileImg(), storage);
+//            removeImgFile(findMember.getMemberInfo().getProfileImg());
         }
-        String imgName = imgPath + updateImgFile(profileImg);
+        String imgName = fileManger.updateImgFile(profileImg, storage);
+//        String imgName = imgPath + updateImgFile(profileImg);
         findMember.getMemberInfo().updateProfileImg(imgName);
     }
 
@@ -64,7 +69,8 @@ public class MemberServiceImpl implements MemberService {
     public void removeProfileImg(Long id) {
         Member findMember = memberRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
         if(findMember.getMemberInfo().getProfileImg() != null){
-            removeImgFile(findMember.getMemberInfo().getProfileImg());
+            fileManger.removeImgFile(findMember.getMemberInfo().getProfileImg(), storage);
+//            removeImgFile(findMember.getMemberInfo().getProfileImg());
         }
         findMember.getMemberInfo().updateProfileImg(null);
     }
@@ -75,33 +81,38 @@ public class MemberServiceImpl implements MemberService {
     }
 
 
-    private void removeImgFile(String prevImg) {
-        Blob blob = storage.get(bucketName).get(prevImg);
-        boolean deleted = blob.delete();
+//    private void removeImgFile(String prevImg) {
+//        Blob blob = storage.get(bucketName).get(prevImg);
+//        boolean deleted = blob.delete();
+//
+//        if (deleted) {
+//            log.info("이미지 삭제 성공: {}", blob);
+//        } else {
+//            log.info("이미지 삭제 실패: {}", blob);
+//        }
+//    }
 
-        if (deleted) {
-            log.info("이미지 삭제 성공: {}", blob);
-        } else {
-            log.info("이미지 삭제 실패: {}", blob);
-        }
-    }
-
-    public String updateImgFile(MultipartFile profileImg) {
-        log.info("Service entered");
-        String uuid = UUID.randomUUID().toString();
-        String ext = profileImg.getContentType();
-
-        try {
-            storage.create(
-                    BlobInfo.newBuilder(bucketName, uuid)
-                            .setContentType(ext)
-                            .build(),
-                    profileImg.getInputStream());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        log.info("이미지 저장 성공: {}", uuid);
-
-        return uuid;
-    }
+//    public String updateImgFile(MultipartFile profileImg) {
+//        log.info("Service entered");
+//        String uuid = UUID.randomUUID().toString();
+//        String ext = profileImg.getContentType();
+//        log.info(uuid);
+//        log.info(ext);
+//        log.info(bucketName);
+//
+//
+//        try {
+//            storage.create(
+//                    BlobInfo.newBuilder(bucketName, uuid)
+//                            .setContentType(ext)
+//                            .build(),
+//                    profileImg.getInputStream());
+//        } catch (IOException e) {
+//            log.info(e.getMessage());
+//            throw new RuntimeException(e);
+//        }
+//        log.info("이미지 저장 성공: {}", uuid);
+//
+//        return uuid;
+//    }
 }

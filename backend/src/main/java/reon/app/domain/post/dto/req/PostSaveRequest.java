@@ -15,6 +15,7 @@ import lombok.NoArgsConstructor;
 public class PostSaveRequest {
     // 썸네일 이미지 포함
     //
+    private Long videoId;
 
 
 }
