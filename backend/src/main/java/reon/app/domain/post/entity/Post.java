@@ -4,6 +4,7 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.DynamicInsert;
 import reon.app.domain.member.entity.Member;
+import reon.app.domain.video.entity.Video;
 import reon.app.global.entity.BaseEntity;
 
 import javax.persistence.*;
@@ -19,9 +20,9 @@ public class Post extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(length = 50)
+    @Column(length = 50, nullable = true)
     private String title;
-    @Column(columnDefinition = "TEXT")
+    @Column(columnDefinition = "TEXT", nullable = true)
     private String content;
     @Enumerated(EnumType.STRING)
     private Scope scope;
@@ -37,9 +38,12 @@ public class Post extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "video_id")
+    private Video video;
 
     @Builder
-    public Post(Long id, String title, String content, Scope scope, String actionPath, int deleted, List<PostComment> postComments, List<PostLike> postLikes, Member member) {
+    public Post(Long id, String title, String content, Scope scope, String actionPath, int deleted, List<PostComment> postComments, List<PostLike> postLikes, Member member, Video video) {
         this.id = id;
         this.title = title;
         this.content = content;
@@ -49,6 +53,7 @@ public class Post extends BaseEntity {
         this.postComments = postComments;
         this.postLikes = postLikes;
         this.member = member;
+        this.video = video;
     }
 }
 
