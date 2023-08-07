@@ -26,6 +26,7 @@ public class OpenViduApi {
      * @param params The Session properties
      * @return The Session ID
      */
+    @Tag(name = "Openvidu", description = "Openvidu API")
     @Operation(summary = "세션만 생성",description = "params로 세션 아이디가 주어지면 해당 아이디로 세션 생성, 없으면 세션 자동 생성")
     @PostMapping("/sessions")
     public ResponseEntity<String> initializeSession(@RequestBody(required = false) Map<String, Object> params)  throws OpenViduJavaClientException, OpenViduHttpException {
@@ -46,6 +47,8 @@ public class OpenViduApi {
      * @param params    The Connection properties
      * @return The Token associated to the Connection
      */
+    @Tag(name = "Openvidu", description = "Openvidu API")
+
     @Operation(summary = "connection 생성",description = "sessionId에 해당하는 connecntion 생성 후 token 반환")
     @PostMapping("/sessions/{sessionId}/connections")
     public ResponseEntity<String> createConnection(@PathVariable("sessionId") String sessionId,
@@ -65,6 +68,8 @@ public class OpenViduApi {
         }
         return new ResponseEntity<>(token, HttpStatus.OK);
     }
+    @Tag(name = "Openvidu", description = "Openvidu API")
+
     @Operation(summary = "배틀 세션 받기",description = "배틀룸에서 사용할 세션 정보 및 토큰 반환")
     @PostMapping("/sessions/connections")
     public ResponseEntity<String> participateRankGame(@RequestBody(required = false) Map<String, Object> params)
@@ -113,7 +118,7 @@ public class OpenViduApi {
         String token = openViduService.makeRankRoom(properties,cproperties);
         return new ResponseEntity<>(token, HttpStatus.OK);
     }
-
+    @Tag(name = "Openvidu", description = "Openvidu API")
     @Operation(summary = "배틀 세션 종료",description = "sessionId에 해당하는 세션 종료")
     @PostMapping("/sessions/{sessionId}/delete")
     public ResponseEntity<String> endSession(@PathVariable("sessionId") String sessionId)
