@@ -49,7 +49,22 @@ export default function OpenViduApp() {
   const joinSession = useCallback(() => {
     const mySession = OV.current.initSession();
 
+    const connections = [];
+    mySession.on('connectionCreated', (event) => {
+      connections.push(event.connection);
+    });
+    console.log('커넥셧ㄴ스', connections);
+
     mySession.on('streamCreated', async (event) => {
+      const sortedConnections = connections.sort(
+        (a, b) => a.createdAt - b.createdAt,
+      );
+      console.log('정렬된커넥', sortedConnections);
+      const myConnectionIndex = sortedConnections.findIndex(
+        (conn) => conn.connectionId === connections.connectionId,
+      );
+      console.log('내 커넧ㄴ 인덳', myConnectionIndex);
+
       const subscriber = mySession.subscribe(event.stream, undefined);
       setSubscribers((subscribers) => [...subscribers, subscriber]);
       setLog((prevLog) => [
@@ -236,7 +251,8 @@ export default function OpenViduApp() {
   const getToken = async () => {
     try {
       const response = await axios.post(
-        APPLICATION_SERVER_URL + '/api/openvidu-management/test',
+        APPLICATION_SERVER_URL +
+          '/api/openvidu-management/sessions/connections',
         {}, // body
         {
           headers: {
@@ -251,6 +267,26 @@ export default function OpenViduApp() {
       console.error('에러', error); // 오류 로깅
     }
   };
+
+  // const closeSession = async (sessionId) => {
+  //   try {
+  //     const response = await axios.post(
+  //       APPLICATION_SERVER_URL + '/api/openvidu-management/test',
+  //       { customSessionId: sessionId },
+  //       {}, // body
+  //       {
+  //         headers: {
+  //           Authorization: 'Basic T1BFTlZJRFVBUFA6b3BlbnZpZHVyZW9uYzIwMw==',
+  //           'Content-Type': 'application/json',
+  //         },
+  //       },
+  //     );
+  //     console.log('응답', response);
+  //     return response.data;
+  //   } catch (error) {
+  //     console.error('에러', error); // 오류 로깅
+  //   }
+  // };
 
   // 작업중인 요청
   // const getToken = useCallback(async () => {
