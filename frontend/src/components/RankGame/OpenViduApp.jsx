@@ -13,14 +13,14 @@ import TutorialModal from 'components/RankGame/TutorialModal';
 import Paper from '@mui/material/Paper';
 
 import { useDispatch } from 'react-redux';
-import { setSessionStarted } from 'redux/sessionSlice';
+import { setIsJoinSession } from 'redux/sessionSlice';
 
 import useLoading from 'hooks/useLoading';
 import useVideoPlayer from 'hooks/useVideoPlayer';
 
 const APPLICATION_SERVER_URL =
-  // process.env.NODE_ENV === 'production' ? '' : 'https://i9c203.p.ssafy.io';
-  process.env.NODE_ENV === 'production' ? '' : 'https://demos.openvidu.io';
+  process.env.NODE_ENV === 'production' ? '' : 'https://i9c203.p.ssafy.io';
+// process.env.NODE_ENV === 'production' ? '' : 'https://demos.openvidu.io';
 
 export default function OpenViduApp() {
   const dispatch = useDispatch();
@@ -68,7 +68,7 @@ export default function OpenViduApp() {
 
     setSession(mySession);
 
-    dispatch(setSessionStarted(true));
+    dispatch(setIsJoinSession(true));
     setLog((prevLog) => [...prevLog, `${logMessageTime} | 참가했습니다.`]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -136,7 +136,7 @@ export default function OpenViduApp() {
     setMainStreamManager(undefined);
     setPublisher(undefined);
 
-    dispatch(setSessionStarted(false)); // 리덕스 세션상태 제거
+    dispatch(setIsJoinSession(false)); // 리덕스 세션상태 제거
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session]);
 
@@ -186,58 +186,73 @@ export default function OpenViduApp() {
    * more about the integration of OpenVidu in your application server.
    */
 
-  // 원본
-  const getToken = useCallback(async () => {
-    return createSession(mySessionId).then((sessionId) =>
-      createToken(sessionId),
-    );
-  }, [mySessionId]);
-
-  const createSession = async (sessionId) => {
-    const response = await axios.post(
-      APPLICATION_SERVER_URL + '/api/sessions',
-      { customSessionId: sessionId },
-      {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      },
-    );
-    console.log('SessionSession', response);
-    return response.data; // The sessionId
-  };
-
-  const createToken = async (sessionId) => {
-    const response = await axios.post(
-      APPLICATION_SERVER_URL + '/api/sessions/' + sessionId + '/connections',
-      {},
-      {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      },
-    );
-    console.log('TokenToken', response);
-    return response.data; // The token
-  };
-
-  // 테스트
+  // 기본 오픈비두 서버 API 요청
   // const getToken = useCallback(async () => {
-  //   return testGetResponse().then((response) => response);
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  //   return createSession(mySessionId).then((sessionId) =>
+  //     createToken(sessionId),
+  //   );
   // }, [mySessionId]);
 
-  // const testGetResponse = async () => {
+  // const createSession = async (sessionId) => {
+  //   const response = await axios.post(
+  //     APPLICATION_SERVER_URL + '/api/sessions',
+  //     { customSessionId: sessionId },
+  //     {
+  //       headers: { 'Content-Type': 'application/json' },
+  //     },
+  //   );
+  //   return response.data; // The sessionId
+  // };
+
+  // const createToken = async (sessionId) => {
+  //   const response = await axios.post(
+  //     APPLICATION_SERVER_URL + '/api/sessions/' + sessionId + '/connections',
+  //     {},
+  //     {
+  //       headers: { 'Content-Type': 'application/json' },
+  //     },
+  //   );
+  //   return response.data; // The token
+  // };
+
+  // 테스트 요청
+  const getToken = useCallback(async () => {
+    const response = await axios.post(
+      APPLICATION_SERVER_URL + '/api/openvidu-management/test',
+      {}, // body
+      {
+        headers: {
+          Authorization: 'Basic T1BFTlZJRFVBUFA6b3BlbnZpZHVyZW9uYzIwMw==',
+          'Content-Type': 'application/json',
+        },
+      },
+    );
+    console.log('응답', response);
+    return response.data;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // 작업중인 요청
+  // const getToken = useCallback(async () => {
+  //   return createToken().then((response) => {
+  //     // const url = new URL(response);
+  //     // const sessionId = url.searchParams.get('sessinId');
+  //     // const token = url.searchParams.get('token');
+  //     const tmp =
+  //       'wss://i9c203.p.ssafy.io?sessionId=ses_OYSe2KtSh5&token=tok_OrWnXOs2EmioDSXR';
+  //     return tmp;
+  //   });
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
+
+  // const createToken = async () => {
   //   try {
   //     const response = await axios.post(
-  //       APPLICATION_SERVER_URL + '/openvidu/api/sessions/REON/connection',
+  //       APPLICATION_SERVER_URL + '/api/openvidu-management/test',
   //       {}, // body
   //       {
   //         headers: {
   //           Authorization: 'Basic T1BFTlZJRFVBUFA6b3BlbnZpZHVyZW9uYzIwMw==',
-  //           // Basic 다음의 값은 'username:password' 형식을 Base64 인코딩한 것
-  //           // username은 OPENVIDUAPP
-  //           // password는 <YOUR_SECRET>
   //           'Content-Type': 'application/json',
   //         },
   //       },
