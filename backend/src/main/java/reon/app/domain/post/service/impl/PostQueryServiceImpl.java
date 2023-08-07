@@ -5,11 +5,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import reon.app.domain.post.dto.res.PrivateDetailPostResponse;
+import reon.app.domain.post.dto.res.PrivatePostsResponse;
 import reon.app.domain.post.dto.res.PublicDetailPostResponse;
 import reon.app.domain.post.entity.Post;
 import reon.app.domain.post.entity.Scope;
 import reon.app.domain.post.repository.PostQueryRepository;
 import reon.app.domain.post.service.PostQueryService;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -34,8 +37,16 @@ public class PostQueryServiceImpl implements PostQueryService {
                 .build();
     }
 
+    // TODO: 2023-08-08 좋아요, 댓글 구현 후 작성 필요
     @Override
     public PublicDetailPostResponse searchPublicById(Long postId) {
+
         return null;
+    }
+
+    @Override
+    public List<PrivatePostsResponse> searchPrivatePosts(Long offset, Long memberId) {
+        List<PrivatePostsResponse> responses = postQueryRepository.searchPrivatePosts(offset, memberId);
+        return responses;
     }
 }

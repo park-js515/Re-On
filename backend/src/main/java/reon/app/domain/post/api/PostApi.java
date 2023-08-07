@@ -4,11 +4,13 @@ import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import reon.app.domain.post.dto.res.PrivateDetailPostResponse;
+import reon.app.domain.post.dto.res.PrivatePostsResponse;
 import reon.app.domain.post.dto.res.PublicDetailPostResponse;
 import reon.app.domain.post.entity.Scope;
 import reon.app.domain.post.service.PostLikeService;
@@ -19,9 +21,12 @@ import reon.app.global.api.ApiResponse;
 import reon.app.global.error.entity.CustomException;
 import reon.app.global.error.entity.ErrorCode;
 
+import java.util.List;
+
 @Api(tags = "Post")
 @RestController
 @RequiredArgsConstructor
+@Slf4j
 @RequestMapping("api/post-management/post")
 public class PostApi {
     private final PostService postService;
@@ -45,7 +50,7 @@ public class PostApi {
     }
 
     // 단건 조회
-    @Operation(tags = "회원", description = "회원 베틀 정보를 조회한다.")
+    @Operation(tags = "게시글", description = "PRIVATE / PUBLIC 게시글을 조회한다.")
     @GetMapping("/{postId}")
     public ApiResponse<?> searchPost(@PathVariable Long postId){
         Scope postScope = postQueryService.searchScopeById(postId);
@@ -62,4 +67,18 @@ public class PostApi {
         }
         return ApiResponse.OK(null);
     }
+
+
+    //offset 적용 필요
+    //무한스크롤 -> pagenation 적용  or offset 방식
+    @Operation(tags = "게시글", description = "PRIVATE 게시글 목록을 조회한다.")
+    @GetMapping("/private")
+    public ApiResponse<?> searchPirvatePosts(@RequestParam(value = "offset") Long offset, @Parameter(hidden = true) @AuthenticationPrincipal User user ){
+        Long memberId = Long.parseLong(user.getUsername());
+        log.info(String.valueOf(memberId));
+        List<PrivatePostsResponse> responses = postQueryService.searchPrivatePosts(offset, memberId);
+        log.info(responses.toString());
+        return ApiResponse.OK(responses);
+    }
+
 }
