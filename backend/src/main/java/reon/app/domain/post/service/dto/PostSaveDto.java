@@ -9,12 +9,13 @@ import org.springframework.web.multipart.MultipartFile;
 @NoArgsConstructor
 public class PostSaveDto {
     private Long memberId;
-//    private Long VideoId; //원본영상
+    private Long videoId; //원본영상
     private MultipartFile actionVideo;
 
     @Builder
-    public PostSaveDto(Long memberId, MultipartFile actionVideo) {
+    public PostSaveDto(Long memberId, Long videoId, MultipartFile actionVideo) {
         this.memberId = memberId;
+        this.videoId = videoId;
         this.actionVideo = actionVideo;
     }
 }

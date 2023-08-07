@@ -64,7 +64,6 @@ public class MemberApi {
         return ApiResponse.OK(updateMember);
     }
 
-    // TODO: 2023-08-01 로그인 구현 후 AuthenticationPrincipal 적용
     @Operation(tags = "회원", description = "회원 프로필 이미지를 수정한다.")
     @PutMapping("/images/update")
     public ApiResponse<Void> updateProfileImg(@RequestPart MultipartFile profileImg, @Parameter(hidden = true) @AuthenticationPrincipal User user) {
