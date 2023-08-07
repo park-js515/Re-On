@@ -12,7 +12,7 @@ const Hotlist = ({injectPostId, changeShow}) => {
   for (let i = 1; i <= 10; i++){
     TESTDATA.push({
       post_id : i,
-      thumbnail : "https://i.ytimg.com/vi/PJSH-r7uPfo/hq720.jpg?sqp=-oaymwEcCNAFEJQDSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLCP2xrC0yhdf70ORJ37lHEpZAPWCA",
+      thumbnail : 'https://source.unsplash.com/random?sig=2',
       member_id : i,
       nick_name : `랄로상-${i}`,
       profile_img : "https://yt3.ggpht.com/ytc/AOPolaQEivCeo8OdmA0NhR3XhlRVybG6CTVeeA4YEL75Ug=s68-c-k-c0x00ffffff-no-rj",
