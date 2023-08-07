@@ -82,9 +82,11 @@ public class OpenViduApi {
 //        Connection connection = findSession.createConnection(cproperties);
 
         //세션 목록 가져오기
+        openvidu.fetch();
         List<Session> sessions = openvidu.getActiveSessions();
         //세션 목록이 있을때
         if(sessions.size()>0) {
+            System.out.println(sessions.size());
             Session targetSession = null;
             //세션들 입장 인원이 1명인 세션 확인하기.
             for (int i = 0; i < sessions.size(); i++) {
@@ -101,6 +103,7 @@ public class OpenViduApi {
                 }
             }
         }
+        System.out.println("0개임");
         //세션 목록이 없거나 1명인 세션이 없는 경우 새롭게 새션 생성
         SessionProperties properties = SessionProperties.fromJson(params).build();
         Session session = openvidu.createSession(properties);
