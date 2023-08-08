@@ -32,7 +32,7 @@ public class MemberQueryServiceImpl implements MemberQueryService {
 
     @Override
     public BackStageMemberResponse findBackStageMembereById(Long id) {
-        BackStageMemberResponse res = memberQueryRepository.findBackStageMembereById(id);
+        BackStageMemberResponse res = memberQueryRepository.findBackStageMemberById(id);
         if(res == null){
             throw new CustomException(ErrorCode.MEMBER_NOT_FOUND);
         }

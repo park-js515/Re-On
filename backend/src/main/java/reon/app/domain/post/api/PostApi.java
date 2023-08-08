@@ -66,6 +66,7 @@ public class PostApi {
             }
         }else{
             PublicDetailPostResponse response = postQueryService.searchPublicById(postId);
+                return ApiResponse.OK(response);
         }
         return ApiResponse.OK(null);
     }
@@ -94,10 +95,10 @@ public class PostApi {
                 .build();
         postService.updatePrivateToPublic(dto);
         return ApiResponse.OK(null);
-
     }
 
-    @Operation(tags="post 좋아요", description = "post 좋아요 API입니다. / True : 좋아요 생성, False : 좋아요 취소")
+
+    @Operation(tags="post 좋아요", description = "좋아요 상태를 변경한다.")
     @PostMapping("/like/{postId}")
     public ApiResponse<Boolean> changeLike(@PathVariable("postId") Long postId, @Parameter(hidden = true) @AuthenticationPrincipal User user){
         Long memberId = Long.parseLong(user.getUsername());

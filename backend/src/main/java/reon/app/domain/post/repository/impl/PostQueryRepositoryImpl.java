@@ -5,6 +5,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import reon.app.domain.post.dto.res.PrivatePostsResponse;
+import reon.app.domain.post.dto.res.PublicDetailPostResponse;
 import reon.app.domain.post.entity.Post;
 import reon.app.domain.post.entity.Scope;
 import reon.app.domain.post.repository.PostQueryRepository;
@@ -29,7 +30,7 @@ public class PostQueryRepositoryImpl implements PostQueryRepository {
     }
 
     @Override
-    public Post searchPrivateById(Long postId) {
+    public Post searchById(Long postId) {
         return queryFactory
                 .select(post)
                 .from(post)

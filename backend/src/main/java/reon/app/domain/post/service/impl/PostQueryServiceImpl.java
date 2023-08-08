@@ -10,9 +10,12 @@ import reon.app.domain.post.dto.res.PublicDetailPostResponse;
 import reon.app.domain.post.entity.Post;
 import reon.app.domain.post.entity.Scope;
 import reon.app.domain.post.repository.PostQueryRepository;
+import reon.app.domain.post.repository.PostRepository;
 import reon.app.domain.post.service.PostQueryService;
 
+import javax.swing.text.html.Option;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -27,7 +30,7 @@ public class PostQueryServiceImpl implements PostQueryService {
 
     @Override
     public PrivateDetailPostResponse searchPrivateById(Long postId) {
-        Post post = postQueryRepository.searchPrivateById(postId);
+        Post post = postQueryRepository.searchById(postId);
         return PrivateDetailPostResponse.builder()
                 .id(post.getId())
                 .memberId(post.getMember().getId())
@@ -37,11 +40,21 @@ public class PostQueryServiceImpl implements PostQueryService {
                 .build();
     }
 
-    // TODO: 2023-08-08 좋아요, 댓글 구현 후 작성 필요
+    // TODO: 2023-08-08 좋아요, 댓글구 현 후 작성 필요
     @Override
     public PublicDetailPostResponse searchPublicById(Long postId) {
-
-        return null;
+        Post post = postQueryRepository.searchById(postId);
+        return PublicDetailPostResponse.builder()
+                .id(post.getId())
+                .memberId(post.getMember().getId())
+                .nickName(post.getMember().getMemberInfo().getNickName())
+                .profileImg(post.getMember().getMemberInfo().getProfileImg())
+                .actionPath(post.getActionPath())
+                .title(post.getTitle())
+                .content(post.getContent())
+                .likeCnt(post.getPostLikes().size())
+                .createDate(post.getCreateDate())
+                .build();
     }
 
     @Override
