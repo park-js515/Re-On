@@ -4,6 +4,7 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.DynamicInsert;
 import reon.app.domain.member.entity.Member;
+import reon.app.domain.post.service.dto.PrivatePostUpdateDto;
 import reon.app.domain.video.entity.Video;
 import reon.app.global.entity.BaseEntity;
 
@@ -55,7 +56,12 @@ public class Post extends BaseEntity {
         this.member = member;
         this.video = video;
     }
+
+    public void updatePrivateToPublic(PrivatePostUpdateDto privatePostUpdateDto) {
+        this.title = privatePostUpdateDto.getTitle();
+        this.content = privatePostUpdateDto.getContent();
+        this.scope = Scope.PUBLIC;
+    }
 }
 
-    // Todo 2023.08.06 : 원본영상 연결해야할까 ?
 
