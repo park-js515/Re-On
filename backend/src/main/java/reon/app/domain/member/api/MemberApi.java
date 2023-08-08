@@ -24,7 +24,7 @@ import reon.app.domain.member.dto.res.MemberResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-@Api(tags = "회원")
+@Api(tags = "Member")
 @RestController
 @Slf4j
 @RequiredArgsConstructor
@@ -32,7 +32,7 @@ import javax.servlet.http.HttpSession;
 public class MemberApi {
     private final MemberService memberService;
     private final MemberQueryService memberQueryService;
-    @Operation(tags = "회원", description = "ID로 마이페이지 상세 정보 조회")
+    @Operation(summary = "mypage member 조회", description = "memberId로 mypage member 상세 조회")
     @GetMapping("/member/{id}") // 시큐리티를 사용한다면 로그인이 됐으면 ? user 있을꺼고 나도 사용하고싶당~
     public ApiResponse<MemberResponse> findMemberById(@PathVariable("id") @ApiParam("유저 id") Long id, @AuthenticationPrincipal User user){
         log.info(user.toString());
@@ -40,7 +40,7 @@ public class MemberApi {
         return ApiResponse.OK(memberResponse);
     }
 
-    @Operation(tags = "백스테이지", description = "ID로 백스테이지 제공 정보 조회")
+    @Operation(summary = "Back stage member 조회", description = "memberId로 BackStage Member 정보 조회")
     @GetMapping("/back-stage/{id}")
     public ApiResponse<BackStageMemberResponse> findBackStageMemberById(@PathVariable("id") @ApiParam("유저 ID") Long id){
         BackStageMemberResponse backStageMemberResponse = memberQueryService.findBackStageMembereById(id);
@@ -53,7 +53,7 @@ public class MemberApi {
 //        return ApiResponse.OK(null);
 //    }
 
-    @Operation(tags = "회원", description = "회원 정보(닉네임, 자기소개)를 수정한다.")
+    @Operation(summary = "member 정보 수정", description = "회원 정보(닉네임, 자기소개)를 수정한다.")
     @PutMapping("/member/update")
     public ApiResponse<?> update(@RequestBody @ApiParam("수정할 회원 정보") MemberUpdateRequest memberUpdateRequest){
         // TODO 2023.08.04 : ERROR처리 어떻게 ?
@@ -64,7 +64,7 @@ public class MemberApi {
         return ApiResponse.OK(updateMember);
     }
 
-    @Operation(tags = "회원", description = "회원 프로필 이미지를 수정한다.")
+    @Operation(summary = "member profile image 수정", description = "회원 프로필 이미지를 수정한다.")
     @PutMapping("/images/update")
     public ApiResponse<Void> updateProfileImg(@RequestPart MultipartFile profileImg, @Parameter(hidden = true) @AuthenticationPrincipal User user) {
 //    public ApiResponse<Void> updateProfileImg(@RequestPart @ApiParam("수정할 이미지") MultipartFile profileImg) {
@@ -72,14 +72,14 @@ public class MemberApi {
         memberService.updateProfileImg(profileImg, Long.parseLong(user.getUsername()));
         return ApiResponse.OK(null);
     }
-    @Operation(tags = "회원", description = "회원 프로필 이미지를 삭제한다.")
+    @Operation(summary = "member image 삭제", description = "회원 프로필 이미지를 삭제한다.")
     @DeleteMapping("/images/delete")
     public ApiResponse<Void> removeProfileImg(@Parameter(hidden = true) @AuthenticationPrincipal User user) {
         memberService.removeProfileImg(Long.parseLong(user.getUsername()));
         return ApiResponse.OK(null);
     }
     
-    @Operation(tags = "회원", description = "로그아웃")
+    @Operation(summary = "로그아웃", description = "로그아웃")
     @GetMapping("/member/logout/{id}")
     public ApiResponse<Void> logout(@PathVariable("id") Long id, HttpServletRequest httpServletRequest){
         HttpSession session = httpServletRequest.getSession();
@@ -89,7 +89,7 @@ public class MemberApi {
     }
 
     // TODO: 2023-08-01 아이디를 인자로 받을지 그냥 Authentication으로 처리할지 결정
-    @Operation(tags = "회원", description = "회원 탈퇴")
+    @Operation(summary = "회원 탈퇴", description = "회원 탈퇴")
     @DeleteMapping("/member/{id}")
     public ApiResponse<Void> delete(@PathVariable("id") @ApiParam("탈퇴를 진행할 유저의 아이디") Long id){
         memberService.delete(id);
@@ -97,13 +97,13 @@ public class MemberApi {
     }
 
 
-    @Operation(tags = "회원", description = "회원 베틀 정보를 조회한다.")
+    @Operation(summary = "member 배틀 정보 조회", description = "회원 베틀 정보를 조회한다.")
     @GetMapping("/battleInfo/{email}")
 //    public ApiResponse<Void> removeProfileImg(@Parameter(hidden = true) @AuthenticationPrincipal User user) {
     public ApiResponse<MemberBattleInfoResponse> findMemberBattleInfoByEmail(@PathVariable("email") @ApiParam("유저 이메일") String email) {
         return ApiResponse.OK(null);
     }
-    @Operation(tags = "회원", description = "회원 베틀 정보를 업데이트한다.")
+    @Operation(summary = "member 배틀 정보 업데이트", description = "회원 베틀 정보를 업데이트한다.")
     @PutMapping("/battleInfo/update")
 //    public ApiResponse<Void> removeProfileImg(@Parameter(hidden = true) @AuthenticationPrincipal User user) {
     public ApiResponse<Void> updateMemberBattleInfo(@RequestBody MemberBattleInfoUpdateRequest memberBattleInfoUpdateRequest) {
