@@ -520,7 +520,7 @@ export default function OpenViduApp() {
   const [toggleTutorialModal, setToggleTutorialModal] = useState(false);
 
   return (
-    <div className="m-8">
+    <div className="">
       {toggleSaveModal && (
         <Modal
           type="save"
@@ -541,54 +541,18 @@ export default function OpenViduApp() {
       {/* 백스테이지 */}
 
       {session !== undefined ? (
-        <div id="session" className="flex justify-around gap-4">
+        <div
+          id="session"
+          className="flex justify-around gap-4 w-full h-full border"
+        >
           {isLoading && (
             <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50">
               <LoadingWaiting />
             </div>
           )}
-          <div
-            id="movie-container"
-            className="border rounded-lg
-            flex-col flex justify-evenly w-[400px] "
-          >
-            <button
-              onClick={handleLoadVideo}
-              className="border-4 border-mainBlue"
-            >
-              세션 사람 2명 되면 발생하는 이벤트
-            </button>
-            <video
-              ref={videoRef}
-              src="video/ISawTheDevil.mp4"
-              poster="image/rank/rank-reon.png"
-              className={`h-[450px] mx-4 rounded-lg ${
-                isPlaying ? 'border-4 border-danger' : ''
-              }`}
-            />
 
-            <Paper
-              style={{ backgroundColor: '#f5f5f5' }}
-              className="h-[100px] mx-4 overflow-auto"
-            >
-              {log.map((item, index) => (
-                <div key={index} ref={logRef}>
-                  {item}
-                </div>
-              ))}
-            </Paper>
-          </div>
-          {/* 왼쪽 */}
-
-          <div
-            id="video-container"
-            className="border rounded-lg h-[600px] w-[1000px]
-            bg-darkGray"
-            style={{
-              backgroundImage: `url('image/rank/rank-video-bg.png')`,
-            }}
-          >
-            <div className="flex flex-wrap place-content-center gap-10 mt-5">
+          <div id="video-container" className="rounded-lg bg-darkGray">
+            <div className="flex flex-wrap place-content-center gap-5 mt-5">
               {publisher !== undefined ? (
                 <div
                   className={`${
@@ -603,6 +567,33 @@ export default function OpenViduApp() {
                   <LoadingWaiting />
                 </div>
               )}
+
+              <div
+                id="movie-container"
+                className="border rounded-lg
+            flex-col flex justify-evenly w-[400px] "
+              >
+                <video
+                  ref={videoRef}
+                  src="video/ISawTheDevil.mp4"
+                  poster="image/rank/rank-reon.png"
+                  className={`h-[450px] mx-4 rounded-lg ${
+                    isPlaying ? 'border-4 border-danger' : ''
+                  }`}
+                />
+
+                <Paper
+                  style={{ backgroundColor: '#f5f5f5' }}
+                  className="h-[100px] mx-4 overflow-auto"
+                >
+                  {log.map((item, index) => (
+                    <div key={index} ref={logRef}>
+                      {item}
+                    </div>
+                  ))}
+                </Paper>
+              </div>
+              {/* 왼쪽 */}
 
               {subscribers.length > 0 ? (
                 subscribers.map((sub, i) => (
@@ -639,7 +630,7 @@ export default function OpenViduApp() {
               )}
             </div>
 
-            <div className="flex justify-center gap-8 mt-10">
+            <div className="flex justify-center gap-5 mt-10">
               {/* 튜토리얼 버튼 */}
               {toggleTutorialModal && (
                 <TutorialModal
