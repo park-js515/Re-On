@@ -23,10 +23,10 @@ const Videoitem = ({props, changeMode}) => {
 
 
     return (
-      <div className="bg-white flex max-w-xl shadow-md flex-col items-start justify-between transform transition-transform duration-300 hover:scale-105 hover:shadow-lg mx-2 rounded">
-       <div style={{ backgroundImage: `url(${props.thumbnail})` }} className="w-full h-48 bg-cover bg-center rounded featured-item cursor-pointer" src={props.thumbnail} alt="" onClick={changeMode}></div>
+      <div className="bg-white flex max-w-xl shadow-md flex-col items-start justify-between transform transition-transform duration-300 hover:scale-105 hover:shadow-lg mx-2 my-6 pb-4">
+       <div style={{ backgroundImage: `url(${props.thumbnail})` }} className="w-full h-64 bg-cover bg-center rounded-t featured-item cursor-pointer " src={props.thumbnail} alt="" onClick={changeMode}></div>
 
-        <div className="flex items-center gap-x-4 text-xs ml-2">
+        <div className="flex items-center gap-x-4 text-xs ml-2 ">
           <div className="">
             💙 {convertToK(props.like_cnt)}
           </div>

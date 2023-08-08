@@ -1,0 +1,22 @@
+
+/* 애니메이션 설정 */
+@keyframes rotateAndFall {
+  0% {
+    transform: translateY(-100%) rotate(0deg);
+  }
+  100% {
+    transform: translateY(100vh) rotate(900deg);
+  }
+}
+
+/* 이미지에 대한 스타일 */
+.fallingImage {
+  position: relative;
+  top: 0;
+  left: 50%;  /* 이미지를 화면의 중앙에 위치시킵니다. */
+  transform: translateX(-50%); /* 이미지를 화면의 중앙에 위치시킵니다. */
+  transform-origin: center;  
+  animation: rotateAndFall 10s cubic-bezier(0.25, 0.1, 0.25, 1) infinite;  /* 부드러운 애니메이션 설정 */
+  z-index: -1; /* Test1 컴포넌트가 가장 앞에 오도록 z-index를 설정 */
+  
+}
