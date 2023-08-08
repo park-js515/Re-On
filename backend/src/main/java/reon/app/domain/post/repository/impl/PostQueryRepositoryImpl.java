@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import reon.app.domain.post.dto.res.PrivatePostsResponse;
 import reon.app.domain.post.dto.res.PublicDetailPostResponse;
+import reon.app.domain.post.dto.res.PublicPostsResponse;
 import reon.app.domain.post.entity.Post;
 import reon.app.domain.post.entity.Scope;
 import reon.app.domain.post.repository.PostQueryRepository;
@@ -54,6 +55,28 @@ public class PostQueryRepositoryImpl implements PostQueryRepository {
                 .join(post.video, video)
                 .where(post.member.id.eq(memberId),
                         post.scope.eq(Scope.PRIVATE))
+                .orderBy(post.createDate.desc())
+                .offset((offset-1)* 20L)
+                .limit(20)
+                .fetch();
+    }
+
+    @Override
+    public List<PublicPostsResponse> searchPublicPosts(Long offset, Long memberId) {
+        return queryFactory
+                .select(Projections.fields(PublicPostsResponse.class,
+                        post.id,
+                        post.member.id.as("memberId"),
+                        post.title,
+                        post.video.thumbnail,
+                        post.postLikes.size().as("likeCnt"),
+                        post.createDate
+                        ))
+                .from(post)
+                .join(post.member, member)
+                .join(post.video, video)
+                .where(post.member.id.eq(memberId),
+                        post.scope.eq(Scope.PUBLIC))
                 .orderBy(post.createDate.desc())
                 .offset((offset-1)* 20L)
                 .limit(20)

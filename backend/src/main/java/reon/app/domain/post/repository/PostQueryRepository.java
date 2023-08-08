@@ -2,6 +2,7 @@ package reon.app.domain.post.repository;
 
 import reon.app.domain.post.dto.res.PrivatePostsResponse;
 import reon.app.domain.post.dto.res.PublicDetailPostResponse;
+import reon.app.domain.post.dto.res.PublicPostsResponse;
 import reon.app.domain.post.entity.Post;
 import reon.app.domain.post.entity.Scope;
 
@@ -13,4 +14,6 @@ public interface PostQueryRepository {
     Post searchById(Long postId);
 
     List<PrivatePostsResponse> searchPrivatePosts(Long offset, Long memberId);
+
+    List<PublicPostsResponse> searchPublicPosts(Long offset, Long memberId);
 }

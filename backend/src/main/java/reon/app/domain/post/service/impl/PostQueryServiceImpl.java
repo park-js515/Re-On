@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import reon.app.domain.post.dto.res.PrivateDetailPostResponse;
 import reon.app.domain.post.dto.res.PrivatePostsResponse;
 import reon.app.domain.post.dto.res.PublicDetailPostResponse;
+import reon.app.domain.post.dto.res.PublicPostsResponse;
 import reon.app.domain.post.entity.Post;
 import reon.app.domain.post.entity.Scope;
 import reon.app.domain.post.repository.PostQueryRepository;
@@ -60,6 +61,12 @@ public class PostQueryServiceImpl implements PostQueryService {
     @Override
     public List<PrivatePostsResponse> searchPrivatePosts(Long offset, Long memberId) {
         List<PrivatePostsResponse> responses = postQueryRepository.searchPrivatePosts(offset, memberId);
+        return responses;
+    }
+
+    @Override
+    public List<PublicPostsResponse> searchPublicPosts(Long offset, Long memberId) {
+        List<PublicPostsResponse> responses = postQueryRepository.searchPublicPosts(offset, memberId);
         return responses;
     }
 }

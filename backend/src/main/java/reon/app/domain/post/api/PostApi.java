@@ -13,6 +13,7 @@ import reon.app.domain.post.dto.req.PrivatePostUpdateRequest;
 import reon.app.domain.post.dto.res.PrivateDetailPostResponse;
 import reon.app.domain.post.dto.res.PrivatePostsResponse;
 import reon.app.domain.post.dto.res.PublicDetailPostResponse;
+import reon.app.domain.post.dto.res.PublicPostsResponse;
 import reon.app.domain.post.entity.Scope;
 import reon.app.domain.post.service.PostLikeService;
 import reon.app.domain.post.service.PostQueryService;
@@ -61,17 +62,15 @@ public class PostApi {
         }
         if(postScope.equals(Scope.PRIVATE)){ // title, content 제공 x
             PrivateDetailPostResponse response = postQueryService.searchPrivateById(postId);
-            if(response != null){
-                return ApiResponse.OK(response);
-            }
+            return ApiResponse.OK(response);
+
         }else{
             PublicDetailPostResponse response = postQueryService.searchPublicById(postId);
-                return ApiResponse.OK(response);
+            return ApiResponse.OK(response);
         }
-        return ApiResponse.OK(null);
     }
 
-    @Operation(summary = "private post 목록 조회", description = "PRIVATE 게시글 목록을 조회한다.")
+    @Operation(summary = "mypage private post 목록 조회", description = "PRIVATE 게시글 목록을 조회한다.")
     @GetMapping("/private")
     public ApiResponse<?> searchPrivatePosts(@RequestParam(value = "offset") Long offset, @Parameter(hidden = true) @AuthenticationPrincipal User user ){
         Long memberId = Long.parseLong(user.getUsername());
@@ -80,6 +79,17 @@ public class PostApi {
         log.info(responses.toString());
         return ApiResponse.OK(responses);
     }
+
+    @Operation(summary = "mypage public post 목록 조회", description = "PUBLIC 게시글 목록을 조회한다.")
+    @GetMapping("/public")
+    public ApiResponse<?> searchPublicPosts(@RequestParam(value = "offset") Long offset, @RequestParam(value = "memberId") Long memberId){
+        log.info(String.valueOf(memberId));
+        List<PublicPostsResponse> responses = postQueryService.searchPublicPosts(offset, memberId);
+        log.info(responses.toString());
+        return ApiResponse.OK(responses);
+    }
+
+
 
     @Operation(summary = "private post upload", description = "PRIVATE 게시글을 PUBLIC으로 변경한다.")
     @PutMapping("/private/{postId}")
