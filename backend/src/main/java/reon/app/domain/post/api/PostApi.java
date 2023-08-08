@@ -98,10 +98,11 @@ public class PostApi {
 
     }
 
-    @Operation(tags="post 좋아요", description = "post 좋아요 API입니다.")
-    @PostMapping("/like/{id}")
-    public ApiResponse<Boolean> changeLike(@PathVariable("id") Long postId, @Parameter(hidden = true) @AuthenticationPrincipal User user){
+    @Operation(tags="post 좋아요", description = "post 좋아요 API입니다. / True : 좋아요 생성, False : 좋아요 취소")
+    @PostMapping("/like/{postId}")
+    public ApiResponse<Boolean> changeLike(@PathVariable("postId") Long postId, @Parameter(hidden = true) @AuthenticationPrincipal User user){
         Long memberId = Long.parseLong(user.getUsername());
-        boolean flag = postLikeService.changeLike(memberId, postId);
+        Boolean flag = postLikeService.changeLike(postId, memberId);
+        return ApiResponse.OK(flag);
     }
 }

@@ -5,6 +5,7 @@ import reon.app.domain.post.entity.Post;
 import reon.app.domain.post.entity.PostLike;
 
 public interface PostLikeRepository extends JpaRepository<PostLike, Long> {
-    Boolean existsPostLikeByMember_IdAndPost_Id(Long memberId, Long postId);
+//    PostLike findPostLikeByIdAndMemberId(Long id, Long memberId);
+    PostLike findByPost_IdAndMember_Id(Long id, Long memberId);
 }
 

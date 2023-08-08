@@ -1,6 +1,7 @@
 package reon.app.domain.post.entity;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import reon.app.domain.member.entity.Member;
@@ -21,6 +22,7 @@ public class PostLike {
     @JoinColumn(name = "post_id")
     private Post post;
 
+    @Builder
     public PostLike(Long id, Member member, Post post) {
         this.id = id;
         this.member = member;
