@@ -13,7 +13,6 @@ import reon.app.domain.post.dto.req.PrivatePostUpdateRequest;
 import reon.app.domain.post.dto.res.PrivateDetailPostResponse;
 import reon.app.domain.post.dto.res.PrivatePostsResponse;
 import reon.app.domain.post.dto.res.PublicDetailPostResponse;
-import reon.app.domain.post.entity.Post;
 import reon.app.domain.post.entity.Scope;
 import reon.app.domain.post.service.PostLikeService;
 import reon.app.domain.post.service.PostQueryService;
@@ -38,9 +37,9 @@ public class PostApi {
 //    private final MemberService memberService;
     private final PostLikeService postLikeService;
 
-    @Operation(summary = "post 생성", description = "post를 생성하는 API입니다")
+    @Operation(summary = "post 저장", description = " 유저 연기 영상, 원본 영상ID를 입력받아 post를 저장")
     @PostMapping
-    public ApiResponse<?> savePost(@RequestPart MultipartFile actionVideo,@RequestParam("videoId") Long videoId,
+    public ApiResponse<?> savePost(@RequestPart MultipartFile actionVideo, @RequestParam("videoId") Long videoId,
                                    @Parameter(hidden = true) @AuthenticationPrincipal User user){
         PostSaveDto postSaveDto = PostSaveDto.builder()
                 .memberId(Long.parseLong(user.getUsername()))
@@ -53,7 +52,7 @@ public class PostApi {
     }
 
     // 단건 조회
-    @Operation(tags = "게시글", description = "PRIVATE / PUBLIC 게시글을 조회한다.")
+    @Operation(summary = "post 상세 조회", description = "postId로 post 상세 조회")
     @GetMapping("/{postId}")
     public ApiResponse<?> searchPost(@PathVariable Long postId){
         Scope postScope = postQueryService.searchScopeById(postId);
@@ -71,9 +70,9 @@ public class PostApi {
         return ApiResponse.OK(null);
     }
 
-    @Operation(tags = "게시글", description = "개인 PRIVATE 게시글 목록을 조회한다.")
+    @Operation(summary = "private post 목록 조회", description = "PRIVATE 게시글 목록을 조회한다.")
     @GetMapping("/private")
-    public ApiResponse<?> searchPirvatePosts(@RequestParam(value = "offset") Long offset, @Parameter(hidden = true) @AuthenticationPrincipal User user ){
+    public ApiResponse<?> searchPrivatePosts(@RequestParam(value = "offset") Long offset, @Parameter(hidden = true) @AuthenticationPrincipal User user ){
         Long memberId = Long.parseLong(user.getUsername());
         log.info(String.valueOf(memberId));
         List<PrivatePostsResponse> responses = postQueryService.searchPrivatePosts(offset, memberId);
@@ -81,7 +80,7 @@ public class PostApi {
         return ApiResponse.OK(responses);
     }
 
-    @Operation(tags = "게시글", description = "PRIVATE 게시글을 PUBLIC으로 변경한다.")
+    @Operation(summary = "private post upload", description = "PRIVATE 게시글을 PUBLIC으로 변경한다.")
     @PutMapping("/private/{postId}")
     public ApiResponse<?> updatePrivatePost(@PathVariable Long postId, @RequestBody PrivatePostUpdateRequest request){
         Scope scope = postQueryService.searchScopeById(postId);
