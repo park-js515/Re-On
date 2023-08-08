@@ -46,31 +46,39 @@ export default function OpenViduApp() {
     [mainStreamManager],
   );
 
+  const [mySide, setMySide] = useState(null); // mySide 상태 선언
   const joinSession = useCallback(() => {
     const mySession = OV.current.initSession();
 
     const connections = [];
-    mySession.on('connectionCreated', (event) => {
+    mySession.on('connectionCreated', async (event) => {
       connections.push(event.connection);
     });
-    console.log('커넥셧ㄴ스', connections);
+    console.log('커넥션스', connections);
 
     mySession.on('streamCreated', async (event) => {
-      const sortedConnections = connections.sort(
-        (a, b) => a.createdAt - b.createdAt,
-      );
-      console.log('정렬된커넥', sortedConnections);
-      const myConnectionIndex = sortedConnections.findIndex(
-        (conn) => conn.connectionId === connections.connectionId,
-      );
-      console.log('내 커넧ㄴ 인덳', myConnectionIndex);
-
       const subscriber = mySession.subscribe(event.stream, undefined);
       setSubscribers((subscribers) => [...subscribers, subscriber]);
+
+      // ++++++++++++유저 순서 구하기+++++++++++++++++++++++
+      const subscriberId = subscriber.stream.streamId.slice(-14); // 상대 커넥션 아이디
+
+      // 커넥션 정보 시간 순으로 정렬
+      const sortedConnections = connections.sort(
+        (a, b) => a.creationTime - b.creationTime,
+      );
+
+      const firstUserId = sortedConnections[0].connectionId; // 먼저 온 유저 커넥션 ID
+      const secondUserId = sortedConnections[1].connectionId; // 나중에 온 유저 커넥션 ID
+
+      // 상대유저가 나중에 온 유저면, 나는 먼저 온 유저(첫번째)
+      const me = subscriberId === secondUserId ? 'USER_ONE' : 'USER_TWO';
+      setMySide(me); // 상태 업데이트
       setLog((prevLog) => [
         ...prevLog,
-        `${logMessageTime} | 상대방이 참여했습니다.`,
+        `${logMessageTime} | 당신은 ${me}입니다.`,
       ]);
+      // +++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
       // 시그널 보내기
       mySession.signal({
@@ -87,7 +95,7 @@ export default function OpenViduApp() {
         `${logMessageTime} | 게임을 시작합니다.`,
       ]);
       await startLoading(5000); // 로딩 5초
-      handlePlayVideo(); // 영상 시작
+      handleLoadVideo(); // 영상 시작
     });
 
     mySession.on('streamDestroyed', (event) => {
@@ -366,8 +374,8 @@ export default function OpenViduApp() {
 
   // ############ 상태 관리 ###############
   const [stage, setStage] = useState('NOT_READY'); // 현재 게임 상태 관리
-  const [userCamOneBorder, setUserCamOneBorder] = useState(false); // 유저1 플레이시 테두리
-  const [userCamTwoBorder, setUserCamTwoBorder] = useState(false); // 유저2 플레이시 테두리
+  const [userCamLeftBorder, setUserCamLeftBorder] = useState(false); // 유저1 플레이시 테두리
+  const [userCamRightBorder, setUserCamRightBorder] = useState(false); // 유저2 플레이시 테두리
 
   // ############# 비디오 플레이 훅 ##############
   // useEffect보다 위에 선언해야 했다.
@@ -378,18 +386,33 @@ export default function OpenViduApp() {
     // 영화 미리보기
     if (stage === 'WATCHING_MOVIE') {
       setLog((prevLog) => [...prevLog, `${logMessageTime} | 작품 미리보기`]);
-      // 유저 1 차례
-    } else if (stage === 'USER_ONE_TURN') {
-      setLog((prevLog) => [...prevLog, `${logMessageTime} | 첫번째 연기 시작`]);
+
+      // 내가 유저 1이면서 첫번째 차례
+    } else if (mySide === 'USER_ONE' && stage === 'USER_ONE_TURN') {
+      setLog((prevLog) => [...prevLog, `${logMessageTime} | 내 연기 시작`]);
       handleUserOnePlay();
-      // 유저 2 차례
-    } else if (stage === 'USER_TWO_TURN') {
-      setLog((prevLog) => [...prevLog, `${logMessageTime} | 두번째 연기 시작`]);
+
+      // 내가 유저 1이면서 두번째 차례
+    } else if (mySide === 'USER_ONE' && stage === 'USER_TWO_TURN') {
+      setLog((prevLog) => [...prevLog, `${logMessageTime} | 상대 연기 시작`]);
       handleUserTwoPlay();
-      // 점수계산
+
+      // 내가 유저 2이면서 첫번째 차례
+    } else if (mySide === 'USER_TWO' && stage === 'USER_ONE_TURN') {
+      setLog((prevLog) => [...prevLog, `${logMessageTime} | 상대 연기 시작`]);
+      handleUserOnePlay();
+
+      // 내가 유저 2이면서 두번째 차례
+    } else if (mySide === 'USER_TWO' && stage === 'USER_TWO_TURN') {
+      setLog((prevLog) => [...prevLog, `${logMessageTime} | 내 연기 시작`]);
+      handleUserTwoPlay();
+
+      // 점수 계산
     } else if (stage === 'CALCULATION') {
       setLog((prevLog) => [...prevLog, `${logMessageTime} | 계산 시작`]);
       handleCaculateScore();
+
+      // 게임 종료
     } else if (stage === 'END') {
       setLog((prevLog) => [...prevLog, `${logMessageTime} | 게임 종료`]);
       setToggleSaveModal(true);
@@ -415,7 +438,8 @@ export default function OpenViduApp() {
             ...prevLog,
             `${logMessageTime} | 첫번째 연기 종료`,
           ]);
-          setUserCamOneBorder(false);
+          setUserCamLeftBorder(false);
+          setUserCamRightBorder(false);
           setStage('USER_TWO_TURN');
           // 유저2 턴 종료
         } else if (stage === 'USER_TWO_TURN') {
@@ -423,7 +447,8 @@ export default function OpenViduApp() {
             ...prevLog,
             `${logMessageTime} | 두번째 연기 종료`,
           ]);
-          setUserCamTwoBorder(false);
+          setUserCamLeftBorder(false);
+          setUserCamRightBorder(false);
           setStage('CALCULATION');
         }
       };
@@ -442,7 +467,6 @@ export default function OpenViduApp() {
   // ############# 비디오 불러오기 함수 #############
   const handleLoadVideo = async () => {
     // setVideoSrc('video/ISawTheDevil.mp4'); // 비디오 URL 업데이트 (유튜브 API 요청해서 영상 소스 받아올 것)
-    await startLoading(3000); // 로딩
     setLog((prevLog) => [
       ...prevLog,
       `${logMessageTime} |  작품 : ${videoRef.current.src} 작품 길이 : ${videoRef.current.duration} `,
@@ -455,7 +479,9 @@ export default function OpenViduApp() {
   const handleUserOnePlay = async () => {
     setLog((prevLog) => [...prevLog, `${logMessageTime} | 유저 1 대기`]);
     await startLoading(3000); // 로딩
-    setUserCamOneBorder(true);
+    mySide === 'USER_ONE'
+      ? setUserCamLeftBorder(true)
+      : setUserCamRightBorder(true);
     setLog((prevLog) => [...prevLog, `${logMessageTime} | 유저 1 시작`]);
     handlePlayVideo();
   };
@@ -464,7 +490,9 @@ export default function OpenViduApp() {
   const handleUserTwoPlay = async () => {
     setLog((prevLog) => [...prevLog, `${logMessageTime} | 유저 2 대기`]);
     await startLoading(3000); // 로딩
-    setUserCamTwoBorder(true);
+    mySide === 'USER_TWO'
+      ? setUserCamLeftBorder(true)
+      : setUserCamRightBorder(true);
     setLog((prevLog) => [...prevLog, `${logMessageTime} | 유저 2 시작`]);
     handlePlayVideo();
   };
@@ -564,7 +592,7 @@ export default function OpenViduApp() {
               {publisher !== undefined ? (
                 <div
                   className={`${
-                    userCamOneBorder ? 'border-4 border-danger' : ''
+                    userCamLeftBorder ? 'border-4 border-danger' : ''
                   }`}
                   onClick={() => handleMainVideoStream(publisher)}
                 >
@@ -580,14 +608,16 @@ export default function OpenViduApp() {
                 subscribers.map((sub, i) => (
                   <div
                     key={sub.id}
-                    className={userCamTwoBorder ? 'border-4 border-danger' : ''}
+                    className={
+                      userCamRightBorder ? 'border-4 border-danger' : ''
+                    }
                     onClick={() => handleMainVideoStream(sub)}
                   >
                     <span>{sub.id}</span>
                     <UserVideoComponent
                       streamManager={sub}
                       className={
-                        userCamTwoBorder ? 'border-4 border-danger' : ''
+                        userCamRightBorder ? 'border-4 border-danger' : ''
                       }
                     />
                   </div>
