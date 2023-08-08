@@ -13,6 +13,7 @@ spring:
         bucket: reon-bucket
 
   datasource:
+
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://127.0.0.1:3306/reon_local?useUnicode=true&characterEncoding=utf8&autoReconnect=true&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true&useSSL=false
     username : "reon"
@@ -21,6 +22,7 @@ spring:
 #    url: jdbc:mariadb://stg-yswa-kr-practice-db-master.mariadb.database.azure.com:3306/S09P12C203?useUnicode=true&characterEncoding=utf8&autoReconnect=true&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true&useSSL=false
 #    username: "S09P12C203"
 #    password: "3iNtyHIJCM"
+
 
   mvc:
     pathmatch:
@@ -34,6 +36,12 @@ spring:
     # show-sql: true # DDL 출력
     generate-ddl: true
 
+OPENVIDU_URL:
+  https://i9c203.p.ssafy.io
+OPENVIDU_SECRET:
+  openvidureonc203
+
+
 oauth:
   naver:
     secret: WRf9Tvwu7z
@@ -43,4 +51,3 @@ oauth:
       api: https://openapi.naver.com
 jwt:
   secret-key: VvbHNpyb3JodG9kZbWhKZ29nby10Atam9vbmdhbmpaGFsZ2VveW8duaW0teWbS1zZXJ2ZXItZGxyamVvYW9290c3
-
