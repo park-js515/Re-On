@@ -9,14 +9,17 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import reon.app.domain.post.dto.req.PrivatePostUpdateRequest;
 import reon.app.domain.post.dto.res.PrivateDetailPostResponse;
 import reon.app.domain.post.dto.res.PrivatePostsResponse;
 import reon.app.domain.post.dto.res.PublicDetailPostResponse;
+import reon.app.domain.post.entity.Post;
 import reon.app.domain.post.entity.Scope;
 import reon.app.domain.post.service.PostLikeService;
 import reon.app.domain.post.service.PostQueryService;
 import reon.app.domain.post.service.PostService;
 import reon.app.domain.post.service.dto.PostSaveDto;
+import reon.app.domain.post.service.dto.PrivatePostUpdateDto;
 import reon.app.global.api.ApiResponse;
 import reon.app.global.error.entity.CustomException;
 import reon.app.global.error.entity.ErrorCode;
@@ -68,10 +71,7 @@ public class PostApi {
         return ApiResponse.OK(null);
     }
 
-
-    //offset 적용 필요
-    //무한스크롤 -> pagenation 적용  or offset 방식
-    @Operation(tags = "게시글", description = "PRIVATE 게시글 목록을 조회한다.")
+    @Operation(tags = "게시글", description = "개인 PRIVATE 게시글 목록을 조회한다.")
     @GetMapping("/private")
     public ApiResponse<?> searchPirvatePosts(@RequestParam(value = "offset") Long offset, @Parameter(hidden = true) @AuthenticationPrincipal User user ){
         Long memberId = Long.parseLong(user.getUsername());
@@ -81,4 +81,20 @@ public class PostApi {
         return ApiResponse.OK(responses);
     }
 
+    @Operation(tags = "게시글", description = "PRIVATE 게시글을 PUBLIC으로 변경한다.")
+    @PutMapping("/private/{postId}")
+    public ApiResponse<?> updatePrivatePost(@PathVariable Long postId, @RequestBody PrivatePostUpdateRequest request){
+        Scope scope = postQueryService.searchScopeById(postId);
+        if(scope.equals(Scope.PUBLIC)){
+            throw new CustomException(ErrorCode.POST_SCOPE_ERROR);
+        }
+        PrivatePostUpdateDto dto = PrivatePostUpdateDto.builder()
+                .id(postId)
+                .title(request.getTitle())
+                .content(request.getContent())
+                .build();
+        postService.updatePrivateToPublic(dto);
+        return ApiResponse.OK(null);
+
+    }
 }

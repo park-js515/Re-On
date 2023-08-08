@@ -16,7 +16,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
+@Transactional(readOnly = true)
 @Slf4j
 public class PostQueryServiceImpl implements PostQueryService {
     private final PostQueryRepository postQueryRepository;

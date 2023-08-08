@@ -11,7 +11,10 @@ import reon.app.domain.post.entity.Scope;
 import reon.app.domain.post.repository.PostRepository;
 import reon.app.domain.post.service.PostService;
 import reon.app.domain.post.service.dto.PostSaveDto;
+import reon.app.domain.post.service.dto.PrivatePostUpdateDto;
 import reon.app.domain.video.entity.Video;
+import reon.app.global.error.entity.CustomException;
+import reon.app.global.error.entity.ErrorCode;
 import reon.app.global.util.FileManger;
 
 @Service
@@ -35,5 +38,13 @@ public class PostServiceImpl implements PostService {
                 .build();
         postRepository.save(post);
         return 1L;
+    }
+
+    @Override
+    public Post updatePrivateToPublic(PrivatePostUpdateDto privatePostUpdateDto) {
+        Post post = postRepository.findById(privatePostUpdateDto.getId()).orElseThrow(()
+                -> new CustomException(ErrorCode.POSTS_NOT_FOUND));
+        post.updatePrivateToPublic(privatePostUpdateDto);
+        return post;
     }
 }
