@@ -15,11 +15,11 @@ import RegisterPage from './pages/RegisterPage';
 import ResponsiveAppBar from 'components/common/NavBar';
 
 function App() {
-  const { sessionStarted } = useSelector((state) => state.session);
+  const { isJoinSession } = useSelector((state) => state.session);
 
   return (
     <>
-      {!sessionStarted && <ResponsiveAppBar />}
+      {!isJoinSession && <ResponsiveAppBar />}
       <Routes>
         <Route path="/faq" element={<FAQPage />} />
         <Route path="/feed" element={<FeedPage />} />
