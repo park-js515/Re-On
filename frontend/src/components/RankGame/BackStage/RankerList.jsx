@@ -1,5 +1,5 @@
 import RankerItem from './RankerItem';
-import { SContainer, SSNSContainer, SRank } from "../BackStage/UserInfo/style";
+import { Container } from '@mui/system';
 
 const DummyData = [
   {
@@ -25,21 +25,9 @@ const DummyData = [
 ];
 const RankerList = () => {
 
-//   return (
-
-//     <div className="">
-//       🏆랭크순위
-//       {DummyData.map((ranker, index) => (
-//         <RankerItem key={index} result={ranker} />
-//       ))}
-//     </div>
-  
-//   ); 
-// };
-
 
   return (
-    <SContainer>
+    <Container>
      
   
       <div className="profile-container">
@@ -52,7 +40,7 @@ const RankerList = () => {
       </div>
 
     
-    </SContainer>
+    </Container>
   );
 };
 
