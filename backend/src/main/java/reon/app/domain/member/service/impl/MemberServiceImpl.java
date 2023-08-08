@@ -28,7 +28,6 @@ import java.util.UUID;
 public class MemberServiceImpl implements MemberService {
     private FileManger fileManger = new FileManger();
 //    private final String imgPath = "https://storage.googleapis.com/reon-bucket/";
-
     private final Storage storage;
     private final MemberRepository memberRepository;
 
@@ -43,14 +42,12 @@ public class MemberServiceImpl implements MemberService {
 //        }
         return findMember;
     }
-
     @Override
     public void deleteRefreshToken(Long id) {
         Member findMember = memberRepository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
         findMember.deleteRefreshToken();
     }
-
     @Override
     public void updateProfileImg(MultipartFile profileImg, Long id) {
         Member findMember = memberRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
@@ -62,7 +59,6 @@ public class MemberServiceImpl implements MemberService {
 //        String imgName = imgPath + updateImgFile(profileImg);
         findMember.getMemberInfo().updateProfileImg(imgName);
     }
-
     @Override
     public void removeProfileImg(Long id) {
         Member findMember = memberRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
@@ -72,12 +68,10 @@ public class MemberServiceImpl implements MemberService {
         }
         findMember.getMemberInfo().updateProfileImg(null);
     }
-
     @Override
     public void delete(Long id) {
         memberRepository.deleteById(id);
     }
-
 
 //    private void removeImgFile(String prevImg) {
 //        Blob blob = storage.get(bucketName).get(prevImg);
@@ -97,8 +91,7 @@ public class MemberServiceImpl implements MemberService {
 //        log.info(uuid);
 //        log.info(ext);
 //        log.info(bucketName);
-//
-//
+
 //        try {
 //            storage.create(
 //                    BlobInfo.newBuilder(bucketName, uuid)
@@ -113,4 +106,21 @@ public class MemberServiceImpl implements MemberService {
 //
 //        return uuid;
 //    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

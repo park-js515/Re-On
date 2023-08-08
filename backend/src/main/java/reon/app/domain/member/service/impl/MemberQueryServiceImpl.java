@@ -38,4 +38,5 @@ public class MemberQueryServiceImpl implements MemberQueryService {
         }
         return res;
     }
+
 }

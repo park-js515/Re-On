@@ -96,11 +96,12 @@ public class MemberApi {
         return ApiResponse.OK(null);
     }
 
-
     @Operation(summary = "member 배틀 정보 조회", description = "회원 베틀 정보를 조회한다.")
     @GetMapping("/battleInfo/{email}")
 //    public ApiResponse<Void> removeProfileImg(@Parameter(hidden = true) @AuthenticationPrincipal User user) {
-    public ApiResponse<MemberBattleInfoResponse> findMemberBattleInfoByEmail(@PathVariable("email") @ApiParam("유저 이메일") String email) {
+    public ApiResponse<MemberBattleInfoResponse> findMemberBattleInfo(@Parameter(hidden = true) @AuthenticationPrincipal User user) {
+        Long memberId = Long.parseLong(user.getUsername());
+        memberService.
         return ApiResponse.OK(null);
     }
     @Operation(summary = "member 배틀 정보 업데이트", description = "회원 베틀 정보를 업데이트한다.")
@@ -109,6 +110,4 @@ public class MemberApi {
     public ApiResponse<Void> updateMemberBattleInfo(@RequestBody MemberBattleInfoUpdateRequest memberBattleInfoUpdateRequest) {
         return ApiResponse.OK(null);
     }
-
-
 }
