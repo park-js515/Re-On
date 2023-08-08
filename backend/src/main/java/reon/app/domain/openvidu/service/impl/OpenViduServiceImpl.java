@@ -1,7 +1,6 @@
 package reon.app.domain.openvidu.service.impl;
 
 import io.openvidu.java.client.*;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import reon.app.domain.openvidu.service.OpenViduService;

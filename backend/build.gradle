@@ -5,7 +5,7 @@ plugins {
 }
 
 	group = 'reon'
-version = '0.0.1-SNAPSHOT'
+	version = '0.0.1-SNAPSHOT'
 
 java {
 	sourceCompatibility = '11'
@@ -34,6 +34,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	//swagger
 	implementation 'io.springfox:springfox-boot-starter:3.0.0'
+	implementation("io.springfox:springfox-swagger-ui:3.0.0")
 
 	// web
 	compileOnly 'org.projectlombok:lombok'
