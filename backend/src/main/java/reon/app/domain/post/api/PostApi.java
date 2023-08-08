@@ -97,4 +97,11 @@ public class PostApi {
         return ApiResponse.OK(null);
 
     }
+
+    @Operation(tags="post 좋아요", description = "post 좋아요 API입니다.")
+    @PostMapping("/like/{id}")
+    public ApiResponse<Boolean> changeLike(@PathVariable("id") Long postId, @Parameter(hidden = true) @AuthenticationPrincipal User user){
+        Long memberId = Long.parseLong(user.getUsername());
+        boolean flag = postLikeService.changeLike(memberId, postId);
+    }
 }
