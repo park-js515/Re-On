@@ -27,6 +27,6 @@ public class BattleLog extends BaseEntity {
     @Column(nullable = false)
     private Long videoId;
     @Column(nullable = false)
-    private int score;
+    private int point;
 
 }
