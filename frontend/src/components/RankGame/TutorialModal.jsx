@@ -14,7 +14,7 @@ import { useRef, useState } from 'react';
 const SDialog = styled(Dialog)(() => ({
   '& .MuiPaper-root': {
     borderRadius: '15px',
-    backgroundImage: 'url(image/rank/rank-large-bg.png)',
+    backgroundImage: 'url(image/rank/rank-modal-bg.png)',
     backgroundSize: 'cover',
     backgroundPosition: 'center',
   },
@@ -103,11 +103,21 @@ export default function TutorialModal({ onConfirm, isOpen, onClose }) {
 
         <SDialogActions>
           {imageIndex < images.length - 1 && (
-            <SButton onClick={handleNext}>다음</SButton> // 마지막 이미지가 아니면 "다음" 버튼 표시
+            <SButton onClick={handleNext}>
+              <img
+                src="image/rank/rank-arrow.png"
+                alt="arrow-btn"
+                className="w-[50px] hover:w-[70px] transition-all duration-300"
+              />
+            </SButton> // 마지막 이미지가 아니면 "다음" 버튼 표시
           )}
           {imageIndex === 2 && (
             <SButton autoFocus onClick={handleClose}>
-              닫기
+              <img
+                src="image/rank/rank-cancel.png"
+                alt="cancel-btn"
+                className="w-[50px] hover:w-[70px] transition-all duration-300"
+              />
             </SButton>
           )}
         </SDialogActions>

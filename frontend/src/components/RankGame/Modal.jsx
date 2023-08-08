@@ -14,12 +14,11 @@ import { useRef } from 'react';
 
 const SDialog = styled(Dialog)(() => ({
   '& .MuiPaper-root': {
-    width: '450px',
-    height: '300px',
     borderRadius: '15px',
     backgroundImage: 'url(image/rank/rank-modal-bg.png)',
-    backgroundSize: 'cover',
     backgroundPosition: 'center',
+    backgroundColor: 'transparent',
+    boxShadow: 'none',
   },
 }));
 
@@ -50,7 +49,7 @@ const SButton = styled(Button)(() => ({
 
 const SDialogActions = styled(DialogActions)(() => ({
   justifyContent: 'center',
-  height: 65,
+  height: 100,
 }));
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -118,20 +117,23 @@ export default function Modal({ type, onConfirm, isOpen, onClose }) {
         </STitle>
 
         <DialogContent>
-          <Grid container spacing={2} alignItems="center">
-            <Grid item xs={8}>
-              <SContentText>{getContent()}</SContentText>
-            </Grid>
-            <Grid item xs={4}>
-              <img src="image/character/cutereon.png" alt="Character" />
-            </Grid>
-          </Grid>
+          <SContentText>{getContent()}</SContentText>
         </DialogContent>
 
         <SDialogActions>
-          <SButton onClick={handleConfirm}>확인</SButton>
+          <SButton onClick={handleConfirm}>
+            <img
+              src="image/rank/rank-confirm.png"
+              alt="confirm-btn"
+              className="w-[50px] hover:w-[70px] transition-all duration-300"
+            />
+          </SButton>
           <SButton autoFocus onClick={handleClose}>
-            취소
+            <img
+              src="image/rank/rank-cancel.png"
+              alt="cancel-btn"
+              className="w-[50px] hover:w-[70px] transition-all duration-300"
+            />
           </SButton>
         </SDialogActions>
       </SDialog>
