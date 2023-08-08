@@ -1,4 +1,7 @@
-import { useRef, forwardRef, useEffect } from "react";
+import './Profile.css';
+import { useRef, forwardRef, useEffect, useState } from 'react';
+import * as hooks from './hooks';
+import * as Sty from './style';
 
 const ModalOverlay = ({ children, isOpen, onDoubleClick }) => {
   if (!isOpen) {
@@ -6,19 +9,7 @@ const ModalOverlay = ({ children, isOpen, onDoubleClick }) => {
   }
 
   return (
-    <div
-      style={{
-        boxSizing: "border-box",
-        position: "fixed",
-        top: 0,
-        left: 0,
-        width: "100%",
-        height: "100%",
-        backgroundColor: "rgba(0, 0, 0, 0.125)",
-        zIndex: 9999,
-      }}
-      onDoubleClick={onDoubleClick}
-    >
+    <div className="Proflie-ModalOverlay" onDoubleClick={onDoubleClick}>
       {children}
     </div>
   );
@@ -30,22 +21,7 @@ const ModalContent = forwardRef(({ children, isOpen }, ref) => {
   }
 
   return (
-    <div
-      style={{
-        boxSizing: "border-box",
-        position: "fixed",
-        bottom: "10px",
-        right: "10px",
-        backgroundColor: "#fff",
-        padding: "2.5px",
-        zIndex: 9998,
-        borderRadius: "5px",
-        height: "270px",
-        width: "550px",
-        border: "thick double #00000038",
-      }}
-      ref={ref}
-    >
+    <div className="Profile-ModalContent" ref={ref}>
       {children}
     </div>
   );
@@ -66,15 +42,15 @@ const Modal = ({ children, isOpen, handleIsOpen }) => {
     }
 
     const handleESC = (event) => {
-      if (event.key === "Escape") {
+      if (event.key === 'Escape') {
         handleIsOpen();
       }
     };
 
-    document.addEventListener("keydown", handleESC);
+    document.addEventListener('keydown', handleESC);
 
     return () => {
-      document.removeEventListener("keydown", handleESC);
+      document.removeEventListener('keydown', handleESC);
     };
   }, [isOpen, handleIsOpen]);
 
@@ -89,10 +65,10 @@ const Modal = ({ children, isOpen, handleIsOpen }) => {
 
 const InputImg = ({ onChange }) => {
   const props = {
-    type: "file",
-    accept: "image/jpg, image/png, image/jpeg",
-    name: "profileImg",
-    id: "profileImg",
+    type: 'file',
+    accept: 'image/jpg, image/png, image/jpeg',
+    name: 'profileImg',
+    id: 'profileImg',
   };
 
   return <input onChange={onChange} {...props} />;
@@ -100,30 +76,121 @@ const InputImg = ({ onChange }) => {
 
 const InputText = ({ value, onChange }) => {
   const props = {
-    type: "text",
-    name: "statusText",
-    id: "statusText",
+    type: 'text',
+    name: 'statusText',
+    id: 'statusText',
   };
 
-  return <textarea 
-  style={{height: "120px", width: "500px", resize: "none"}}
-  value={value} onChange={onChange} {...props} placeholder="상태 메시지를 입력하세요!"/>;
+  return (
+    <textarea
+      className="Profile-InputText"
+      value={value}
+      onChange={onChange}
+      {...props}
+      placeholder="상태 메시지를 입력하세요!"
+    />
+  );
 };
 
 const InputNick = ({ value, onChange }) => {
   const props = {
-    type: "text",
-    name: "nickName",
-    id: "nickName",
+    type: 'text',
+    name: 'nickName',
+    id: 'nickName',
   };
 
-  return <input value={value} onChange={onChange} {...props} placeholder=" 3 <= Nickname <= 16"/>;
+  return (
+    <input
+      value={value}
+      onChange={onChange}
+      {...props}
+      placeholder=" 3 <= Nickname <= 16"
+    />
+  );
 };
 
 const Button = ({ children, onClick }) => {
-  return <button 
-  className="hover:bg-slate-300"
-  onClick={onClick}>{children}</button>;
+  return (
+    <button className="Profile-CloseButton" onClick={onClick}>
+      {children}
+    </button>
+  );
 };
 
-export { Modal, InputImg, InputNick, InputText, Button };
+const ModifyForm = ({
+  setProfileImg,
+  introduce,
+  setIntroduce,
+  nickName,
+  setNickName,
+}) => {
+  const [tempInputImg, setTempInputImg] = useState(null);
+  const [tempInputText, setTempInputText] = hooks.useInputText(
+    introduce,
+    (value) => value.length <= 150,
+  );
+  const [tempInputNick, setTempInputNick] = hooks.useInputText(
+    nickName,
+    (value) => value.length <= 16,
+  );
+
+  const handleTempImg = (event) => {
+    const file = event.target.files[0];
+    const reader = new FileReader();
+
+    reader.onloadend = () => {
+      setTempInputImg(reader.result);
+    };
+
+    if (file) {
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const onSubmit = (event) => {
+    event.preventDefault();
+    const willChange = window.confirm('변경하시겠습니까?');
+
+    if (willChange) {
+      if (tempInputImg) {
+        setProfileImg((current) => {
+          return { ...current, src: tempInputImg };
+        });
+      }
+      setIntroduce(tempInputText);
+      setNickName(tempInputNick);
+    }
+  };
+
+  return (
+    <form onSubmit={onSubmit}>
+      <label htmlFor="profileImg">이미지 변경: </label>
+      <InputImg onChange={handleTempImg}></InputImg>
+      <br />
+      <label htmlFor="statusText">상태메시지: </label>
+      <Sty.Roww100CC>
+        <InputText
+          value={tempInputText}
+          onChange={setTempInputText}
+        ></InputText>
+      </Sty.Roww100CC>
+      <br />
+      <div style={{ position: 'relative' }}>
+        <label htmlFor="nickName">닉네임: </label>
+        <InputNick
+          value={tempInputNick}
+          onChange={setTempInputNick}
+        ></InputNick>
+
+        <button
+          className="bg-white hover:bg-lightGray border rounded"
+          style={{ position: 'fixed', right: '20px' }}
+        >
+          Update
+        </button>
+      </div>
+    </form>
+  );
+};
+
+export { Modal, InputImg, InputNick, InputText, Button, ModifyForm };

@@ -8,7 +8,10 @@ const imgUrl = {
 
 }
 export default function NotLoggedInYet() {
-
+  const NAVER_CLIENT_ID = process.env.REACT_APP_NAVER_CLIENT_ID;
+  const NAVER_REDIRECT_URI = "http://localhost:3000/oauth"
+  const STATE = "flase";
+  const NAVER_AUTHORIZATION_URL = `https://nid.naver.com/oauth2.0/authorize?client_id=${NAVER_CLIENT_ID}&response_type=code&redirect_uri=${NAVER_REDIRECT_URI}&state=${STATE}`;
   return (
     <div className="w-full flex justify-center items-center flex-col  h-3/5">
       <ul className="w-3/5 ">
@@ -25,13 +28,15 @@ export default function NotLoggedInYet() {
           className="border border-gray-300 w-full  my-3 flex justify-center py-2 rounded-lg"
         >
           <a
-            href='https://www.naver.com/'
+            href={NAVER_AUTHORIZATION_URL}
             className=" flex w-full  h-full  justify-center items-center"
           >
             <img
+            
               src={imgUrl["naver"]}
               alt=""
               className="w-8 h-8 rounded-full mr-2"
+            
             />
             <span className="font-medium text-gray-500">Naver</span>
           </a>

@@ -1,20 +1,11 @@
-const ProfileImg = ({ src, alt }) => {
-  const Img = ({ src, alt }) => {
-    return (
-      <img
-        src={src}
-        style={{
-          boxSizing: "border-box",
-          height: "266px",
-          width: "266px",
-          borderRadius: "100%",
-        }}
-        alt={alt}
-      />
-    );
-  };
+import './Profile.css';
 
-  return <Img src={src} alt={alt} />;
+const ProfileImg = ({ src, alt }) => {
+  return <img className="Profile-ProfileImg" src={src} alt={alt} />;
 };
 
-export {ProfileImg}
+const ProfiletierImg = ({src, alt}) => {
+  return <img className="Profile-ProfileTierImg" src={src} alt={alt}></img>
+}
+
+export { ProfileImg, ProfiletierImg };

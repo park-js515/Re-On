@@ -1,4 +1,5 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import { Route, Routes } from 'react-router-dom';
 import FAQPage from './pages/FAQPage';
 import FeedPage from './pages/FeedPage';
@@ -13,9 +14,11 @@ import RegisterPage from './pages/RegisterPage';
 import ResponsiveAppBar from 'components/common/NavBar';
 
 function App() {
+  const { sessionStarted } = useSelector((state) => state.session);
+
   return (
     <>
-      <ResponsiveAppBar />
+      {!sessionStarted && <ResponsiveAppBar />}
       <Routes>
         <Route path="/faq" element={<FAQPage />} />
         <Route path="/feed" element={<FeedPage />} />

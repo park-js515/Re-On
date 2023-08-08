@@ -1,10 +1,13 @@
 import RankerList from './RankerList';
 
+
 const RightSide = () => {
   return (
-    <div className="flex flex-col justify-around h-full">
-      <RankerList />
+    <div className='flex justify-around'>
+        <RankerList />
     </div>
+   
+ 
   );
 };
 

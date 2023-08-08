@@ -1,35 +1,70 @@
 import React from "react";
 import Videoitem from "./Videoitem";
-const Videolist = () => {
-      // 테스트 데이터
-    let TESTDATA = []
-    for (let i = 1; i <= 10; i++){
-        TESTDATA.push({
-        video_id : i,
-        thumbnail_url : "https://i.ytimg.com/vi/PJSH-r7uPfo/hq720.jpg?sqp=-oaymwEcCNAFEJQDSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLCP2xrC0yhdf70ORJ37lHEpZAPWCA",
-        author_id : i,
-        author : `랄로상-${i}`,
-        profile_url : "https://yt3.ggpht.com/ytc/AOPolaQEivCeo8OdmA0NhR3XhlRVybG6CTVeeA4YEL75Ug=s68-c-k-c0x00ffffff-no-rj",
-        title : `어쩌라고-${i}`,
-        like_cnt : 2400,
-        comments_cnt : 20,
-        isLike : (i % 2 === 0 ? true : false)
-        })
+import { useState, useRef, useEffect } from "react";
+
+const Videolist = ({injectPostId, changeShow}) => {
+  
+    const addData = () => {
+        // API 요청 후 받은 걸로 추가 (비디오 뭉탱이)
+        let temp = []
+        for (let i = 1; i <= 20; i++){
+            temp.push({
+            post_id : i,
+            thumbnail : 'https://source.unsplash.com/random?sig=1',
+            member_id : i,
+            nick_name : `닉네임 넘버-${i} `,
+            profile_img : "https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
+            title : `제목 넘버-${i}`,
+            like_cnt : 2400,
+            comment_cnt : 20,
+            })
+        }
+        return temp
     }
+
+    const [data, setData] = useState([])
+    const [page, setPage] = useState(0)
+    const target = useRef()
+    const options = {
+        threshold: 1.0
+    };
+    const renewData = () => {
+        setData((data) => {return [...data, ...addData()]})
+        setPage((page) => {return page + 1})
+    }
+    const observer = new IntersectionObserver(renewData, options)
+
+    useEffect(()=>{
+        observer.observe(target.current)
+    }, []);
+
     return(
-        <div>
-            <h1>투표해줘</h1>
-            <div className="grid gap-4 grid-cols-3 grid-rows-auto">
-                {TESTDATA.map((item)=>{
+    
+
+        
+        <div className="bg-white py-12 sm:py-">
+            <h1 className="my-4 text-center font-bold text-3xl text-dark">💌투표해줘</h1>
+            <div className="mx-auto max-w-7xl px-6 lg:px-8">
+                <div className="mx-auto mt-10 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 pt-10 sm:mt-16 sm:pt-16 lg:mx-0 lg:max-w-none lg:grid-cols-3">
+
+                {data.map((item,idx)=>{
                     return (
                         <Videoitem
-                            key={item.video_id}
+                            key={idx}
                             props={item}
+                            changeMode={()=>{
+                                injectPostId(item.post_id)
+                                changeShow()
+                            }}
                         />
                     )   
                 })}
+          
+                <div className="text-center" ref={target}>더 보기...</div>
+                </div>
             </div>
         </div>
+
 )}
 
 export default Videolist
