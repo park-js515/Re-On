@@ -37,7 +37,7 @@ dependencies {
 	//security
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	// validation
-//	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	// 기본 web
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	//swagger

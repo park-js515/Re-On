@@ -18,7 +18,7 @@ public class Video extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(nullable = false)
-    private String title;
+    private String title; // 유투브 영상 제목
     @Column(nullable = false)
     private String actor;
     @Column(name = "utube_link", nullable = false)
