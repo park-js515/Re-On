@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import io.openvidu.java.client.*;
+import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +17,7 @@ import reon.app.global.api.ApiResponse;
 
 import static reon.app.global.api.ApiResponse.ERROR;
 import static reon.app.global.api.ApiResponse.OK;
-@Tag(name = "Openvidu", description = "Openvidu API")
+@Api(tags = "OpenVidu")
 @CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/openvidu-management")
@@ -28,14 +29,13 @@ public class OpenViduApi {
      * @param params The Session properties
      * @return The Session ID
      */
-    @Tag(name = "Openvidu", description = "Openvidu API")
-    @Operation(summary = "세션만 생성",description = "params로 세션 아이디가 주어지면 해당 아이디로 세션 생성, 없으면 세션 자동 생성")
+    @Tag(name = "OpenVidu")
+    @Operation(summary = "Session 생성",description = "params로 세션 아이디가 주어지면 해당 아이디로 세션 생성, 없으면 세션 자동 생성")
     @PostMapping("/sessions")
     public ApiResponse<String> initializeSession(@RequestBody(required = false) Map<String, Object> params)  throws OpenViduJavaClientException, OpenViduHttpException {
 //        SessionProperties properties = SessionProperties.fromJson(params).build();
 //        Session session = openvidu.createSession(properties);
 //        return new ResponseEntity<>(session.getSessionId(), HttpStatus.OK);
-
         String sessionId;
         if(params==null){
             sessionId = openViduService.startSession();
@@ -49,8 +49,7 @@ public class OpenViduApi {
      * @param params    The Connection properties
      * @return The Token associated to the Connection
      */
-    @Tag(name = "Openvidu", description = "Openvidu API")
-
+    @Tag(name = "OpenVidu")
     @Operation(summary = "connection 생성",description = "sessionId에 해당하는 connecntion 생성 후 token 반환")
     @PostMapping("/sessions/{sessionId}/connections")
     public ApiResponse<?> createConnection(@PathVariable("sessionId") String sessionId,
@@ -72,9 +71,8 @@ public class OpenViduApi {
 //        return new ResponseEntity<>(token, HttpStatus.OK);
         return OK(token);
     }
-    @Tag(name = "Openvidu", description = "Openvidu API")
-
-    @Operation(summary = "배틀 세션 받기",description = "배틀룸에서 사용할 세션 정보 및 토큰 반환")
+    @Tag(name = "OpenVidu")
+    @Operation(summary = "배틀룸 세션 생성",description = "배틀룸에서 사용할 Session 생성 후 SessionId 및 token 반환")
     @PostMapping("/sessions/connections")
     public ApiResponse<String> participateRankGame(@RequestBody(required = false) Map<String, Object> params)
             throws OpenViduJavaClientException, OpenViduHttpException {
@@ -122,8 +120,8 @@ public class OpenViduApi {
         String token = openViduService.makeRankRoom(properties,cproperties);
         return OK(token);
     }
-    @Tag(name = "Openvidu", description = "Openvidu API")
-    @Operation(summary = "배틀 세션 종료",description = "sessionId에 해당하는 세션 종료")
+    @Tag(name = "OpenVidu")
+    @Operation(summary = "배틀룸 세션 종료",description = "sessionId에 해당하는 세션 종료")
     @PostMapping("/sessions/{sessionId}/delete")
     public ApiResponse<?> endSession(@PathVariable("sessionId") String sessionId)
             throws OpenViduJavaClientException, OpenViduHttpException {
