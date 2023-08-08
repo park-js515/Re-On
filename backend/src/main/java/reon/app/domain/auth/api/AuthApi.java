@@ -21,7 +21,6 @@ import reon.app.domain.auth.tokens.AuthTokens;
 @Slf4j
 public class AuthApi {
     private final OAuthLoginService oAuthLoginService;
-    @Tag(name="Auth")
     @Operation(summary = "네이버 로그인",description = "params로 인가코드를 주면 AccessToken 및 RefeshToken 반환")
     @PostMapping("/naver")
     public ResponseEntity<AuthTokens> loginNaver(@RequestBody NaverLoginParams params){
