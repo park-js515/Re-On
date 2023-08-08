@@ -5,25 +5,11 @@ import { Profile } from "./Profile/index";
 const MyPageComponent = () => {
   return (
     <>
-      <Profile></Profile>
-      <Feed></Feed>
+      <Profile/>
+      <Feed/>
     </>
   );
 };
-
-// const MyPageComponent = () => {
-//   return (
-//     <>
-//       <Sty.Roww100>
-//         <Profile></Profile>
-//       </Sty.Roww100>
-
-//       <Sty.SSticky>
-//         <Feed></Feed>
-//       </Sty.SSticky>
-//     </>
-//   )
-// }
 
 
 export { MyPageComponent };

@@ -8,6 +8,10 @@ const navigation = [
   { name: '일반게임', to: '/normallist', current: false },
   { name: '투표해줘', to: '/feed', current: false },
   { name: '로그인', to: '/login', current: false },
+  { name: '마페이지수정', to: '/normalgame', current: false },
+  
+  
+
 ];
 
 function classNames(...classes) {
@@ -82,7 +86,10 @@ export default function Example() {
                           {({ active }) => (
                             <Link
                               to="/logout"
-                              className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
+                              className={classNames(
+                                active ? 'bg-gray-100' : '',
+                                'block px-4 py-2 text-sm text-gray-700',
+                              )}
                             >
                               로그아웃
                             </Link>

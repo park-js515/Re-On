@@ -13,14 +13,14 @@ import TutorialModal from 'components/RankGame/TutorialModal';
 import Paper from '@mui/material/Paper';
 
 import { useDispatch } from 'react-redux';
-import { setSessionStarted } from 'redux/sessionSlice';
+import { setIsJoinSession } from 'redux/sessionSlice';
 
 import useLoading from 'hooks/useLoading';
 import useVideoPlayer from 'hooks/useVideoPlayer';
 
 const APPLICATION_SERVER_URL =
-  // process.env.NODE_ENV === 'production' ? '' : 'https://i9c203.p.ssafy.io';
-  process.env.NODE_ENV === 'production' ? '' : 'https://demos.openvidu.io';
+  process.env.NODE_ENV === 'production' ? '' : 'https://i9c203.p.ssafy.io';
+// process.env.NODE_ENV === 'production' ? '' : 'https://demos.openvidu.io';
 
 export default function OpenViduApp() {
   const dispatch = useDispatch();
@@ -46,16 +46,56 @@ export default function OpenViduApp() {
     [mainStreamManager],
   );
 
+  const [mySide, setMySide] = useState(null); // mySide 상태 선언
   const joinSession = useCallback(() => {
     const mySession = OV.current.initSession();
 
-    mySession.on('streamCreated', (event) => {
+    const connections = [];
+    mySession.on('connectionCreated', async (event) => {
+      connections.push(event.connection);
+    });
+    console.log('커넥션스', connections);
+
+    mySession.on('streamCreated', async (event) => {
       const subscriber = mySession.subscribe(event.stream, undefined);
       setSubscribers((subscribers) => [...subscribers, subscriber]);
+
+      // ++++++++++++유저 순서 구하기+++++++++++++++++++++++
+      const subscriberId = subscriber.stream.streamId.slice(-14); // 상대 커넥션 아이디
+
+      // 커넥션 정보 시간 순으로 정렬
+      const sortedConnections = connections.sort(
+        (a, b) => a.creationTime - b.creationTime,
+      );
+
+      const firstUserId = sortedConnections[0].connectionId; // 먼저 온 유저 커넥션 ID
+      const secondUserId = sortedConnections[1].connectionId; // 나중에 온 유저 커넥션 ID
+
+      // 상대유저가 나중에 온 유저면, 나는 먼저 온 유저(첫번째)
+      const me = subscriberId === secondUserId ? 'USER_ONE' : 'USER_TWO';
+      setMySide(me); // 상태 업데이트
       setLog((prevLog) => [
         ...prevLog,
-        `${logMessageTime} | 상대방이 참여했습니다.`,
+        `${logMessageTime} | 당신은 ${me}입니다.`,
       ]);
+      // +++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+      // 시그널 보내기
+      mySession.signal({
+        data: 'playVideo', // Optional, any string to send to the other participant
+        type: 'playVideo', // Optional, used to define custom signal types
+      });
+    });
+
+    // 시그널 받기
+    mySession.on('signal:playVideo', async (event) => {
+      // 시그널을 받으면 비디오 재생을 처리
+      setLog((prevLog) => [
+        ...prevLog,
+        `${logMessageTime} | 게임을 시작합니다.`,
+      ]);
+      await startLoading(5000); // 로딩 5초
+      handleLoadVideo(); // 영상 시작
     });
 
     mySession.on('streamDestroyed', (event) => {
@@ -68,7 +108,7 @@ export default function OpenViduApp() {
 
     setSession(mySession);
 
-    dispatch(setSessionStarted(true));
+    dispatch(setIsJoinSession(true));
     setLog((prevLog) => [...prevLog, `${logMessageTime} | 참가했습니다.`]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -86,7 +126,7 @@ export default function OpenViduApp() {
             videoSource: undefined,
             publishAudio: true,
             publishVideo: true,
-            resolution: '350x400',
+            resolution: '500x600',
             frameRate: 30,
             insertMode: 'APPEND',
             mirror: true,
@@ -136,7 +176,7 @@ export default function OpenViduApp() {
     setMainStreamManager(undefined);
     setPublisher(undefined);
 
-    dispatch(setSessionStarted(false)); // 리덕스 세션상태 제거
+    dispatch(setIsJoinSession(false)); // 리덕스 세션상태 제거
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session]);
 
@@ -186,58 +226,97 @@ export default function OpenViduApp() {
    * more about the integration of OpenVidu in your application server.
    */
 
-  // 원본
-  const getToken = useCallback(async () => {
-    return createSession(mySessionId).then((sessionId) =>
-      createToken(sessionId),
-    );
-  }, [mySessionId]);
-
-  const createSession = async (sessionId) => {
-    const response = await axios.post(
-      APPLICATION_SERVER_URL + '/api/sessions',
-      { customSessionId: sessionId },
-      {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      },
-    );
-    console.log('SessionSession', response);
-    return response.data; // The sessionId
-  };
-
-  const createToken = async (sessionId) => {
-    const response = await axios.post(
-      APPLICATION_SERVER_URL + '/api/sessions/' + sessionId + '/connections',
-      {},
-      {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      },
-    );
-    console.log('TokenToken', response);
-    return response.data; // The token
-  };
-
-  // 테스트
+  // 기본 오픈비두 서버 API 요청
   // const getToken = useCallback(async () => {
-  //   return testGetResponse().then((response) => response);
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  //   return createSession(mySessionId).then((sessionId) =>
+  //     createToken(sessionId),
+  //   );
   // }, [mySessionId]);
 
-  // const testGetResponse = async () => {
+  // const createSession = async (sessionId) => {
+  //   const response = await axios.post(
+  //     APPLICATION_SERVER_URL + '/api/sessions',
+  //     { customSessionId: sessionId },
+  //     {
+  //       headers: { 'Content-Type': 'application/json' },
+  //     },
+  //   );
+  //   return response.data; // The sessionId
+  // };
+
+  // const createToken = async (sessionId) => {
+  //   const response = await axios.post(
+  //     APPLICATION_SERVER_URL + '/api/sessions/' + sessionId + '/connections',
+  //     {},
+  //     {
+  //       headers: { 'Content-Type': 'application/json' },
+  //     },
+  //   );
+  //   return response.data; // The token
+  // };
+
+  // 테스트 요청
+  const getToken = async () => {
+    try {
+      const response = await axios.post(
+        APPLICATION_SERVER_URL +
+          '/api/openvidu-management/sessions/connections',
+        {}, // body
+        {
+          headers: {
+            Authorization: 'Basic T1BFTlZJRFVBUFA6b3BlbnZpZHVyZW9uYzIwMw==',
+            'Content-Type': 'application/json',
+          },
+        },
+      );
+      console.log('응답', response);
+      return response.data;
+    } catch (error) {
+      console.error('에러', error); // 오류 로깅
+    }
+  };
+
+  // const closeSession = async (sessionId) => {
   //   try {
   //     const response = await axios.post(
-  //       APPLICATION_SERVER_URL + '/openvidu/api/sessions/REON/connection',
+  //       APPLICATION_SERVER_URL + '/api/openvidu-management/test',
+  //       { customSessionId: sessionId },
   //       {}, // body
   //       {
   //         headers: {
   //           Authorization: 'Basic T1BFTlZJRFVBUFA6b3BlbnZpZHVyZW9uYzIwMw==',
-  //           // Basic 다음의 값은 'username:password' 형식을 Base64 인코딩한 것
-  //           // username은 OPENVIDUAPP
-  //           // password는 <YOUR_SECRET>
+  //           'Content-Type': 'application/json',
+  //         },
+  //       },
+  //     );
+  //     console.log('응답', response);
+  //     return response.data;
+  //   } catch (error) {
+  //     console.error('에러', error); // 오류 로깅
+  //   }
+  // };
+
+  // 작업중인 요청
+  // const getToken = useCallback(async () => {
+  //   return createToken().then((response) => {
+  //     // const url = new URL(response);
+  //     // const sessionId = url.searchParams.get('sessinId');
+  //     // const token = url.searchParams.get('token');
+  //     const tmp =
+  //       'wss://i9c203.p.ssafy.io?sessionId=ses_OYSe2KtSh5&token=tok_OrWnXOs2EmioDSXR';
+  //     return tmp;
+  //   });
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
+
+  // const createToken = async () => {
+  //   try {
+  //     const response = await axios.post(
+  //       APPLICATION_SERVER_URL + '/api/openvidu-management/test',
+  //       {}, // body
+  //       {
+  //         headers: {
+  //           Authorization: 'Basic T1BFTlZJRFVBUFA6b3BlbnZpZHVyZW9uYzIwMw==',
   //           'Content-Type': 'application/json',
   //         },
   //       },
@@ -294,9 +373,9 @@ export default function OpenViduApp() {
   }, [isLoading]);
 
   // ############ 상태 관리 ###############
-  const [stage, setStage] = useState('NOT_READY'); // 현재 게임 상태 관리
-  const [userCamOneBorder, setUserCamOneBorder] = useState(false); // 유저1 플레이시 테두리
-  const [userCamTwoBorder, setUserCamTwoBorder] = useState(false); // 유저2 플레이시 테두리
+  const [stage, setStage] = useState('READY'); // 현재 게임 상태 관리
+  const [userCamLeftBorder, setUserCamLeftBorder] = useState(false); // 유저1 플레이시 테두리
+  const [userCamRightBorder, setUserCamRightBorder] = useState(false); // 유저2 플레이시 테두리
 
   // ############# 비디오 플레이 훅 ##############
   // useEffect보다 위에 선언해야 했다.
@@ -307,18 +386,33 @@ export default function OpenViduApp() {
     // 영화 미리보기
     if (stage === 'WATCHING_MOVIE') {
       setLog((prevLog) => [...prevLog, `${logMessageTime} | 작품 미리보기`]);
-      // 유저 1 차례
-    } else if (stage === 'USER_ONE_TURN') {
-      setLog((prevLog) => [...prevLog, `${logMessageTime} | 첫번째 연기 시작`]);
+
+      // 내가 유저 1이면서 첫번째 차례
+    } else if (mySide === 'USER_ONE' && stage === 'USER_ONE_TURN') {
+      setLog((prevLog) => [...prevLog, `${logMessageTime} | 내 연기 시작`]);
       handleUserOnePlay();
-      // 유저 2 차례
-    } else if (stage === 'USER_TWO_TURN') {
-      setLog((prevLog) => [...prevLog, `${logMessageTime} | 두번째 연기 시작`]);
+
+      // 내가 유저 1이면서 두번째 차례
+    } else if (mySide === 'USER_ONE' && stage === 'USER_TWO_TURN') {
+      setLog((prevLog) => [...prevLog, `${logMessageTime} | 상대 연기 시작`]);
       handleUserTwoPlay();
-      // 점수계산
+
+      // 내가 유저 2이면서 첫번째 차례
+    } else if (mySide === 'USER_TWO' && stage === 'USER_ONE_TURN') {
+      setLog((prevLog) => [...prevLog, `${logMessageTime} | 상대 연기 시작`]);
+      handleUserOnePlay();
+
+      // 내가 유저 2이면서 두번째 차례
+    } else if (mySide === 'USER_TWO' && stage === 'USER_TWO_TURN') {
+      setLog((prevLog) => [...prevLog, `${logMessageTime} | 내 연기 시작`]);
+      handleUserTwoPlay();
+
+      // 점수 계산
     } else if (stage === 'CALCULATION') {
       setLog((prevLog) => [...prevLog, `${logMessageTime} | 계산 시작`]);
       handleCaculateScore();
+
+      // 게임 종료
     } else if (stage === 'END') {
       setLog((prevLog) => [...prevLog, `${logMessageTime} | 게임 종료`]);
       setToggleSaveModal(true);
@@ -344,7 +438,8 @@ export default function OpenViduApp() {
             ...prevLog,
             `${logMessageTime} | 첫번째 연기 종료`,
           ]);
-          setUserCamOneBorder(false);
+          setUserCamLeftBorder(false);
+          setUserCamRightBorder(false);
           setStage('USER_TWO_TURN');
           // 유저2 턴 종료
         } else if (stage === 'USER_TWO_TURN') {
@@ -352,7 +447,8 @@ export default function OpenViduApp() {
             ...prevLog,
             `${logMessageTime} | 두번째 연기 종료`,
           ]);
-          setUserCamTwoBorder(false);
+          setUserCamLeftBorder(false);
+          setUserCamRightBorder(false);
           setStage('CALCULATION');
         }
       };
@@ -371,7 +467,6 @@ export default function OpenViduApp() {
   // ############# 비디오 불러오기 함수 #############
   const handleLoadVideo = async () => {
     // setVideoSrc('video/ISawTheDevil.mp4'); // 비디오 URL 업데이트 (유튜브 API 요청해서 영상 소스 받아올 것)
-    await startLoading(3000); // 로딩
     setLog((prevLog) => [
       ...prevLog,
       `${logMessageTime} |  작품 : ${videoRef.current.src} 작품 길이 : ${videoRef.current.duration} `,
@@ -384,7 +479,9 @@ export default function OpenViduApp() {
   const handleUserOnePlay = async () => {
     setLog((prevLog) => [...prevLog, `${logMessageTime} | 유저 1 대기`]);
     await startLoading(3000); // 로딩
-    setUserCamOneBorder(true);
+    mySide === 'USER_ONE'
+      ? setUserCamLeftBorder(true)
+      : setUserCamRightBorder(true);
     setLog((prevLog) => [...prevLog, `${logMessageTime} | 유저 1 시작`]);
     handlePlayVideo();
   };
@@ -393,7 +490,9 @@ export default function OpenViduApp() {
   const handleUserTwoPlay = async () => {
     setLog((prevLog) => [...prevLog, `${logMessageTime} | 유저 2 대기`]);
     await startLoading(3000); // 로딩
-    setUserCamTwoBorder(true);
+    mySide === 'USER_TWO'
+      ? setUserCamLeftBorder(true)
+      : setUserCamRightBorder(true);
     setLog((prevLog) => [...prevLog, `${logMessageTime} | 유저 2 시작`]);
     handlePlayVideo();
   };
@@ -421,7 +520,7 @@ export default function OpenViduApp() {
   const [toggleTutorialModal, setToggleTutorialModal] = useState(false);
 
   return (
-    <div className="m-8">
+    <div className="">
       {toggleSaveModal && (
         <Modal
           type="save"
@@ -442,58 +541,19 @@ export default function OpenViduApp() {
       {/* 백스테이지 */}
 
       {session !== undefined ? (
-        <div id="session" className="flex justify-around gap-4">
+        <div id="session" className="flex justify-around gap-4 w-full h-full">
           {isLoading && (
             <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50">
               <LoadingWaiting />
             </div>
           )}
-          <div
-            id="movie-container"
-            className="border rounded-lg
-            flex-col flex justify-evenly w-[400px] "
-          >
-            <button
-              onClick={handleLoadVideo}
-              className="border-4 border-mainBlue"
-            >
-              세션 사람 2명 되면 발생하는 이벤트
-            </button>
-            <video
-              ref={videoRef}
-              src="video/ISawTheDevil.mp4"
-              poster="image/rank/rank-reon.png"
-              className={`h-[450px] mx-4 rounded-lg ${
-                isPlaying ? 'border-4 border-danger' : ''
-              }`}
-            />
 
-            <Paper
-              style={{ backgroundColor: '#f5f5f5' }}
-              className="h-[100px] mx-4 overflow-auto"
-            >
-              {log.map((item, index) => (
-                <div key={index} ref={logRef}>
-                  {item}
-                </div>
-              ))}
-            </Paper>
-          </div>
-          {/* 왼쪽 */}
-
-          <div
-            id="video-container"
-            className="border rounded-lg h-[600px] w-[1000px]
-            bg-darkGray"
-            style={{
-              backgroundImage: `url('image/rank/rank-video-bg.png')`,
-            }}
-          >
-            <div className="flex flex-wrap place-content-center gap-10 mt-5">
+          <div id="video-container" className="rounded-lg">
+            <div className="flex flex-wrap place-content-center gap-5 mt-5">
               {publisher !== undefined ? (
                 <div
                   className={`${
-                    userCamOneBorder ? 'border-4 border-danger' : ''
+                    userCamLeftBorder ? 'border-4 border-danger' : ''
                   }`}
                   onClick={() => handleMainVideoStream(publisher)}
                 >
@@ -505,18 +565,47 @@ export default function OpenViduApp() {
                 </div>
               )}
 
+              <div
+                id="movie-container"
+                className="rounded-lg
+            flex-col flex justify-evenly w-[400px] "
+              >
+                <video
+                  ref={videoRef}
+                  src="video/ISawTheDevil.mp4"
+                  poster="image/rank/rank-reon.png"
+                  className={`h-[450px] mx-4 rounded-lg ${
+                    isPlaying ? 'border-4 border-danger' : ''
+                  }`}
+                />
+
+                <Paper
+                  style={{ backgroundColor: '#f5f5f5' }}
+                  className="h-[100px] mx-4 overflow-auto"
+                >
+                  {log.map((item, index) => (
+                    <div key={index} ref={logRef}>
+                      {item}
+                    </div>
+                  ))}
+                </Paper>
+              </div>
+              {/* 왼쪽 */}
+
               {subscribers.length > 0 ? (
                 subscribers.map((sub, i) => (
                   <div
                     key={sub.id}
-                    className={userCamTwoBorder ? 'border-4 border-danger' : ''}
+                    className={
+                      userCamRightBorder ? 'border-4 border-danger' : ''
+                    }
                     onClick={() => handleMainVideoStream(sub)}
                   >
                     <span>{sub.id}</span>
                     <UserVideoComponent
                       streamManager={sub}
                       className={
-                        userCamTwoBorder ? 'border-4 border-danger' : ''
+                        userCamRightBorder ? 'border-4 border-danger' : ''
                       }
                     />
                   </div>
@@ -526,7 +615,7 @@ export default function OpenViduApp() {
                   <div className="flex text-white">
                     <Matching typingContent="..." />
                   </div>
-                  <div className="relative flex items-center justify-center w-[350px] h-[400px]">
+                  <div className="relative flex items-center justify-center w-[500px] h-[600px]">
                     <img
                       src="image/rank/rank-basic-bg.png"
                       alt="waiting"
@@ -538,7 +627,7 @@ export default function OpenViduApp() {
               )}
             </div>
 
-            <div className="flex justify-center gap-8 mt-10">
+            <div className="flex justify-center gap-5 mt-10">
               {/* 튜토리얼 버튼 */}
               {toggleTutorialModal && (
                 <TutorialModal

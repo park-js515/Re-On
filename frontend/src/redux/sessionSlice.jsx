@@ -2,13 +2,13 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const sessionSlice = createSlice({
   name: 'session',
-  initialState: { sessionStarted: false },
+  initialState: { isJoinSession: false },
   reducers: {
-    setSessionStarted: (state, action) => {
-      state.sessionStarted = action.payload;
+    setIsJoinSession: (state, action) => {
+      state.isJoinSession = action.payload;
     },
   },
 });
 
-export const { setSessionStarted } = sessionSlice.actions;
+export const { setIsJoinSession } = sessionSlice.actions;
 export default sessionSlice.reducer;

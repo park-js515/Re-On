@@ -3,7 +3,7 @@ import * as Tab from './Tab';
 import * as FeedList from './FeedList';
 import * as Sty from './style';
 
-const contents = ['Public', 'Private', 'Like'];
+const contents = ['피드', '비공개', '좋아요'];
 
 const Feed = () => {
   const { currentTab, changeTab } = hooks.useTabs(0, contents);

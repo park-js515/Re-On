@@ -1,7 +1,9 @@
 import { MyPageComponent } from "components/MyPage/index";
 
 const MyPage = () => {
-  return <MyPageComponent></MyPageComponent>;
+  return <MyPageComponent/>
+    
+ 
 };
 
 export default MyPage;

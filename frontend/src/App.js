@@ -11,14 +11,15 @@ import NormalListPage from './pages/NormalListPage';
 import RankPage from './pages/RankPage';
 import RegisterPage from './pages/RegisterPage';
 
+
 import ResponsiveAppBar from 'components/common/NavBar';
 
 function App() {
-  const { sessionStarted } = useSelector((state) => state.session);
+  const { isJoinSession } = useSelector((state) => state.session);
 
   return (
     <>
-      {!sessionStarted && <ResponsiveAppBar />}
+      {!isJoinSession && <ResponsiveAppBar />}
       <Routes>
         <Route path="/faq" element={<FAQPage />} />
         <Route path="/feed" element={<FeedPage />} />
@@ -29,6 +30,7 @@ function App() {
         <Route path="/normallist" element={<NormalListPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/rank" element={<RankPage />} />
+       
       </Routes>
     </>
   );

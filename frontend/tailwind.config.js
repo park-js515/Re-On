@@ -13,9 +13,10 @@ module.exports = {
       info: '#34d399',
       darkGray: '#4b5563',
       lightGray: '#9ca3af',
-      inss: '#D4E6A0',
+      inss: '#FAFFEA',
       green: '#75A94B',
-      black: 'black',
+      black: '#000000',
+      
     },
     extend: {},
   },

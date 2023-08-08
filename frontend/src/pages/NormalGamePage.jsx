@@ -1,9 +1,22 @@
+import { Container } from '@mui/system';
+import Postbar from "components/My/Postbar"
+import MyPageMine from "components/My/MyPageMine"
+
 
 const NoramalGamePage = () => {
   return(
-    <p className="truncate hover:text-clip">일반게임일반게임일반게임일반게임일반게임</p>
+    <div>
+
+    <Container>
+    <div className='border-b'>
+      <MyPageMine/>
+    </div>
+    </Container>
+      <Postbar/>
+    </div>
   )
 
 };
 
 export default NoramalGamePage;
+
