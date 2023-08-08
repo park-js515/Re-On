@@ -3,7 +3,7 @@ import BackStage from "components/BackStage";
 const BackStagePage = () => {
   return (
     <div>
-      <div>
+      <div className="bg-lightBlue">
         <BackStage />
       </div>
     </div>

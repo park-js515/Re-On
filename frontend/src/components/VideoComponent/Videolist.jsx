@@ -10,7 +10,7 @@ const Videolist = ({injectPostId, changeShow}) => {
         for (let i = 1; i <= 20; i++){
             temp.push({
             post_id : i,
-            thumbnail : 'https://source.unsplash.com/random?sig=1',
+            thumbnail : `https://source.unsplash.com/random?sig=${i}`,
             member_id : i,
             nick_name : `닉네임 넘버-${i} `,
             profile_img : "https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
@@ -47,10 +47,9 @@ const Videolist = ({injectPostId, changeShow}) => {
     );
 
     return (
-        <div className="py-12 sm:py-8 ">
-            <div className="bg-begie mx-auto max-w-7xl px-2 lg:px-8">
-                <h1 className="mt-24 text-center font-bold text-3xl text-dark">💌투표해줘</h1>
-                
+        <div className="py-8 sm:py-8 ">
+            <div className="bg-white mx-auto max-w-7xl px-2 lg:px-8">
+                <h1 className="my-8 py-12 text-center font-bold text-3xl text-dark ">💌투표해줘</h1>           
                 <div className="flex justify-end my-4"> {/* flex를 사용하여 우측으로 정렬 */}
                     <div className="relative">
                         <input 
@@ -79,7 +78,7 @@ const Videolist = ({injectPostId, changeShow}) => {
                             />
                         );
                     })}
-                    <div className="text-center" ref={target}>더 보기...</div>
+                    <div className="text-center" ref={target}>🚝찾는중🚝</div>
                 </div>
             </div>
         </div>

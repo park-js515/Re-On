@@ -3,9 +3,10 @@ import styled from "styled-components";
 export const SContainer = styled.div`
   cursor: pointer;
   position: relative;
-  background: linear-gradient(0deg, #f2ecda, #8ccfd5);
+  background-color: #fff;
   background-size: cover;
-  height: 15.5vw;
+  height: 20.5vw;
+  width: 55.5vw;
   border-radius: 12px;
   color: #000000;
   box-shadow: 5px 5px 15px #c5c5c5;
@@ -45,7 +46,7 @@ export const SContainer = styled.div`
         transform: translateY(-5%);
       }
     }
-    /* 이메일 */
+    /* 전적 */
     .recent {
       font-size: large;
       color: #3c3c3c;
@@ -58,8 +59,8 @@ export const SContainer = styled.div`
     }
     /* 프로필 사진 */
     img {
-      width: 6.5vw;
-      height: 6.5vw;
+      width: 10vw;
+      height: 10vw;
       margin-right: calc(0.5vw + 2px);
       border: 3px solid transparent;
       border-radius: 50%;
@@ -90,11 +91,13 @@ export const SSNSContainer = styled.div`
 
 export const SRank = styled.div`
   user-select: none;
-  font-size: calc(1vw + 15px);
  
-  color: #ffffff;
   position: absolute;
-  bottom: calc(0.8vw + 1px);
-  right: calc(1vw + 12px);
+  bottom: calc(4vw + 1px);
+  right: calc(3vw + 12px);
   z-index: 100;
+  img {
+    width: 200px;  // 원하는 너비로 설정
+    height: 250px; // 원하는 높이로 설정
+  }
 `;

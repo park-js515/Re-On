@@ -52,7 +52,7 @@ const FeedPage = () => {
   return (
 
    
-    <div className="bg-begie" >
+    <div className="bg-gradient-to-t from-lightBlue via-begie to-begie" >
         {/* <Container>
           <Banner/>
         </Container> */}

@@ -38,7 +38,7 @@ const Videoitem = ({props, changeMode}) => {
         
         <div className="group relative ml-2">
           <h3 className="mt-3 text-lg font-semibold leading-6 text-gray-900 group-hover:text-gray-600">
-          <span className="text-sm hover:underline hover:decoration-solid hover:cursor-pointer" onClick={changeMode}>{props.title}</span>
+          <span className="text-2xl hover:underline hover:decoration-solid hover:cursor-pointer" onClick={changeMode}>{props.title}</span>
           </h3>
         </div>
         

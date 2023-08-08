@@ -431,7 +431,7 @@ export default function OpenViduApp() {
         />
       )}
       {session === undefined ? (
-        <div id="join">
+        <div id="join" >
           <BackStage
             myUserName={myUserName}
             mySessionId={mySessionId}
