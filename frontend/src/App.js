@@ -11,6 +11,7 @@ import NormalListPage from './pages/NormalListPage';
 import RankPage from './pages/RankPage';
 import RegisterPage from './pages/RegisterPage';
 
+
 import ResponsiveAppBar from 'components/common/NavBar';
 
 function App() {
@@ -29,6 +30,7 @@ function App() {
         <Route path="/normallist" element={<NormalListPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/rank" element={<RankPage />} />
+       
       </Routes>
     </>
   );

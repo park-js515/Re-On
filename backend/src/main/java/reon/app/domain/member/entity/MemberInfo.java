@@ -23,7 +23,7 @@ public class MemberInfo {
     private String nickName; //닉네임
     @Column(length = 150)
     private String introduce;//자기소개
-    @Column(name = "profile_img")
+    @Column(name = "profile_img") // 스토리지에 저장된 이미지 파일 이름
     private String profileImg;//프로필 이미지
     private int reported;//재제 수
     private int deleted;//탈퇴 여부
@@ -35,7 +35,6 @@ public class MemberInfo {
     }
 
     public void updateProfileImg(String profileImg) {
-
         this.profileImg = profileImg;
     }
     public void updateReported(int reported){

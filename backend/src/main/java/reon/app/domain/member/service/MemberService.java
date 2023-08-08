@@ -9,12 +9,8 @@ import reon.app.domain.member.entity.Member;
 @Transactional
 public interface MemberService {
     Member updateMember(MemberUpdateRequest memberUpdateRequest);
-//    void updateProfileImg(MultipartFile profileImg, long id);
+    void updateProfileImg(MultipartFile profileImg, Long id);
 
-//    void modify(MemberModifyRequest memberModifyRequest);
-//
-//
-//    void updateProfileImg(MultipartFile multipartFile, Long memberId);
     void deleteRefreshToken(Long id);
 
     void removeProfileImg(Long id);

@@ -6,8 +6,8 @@ const imgUrl = {
 };
 export default function NotLoggedInYet() {
   const NAVER_CLIENT_ID = process.env.REACT_APP_NAVER_CLIENT_ID;
-  const NAVER_REDIRECT_URI = 'http://localhost:3000/oauth';
-  const STATE = 'flase';
+  const NAVER_REDIRECT_URI = "http://localhost:3000/auth"
+  const STATE = "flase";
   const NAVER_AUTHORIZATION_URL = `https://nid.naver.com/oauth2.0/authorize?client_id=${NAVER_CLIENT_ID}&response_type=code&redirect_uri=${NAVER_REDIRECT_URI}&state=${STATE}`;
   return (
     <div className="w-full flex justify-center items-center flex-col  h-3/5">

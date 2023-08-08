@@ -11,6 +11,7 @@ import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @Configuration
+@EnableSwagger2
 public class SwaggerConfiguration {
     @Bean
     public Docket api() {
@@ -20,6 +21,7 @@ public class SwaggerConfiguration {
                 .apis(RequestHandlerSelectors.basePackage("reon.app.domain"))
                 .paths(PathSelectors.any())
                 .build()
+                .host("https://i9c203.p.ssafy.io/api")
                 .apiInfo(apiInfo());
     }
 

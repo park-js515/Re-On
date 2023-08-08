@@ -19,22 +19,26 @@ const Videoitem = ({props, changeMode}) => {
         navigate('/mypage')
     }
     
+
+
+
     return (
-      <div className="flex max-w-xl shadow-md flex-col items-start justify-between transform transition-transform duration-300 hover:scale-105 hover:shadow-lg mx-2 ">
-        <div style={{ backgroundImage: `url(${props.thumbnail})` }}  className="w-full h-48 bg-cover bg-center rounded-t" src={props.thumbnail} alt=""  onClick={changeMode}></div>
-        
+      <div className="bg-white flex max-w-xl shadow-md flex-col items-start justify-between transform transition-transform duration-300 hover:scale-105 hover:shadow-lg mx-2 rounded">
+       <div style={{ backgroundImage: `url(${props.thumbnail})` }} className="w-full h-48 bg-cover bg-center rounded featured-item cursor-pointer" src={props.thumbnail} alt="" onClick={changeMode}></div>
+
         <div className="flex items-center gap-x-4 text-xs ml-2">
-          <div className="text-gray-500">
-            ❤ {convertToK(props.like_cnt)}
+          <div className="">
+            💙 {convertToK(props.like_cnt)}
           </div>
           <div className="relative z-10 rounded-full bg-gray-50 px-3 py-1.5 font-medium text-gray-600 hover:bg-gray-100">
-            💬 {convertToK(props.comment_cnt)}
+            💬 {convertToK(props.comment_cnt)}   
           </div>
         </div>
         
+        
         <div className="group relative ml-2">
           <h3 className="mt-3 text-lg font-semibold leading-6 text-gray-900 group-hover:text-gray-600">
-          <span className="text-sm hover:underline hover:decoration-solid hover:cursor-pointer" onClick={changeMode}>{props.title}</span>
+          <span className="text-2xl hover:underline hover:decoration-solid hover:cursor-pointer" onClick={changeMode}>{props.title}</span>
           </h3>
         </div>
         

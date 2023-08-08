@@ -1,4 +1,4 @@
-import UserInfo from './UserInfo/sex';
+import UserInfo from './UserInfo/UserInfo';
 import RecentGameList from './RecentGameList';
 
 const LeftSide = () => {

@@ -1,7 +1,7 @@
 import './Feed.css';
 
 const TabButton = ({ children, selected, onClick, style }) => {
-  const backgroundColor = selected ? '#007bff' : '#f0f0f0';
+  const backgroundColor = selected ? '#8ccfd5' : '#f2ecda';
   const color = selected ? '#fff' : '#333';
 
   return (

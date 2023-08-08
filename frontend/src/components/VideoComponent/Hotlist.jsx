@@ -12,11 +12,11 @@ const Hotlist = ({injectPostId, changeShow}) => {
   for (let i = 1; i <= 10; i++){
     TESTDATA.push({
       post_id : i,
-      thumbnail : 'https://source.unsplash.com/random?sig=2',
+      thumbnail : `https://source.unsplash.com/random?sig=2${i}`,
       member_id : i,
-      nick_name : `랄로상-${i}`,
-      profile_img : "https://yt3.ggpht.com/ytc/AOPolaQEivCeo8OdmA0NhR3XhlRVybG6CTVeeA4YEL75Ug=s68-c-k-c0x00ffffff-no-rj",
-      title : `어쩌라고-${i}`,
+      nick_name : `닉네임-${i}`,
+      profile_img : `https://source.unsplash.com/random?sig=55${i}`,
+      title : `제목-${i}`,
       like_cnt : 2400,
       comment_cnt : 20,
     })
@@ -45,6 +45,7 @@ const Hotlist = ({injectPostId, changeShow}) => {
       speed: 500,
       slidesToShow: 3,
       slidesToScroll: 1,
+      draggable : true,
       adaptiveHeight: true,
       autoplay: true,
       autoplaySpeed: 1500,
@@ -53,9 +54,10 @@ const Hotlist = ({injectPostId, changeShow}) => {
     };
 
   return (
-    <div className="bg-white py-12 sm:py-16">
-      <h1 className="my-4 text-center font-bold text-3xl text-dark">🎁인기영상</h1>
-      <div className="mx-auto max-w-7xl px-6 lg:px-8">
+    <div className="bg-gradient-to-b from-lightBlue to-begie my-4 py-12 sm:py-16 ">
+      <div className="bg-white mx-auto max-w-7xl py-16 px-2 rounded">
+      <h1 className="my-4 py-8 text-center font-bold text-3xl text-dark ">🎁인기영상</h1>
+      <div className="mx-auto max-w-7xl px-6 lg:px-8 ">
           <Slider ref={sliderRef} {...settings}>
               {TESTDATA.map((item) => (
                   <div key={item.video_id}>
@@ -69,6 +71,7 @@ const Hotlist = ({injectPostId, changeShow}) => {
                   </div>
               ))}
           </Slider>
+          </div>
       </div>
     </div>
   );
