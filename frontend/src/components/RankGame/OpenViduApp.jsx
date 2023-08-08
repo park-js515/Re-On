@@ -126,7 +126,7 @@ export default function OpenViduApp() {
             videoSource: undefined,
             publishAudio: true,
             publishVideo: true,
-            resolution: '350x400',
+            resolution: '500x600',
             frameRate: 30,
             insertMode: 'APPEND',
             mirror: true,
@@ -373,7 +373,7 @@ export default function OpenViduApp() {
   }, [isLoading]);
 
   // ############ 상태 관리 ###############
-  const [stage, setStage] = useState('NOT_READY'); // 현재 게임 상태 관리
+  const [stage, setStage] = useState('READY'); // 현재 게임 상태 관리
   const [userCamLeftBorder, setUserCamLeftBorder] = useState(false); // 유저1 플레이시 테두리
   const [userCamRightBorder, setUserCamRightBorder] = useState(false); // 유저2 플레이시 테두리
 
@@ -530,7 +530,7 @@ export default function OpenViduApp() {
         />
       )}
       {session === undefined ? (
-        <div id="join" >
+        <div id="join">
           <BackStage
             myUserName={myUserName}
             mySessionId={mySessionId}
@@ -541,17 +541,14 @@ export default function OpenViduApp() {
       {/* 백스테이지 */}
 
       {session !== undefined ? (
-        <div
-          id="session"
-          className="flex justify-around gap-4 w-full h-full border"
-        >
+        <div id="session" className="flex justify-around gap-4 w-full h-full">
           {isLoading && (
             <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50">
               <LoadingWaiting />
             </div>
           )}
 
-          <div id="video-container" className="rounded-lg bg-darkGray">
+          <div id="video-container" className="rounded-lg">
             <div className="flex flex-wrap place-content-center gap-5 mt-5">
               {publisher !== undefined ? (
                 <div
@@ -570,7 +567,7 @@ export default function OpenViduApp() {
 
               <div
                 id="movie-container"
-                className="border rounded-lg
+                className="rounded-lg
             flex-col flex justify-evenly w-[400px] "
               >
                 <video
@@ -618,7 +615,7 @@ export default function OpenViduApp() {
                   <div className="flex text-white">
                     <Matching typingContent="..." />
                   </div>
-                  <div className="relative flex items-center justify-center w-[350px] h-[400px]">
+                  <div className="relative flex items-center justify-center w-[500px] h-[600px]">
                     <img
                       src="image/rank/rank-basic-bg.png"
                       alt="waiting"
