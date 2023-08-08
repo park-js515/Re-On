@@ -6,7 +6,7 @@ function BackStage({ myUserName, mySessionId, joinSession }) {
     <div id="join">
       <div id="img-div"></div>
       <div id="join-dialog">
-        <div className="flex justify-around h-screen">
+        <div className=" flex justify-around h-screen">
           <div className="w-128 flex flex-col justify-center">
             <LeftSide />
           </div>

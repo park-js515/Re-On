@@ -3,7 +3,7 @@ import RankerList from './RankerList';
 
 const RightSide = () => {
   return (
-    <div className='flex justify-around'>
+    <div className='flex'>
         <RankerList />
     </div>
    

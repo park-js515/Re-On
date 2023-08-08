@@ -4,15 +4,15 @@
   }
   
   .marquee {
-    --duration: 60s;
+    --duration: 30s;
     --gap: var(--space);
   
     display: flex;
     overflow: hidden;
     user-select: none;
     gap: var(--gap);
-    transform: skewY(-3deg);
-    margin-bottom: 5px;
+    transform: skewY(-0deg);
+    margin-bottom: 18px;
   }
   
   .marquee__group {
@@ -58,7 +58,7 @@
   }
   
   .marquee--borders {
-    border-block: 3px solid dodgerblue;
+    border-block: 3px solid #f2ecda;
     padding-block: 0.75rem;
   }
   
