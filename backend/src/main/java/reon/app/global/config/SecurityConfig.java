@@ -42,7 +42,7 @@ public class SecurityConfig {
                 .formLogin().disable()
                 .httpBasic().disable()
                 .authorizeRequests()
-                .antMatchers("/api/member","/api/auth/naver", "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html", "/swagger-resources/**", "/api/post-management/public", "/api/attraction-management/**", "/api/member-management/**").permitAll()
+                .antMatchers("/api/member","/api/auth/naver", "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html", "/swagger-resources/**", "/api/post-management/public", "/api/attraction-management/**", "/api/member-management/**","/api/post-management/**" ).permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);

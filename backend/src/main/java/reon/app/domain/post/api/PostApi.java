@@ -68,6 +68,7 @@ public class PostApi {
         }
     }
 
+
     @Operation(summary = "mypage private post 목록 조회", description = "PRIVATE 게시글 목록을 조회한다.")
     @GetMapping("/private")
     public ApiResponse<?> searchPrivatePosts(@RequestParam(value = "offset") Long offset, @Parameter(hidden = true) @AuthenticationPrincipal User user ){
@@ -78,6 +79,7 @@ public class PostApi {
         return ApiResponse.OK(responses);
     }
 
+
     @Operation(summary = "mypage 내가 좋아요 누른 post 목록 조회", description = "liked 게시글 목록을 조회한다.")
     @GetMapping("/liked")
     public ApiResponse<?> searchLikedPosts(@RequestParam(value = "offset") Long offset, @Parameter(hidden = true) @AuthenticationPrincipal User user ) {
@@ -85,7 +87,6 @@ public class PostApi {
         List<PostsResponse> responses = postQueryService.searchLikedPosts(offset, memberId);
         return ApiResponse.OK(responses);
     }
-
 
 
     @Operation(summary = "mypage public post 목록 조회", description = "PUBLIC 게시글 목록을 조회한다.")
@@ -97,6 +98,12 @@ public class PostApi {
         return ApiResponse.OK(responses);
     }
 
+    @Operation(summary = "투표해줘 public post 목록 전체 조회", description = "투표해줘 PUBLIC 게시글 목록을 조회한다.")
+    @GetMapping("/feed")
+    public ApiResponse<?> searchFeedPosts(@RequestParam(value = "offset") Long offset){
+        List<PostsResponse> responses = postQueryService.searchFeedPosts(offset);
+        return ApiResponse.OK(responses);
+    }
 
 
     @Operation(summary = "private post upload", description = "PRIVATE 게시글을 PUBLIC으로 변경한다.")

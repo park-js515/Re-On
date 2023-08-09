@@ -17,4 +17,6 @@ public interface PostQueryService {
     List<PublicPostsResponse> searchPublicPosts(Long offset, Long memberId);
 
     List<PostsResponse> searchLikedPosts(Long offset, Long memberId);
+
+    List<PostsResponse> searchFeedPosts(Long offset);
 }

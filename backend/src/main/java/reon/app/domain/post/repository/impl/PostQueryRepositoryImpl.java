@@ -109,4 +109,27 @@ public class PostQueryRepositoryImpl implements PostQueryRepository {
                 .limit(21)
                 .fetch();
     }
+
+    @Override
+    public List<PostsResponse> searchFeesPosts(Long offset) {
+        return queryFactory
+                .select(Projections.fields(PostsResponse.class,
+                        post.id,
+                        post.member.id.as("memberId"),
+                        post.title,
+                        post.member.memberInfo.nickName,
+                        post.member.memberInfo.profileImg,
+                        post.video.thumbnail,
+                        post.postLikes.size().as("likeCnt"),
+                        post.createDate
+                        ))
+                .from(post)
+                .join(post.member, member)
+                .join(post.video, video)
+                .where(post.scope.eq(Scope.PUBLIC))
+                .orderBy(post.createDate.desc())
+                .offset((offset-1)* 21L)
+                .limit(21)
+                .fetch();
+    }
 }

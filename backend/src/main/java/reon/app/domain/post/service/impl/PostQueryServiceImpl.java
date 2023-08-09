@@ -81,4 +81,10 @@ public class PostQueryServiceImpl implements PostQueryService {
         List<PostsResponse> responses = postQueryRepository.searchLikedPosts(ids ,offset,memberId);
         return responses;
     }
+
+    @Override
+    public List<PostsResponse> searchFeedPosts(Long offset) {
+        List<PostsResponse> responses = postQueryRepository.searchFeesPosts(offset);
+        return responses;
+    }
 }

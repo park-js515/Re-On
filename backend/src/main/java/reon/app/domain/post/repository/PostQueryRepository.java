@@ -19,4 +19,6 @@ public interface PostQueryRepository {
     List<PublicPostsResponse> searchPublicPosts(Long offset, Long memberId);
 
     List<PostsResponse> searchLikedPosts(List<Long> ids, Long offset, Long memberId);
+
+    List<PostsResponse> searchFeesPosts(Long offset);
 }
