@@ -38,7 +38,7 @@ public class MemberApi {
     private final MemberService memberService;
     private final MemberQueryService memberQueryService;
     private final BattleLogService battleLogService;
-    private final BattleLogQueryService battleLogQueryService;
+//    private final BattleLogQueryService battleLogQueryService;
 
 
     @Operation(summary = "mypage member 조회", description = "memberId로 mypage member 상세 조회")

@@ -1,4 +1,4 @@
 package reon.app.domain.member.repository;
 
-public interface BattleLogQueryRepository {
-}
+//public interface BattleLogQueryRepository {
+//}
