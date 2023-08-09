@@ -9,6 +9,7 @@ import reon.app.domain.member.dto.req.BattleLogSaveRequest;
 import reon.app.domain.member.dto.req.MemberBattleInfoUpdateRequest;
 import reon.app.domain.member.dto.req.MemberUpdateRequest;
 import reon.app.domain.member.dto.res.BackStageMemberResponse;
+import reon.app.domain.member.dto.res.BattleLogResponse;
 import reon.app.domain.member.dto.res.MemberBattleInfoResponse;
 import reon.app.domain.member.entity.Member;
 import reon.app.domain.member.service.BattleLogQueryService;
@@ -27,6 +28,8 @@ import reon.app.domain.member.dto.res.MemberResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import java.util.List;
+
 import static reon.app.global.api.ApiResponse.OK;
 
 @Api(tags = "Member")
@@ -38,7 +41,7 @@ public class MemberApi {
     private final MemberService memberService;
     private final MemberQueryService memberQueryService;
     private final BattleLogService battleLogService;
-//    private final BattleLogQueryService battleLogQueryService;
+    private final BattleLogQueryService battleLogQueryService;
 
 
     @Operation(summary = "mypage member 조회", description = "memberId로 mypage member 상세 조회")
@@ -52,7 +55,7 @@ public class MemberApi {
     @Operation(summary = "Back stage member 조회", description = "memberId로 BackStage Member 정보 조회")
     @GetMapping("/back-stage/{id}")
     public ApiResponse<BackStageMemberResponse> findBackStageMemberById(@PathVariable("id") @ApiParam("유저 ID") Long id){
-        BackStageMemberResponse backStageMemberResponse = memberQueryService.findBackStageMembereById(id);
+        BackStageMemberResponse backStageMemberResponse = memberQueryService.findBackStageMemberById(id);
         return ApiResponse.OK(backStageMemberResponse);
     }
 
@@ -123,15 +126,16 @@ public class MemberApi {
     @Operation(summary = "Battle 결과 등록", description = "배틀 결과를 저장한다")
     @PostMapping("/battlelog")
     public ApiResponse<Void> saveBattleLog(@RequestBody BattleLogSaveRequest battleLogSaveRequest){
-
+        battleLogService.saveBattleLog(battleLogSaveRequest);
         return OK(null);
     }
 
     @Operation(summary = "Battle 기록 조회", description = "배틀 기록을 조회한다.")
     @GetMapping("/battlelog")
-    public ApiResponse<Void> findBattleLogById(@Parameter(hidden = true) @AuthenticationPrincipal User user){
-
-        return OK(null);
+    public ApiResponse<?> findBattleLogById(@Parameter(hidden = true) @AuthenticationPrincipal User user){
+        Long memberId = Long.parseLong(user.getUsername());
+        List<BattleLogResponse> battleLogResponseList = battleLogQueryService.findBattleLogsById(memberId);
+        return OK(battleLogResponseList);
     }
 
 }

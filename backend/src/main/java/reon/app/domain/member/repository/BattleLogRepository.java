@@ -1,4 +1,9 @@
 package reon.app.domain.member.repository;
 
-public interface BattleLogRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
+import reon.app.domain.member.entity.BattleLog;
+
+
+public interface BattleLogRepository extends JpaRepository<BattleLog,Long> {
+
 }

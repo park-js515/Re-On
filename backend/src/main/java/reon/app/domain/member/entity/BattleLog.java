@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.DynamicInsert;
+import reon.app.domain.video.entity.Video;
 import reon.app.global.entity.BaseEntity;
 
 import javax.persistence.*;
@@ -21,12 +22,22 @@ public class BattleLog extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Column(nullable = false)
-    private Long user1Id;
+    @ManyToOne
+    @JoinColumn(name ="user1_id")
+    private Member user1;
+
     @Column(nullable = false)
-    private Long user2Id;
+    @ManyToOne
+    @JoinColumn(name="user1_id")
+    private Member user2;
+
     @Column(nullable = false)
-    private Long videoId;
+    @ManyToOne
+    @JoinColumn(name = "vidio_id")
+    private Video video;
+
     @Column(nullable = false)
     private int point;
 

@@ -1,4 +1,12 @@
 package reon.app.domain.member.repository;
 
-//public interface BattleLogQueryRepository {
-//}
+import reon.app.domain.member.dto.res.BattleLogResponse;
+
+import java.util.List;
+
+public interface BattleLogQueryRepository {
+
+    List<BattleLogResponse> searchBattleLogsById(Long memberId);
+
+
+}
