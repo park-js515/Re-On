@@ -62,8 +62,8 @@
     background: repeating-linear-gradient(to left, #dd3232 4vw, #911818 12vw, #ec8989 15vw);
     transform-origin: 0 0%;
     transform: rotate(3deg);
-    transition: transform 4s ease;
-    animation: swing 2s ease infinite;
+    transition: transform 3s ease;
+    animation: swing 1s ease infinite;
   }
   
   @keyframes swing {

@@ -19,6 +19,9 @@ const Hotlist = ({injectPostId, changeShow}) => {
       title : `제목-${i}`,
       like_cnt : 2400,
       comment_cnt : 20,
+      year:'2023',
+      month:i,
+      date:i,
     })
     }
     const NextArrow = ({ onClick }) => (

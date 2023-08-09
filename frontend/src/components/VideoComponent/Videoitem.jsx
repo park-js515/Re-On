@@ -24,20 +24,21 @@ const Videoitem = ({props, changeMode}) => {
 
     return (
       <div className="bg-white flex max-w-xl shadow-md flex-col items-start justify-between transform transition-transform duration-300 hover:scale-105 hover:shadow-lg mx-2 my-4 pb-4">
-        <div>
-          <span>
-           {props.year}/{props.month}/{props.date}
-          </span>
-        </div>
-            
-        <div className="relative mt-2 flex items-center gap-x-4 ml-2 mb-1">
+        <div className="relative mt-2 flex items-center justify-between gap-x-4 ml-2 mb-1">
+        <div className="flex items-center gap-x-4">
           <img src={props.profile_img} alt="" onClick={moveToMyPage} className="h-10 w-10 rounded-full bg-gray-50" />
           <div className="text-sm leading-6">
             <p className="font-semibold text-gray-900">
-             <span className="text-xs hover:underline hover:decoration-solid hover:cursor-pointer" onClick={moveToMyPage}>{props.nick_name}</span>
+            <span className="text-xs hover:underline hover:decoration-solid hover:cursor-pointer" onClick={moveToMyPage}>{props.nick_name}</span>
             </p>
           </div>
         </div>
+          <p className="ml-12 pl-24 font-semibold text-gray-900">
+            <span className="text-xs">
+              {props.year}/{props.month}/{props.date}
+            </span>
+          </p>
+      </div>
         
        <div style={{ backgroundImage: `url(${props.thumbnail})` }} className="w-full h-64 bg-cover bg-center rounded-t featured-item cursor-pointer " src={props.thumbnail} alt="" onClick={changeMode}></div>
 

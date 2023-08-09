@@ -10,7 +10,11 @@ import React from 'react';
             backgroundImage: `https://source.unsplash.com/random?sig=10${i}`,
             comment_cnt: 20,
             profile_img:`https://source.unsplash.com/random?sig=10${i}`,
-            nick_name:`두껍희창${i}`
+            nick_name:`두껍희창${i}`,
+            year:'2023',
+            month:i,
+            date:i,
+            
         });
     }
     const posts = temp;
@@ -23,6 +27,7 @@ import React from 'react';
               <div key={post.id} className="flex shadow-md rounded max-w-xl flex-col items-start justify-between transform transition-transform duration-300 hover:scale-105 hover:shadow-lg my-6 pb-2">
                 
                 
+      
                  <div style={{ backgroundImage: `url(${post.backgroundImage})` }} 
                  className="w-full h-64 bg-cover bg-center rounded featured-item cursor-pointer" src={post.backgroundImage} alt="">
 
