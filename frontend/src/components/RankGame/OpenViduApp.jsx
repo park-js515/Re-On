@@ -8,6 +8,7 @@ import UserVideoComponent from './UserVideoComponent';
 import Matching from 'components/Typing/Matching';
 import LoadingWaiting from 'components/RankGame/LoadingWaiting';
 import MatchingWaiting from 'components/RankGame/MatchingWaiting';
+import CalculatingWaiting from 'components/RankGame/CalculatingWaiting';
 import Modal from 'components/RankGame/Modal';
 import TutorialModal from 'components/RankGame/TutorialModal';
 
@@ -24,7 +25,10 @@ const APPLICATION_SERVER_URL =
 
 export default function OpenViduApp() {
   const dispatch = useDispatch();
+  // 세션 아이디는 이제 설정해줄 필요가 없어보인다.
+  // 그냥 /api/openvidu-management/sessions/connections에 POST하면 알아서 세션 만들어서 연결해주기 때문
   const [mySessionId, setMySessionId] = useState('TEST');
+  // myUserName은 리덕스||로컬스토리지에 자기 이름을 보여준다.
   const [myUserName, setMyUserName] = useState(
     `연기자${Math.floor(Math.random() * 100)}`,
   );
@@ -54,7 +58,6 @@ export default function OpenViduApp() {
     mySession.on('connectionCreated', async (event) => {
       connections.push(event.connection);
     });
-    console.log('커넥션스', connections);
 
     mySession.on('streamCreated', async (event) => {
       const subscriber = mySession.subscribe(event.stream, undefined);
@@ -413,6 +416,11 @@ export default function OpenViduApp() {
       setLog((prevLog) => [...prevLog, `${logMessageTime} | 계산 시작`]);
       handleCaculateScore();
 
+      // 결과 보여주기
+    } else if (stage === 'RESULT') {
+      setLog((prevLog) => [...prevLog, `${logMessageTime} | 결과 종료`]);
+      handleViewResult();
+
       // 게임 종료
     } else if (stage === 'END') {
       setLog((prevLog) => [...prevLog, `${logMessageTime} | 게임 종료`]);
@@ -479,7 +487,7 @@ export default function OpenViduApp() {
   // ############# 유저1 플레이 함수 ##############
   const handleUserOnePlay = async () => {
     setLog((prevLog) => [...prevLog, `${logMessageTime} | 유저 1 대기`]);
-    await startLoading(3000); // 로딩
+    // await startLoading(3000); // 로딩
     mySide === 'USER_ONE'
       ? setUserCamLeftBorder(true)
       : setUserCamRightBorder(true);
@@ -490,7 +498,7 @@ export default function OpenViduApp() {
   // ############# 유저2 플레이 함수 ##############
   const handleUserTwoPlay = async () => {
     setLog((prevLog) => [...prevLog, `${logMessageTime} | 유저 2 대기`]);
-    await startLoading(3000); // 로딩
+    // await startLoading(3000); // 로딩
     mySide === 'USER_TWO'
       ? setUserCamLeftBorder(true)
       : setUserCamRightBorder(true);
@@ -499,11 +507,22 @@ export default function OpenViduApp() {
   };
 
   // ############# 점수 계산 ##############
+  // 실제 이곳에서 계산하는 게 아니라
   const handleCaculateScore = async () => {
     //  AI계산
     setLog((prevLog) => [...prevLog, `${logMessageTime} | AI 점수 계산`]);
-    setStage('END');
+    setStage('RESULT');
+    // AI 계산하는 로직
     await startLoading(3000);
+  };
+
+  // ############# 결과 보여주기 #############
+  const handleViewResult = async () => {
+    // 커튼 촤라라라락 결과 보여주는
+
+    // 3초 있다가 녹화 저장 여부 묻기
+    await startLoading(3000);
+    setStage('END');
   };
 
   // ############# 녹화 저장 함수 ##############
@@ -522,14 +541,6 @@ export default function OpenViduApp() {
 
   return (
     <div className="">
-      {toggleSaveModal && (
-        <Modal
-          type="save"
-          onConfirm={handleSaveVideo}
-          isOpen={toggleSaveModal}
-          onClose={() => setToggleSaveModal(false)}
-        />
-      )}
       {session === undefined ? (
         <div id="join">
           <BackStage
@@ -543,6 +554,21 @@ export default function OpenViduApp() {
 
       {session !== undefined ? (
         <div id="session" className="">
+          {toggleSaveModal && (
+            <Modal
+              type="save"
+              onConfirm={handleSaveVideo}
+              isOpen={toggleSaveModal}
+              onClose={() => setToggleSaveModal(false)}
+            />
+          )}
+
+          {stage === 'RESULT' && (
+            <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50">
+              <CalculatingWaiting />
+            </div>
+          )}
+
           {isLoading && (
             <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50">
               <LoadingWaiting />
@@ -558,10 +584,7 @@ export default function OpenViduApp() {
 
               <div
                 id="log-list"
-                className="bg-center bg-no-repeat bg-cover h-[35px] mx-4 overflow-auto items-center mb-5"
-                style={{
-                  backgroundImage: "url('image/rank/rank-log-bar.png')",
-                }}
+                className=" h-[35px] mx-4 overflow-auto items-center mb-5"
               >
                 {log.map((item, index) => (
                   <div
