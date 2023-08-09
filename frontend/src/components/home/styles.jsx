@@ -6,7 +6,7 @@ export const SContainer = styled.main`
     font-weight: 400;
     position: relative;
     width: 100%;
-    height: 550px;
+    height: 900px;
     background: linear-gradient(to right top, beige, lightBlue);
     display: flex;
     justify-content: center;
@@ -15,17 +15,15 @@ export const SContainer = styled.main`
   
   
     h1 {
-      
-
-      margin: 0px;
-      font-size: calc(2vw + 28px);
+   
+      font-size: calc(10vw + 40px);
       margin-bottom: calc(1vw + 30px);
       margin-top: calc(1vw + 1px);
     }
     h3 {
       
-      font-size: calc(1vw + 11px);
-      margin: 0px;
+      font-size: calc(2vw + 12px);
+      margin-left: 15px;
       line-height: calc(1vw+40px);
     }
     h4 {
@@ -46,7 +44,7 @@ export const SContainer = styled.main`
     }
     .lottie-container {
       cursor: pointer;
-      width: calc(2vw + 600px);
+      width: calc(4vw + 800px);
       margin-left: calc(2vw + 80px);
     }
   
