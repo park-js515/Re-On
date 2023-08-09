@@ -7,8 +7,9 @@ import reon.app.domain.member.entity.MemberBattleInfo;
 @ToString
 @Getter
 public class MemberBattleInfoResponse {
-    private int score;
-    private int gameCnt;
+
+    private int score; //누적점수
+    private int gameCnt; //
     private int win;
     private int lose;
 

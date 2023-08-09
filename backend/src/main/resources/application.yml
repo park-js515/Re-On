@@ -33,7 +33,7 @@ spring:
       ddl-auto : update
 #      ddl-auto: create
 #      ddl-auto: none
-    # show-sql: true # DDL 출력
+      show-sql: true # DDL 출력
     generate-ddl: true
 
 OPENVIDU_URL:

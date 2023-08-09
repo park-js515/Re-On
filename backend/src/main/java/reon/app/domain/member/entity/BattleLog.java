@@ -23,19 +23,16 @@ public class BattleLog extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name ="user1_id")
     private Member user1;
 
-
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="user2_id")
     private Member user2;
 
-
-    @ManyToOne
-    @JoinColumn(name = "vidio_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "video_id")
     private Video video;
 
     @Column(nullable = false)

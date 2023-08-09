@@ -107,22 +107,24 @@ public class MemberApi {
         memberService.delete(id);
         return ApiResponse.OK(null);
     }
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
     @Operation(summary = "member 배틀 정보 조회", description = "회원 베틀 정보를 조회한다.")
-    @GetMapping("/battleInfo/{email}")
-//    public ApiResponse<Void> removeProfileImg(@Parameter(hidden = true) @AuthenticationPrincipal User user) {
-    public ApiResponse<MemberBattleInfoResponse> findMemberBattleInfo(@Parameter(hidden = true) @AuthenticationPrincipal User user) {
-        Long memberId = Long.parseLong(user.getUsername());
-        return ApiResponse.OK(null);
+    @GetMapping("/member/{id}/battleInfo")
+    public ApiResponse<MemberBattleInfoResponse> findMemberBattleInfo(@PathVariable("id") Long id) {
+        MemberBattleInfoResponse memberBattleInfoResponse = memberQueryService.findMemberBattleInfoById(id);
+        return OK(memberBattleInfoResponse);
     }
     @Operation(summary = "member 배틀 정보 업데이트", description = "회원 베틀 정보를 업데이트한다.")
-    @PutMapping("/battleInfo/update")
-//    public ApiResponse<Void> removeProfileImg(@Parameter(hidden = true) @AuthenticationPrincipal User user) {
+    @PutMapping("/member/{id}/battleInfo")
     public ApiResponse<Void> updateMemberBattleInfo(@RequestBody MemberBattleInfoUpdateRequest memberBattleInfoUpdateRequest) {
-        return ApiResponse.OK(null);
+        return OK(null);
     }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
     @Operation(summary = "Battle 결과 등록", description = "배틀 결과를 저장한다")
     @PostMapping("/battlelog")
     public ApiResponse<Void> saveBattleLog(@RequestBody BattleLogSaveRequest battleLogSaveRequest){
