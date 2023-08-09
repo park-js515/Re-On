@@ -84,7 +84,13 @@ public class PostQueryServiceImpl implements PostQueryService {
 
     @Override
     public List<PostsResponse> searchFeedPosts(Long offset) {
-        List<PostsResponse> responses = postQueryRepository.searchFeesPosts(offset);
+        List<PostsResponse> responses = postQueryRepository.searchFeedPosts(offset);
+        return responses;
+    }
+
+    @Override
+    public List<PostsResponse> searchFeedRankPosts() {
+        List<PostsResponse> responses = postQueryRepository.searchFeedRankPosts();
         return responses;
     }
 }

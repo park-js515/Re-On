@@ -1,6 +1,10 @@
 package reon.app.domain.post.repository.impl;
 
+import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.core.types.dsl.NumberPath;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -13,6 +17,8 @@ import reon.app.domain.post.entity.PostLike;
 import reon.app.domain.post.entity.Scope;
 import reon.app.domain.post.repository.PostQueryRepository;
 
+import java.time.LocalDateTime;
+import java.time.YearMonth;
 import java.util.List;
 
 import static reon.app.domain.member.entity.QMember.member;
@@ -111,7 +117,7 @@ public class PostQueryRepositoryImpl implements PostQueryRepository {
     }
 
     @Override
-    public List<PostsResponse> searchFeesPosts(Long offset) {
+    public List<PostsResponse> searchFeedPosts(Long offset) {
         return queryFactory
                 .select(Projections.fields(PostsResponse.class,
                         post.id,
@@ -131,5 +137,39 @@ public class PostQueryRepositoryImpl implements PostQueryRepository {
                 .offset((offset-1)* 21L)
                 .limit(21)
                 .fetch();
+    }
+
+    @Override
+    public List<PostsResponse> searchFeedRankPosts() {
+
+        return queryFactory
+                .select(Projections.fields(PostsResponse.class,
+                        post.id,
+                        post.member.id.as("memberId"),
+                        post.title,
+                        post.member.memberInfo.nickName,
+                        post.member.memberInfo.profileImg,
+                        post.video.thumbnail,
+                        post.postLikes.size().as("likeCnt"),
+                        post.createDate
+                ))
+                .from(post)
+                .join(post.member, member)
+                .join(post.video, video)
+                .where(post.scope.eq(Scope.PUBLIC),
+                        isCurrentMonth()
+                        )
+                .orderBy(post.postLikes.size().desc())
+                .fetch();
+    }
+
+    private BooleanExpression isCurrentMonth() {
+        LocalDateTime now = LocalDateTime.now();
+        YearMonth yearMonth = YearMonth.from(now);
+
+        return post.createDate.between(
+                yearMonth.atDay(1).atStartOfDay(),
+                yearMonth.atEndOfMonth().atTime(23, 59, 59)
+        );
     }
 }

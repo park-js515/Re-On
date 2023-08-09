@@ -36,7 +36,7 @@ public class PostApi {
 //    private final MemberService memberService;
     private final PostLikeService postLikeService;
 
-    @Operation(summary = "post 저장", description = " 유저 연기 영상, 원본 영상ID를 입력받아 post를 저장")
+    @Operation(summary = "post 저장", description = "유저 연기 영상, 원본 영상ID를 입력받아 post를 저장")
     @PostMapping
     public ApiResponse<?> savePost(@RequestPart MultipartFile actionVideo, @RequestParam("videoId") Long videoId,
                                    @Parameter(hidden = true) @AuthenticationPrincipal User user){
@@ -105,6 +105,12 @@ public class PostApi {
         return ApiResponse.OK(responses);
     }
 
+    @Operation(summary = "투표해줘 페이지 TOP10 post 조회", description = "좋아요 상태를 변경한다.")
+    @GetMapping("/feed/rank")
+    public ApiResponse<?> searchFeedRankPosts(){
+        List<PostsResponse> responses = postQueryService.searchFeedRankPosts();
+        return ApiResponse.OK(responses);
+    }
 
     @Operation(summary = "private post upload", description = "PRIVATE 게시글을 PUBLIC으로 변경한다.")
     @PutMapping("/private/{postId}")
@@ -123,11 +129,13 @@ public class PostApi {
     }
 
 
-    @Operation(tags="post 좋아요", description = "좋아요 상태를 변경한다.")
+    @Operation(summary = "post 좋아요", description = "좋아요 상태를 변경한다.")
     @PostMapping("/like/{postId}")
     public ApiResponse<Boolean> changeLike(@PathVariable("postId") Long postId, @Parameter(hidden = true) @AuthenticationPrincipal User user){
         Long memberId = Long.parseLong(user.getUsername());
         Boolean flag = postLikeService.changeLike(postId, memberId);
         return ApiResponse.OK(flag);
     }
+
+
 }

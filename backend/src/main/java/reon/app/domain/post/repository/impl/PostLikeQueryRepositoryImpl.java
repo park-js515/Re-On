@@ -22,4 +22,5 @@ public class PostLikeQueryRepositoryImpl implements PostLikeQueryRepository {
                 .where(postLike.member.id.eq(memberId))
                 .fetch();
     }
+
 }
