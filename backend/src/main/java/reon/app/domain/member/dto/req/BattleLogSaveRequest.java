@@ -15,14 +15,4 @@ public class BattleLogSaveRequest {
     private Long user2Id;//사용자 2 id
     private Long videoId;//연기 원본 영상
     private int point;//승점
-
-    public BattleLog toEntity(){
-        return BattleLog.builder()
-                .user1Id(this.user1Id)
-                .user2Id(this.user2Id)
-                .videoId(this.videoId)
-                .point(this.point)
-                .build();
-    }
-
 }

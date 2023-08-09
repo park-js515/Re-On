@@ -23,12 +23,12 @@ public class BattleLogQueryRepositoryImpl implements BattleLogQueryRepository {
 
         return queryFactory
                 .select(Projections.fields(BattleLogResponse.class,
-                        battleLog.user2Id,
-                        battleLog.videoId,
+                        battleLog.user1.id,
+                        battleLog.video.title,
                         battleLog.point
                         ))
                 .from(battleLog)
-                .where(battleLog.user1Id.eq(memberId))
+                .where(battleLog.user1.id.eq(memberId))
                 .orderBy(battleLog.createDate.desc())
                 .limit(10)
                 .fetch();
