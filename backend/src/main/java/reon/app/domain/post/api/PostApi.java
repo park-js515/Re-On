@@ -3,6 +3,7 @@ package reon.app.domain.post.api;
 import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -10,10 +11,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import reon.app.domain.post.dto.req.PrivatePostUpdateRequest;
-import reon.app.domain.post.dto.res.PrivateDetailPostResponse;
-import reon.app.domain.post.dto.res.PrivatePostsResponse;
-import reon.app.domain.post.dto.res.PublicDetailPostResponse;
-import reon.app.domain.post.dto.res.PublicPostsResponse;
+import reon.app.domain.post.dto.res.*;
 import reon.app.domain.post.entity.Scope;
 import reon.app.domain.post.service.PostLikeService;
 import reon.app.domain.post.service.PostQueryService;
@@ -79,6 +77,16 @@ public class PostApi {
         log.info(responses.toString());
         return ApiResponse.OK(responses);
     }
+
+    @Operation(summary = "mypage 내가 좋아요 누른 post 목록 조회", description = "liked 게시글 목록을 조회한다.")
+    @GetMapping("/liked")
+    public ApiResponse<?> searchLikedPosts(@RequestParam(value = "offset") Long offset, @Parameter(hidden = true) @AuthenticationPrincipal User user ) {
+        Long memberId = Long.parseLong(user.getUsername());
+        List<PostsResponse> responses = postQueryService.searchLikedPosts(offset, memberId);
+        return ApiResponse.OK(responses);
+    }
+
+
 
     @Operation(summary = "mypage public post 목록 조회", description = "PUBLIC 게시글 목록을 조회한다.")
     @GetMapping("/public")

@@ -4,10 +4,12 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+import reon.app.domain.post.dto.res.PostsResponse;
 import reon.app.domain.post.dto.res.PrivatePostsResponse;
 import reon.app.domain.post.dto.res.PublicDetailPostResponse;
 import reon.app.domain.post.dto.res.PublicPostsResponse;
 import reon.app.domain.post.entity.Post;
+import reon.app.domain.post.entity.PostLike;
 import reon.app.domain.post.entity.Scope;
 import reon.app.domain.post.repository.PostQueryRepository;
 
@@ -56,8 +58,8 @@ public class PostQueryRepositoryImpl implements PostQueryRepository {
                 .where(post.member.id.eq(memberId),
                         post.scope.eq(Scope.PRIVATE))
                 .orderBy(post.createDate.desc())
-                .offset((offset-1)* 20L)
-                .limit(20)
+                .offset((offset-1)* 21L)
+                .limit(21)
                 .fetch();
     }
 
@@ -78,8 +80,32 @@ public class PostQueryRepositoryImpl implements PostQueryRepository {
                 .where(post.member.id.eq(memberId),
                         post.scope.eq(Scope.PUBLIC))
                 .orderBy(post.createDate.desc())
-                .offset((offset-1)* 20L)
-                .limit(20)
+                .offset((offset-1)* 21L)
+                .limit(21)
+                .fetch();
+    }
+
+    @Override
+    public List<PostsResponse> searchLikedPosts(List<Long> ids, Long offset, Long memberId) {
+        return queryFactory
+                .select(Projections.fields(PostsResponse.class,
+                        post.id,
+                        post.member.id.as("memberId"),
+                        post.title,
+                        post.member.memberInfo.nickName,
+                        post.member.memberInfo.profileImg,
+                        post.video.thumbnail,
+                        post.postLikes.size().as("likeCnt"),
+                        post.createDate
+                        ))
+                .from(post)
+                .join(post.member, member)
+                .join(post.video, video)
+                .where(post.id.in(ids),
+                        post.scope.eq(Scope.PUBLIC))
+                .orderBy(post.createDate.desc())
+                .offset((offset-1)* 21L)
+                .limit(21)
                 .fetch();
     }
 }

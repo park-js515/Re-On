@@ -4,12 +4,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import reon.app.domain.post.dto.res.PrivateDetailPostResponse;
-import reon.app.domain.post.dto.res.PrivatePostsResponse;
-import reon.app.domain.post.dto.res.PublicDetailPostResponse;
-import reon.app.domain.post.dto.res.PublicPostsResponse;
+import reon.app.domain.post.dto.res.*;
 import reon.app.domain.post.entity.Post;
 import reon.app.domain.post.entity.Scope;
+import reon.app.domain.post.repository.PostLikeQueryRepository;
 import reon.app.domain.post.repository.PostQueryRepository;
 import reon.app.domain.post.repository.PostRepository;
 import reon.app.domain.post.service.PostQueryService;
@@ -24,6 +22,7 @@ import java.util.Optional;
 @Slf4j
 public class PostQueryServiceImpl implements PostQueryService {
     private final PostQueryRepository postQueryRepository;
+    private final PostLikeQueryRepository postLikeQueryRepository;
     @Override
     public Scope searchScopeById(Long postId) {
         return postQueryRepository.searchScopeById(postId);
@@ -67,6 +66,19 @@ public class PostQueryServiceImpl implements PostQueryService {
     @Override
     public List<PublicPostsResponse> searchPublicPosts(Long offset, Long memberId) {
         List<PublicPostsResponse> responses = postQueryRepository.searchPublicPosts(offset, memberId);
+        return responses;
+    }
+
+    @Override
+    public List<PostsResponse> searchLikedPosts(Long offset, Long memberId) {
+        List<Long> ids = postLikeQueryRepository.searchLikedPostByMemberId(memberId);
+        if(ids.isEmpty()){
+            log.info("empty error");
+        }
+        log.info( ids.toString());
+        System.out.println(ids.size());
+        log.info("ids size = " + ids.size());
+        List<PostsResponse> responses = postQueryRepository.searchLikedPosts(ids ,offset,memberId);
         return responses;
     }
 }
