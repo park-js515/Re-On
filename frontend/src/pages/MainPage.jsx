@@ -76,6 +76,7 @@ import 'swiper/css';
 import './styles.css';
 import Slide1 from '../components/home/Slide1'
 import Test from '../components/home/Test'
+import Curtain from '../components/home/Curtain'
 // import required modules
 import { Mousewheel, Pagination } from 'swiper/modules';
 
@@ -111,7 +112,7 @@ export default function MainPage() {
       >
         
           <SwiperSlide className="bg-gradient-to-t from-begie to-lightBlue flex flex-col ">      
-             
+                <Curtain/>
                 <Slide1/>
                 <Test/>
 
@@ -137,10 +138,9 @@ export default function MainPage() {
             </section>
         </SwiperSlide>
 
-        <SwiperSlide className="bg-gradient-to-t from-begie to-lightBlue relative">
-          <img src="/image/face/희창.png" alt="" className="w-full h-full" />
-          <h1 className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white text-4xl md:text-5xl lg:text-6xl m-0">두꺼비</h1>
-      </SwiperSlide>
+        <SwiperSlide className="bg-gradient-to-t from-begie to-lightBlue">
+          <img src="https://source.unsplash.com/random/?nature,landscape" alt="Random Nature Landscape"  />
+        </SwiperSlide>
 
      
        
