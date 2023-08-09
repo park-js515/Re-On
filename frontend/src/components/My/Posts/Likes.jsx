@@ -30,8 +30,14 @@ import React from 'react';
 
                 
                 <div className="flex items-center gap-x-4 text-xs ml-2">
-                  <div className="text-gray-500">💙좋아요 {post.likes}</div>
-                  <div className="text-gray-500">💬댓글 {post.comment_cnt}</div>
+                <div className="text-gray-500">
+                    <span className="text-xl">💙</span>좋아요 {post.likes}
+                </div>
+
+                <div className="text-gray-500">
+                    <span className="text-xl">💬</span>댓글 
+                </div>
+                  
                     
                   
                 </div>
