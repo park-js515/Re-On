@@ -1,17 +1,18 @@
+/* eslint-disable jsx-a11y/alt-text */
 import { OpenVidu } from 'openvidu-browser';
+import './OpenVidu.css';
 import axios from 'axios';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { useSelector } from 'react-redux';
 import BackStage from './BackStage';
 import UserVideoComponent from './UserVideoComponent';
 import Matching from 'components/Typing/Matching';
 import LoadingWaiting from 'components/RankGame/LoadingWaiting';
 import MatchingWaiting from 'components/RankGame/MatchingWaiting';
+import CalculatingWaiting from 'components/RankGame/CalculatingWaiting';
 import Modal from 'components/RankGame/Modal';
 import TutorialModal from 'components/RankGame/TutorialModal';
 
-import Paper from '@mui/material/Paper';
-
+import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { setIsJoinSession } from 'redux/sessionSlice';
 
@@ -19,12 +20,15 @@ import useLoading from 'hooks/useLoading';
 import useVideoPlayer from 'hooks/useVideoPlayer';
 
 const APPLICATION_SERVER_URL =
-  process.env.NODE_ENV === 'production' ? '' : 'https://i9c203.p.ssafy.io';
-// process.env.NODE_ENV === 'production' ? '' : 'https://demos.openvidu.io';
+  // process.env.NODE_ENV === 'production' ? '' : 'https://i9c203.p.ssafy.io';
+  process.env.NODE_ENV === 'production' ? '' : 'https://demos.openvidu.io';
 
 export default function OpenViduApp() {
   const dispatch = useDispatch();
+  // 세션 아이디는 이제 설정해줄 필요가 없어보인다.
+  // 그냥 /api/openvidu-management/sessions/connections에 POST하면 알아서 세션 만들어서 연결해주기 때문
   const [mySessionId, setMySessionId] = useState('TEST');
+  // myUserName은 리덕스||로컬스토리지에 자기 이름을 보여준다.
   const [myUserName, setMyUserName] = useState(
     `연기자${Math.floor(Math.random() * 100)}`,
   );
@@ -54,7 +58,6 @@ export default function OpenViduApp() {
     mySession.on('connectionCreated', async (event) => {
       connections.push(event.connection);
     });
-    console.log('커넥션스', connections);
 
     mySession.on('streamCreated', async (event) => {
       const subscriber = mySession.subscribe(event.stream, undefined);
@@ -227,54 +230,54 @@ export default function OpenViduApp() {
    */
 
   // 기본 오픈비두 서버 API 요청
-  // const getToken = useCallback(async () => {
-  //   return createSession(mySessionId).then((sessionId) =>
-  //     createToken(sessionId),
-  //   );
-  // }, [mySessionId]);
+  const getToken = useCallback(async () => {
+    return createSession(mySessionId).then((sessionId) =>
+      createToken(sessionId),
+    );
+  }, [mySessionId]);
 
-  // const createSession = async (sessionId) => {
-  //   const response = await axios.post(
-  //     APPLICATION_SERVER_URL + '/api/sessions',
-  //     { customSessionId: sessionId },
-  //     {
-  //       headers: { 'Content-Type': 'application/json' },
-  //     },
-  //   );
-  //   return response.data; // The sessionId
-  // };
+  const createSession = async (sessionId) => {
+    const response = await axios.post(
+      APPLICATION_SERVER_URL + '/api/sessions',
+      { customSessionId: sessionId },
+      {
+        headers: { 'Content-Type': 'application/json' },
+      },
+    );
+    return response.data; // The sessionId
+  };
 
-  // const createToken = async (sessionId) => {
-  //   const response = await axios.post(
-  //     APPLICATION_SERVER_URL + '/api/sessions/' + sessionId + '/connections',
-  //     {},
-  //     {
-  //       headers: { 'Content-Type': 'application/json' },
-  //     },
-  //   );
-  //   return response.data; // The token
-  // };
+  const createToken = async (sessionId) => {
+    const response = await axios.post(
+      APPLICATION_SERVER_URL + '/api/sessions/' + sessionId + '/connections',
+      {},
+      {
+        headers: { 'Content-Type': 'application/json' },
+      },
+    );
+    return response.data; // The token
+  };
 
   // 테스트 요청
-  const getToken = async () => {
-    try {
-      const response = await axios.post(
-        APPLICATION_SERVER_URL +
-          '/api/openvidu-management/sessions/connections',
-        {}, // body
-        {
-          headers: {
-            Authorization: 'Basic T1BFTlZJRFVBUFA6b3BlbnZpZHVyZW9uYzIwMw==',
-            'Content-Type': 'application/json',
-          },
-        },
-      );
-      console.log('응답', response);
-      return response.data;
-    } catch (error) {
-      console.error('에러', error); // 오류 로깅
-    }
-  };
+  // const getToken = async () => {
+  //   try {
+  //     const response = await axios.post(
+  //       APPLICATION_SERVER_URL +
+  //         '/api/openvidu-management/sessions/connections',
+  //       {}, // body
+  //       {
+  //         headers: {
+  //           Authorization: 'Basic T1BFTlZJRFVBUFA6b3BlbnZpZHVyZW9uYzIwMw==',
+  //           'Content-Type': 'application/json',
+  //         },
+  //       },
+  //     );
+  //     console.log('응답', response);
+  //     return response.data;
+  //   } catch (error) {
+  //     console.error('에러', error); // 오류 로깅
+  //   }
+  // };
 
   // const closeSession = async (sessionId) => {
   //   try {
@@ -342,6 +345,7 @@ export default function OpenViduApp() {
   const logMessageTime = `${currentTime.getHours()}:${currentTime.getMinutes()}:${currentTime.getSeconds()}`;
   const [log, setLog] = useState(['게임 상태를 기록합니다.']);
   const logRef = useRef(null);
+
   useEffect(() => {
     logRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [log]);
@@ -358,15 +362,15 @@ export default function OpenViduApp() {
   useEffect(() => {
     let intervalId;
     if (isLoading) {
-      setLog((prevLog) => [...prevLog, ` ${logMessageTime} | 로딩 시작`]);
+      // setLog((prevLog) => [...prevLog, ` ${logMessageTime} | 로딩 시작`]);
       let counter = 0;
-      intervalId = setInterval(() => {
-        setLog((prevLog) => [...prevLog, `${counter}초`]);
-        counter++;
-      }, 1000);
+      // intervalId = setInterval(() => {
+      //   setLog((prevLog) => [...prevLog, `${counter}초`]);
+      //   counter++;
+      // }, 1000);
     } else {
       clearInterval(intervalId);
-      setLog((prevLog) => [...prevLog, `${logMessageTime} | 로딩 종료`]);
+      // setLog((prevLog) => [...prevLog, `${logMessageTime} | 로딩 종료`]);
     }
     return () => clearInterval(intervalId);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -411,6 +415,11 @@ export default function OpenViduApp() {
     } else if (stage === 'CALCULATION') {
       setLog((prevLog) => [...prevLog, `${logMessageTime} | 계산 시작`]);
       handleCaculateScore();
+
+      // 결과 보여주기
+    } else if (stage === 'RESULT') {
+      setLog((prevLog) => [...prevLog, `${logMessageTime} | 결과 종료`]);
+      handleViewResult();
 
       // 게임 종료
     } else if (stage === 'END') {
@@ -478,7 +487,7 @@ export default function OpenViduApp() {
   // ############# 유저1 플레이 함수 ##############
   const handleUserOnePlay = async () => {
     setLog((prevLog) => [...prevLog, `${logMessageTime} | 유저 1 대기`]);
-    await startLoading(3000); // 로딩
+    // await startLoading(3000); // 로딩
     mySide === 'USER_ONE'
       ? setUserCamLeftBorder(true)
       : setUserCamRightBorder(true);
@@ -489,7 +498,7 @@ export default function OpenViduApp() {
   // ############# 유저2 플레이 함수 ##############
   const handleUserTwoPlay = async () => {
     setLog((prevLog) => [...prevLog, `${logMessageTime} | 유저 2 대기`]);
-    await startLoading(3000); // 로딩
+    // await startLoading(3000); // 로딩
     mySide === 'USER_TWO'
       ? setUserCamLeftBorder(true)
       : setUserCamRightBorder(true);
@@ -498,11 +507,22 @@ export default function OpenViduApp() {
   };
 
   // ############# 점수 계산 ##############
+  // 실제 이곳에서 계산하는 게 아니라
   const handleCaculateScore = async () => {
     //  AI계산
     setLog((prevLog) => [...prevLog, `${logMessageTime} | AI 점수 계산`]);
-    setStage('END');
+    setStage('RESULT');
+    // AI 계산하는 로직
     await startLoading(3000);
+  };
+
+  // ############# 결과 보여주기 #############
+  const handleViewResult = async () => {
+    // 커튼 촤라라라락 결과 보여주는
+
+    // 3초 있다가 녹화 저장 여부 묻기
+    await startLoading(3000);
+    setStage('END');
   };
 
   // ############# 녹화 저장 함수 ##############
@@ -521,14 +541,6 @@ export default function OpenViduApp() {
 
   return (
     <div className="">
-      {toggleSaveModal && (
-        <Modal
-          type="save"
-          onConfirm={handleSaveVideo}
-          isOpen={toggleSaveModal}
-          onClose={() => setToggleSaveModal(false)}
-        />
-      )}
       {session === undefined ? (
         <div id="join">
           <BackStage
@@ -541,15 +553,51 @@ export default function OpenViduApp() {
       {/* 백스테이지 */}
 
       {session !== undefined ? (
-        <div id="session" className="flex justify-around gap-4 w-full h-full">
+        <div id="session" className="">
+          {toggleSaveModal && (
+            <Modal
+              type="save"
+              onConfirm={handleSaveVideo}
+              isOpen={toggleSaveModal}
+              onClose={() => setToggleSaveModal(false)}
+            />
+          )}
+
+          {stage === 'RESULT' && (
+            <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50">
+              <CalculatingWaiting />
+            </div>
+          )}
+
           {isLoading && (
             <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50">
               <LoadingWaiting />
             </div>
           )}
 
-          <div id="video-container" className="rounded-lg">
-            <div className="flex flex-wrap place-content-center gap-5 mt-5">
+          <div id="video-container" className="">
+            <div className="text-center">
+              <img
+                src="image/rank/rank-vs.png"
+                className="mx-auto h-[200px] w-[300px]"
+              />
+
+              <div
+                id="log-list"
+                className=" h-[35px] mx-4 overflow-auto items-center mb-5"
+              >
+                {log.map((item, index) => (
+                  <div
+                    key={index}
+                    ref={logRef}
+                    className="log-item text-[24px] text-center"
+                  >
+                    {item}
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="flex flex-wrap place-content-center ">
               {publisher !== undefined ? (
                 <div
                   className={`${
@@ -579,18 +627,49 @@ export default function OpenViduApp() {
                   }`}
                 />
 
-                <Paper
-                  style={{ backgroundColor: '#f5f5f5' }}
-                  className="h-[100px] mx-4 overflow-auto"
-                >
-                  {log.map((item, index) => (
-                    <div key={index} ref={logRef}>
-                      {item}
-                    </div>
-                  ))}
-                </Paper>
+                <div className="flex justify-center gap-5 mt-10">
+                  {/* 튜토리얼 버튼 */}
+                  {toggleTutorialModal && (
+                    <TutorialModal
+                      type="tutorial"
+                      onConfirm={leaveSession}
+                      isOpen={toggleTutorialModal}
+                      onClose={() => setToggleTutorialModal(false)}
+                    />
+                  )}
+                  <button
+                    className="m-0 flex items-center justify-center"
+                    onClick={() => setToggleTutorialModal(true)}
+                  >
+                    <img
+                      src="image/rank/rank-tutorial-btn.png"
+                      alt="tutorial-btn"
+                      className="w-[150px] hover:w-[200px] transition-all duration-300"
+                    />
+                  </button>
+
+                  {/* 나가기 버튼 */}
+                  {toggleExitModal && (
+                    <Modal
+                      type="exit"
+                      onConfirm={leaveSession}
+                      isOpen={toggleExitModal}
+                      onClose={() => setToggleExitModal(false)}
+                    />
+                  )}
+                  <button
+                    className="rounded-lg flex items-center justify-center"
+                    onClick={() => setToggleExitModal(true)}
+                  >
+                    <img
+                      src="image/rank/rank-exit-btn.png"
+                      alt="exit-btn"
+                      className="w-[150px] hover:w-[180px] transition-all duration-300"
+                    />
+                  </button>
+                </div>
+                {/* 버튼 */}
               </div>
-              {/* 왼쪽 */}
 
               {subscribers.length > 0 ? (
                 subscribers.map((sub, i) => (
@@ -626,51 +705,9 @@ export default function OpenViduApp() {
                 </div>
               )}
             </div>
-
-            <div className="flex justify-center gap-5 mt-10">
-              {/* 튜토리얼 버튼 */}
-              {toggleTutorialModal && (
-                <TutorialModal
-                  type="tutorial"
-                  onConfirm={leaveSession}
-                  isOpen={toggleTutorialModal}
-                  onClose={() => setToggleTutorialModal(false)}
-                />
-              )}
-              <button
-                className="bg-green rounded-lg w-[50px] h-[50px] m-0 flex items-center justify-center"
-                onClick={() => setToggleTutorialModal(true)}
-              >
-                <img
-                  src="image/rank/rank-tutorial-btn.png"
-                  alt="tutorial-btn"
-                  className="w-[30px] hover:w-[40px] transition-all duration-300"
-                />
-              </button>
-
-              {/* 나가기 버튼 */}
-              {toggleExitModal && (
-                <Modal
-                  type="exit"
-                  onConfirm={leaveSession}
-                  isOpen={toggleExitModal}
-                  onClose={() => setToggleExitModal(false)}
-                />
-              )}
-              <button
-                className="bg-danger rounded-lg w-[50px] h-[50px] flex items-center justify-center"
-                onClick={() => setToggleExitModal(true)}
-              >
-                <img
-                  src="image/rank/rank-exit-btn.png"
-                  alt="exit-btn"
-                  className="w-[40px] hover:w-[50px] transition-all duration-300"
-                />
-              </button>
-            </div>
-            {/* 버튼 */}
           </div>
-          {/* 오른쪽 */}
+
+          {/* 비디오 */}
         </div>
       ) : // 배틀룸
       null}
