@@ -1,0 +1,61 @@
+
+/* 애니메이션 설정 */
+@keyframes rotateAndFall {
+  0% {
+    transform: translateY(-100%) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(150vh) rotate(600deg);
+    opacity: 1;
+  }
+}
+
+/* 이미지에 대한 스타일 */
+.fallingImage {
+  transform-origin: center;  
+  animation: rotateAndFall 4s cubic-bezier(0.25, 0.1, 0.25, 1) infinite; 
+  z-index: -1; 
+  position: absolute;
+  /* 진짜 임폴트 안쓸랬는데 진짜 안먹어서 화가나 */
+  width: 500px !important;  
+  height: 500px !important;
+  opacity: 0;
+  animation-fill-mode: forwards;
+} 
+
+.fallingImage:nth-child(1)  { left: -18%; top: -30%; animation-delay: 0s; }
+.fallingImage:nth-child(2)  { left: 15%; top: -12%; animation-delay: 0.4s; }
+.fallingImage:nth-child(3)  { left: -40%; top: -9%; animation-delay: 0.8s; }
+.fallingImage:nth-child(4)  { left: 55%; top: -35%; animation-delay: 1.2s; }
+.fallingImage:nth-child(5)  { left: -22%; top: -8%; animation-delay: 1.6s; }
+.fallingImage:nth-child(6)  { left: 5%; top: -18%; animation-delay: 2s; }
+.fallingImage:nth-child(7)  { left: 35%; top: -10%; animation-delay: 2.4s; }
+.fallingImage:nth-child(8)  { left: -18%; top: -26%; animation-delay: 2.8s; }
+.fallingImage:nth-child(9)  { right: 20%; top: -30%; animation-delay: 3.2s; }
+.fallingImage:nth-child(10) { right: 47%; top: -40%; animation-delay: 3.6s; }
+.fallingImage:nth-child(11) { right: -27%; top: -14%; animation-delay: 4s; }
+.fallingImage:nth-child(12) { right: 25%; top: -25%; animation-delay: 4.4s; }
+.fallingImage:nth-child(13) { right: -15%; top: -35%; animation-delay: 0.5s; }
+.fallingImage:nth-child(14) { right: 29%; top: -19%; animation-delay: 1s; }
+.fallingImage:nth-child(15) { right: 15%; top: -30%; animation-delay: 1.5s; }
+.fallingImage:nth-child(16) { left: -25%; top: -12%; animation-delay: 2s; }
+.fallingImage:nth-child(17) { left: 45%; top: -5%; animation-delay: 2.5s; }
+.fallingImage:nth-child(18) { right: -5%; top: -17%; animation-delay: 3s; }
+.fallingImage:nth-child(19) { left: 25%; top: -40%; animation-delay: 3.5s; }
+.fallingImage:nth-child(20) { right: 35%; top: -10%; animation-delay: 4s; }
+.fallingImage:nth-child(21) { left: 30%; top: -12%; animation-delay: 4.5s; }
+.fallingImage:nth-child(22) { left: -29%; top: -23%; animation-delay: 0.7s; }
+.fallingImage:nth-child(23) { right: 25%; top: -30%; animation-delay: 1.3s; }
+.fallingImage:nth-child(24) { left: -25%; top: -32%; animation-delay: 1.9s; }
+.fallingImage:nth-child(25) { right: 20%; top: -4%; animation-delay: 2.3s; }
+.fallingImage:nth-child(26) { left: 20%; top: -24%; animation-delay: 2.7s; }
+.fallingImage:nth-child(27) { right: -15%; top: -10%; animation-delay: 3.1s; }
+.fallingImage:nth-child(28) { left: 15%; top: 17%; animation-delay: 3.7s; }
+.fallingImage:nth-child(29) { right: 5%; top: -15%; animation-delay: 4.2s; }
+.fallingImage:nth-child(30) { left: -5%; top: -11%; animation-delay: 4.8s; }
+
+
+
+
+

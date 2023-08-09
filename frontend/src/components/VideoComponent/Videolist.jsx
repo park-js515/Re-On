@@ -17,6 +17,10 @@ const Videolist = ({injectPostId, changeShow}) => {
             title : `제목 넘버-${i}`,
             like_cnt : 2400,
             comment_cnt : 20,
+            year:'2023',
+            month:i,
+            date:i,
+
             })
         }
         return temp
@@ -50,7 +54,7 @@ const Videolist = ({injectPostId, changeShow}) => {
         <div className="py-8 sm:py-8 ">
             <div className="bg-white mx-auto max-w-7xl px-2 lg:px-8">
                 <h1 className="my-8 py-12 text-center font-bold text-3xl text-dark ">💌투표해줘</h1>           
-                <div className="flex justify-end my-4"> {/* flex를 사용하여 우측으로 정렬 */}
+                <div className="flex justify-end my-4 rounded"> {/* flex를 사용하여 우측으로 정렬 */}
                     <div className="relative">
                         <input 
                             type="text" 
