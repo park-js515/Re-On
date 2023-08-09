@@ -102,7 +102,8 @@ public class PostQueryRepositoryImpl implements PostQueryRepository {
                 .join(post.member, member)
                 .join(post.video, video)
                 .where(post.id.in(ids),
-                        post.scope.eq(Scope.PUBLIC))
+                        post.scope.eq(Scope.PUBLIC),
+                        post.member.id.ne(memberId))
                 .orderBy(post.createDate.desc())
                 .offset((offset-1)* 21L)
                 .limit(21)

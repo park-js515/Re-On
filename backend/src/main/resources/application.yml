@@ -35,6 +35,10 @@ spring:
 #      ddl-auto: none
     # show-sql: true # DDL 출력
     generate-ddl: true
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
 
 OPENVIDU_URL:
   https://i9c203.p.ssafy.io

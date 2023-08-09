@@ -4,14 +4,20 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
+import net.bytebuddy.implementation.bind.annotation.Super;
+import org.hibernate.annotations.DynamicInsert;
 import reon.app.domain.member.entity.Member;
+import reon.app.global.entity.BaseEntity;
 
 import javax.persistence.*;
 
 @Entity
 @Getter
+@SuperBuilder
+@DynamicInsert
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class PostLike {
+public class PostLike extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
