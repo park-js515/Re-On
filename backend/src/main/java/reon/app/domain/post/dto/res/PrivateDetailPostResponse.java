@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
-public class PrivateDetailPostResponse {
+public class PrivateDetailPostResponse { // 마이페이지 Private 상세 조회
     private Long id; // post id
     private Long memberId; // member id
     private String title; // utube video title(not member action video title)

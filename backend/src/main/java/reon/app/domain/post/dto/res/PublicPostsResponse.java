@@ -14,17 +14,18 @@ public class PublicPostsResponse {
     private String title;
     private String thumbnail;
     private int likeCnt;
-    // TODO: 2023-08-09 comment 구현 후 추가 
-//    private int commentCnt;
+    private int commentCnt;
     private LocalDateTime createDate;
 
     @Builder
-    public PublicPostsResponse(Long id, Long memberId, String title, String thumbnail, int likeCnt, LocalDateTime createDate) {
+    public PublicPostsResponse(Long id, Long memberId, String title, String thumbnail, int likeCnt, int commentCnt, LocalDateTime createDate) {
         this.id = id;
         this.memberId = memberId;
         this.title = title;
         this.thumbnail = thumbnail;
         this.likeCnt = likeCnt;
+        this.commentCnt = commentCnt;
         this.createDate = createDate;
+
     }
 }

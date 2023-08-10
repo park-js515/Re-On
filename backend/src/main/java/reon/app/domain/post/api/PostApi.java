@@ -62,7 +62,6 @@ public class PostApi {
         if(postScope.equals(Scope.PRIVATE)){ // title, content 제공 x
             PrivateDetailPostResponse response = postQueryService.searchPrivateById(postId);
             return ApiResponse.OK(response);
-
         }else{
             PublicDetailPostResponse response = postQueryService.searchPublicById(postId);
             return ApiResponse.OK(response);

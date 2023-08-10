@@ -62,6 +62,7 @@ public class PostQueryRepositoryImpl implements PostQueryRepository {
                 .join(post.member, member)
                 .join(post.video, video)
                 .where(post.member.id.eq(memberId),
+                        post.deleted.eq(0),
                         post.scope.eq(Scope.PRIVATE))
                 .orderBy(post.createDate.desc())
                 .offset((offset-1)* 21L)
@@ -78,12 +79,14 @@ public class PostQueryRepositoryImpl implements PostQueryRepository {
                         post.title,
                         post.video.thumbnail,
                         post.postLikes.size().as("likeCnt"),
+                        post.postComments.size().as("commentCnt"),
                         post.createDate
                         ))
                 .from(post)
                 .join(post.member, member)
                 .join(post.video, video)
                 .where(post.member.id.eq(memberId),
+                        post.deleted.eq(0),
                         post.scope.eq(Scope.PUBLIC))
                 .orderBy(post.createDate.desc())
                 .offset((offset-1)* 21L)
@@ -102,12 +105,14 @@ public class PostQueryRepositoryImpl implements PostQueryRepository {
                         post.member.memberInfo.profileImg,
                         post.video.thumbnail,
                         post.postLikes.size().as("likeCnt"),
+                        post.postComments.size().as("commentCnt"),
                         post.createDate
                         ))
                 .from(post)
                 .join(post.member, member)
                 .join(post.video, video)
                 .where(post.id.in(ids),
+                        post.deleted.eq(0),
                         post.scope.eq(Scope.PUBLIC),
                         post.member.id.ne(memberId))
                 .orderBy(post.createDate.desc())
@@ -127,12 +132,14 @@ public class PostQueryRepositoryImpl implements PostQueryRepository {
                         post.member.memberInfo.profileImg,
                         post.video.thumbnail,
                         post.postLikes.size().as("likeCnt"),
+                        post.postComments.size().as("likeCnt"),
                         post.createDate
                         ))
                 .from(post)
                 .join(post.member, member)
                 .join(post.video, video)
-                .where(post.scope.eq(Scope.PUBLIC))
+                .where(post.scope.eq(Scope.PUBLIC),
+                        post.deleted.eq(0))
                 .orderBy(post.createDate.desc())
                 .offset((offset-1)* 21L)
                 .limit(21)
@@ -151,12 +158,14 @@ public class PostQueryRepositoryImpl implements PostQueryRepository {
                         post.member.memberInfo.profileImg,
                         post.video.thumbnail,
                         post.postLikes.size().as("likeCnt"),
+                        post.postComments.size().as("commentCnt"),
                         post.createDate
                 ))
                 .from(post)
                 .join(post.member, member)
                 .join(post.video, video)
-                .where(post.scope.eq(Scope.PUBLIC),
+                .where(post.deleted.eq(0),
+                        post.scope.eq(Scope.PUBLIC),
                         isCurrentMonth()
                         )
                 .orderBy(post.postLikes.size().desc())

@@ -15,6 +15,7 @@ import reon.app.domain.post.service.PostQueryService;
 import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -44,6 +45,7 @@ public class PostQueryServiceImpl implements PostQueryService {
     @Override
     public PublicDetailPostResponse searchPublicById(Long postId) {
         Post post = postQueryRepository.searchById(postId);
+        List<PostCommentResponse> commentResponses = getCommentResponse(post);
         return PublicDetailPostResponse.builder()
                 .id(post.getId())
                 .memberId(post.getMember().getId())
@@ -53,6 +55,7 @@ public class PostQueryServiceImpl implements PostQueryService {
                 .title(post.getTitle())
                 .content(post.getContent())
                 .likeCnt(post.getPostLikes().size())
+                .postCommentResponses(commentResponses)
                 .createDate(post.getCreateDate())
                 .build();
     }
@@ -72,12 +75,7 @@ public class PostQueryServiceImpl implements PostQueryService {
     @Override
     public List<PostsResponse> searchLikedPosts(Long offset, Long memberId) {
         List<Long> ids = postLikeQueryRepository.searchLikedPostByMemberId(memberId);
-        if(ids.isEmpty()){
-            log.info("empty error");
-        }
-        log.info( ids.toString());
-        System.out.println(ids.size());
-        log.info("ids size = " + ids.size());
+
         List<PostsResponse> responses = postQueryRepository.searchLikedPosts(ids ,offset,memberId);
         return responses;
     }
@@ -92,5 +90,17 @@ public class PostQueryServiceImpl implements PostQueryService {
     public List<PostsResponse> searchFeedRankPosts() {
         List<PostsResponse> responses = postQueryRepository.searchFeedRankPosts();
         return responses;
+    }
+
+    private List<PostCommentResponse> getCommentResponse(Post post){
+        return post.getPostComments().stream().map(postComment -> PostCommentResponse.builder()
+                .id(postComment.getId())
+                .memberId(post.getMember().getId())
+                .postId(post.getId())
+                .nickName(post.getMember().getMemberInfo().getNickName())
+                .profileImg(post.getMember().getMemberInfo().getProfileImg())
+                .content(postComment.getContent())
+                .createdDate(postComment.getCreateDate())
+                .build()).collect(Collectors.toList());
     }
 }
