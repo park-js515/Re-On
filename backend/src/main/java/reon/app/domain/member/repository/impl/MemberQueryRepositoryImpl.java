@@ -35,7 +35,7 @@ public class MemberQueryRepositoryImpl implements MemberQueryRepository {
     }
 
     @Override
-    public BackStageMemberResponse findBackStageMembereById(Long id) {
+    public BackStageMemberResponse findBackStageMemberById(Long id) {
         return queryFactory
                 .select(Projections.fields(BackStageMemberResponse.class,
                         member.id,
@@ -64,4 +64,6 @@ public class MemberQueryRepositoryImpl implements MemberQueryRepository {
                 .where(member.id.eq(id))
                 .fetchOne();
     }
+
+
 }

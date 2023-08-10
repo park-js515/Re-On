@@ -109,26 +109,18 @@ public class MemberApi {
     }
 
 
-
     @Operation(summary = "member 배틀 정보 조회", description = "회원 베틀 정보를 조회한다.")
     @GetMapping("/member/{id}/battleInfo")
     public ApiResponse<MemberBattleInfoResponse> findMemberBattleInfo(@PathVariable("id") Long id) {
         MemberBattleInfoResponse memberBattleInfoResponse = memberQueryService.findMemberBattleInfoById(id);
         return OK(memberBattleInfoResponse);
     }
-    @Operation(summary = "member 배틀 정보 업데이트", description = "회원 베틀 정보를 업데이트한다.")
-    @PutMapping("/member/{id}/battleInfo")
-    public ApiResponse<Void> updateMemberBattleInfo(@RequestBody MemberBattleInfoUpdateRequest memberBattleInfoUpdateRequest) {
-        return OK(null);
-    }
-
-
-
-
+    
     @Operation(summary = "Battle 결과 등록", description = "배틀 결과를 저장한다")
     @PostMapping("/battlelog")
     public ApiResponse<Void> saveBattleLog(@RequestBody BattleLogSaveRequest battleLogSaveRequest){
-        battleLogService.saveBattleLog(battleLogSaveRequest);
+        battleLogService.saveBattleLog(battleLogSaveRequest);//배틀 결과 저장
+        memberService.updateBattleInfo(battleLogSaveRequest);//member battle info 갱신
         return OK(null);
     }
 

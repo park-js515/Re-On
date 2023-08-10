@@ -36,6 +36,6 @@ public class BattleLog extends BaseEntity {
     private Video video;
 
     @Column(nullable = false)
-    private int point;
+    private int point; // 음수 패, 0 무승부, 양수 승
 
 }

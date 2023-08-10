@@ -8,12 +8,9 @@ import reon.app.domain.member.dto.res.BackStageMemberResponse;
 import reon.app.domain.member.dto.res.MemberBattleInfoResponse;
 import reon.app.domain.member.dto.res.MemberResponse;
 import reon.app.domain.member.repository.MemberQueryRepository;
-import reon.app.domain.member.repository.impl.MemberQueryRepositoryImpl;
 import reon.app.domain.member.service.MemberQueryService;
 import reon.app.global.error.entity.CustomException;
 import reon.app.global.error.entity.ErrorCode;
-
-import javax.persistence.Id;
 
 @Service
 @RequiredArgsConstructor
@@ -33,7 +30,7 @@ public class MemberQueryServiceImpl implements MemberQueryService {
 
     @Override
     public BackStageMemberResponse findBackStageMemberById(Long id) {
-        BackStageMemberResponse res = memberQueryRepository.findBackStageMembereById(id);
+        BackStageMemberResponse res = memberQueryRepository.findBackStageMemberById(id);
         if(res == null){
             throw new CustomException(ErrorCode.MEMBER_NOT_FOUND);
         }

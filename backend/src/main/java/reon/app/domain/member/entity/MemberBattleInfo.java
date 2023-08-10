@@ -47,14 +47,46 @@ public class MemberBattleInfo {
         return false;
     }
 
-    public void updateTier(String tier){
-        switch (tier){
-            case "BRONZE":
-                this.tier = Tier.SILVER;
-                break;
-            case "SILVER":
-                this.tier = Tier.GOLD;
-                break;
+//    public void updateTier(String tier){
+//        switch (tier){
+//            case "BRONZE":
+//                this.tier = Tier.SILVER;
+//                break;
+//            case "SILVER":
+//                this.tier = Tier.GOLD;
+//                break;
+//        }
+//    }
+
+    public void updateScore(int score){
+        int newScore = this.score+score;
+        if(newScore <= 0){
+            this.score=0;
+        }
+        else{
+            this.score=newScore;
+        }
+    }
+
+    public void updateTier(){
+        switch (this.tier){
+            case BRONZE:
+                if(this.score >= 100){
+                    this.tier = Tier.SILVER;
+                    return;
+                }
+            case SILVER:
+                if(this.score >= 1000){
+                    this.tier = Tier.GOLD;
+                    return;
+                }else if(this.score<100){
+                    this.tier = Tier.BRONZE;
+                    return;
+                }
+            case GOLD:
+                if(this.score<1000) {
+                    this.tier = Tier.SILVER;
+                }
         }
     }
 

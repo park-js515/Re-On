@@ -7,7 +7,7 @@ import reon.app.domain.member.dto.res.MemberResponse;
 public interface MemberQueryRepository {
     MemberResponse findById(Long id);
 
-    BackStageMemberResponse findBackStageMembereById(Long id);
+    BackStageMemberResponse findBackStageMemberById(Long id);
 
     MemberBattleInfoResponse findMemberBattleInfoById(Long id);
 }

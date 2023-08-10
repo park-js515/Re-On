@@ -22,7 +22,7 @@ public class BattleLogServiceImpl implements BattleLogService {
                         .user1(Member.builder().id(battleLogSaveRequest.getUser1Id()).build())
                         .user2(Member.builder().id(battleLogSaveRequest.getUser2Id()).build())
                         .video(Video.builder().id(battleLogSaveRequest.getVideoId()).build())
-                        .point(battleLogSaveRequest.getPoint())
+                        .point(battleLogSaveRequest.getResult())
                         .build();
         battleLogRepository.save(battleLog);
     }

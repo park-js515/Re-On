@@ -18,4 +18,6 @@ public interface MemberService {
 
     void delete(Long id);
 
+    void updateBattleInfo(BattleLogSaveRequest battleLogSaveRequest);
+
 }
