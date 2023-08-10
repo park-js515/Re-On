@@ -1,17 +1,18 @@
+/* eslint-disable jsx-a11y/alt-text */
 import { OpenVidu } from 'openvidu-browser';
+import './OpenVidu.css';
 import axios from 'axios';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { useSelector } from 'react-redux';
 import BackStage from './BackStage';
 import UserVideoComponent from './UserVideoComponent';
 import Matching from 'components/Typing/Matching';
 import LoadingWaiting from 'components/RankGame/LoadingWaiting';
 import MatchingWaiting from 'components/RankGame/MatchingWaiting';
+import CalculatingWaiting from 'components/RankGame/CalculatingWaiting';
 import Modal from 'components/RankGame/Modal';
 import TutorialModal from 'components/RankGame/TutorialModal';
-
-import Paper from '@mui/material/Paper';
-
+import * as faceapi from 'face-api.js';
+import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { setIsJoinSession } from 'redux/sessionSlice';
 
@@ -24,7 +25,10 @@ const APPLICATION_SERVER_URL =
 
 export default function OpenViduApp() {
   const dispatch = useDispatch();
+  // 세션 아이디는 이제 설정해줄 필요가 없어보인다.
+  // 그냥 /api/openvidu-management/sessions/connections에 POST하면 알아서 세션 만들어서 연결해주기 때문
   const [mySessionId, setMySessionId] = useState('TEST');
+  // myUserName은 리덕스||로컬스토리지에 자기 이름을 보여준다.
   const [myUserName, setMyUserName] = useState(
     `연기자${Math.floor(Math.random() * 100)}`,
   );
@@ -34,6 +38,7 @@ export default function OpenViduApp() {
   const [subscribers, setSubscribers] = useState([]);
   // eslint-disable-next-line no-unused-vars
   const [currentVideoDevice, setCurrentVideoDevice] = useState(null);
+  const [mySession, setMySession] = useState(null); // 밖에서 세션 시그널을 사용하기 위함
 
   const OV = useRef(new OpenVidu());
 
@@ -49,12 +54,10 @@ export default function OpenViduApp() {
   const [mySide, setMySide] = useState(null); // mySide 상태 선언
   const joinSession = useCallback(() => {
     const mySession = OV.current.initSession();
-
     const connections = [];
     mySession.on('connectionCreated', async (event) => {
       connections.push(event.connection);
     });
-    console.log('커넥션스', connections);
 
     mySession.on('streamCreated', async (event) => {
       const subscriber = mySession.subscribe(event.stream, undefined);
@@ -119,14 +122,14 @@ export default function OpenViduApp() {
       getToken().then(async (token) => {
         try {
           console.log('토큰', token);
-          await session.connect(token, { clientData: myUserName });
+          await session.connect(token.response, { clientData: myUserName });
 
           let publisher = await OV.current.initPublisherAsync(undefined, {
             audioSource: undefined,
             videoSource: undefined,
             publishAudio: true,
             publishVideo: true,
-            resolution: '500x600',
+            resolution: '500x400',
             frameRate: 30,
             insertMode: 'APPEND',
             mirror: true,
@@ -276,25 +279,25 @@ export default function OpenViduApp() {
     }
   };
 
-  // const closeSession = async (sessionId) => {
-  //   try {
-  //     const response = await axios.post(
-  //       APPLICATION_SERVER_URL + '/api/openvidu-management/test',
-  //       { customSessionId: sessionId },
-  //       {}, // body
-  //       {
-  //         headers: {
-  //           Authorization: 'Basic T1BFTlZJRFVBUFA6b3BlbnZpZHVyZW9uYzIwMw==',
-  //           'Content-Type': 'application/json',
-  //         },
-  //       },
-  //     );
-  //     console.log('응답', response);
-  //     return response.data;
-  //   } catch (error) {
-  //     console.error('에러', error); // 오류 로깅
-  //   }
-  // };
+  const closeSession = async (sessionId) => {
+    try {
+      const response = await axios.post(
+        APPLICATION_SERVER_URL + '/api/openvidu-management/test',
+        { customSessionId: sessionId },
+        {}, // body
+        {
+          headers: {
+            Authorization: 'Basic T1BFTlZJRFVBUFA6b3BlbnZpZHVyZW9uYzIwMw==',
+            'Content-Type': 'application/json',
+          },
+        },
+      );
+      console.log('응답', response);
+      return response.data;
+    } catch (error) {
+      console.error('에러', error); // 오류 로깅
+    }
+  };
 
   // 작업중인 요청
   // const getToken = useCallback(async () => {
@@ -337,11 +340,167 @@ export default function OpenViduApp() {
   // ################################################################
   // ################################################################
 
+  const ort = require('onnxruntime-web/webgpu');
+  const [ortSession, setOrtSession] = useState(null);
+  useEffect(() => {
+    async function createSession() {
+      try {
+        setOrtSession(
+          await ort.InferenceSession.create('reon_model-2.onnx', {
+            executionProviders: ['webgl'],
+          }),
+        );
+        faceapi.nets.tinyFaceDetector.loadFromUri('models');
+      } catch (e) {
+        document.write(`failed to inference ONNX model: ${e}.`);
+      }
+    }
+    createSession();
+    return () => {
+      setOrtSession(null);
+    };
+  }, []);
+
+  let myInterval = null;
+  let frame_cnts = 0;
+  let sum_diff = 0;
+  function face_detect() {
+    console.log('@@@@@@@@@@@@@@@@@@@@@@@@@ face_detect');
+    const video = document.getElementById(mySide);
+    const origin = document.getElementById('origin');
+    const canvas = faceapi.createCanvasFromMedia(video);
+
+    origin.addEventListener('loadeddata', () => {
+      const origin_canvas = faceapi.createCanvasFromMedia(origin);
+      faceapi.matchDimensions(origin_canvas, originSize);
+    });
+
+    const originSize = { width: 224, height: 224 };
+    const videoSize = { width: 224, height: 224 };
+    faceapi.matchDimensions(canvas, videoSize);
+    const FPS = 10;
+    myInterval = setInterval(async () => {
+      const start = new Date();
+      const video_detections = await faceapi.detectAllFaces(
+        video,
+        new faceapi.TinyFaceDetectorOptions(),
+      );
+      const origin_detections = await faceapi.detectAllFaces(
+        origin,
+        new faceapi.TinyFaceDetectorOptions(),
+      );
+
+      const resizedDetections_video = faceapi.resizeResults(
+        video_detections,
+        videoSize,
+      );
+      const resizedDetections_origin = faceapi.resizeResults(
+        origin_detections,
+        originSize,
+      );
+      // canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
+      // faceapi.draw.drawDetections(canvas, resizedDetections);
+      if (
+        resizedDetections_video.length > 0 &&
+        resizedDetections_origin.length > 0
+      ) {
+        try {
+          await image_classification(
+            resizedDetections_video[0].box,
+            resizedDetections_origin[0].box,
+          );
+        } catch {
+          console.log('오류 발생');
+        }
+      }
+      console.log(new Date() - start);
+    }, 1000 / FPS);
+  }
+  async function image_classification(box1, box2) {
+    const [x1, y1, w1, h1] = [box1.x, box1.y, box1.width, box1.height];
+    const [x2, y2, w2, h2] = [box2.x, box2.y, box2.width, box2.height];
+    const mean = [0.485, 0.456, 0.406];
+    const std = [0.229, 0.224, 0.225];
+    const imageData1 = resizeImage(x1, y1, w1, h1);
+    const imageData2 = resizeImage(x2, y2, w2, h2);
+
+    // Create a new Float32Array for the input tensor
+    const inputData1 = new Float32Array(1 * 3 * 224 * 224);
+    const inputData2 = new Float32Array(1 * 3 * 224 * 224);
+    const pixels = 224 * 224;
+
+    // 데이터 정규화
+    for (let i = 0; i < pixels; i++) {
+      inputData1[i * 3] = (imageData1.data[i * 4] / 255.0 - mean[0]) / std[0]; // R
+      inputData1[i * 3 + 1] =
+        (imageData1.data[i * 4 + 1] / 255.0 - mean[1]) / std[1]; // G
+      inputData1[i * 3 + 2] =
+        (imageData1.data[i * 4 + 2] / 255.0 - mean[2]) / std[2]; // B
+      inputData2[i * 3] = (imageData2.data[i * 4] / 255.0 - mean[0]) / std[0]; // R
+      inputData2[i * 3 + 1] =
+        (imageData2.data[i * 4 + 1] / 255.0 - mean[1]) / std[1]; // G
+      inputData2[i * 3 + 2] =
+        (imageData2.data[i * 4 + 2] / 255.0 - mean[2]) / std[2]; // B
+    }
+
+    // Create ONNX tensor from the input array
+    const inputTensor1 = new ort.Tensor(
+      'float32',
+      inputData1,
+      [1, 3, 224, 224],
+    );
+    const inputTensor2 = new ort.Tensor(
+      'float32',
+      inputData2,
+      [1, 3, 224, 224],
+    );
+    const inputName = ortSession.inputNames[0];
+    const outputName = ortSession.outputNames[0];
+    const input1 = { [inputName]: inputTensor1 };
+    const input2 = { [inputName]: inputTensor2 };
+    const output1 = await ortSession.run(input1);
+    const output2 = await ortSession.run(input2);
+    let probs1 = output1[outputName].data;
+    let probs2 = output2[outputName].data;
+    const total1 = probs1.reduce((a, b) => a + Math.exp(b), 0);
+    const total2 = probs2.reduce((a, b) => a + Math.exp(b), 0);
+    probs1 = probs1.map((prob) => {
+      return (Math.exp(prob) / total1).toFixed(2);
+    });
+    probs2 = probs2.map((prob) => {
+      return (Math.exp(prob) / total2).toFixed(2);
+    });
+    for (let i = 0; i < 7; i++) {
+      sum_diff += Math.abs(probs1[i] - probs2[i]);
+    }
+    frame_cnts++;
+  }
+
+  function resizeImage(x, y, w, h) {
+    const video = document.getElementById(mySide);
+    const cropCanvas = document.createElement('canvas');
+    cropCanvas.width = w;
+    cropCanvas.height = h;
+    const cropContext = cropCanvas.getContext('2d');
+
+    cropContext.drawImage(video, x, y, w, h, 0, 0, w, h);
+    const croppedImageData = cropContext.getImageData(0, 0, w, h);
+
+    const resizedCanvas = document.createElement('canvas');
+    resizedCanvas.width = 224;
+    resizedCanvas.height = 224;
+    const resizedContext = resizedCanvas.getContext('2d');
+
+    resizedContext.drawImage(cropCanvas, 0, 0, w, h, 0, 0, 224, 224);
+    return resizedContext.getImageData(0, 0, 224, 224);
+  }
+
   // #################       게임 로그 저장      ####################
   const currentTime = new Date();
   const logMessageTime = `${currentTime.getHours()}:${currentTime.getMinutes()}:${currentTime.getSeconds()}`;
   const [log, setLog] = useState(['게임 상태를 기록합니다.']);
   const logRef = useRef(null);
+
   useEffect(() => {
     logRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [log]);
@@ -376,6 +535,7 @@ export default function OpenViduApp() {
   const [stage, setStage] = useState('READY'); // 현재 게임 상태 관리
   const [userCamLeftBorder, setUserCamLeftBorder] = useState(false); // 유저1 플레이시 테두리
   const [userCamRightBorder, setUserCamRightBorder] = useState(false); // 유저2 플레이시 테두리
+  const [recordOn, setRecordOn] = useState(false);
 
   // ############# 비디오 플레이 훅 ##############
   // useEffect보다 위에 선언해야 했다.
@@ -391,7 +551,6 @@ export default function OpenViduApp() {
     } else if (mySide === 'USER_ONE' && stage === 'USER_ONE_TURN') {
       setLog((prevLog) => [...prevLog, `${logMessageTime} | 내 연기 시작`]);
       handleUserOnePlay();
-
       // 내가 유저 1이면서 두번째 차례
     } else if (mySide === 'USER_ONE' && stage === 'USER_TWO_TURN') {
       setLog((prevLog) => [...prevLog, `${logMessageTime} | 상대 연기 시작`]);
@@ -406,11 +565,15 @@ export default function OpenViduApp() {
     } else if (mySide === 'USER_TWO' && stage === 'USER_TWO_TURN') {
       setLog((prevLog) => [...prevLog, `${logMessageTime} | 내 연기 시작`]);
       handleUserTwoPlay();
-
       // 점수 계산
     } else if (stage === 'CALCULATION') {
       setLog((prevLog) => [...prevLog, `${logMessageTime} | 계산 시작`]);
       handleCaculateScore();
+
+      // 결과 보여주기
+    } else if (stage === 'RESULT') {
+      setLog((prevLog) => [...prevLog, `${logMessageTime} | 결과 종료`]);
+      handleViewResult();
 
       // 게임 종료
     } else if (stage === 'END') {
@@ -421,6 +584,7 @@ export default function OpenViduApp() {
   }, [stage]);
 
   // ############ 턴 종료 ###############
+  const [resultScore, setResultScore] = useState(0);
 
   useEffect(() => {
     if (videoRef.current) {
@@ -438,6 +602,13 @@ export default function OpenViduApp() {
             ...prevLog,
             `${logMessageTime} | 첫번째 연기 종료`,
           ]);
+          if (mySide === 'USER_ONE') {
+            clearInterval(myInterval);
+            const answer = 100 - (sum_diff / frame_cnts) * 100;
+            console.log(`@@@@@@@@@@@@@@ 내 점수는 ${answer}`);
+            setResultScore(answer);
+            setRecordOn(false);
+          }
           setUserCamLeftBorder(false);
           setUserCamRightBorder(false);
           setStage('USER_TWO_TURN');
@@ -447,11 +618,20 @@ export default function OpenViduApp() {
             ...prevLog,
             `${logMessageTime} | 두번째 연기 종료`,
           ]);
+          if (mySide === 'USER_TWO') {
+            clearInterval(myInterval);
+            const answer = 100 - (sum_diff / frame_cnts) * 100;
+            console.log(`@@@@@@@@@@@@@@ 내 점수는 ${answer}`);
+            setResultScore(answer);
+            setRecordOn(false);
+          }
+          mySession.signal;
           setUserCamLeftBorder(false);
           setUserCamRightBorder(false);
           setStage('CALCULATION');
         }
       };
+
       // 비디오 요소에 이벤트 리스너 추가
       videoRef.current.addEventListener('ended', handleEnded); // ended면 handleEnded() 실행
       // 클린업 함수에서 이벤트 리스너 제거
@@ -467,6 +647,7 @@ export default function OpenViduApp() {
   // ############# 비디오 불러오기 함수 #############
   const handleLoadVideo = async () => {
     // setVideoSrc('video/ISawTheDevil.mp4'); // 비디오 URL 업데이트 (유튜브 API 요청해서 영상 소스 받아올 것)
+    await startLoading(3000); // 로딩
     setLog((prevLog) => [
       ...prevLog,
       `${logMessageTime} |  작품 : ${videoRef.current.src} 작품 길이 : ${videoRef.current.duration} `,
@@ -479,30 +660,67 @@ export default function OpenViduApp() {
   const handleUserOnePlay = async () => {
     setLog((prevLog) => [...prevLog, `${logMessageTime} | 유저 1 대기`]);
     await startLoading(3000); // 로딩
+    handlePlayVideo();
+    if (
+      videoRef.current &&
+      !videoRef.current.paused &&
+      mySide === 'USER_ONE' &&
+      stage === 'USER_ONE_TURN'
+    ) {
+      setRecordOn(true);
+      face_detect();
+      // handleRecordVideo();
+    }
     mySide === 'USER_ONE'
       ? setUserCamLeftBorder(true)
       : setUserCamRightBorder(true);
     setLog((prevLog) => [...prevLog, `${logMessageTime} | 유저 1 시작`]);
-    handlePlayVideo();
   };
 
   // ############# 유저2 플레이 함수 ##############
   const handleUserTwoPlay = async () => {
     setLog((prevLog) => [...prevLog, `${logMessageTime} | 유저 2 대기`]);
     await startLoading(3000); // 로딩
+    handlePlayVideo();
+    if (
+      videoRef.current &&
+      !videoRef.current.paused &&
+      mySide === 'USER_TWO' &&
+      stage === 'USER_TWO_TURN'
+    ) {
+      setRecordOn(true);
+      face_detect();
+    }
     mySide === 'USER_TWO'
       ? setUserCamLeftBorder(true)
       : setUserCamRightBorder(true);
     setLog((prevLog) => [...prevLog, `${logMessageTime} | 유저 2 시작`]);
-    handlePlayVideo();
   };
 
   // ############# 점수 계산 ##############
+  // 실제 이곳에서 계산하는 게 아니라
   const handleCaculateScore = async () => {
     //  AI계산
     setLog((prevLog) => [...prevLog, `${logMessageTime} | AI 점수 계산`]);
-    setStage('END');
+    //  점수를 계산한다면,,,,,,
+    // 상대에게 점수랑 id 보내는 시그널
+    // 점수, id 받기
+
+    // 점수 비교해서 승 무 패 결정
+
+    // 내 ID. 상대ID. 승무패 보내는 API
+
+    setStage('RESULT');
+    // AI 계산하는 로직
     await startLoading(3000);
+  };
+
+  // ############# 결과 보여주기 #############
+  const handleViewResult = async () => {
+    // 커튼 촤라라라락 결과 보여주는
+    await startLoading(3000);
+
+    setStage('END');
   };
 
   // ############# 녹화 저장 함수 ##############
@@ -521,14 +739,6 @@ export default function OpenViduApp() {
 
   return (
     <div className="">
-      {toggleSaveModal && (
-        <Modal
-          type="save"
-          onConfirm={handleSaveVideo}
-          isOpen={toggleSaveModal}
-          onClose={() => setToggleSaveModal(false)}
-        />
-      )}
       {session === undefined ? (
         <div id="join">
           <BackStage
@@ -541,23 +751,53 @@ export default function OpenViduApp() {
       {/* 백스테이지 */}
 
       {session !== undefined ? (
-        <div id="session" className="flex justify-around gap-4 w-full h-full">
+        <div id="session" className="">
+          {toggleSaveModal && (
+            <Modal
+              type="save"
+              onConfirm={handleSaveVideo}
+              isOpen={toggleSaveModal}
+              onClose={() => setToggleSaveModal(false)}
+            />
+          )}
+
           {isLoading && (
             <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50">
               <LoadingWaiting />
             </div>
           )}
 
-          <div id="video-container" className="rounded-lg">
-            <div className="flex flex-wrap place-content-center gap-5 mt-5">
+          <div id="video-container" className="">
+            <div className="text-center">
+              <img
+                src="image/rank/rank-vs.png"
+                className="mx-auto h-[200px] w-[300px]"
+              />
+
+              <div
+                id="log-list"
+                className=" h-[40px] mx-4 overflow-auto items-center mb-5"
+              >
+                {log.map((item, index) => (
+                  <div
+                    key={index}
+                    ref={logRef}
+                    className="log-item text-[24px] text-center"
+                  >
+                    <h1>{item}</h1>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="flex flex-wrap place-content-center ">
               {publisher !== undefined ? (
-                <div
-                  className={`${
-                    userCamLeftBorder ? 'border-4 border-danger' : ''
-                  }`}
-                  onClick={() => handleMainVideoStream(publisher)}
-                >
-                  <UserVideoComponent streamManager={publisher} />
+                <div onClick={() => handleMainVideoStream(publisher)}>
+                  <UserVideoComponent
+                    streamManager={publisher}
+                    mySide={mySide}
+                    recordOn={recordOn}
+                    userCamBorder={userCamLeftBorder}
+                  />
                 </div>
               ) : (
                 <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50">
@@ -568,45 +808,77 @@ export default function OpenViduApp() {
               <div
                 id="movie-container"
                 className="rounded-lg
-            flex-col flex justify-evenly w-[400px] "
+            flex-col flex justify-evenly"
               >
                 <video
+                  id="origin"
                   ref={videoRef}
-                  src="video/ISawTheDevil.mp4"
+                  src="video/아저씨-원빈-금니빨.mp4"
                   poster="image/rank/rank-reon.png"
-                  className={`h-[450px] mx-4 rounded-lg ${
+                  className={`mx-4 rounded-lg ${
                     isPlaying ? 'border-4 border-danger' : ''
                   }`}
+                  style={{ width: '400px', height: '500px' }}
                 />
 
-                <Paper
-                  style={{ backgroundColor: '#f5f5f5' }}
-                  className="h-[100px] mx-4 overflow-auto"
-                >
-                  {log.map((item, index) => (
-                    <div key={index} ref={logRef}>
-                      {item}
-                    </div>
-                  ))}
-                </Paper>
+                <div className="flex justify-center gap-5 mt-10">
+                  {/* 튜토리얼 버튼 */}
+                  {toggleTutorialModal && (
+                    <TutorialModal
+                      type="tutorial"
+                      onConfirm={leaveSession}
+                      isOpen={toggleTutorialModal}
+                      onClose={() => setToggleTutorialModal(false)}
+                    />
+                  )}
+                  <button
+                    className="m-0 flex items-center justify-center"
+                    onClick={() => setToggleTutorialModal(true)}
+                  >
+                    <img
+                      src="image/rank/rank-tutorial-btn.png"
+                      alt="tutorial-btn"
+                      className="w-[150px] hover:w-[200px] transition-all duration-300"
+                    />
+                  </button>
+
+                  {/* 나가기 버튼 */}
+                  {toggleExitModal && (
+                    <Modal
+                      type="exit"
+                      onConfirm={leaveSession}
+                      isOpen={toggleExitModal}
+                      onClose={() => setToggleExitModal(false)}
+                    />
+                  )}
+                  <button
+                    className="rounded-lg flex items-center justify-center"
+                    onClick={() => setToggleExitModal(true)}
+                  >
+                    <img
+                      src="image/rank/rank-exit-btn.png"
+                      alt="exit-btn"
+                      className="w-[150px] hover:w-[180px] transition-all duration-300"
+                    />
+                  </button>
+                </div>
+                {/* 버튼 */}
               </div>
-              {/* 왼쪽 */}
+
+              {stage === 'END' && (
+                <div className="fixed inset-0 flex justify-center items-center z-50">
+                  {resultScore}
+                </div>
+              )}
 
               {subscribers.length > 0 ? (
                 subscribers.map((sub, i) => (
-                  <div
-                    key={sub.id}
-                    className={
-                      userCamRightBorder ? 'border-4 border-danger' : ''
-                    }
-                    onClick={() => handleMainVideoStream(sub)}
-                  >
+                  <div key={sub.id} onClick={() => handleMainVideoStream(sub)}>
                     <span>{sub.id}</span>
                     <UserVideoComponent
                       streamManager={sub}
-                      className={
-                        userCamRightBorder ? 'border-4 border-danger' : ''
-                      }
+                      mySide={null}
+                      userCamBorder={userCamRightBorder}
                     />
                   </div>
                 ))
@@ -615,7 +887,7 @@ export default function OpenViduApp() {
                   <div className="flex text-white">
                     <Matching typingContent="..." />
                   </div>
-                  <div className="relative flex items-center justify-center w-[500px] h-[600px]">
+                  <div className="relative flex items-center justify-center w-[500px] h-[400px]">
                     <img
                       src="image/rank/rank-basic-bg.png"
                       alt="waiting"
@@ -626,51 +898,9 @@ export default function OpenViduApp() {
                 </div>
               )}
             </div>
-
-            <div className="flex justify-center gap-5 mt-10">
-              {/* 튜토리얼 버튼 */}
-              {toggleTutorialModal && (
-                <TutorialModal
-                  type="tutorial"
-                  onConfirm={leaveSession}
-                  isOpen={toggleTutorialModal}
-                  onClose={() => setToggleTutorialModal(false)}
-                />
-              )}
-              <button
-                className="bg-green rounded-lg w-[50px] h-[50px] m-0 flex items-center justify-center"
-                onClick={() => setToggleTutorialModal(true)}
-              >
-                <img
-                  src="image/rank/rank-tutorial-btn.png"
-                  alt="tutorial-btn"
-                  className="w-[30px] hover:w-[40px] transition-all duration-300"
-                />
-              </button>
-
-              {/* 나가기 버튼 */}
-              {toggleExitModal && (
-                <Modal
-                  type="exit"
-                  onConfirm={leaveSession}
-                  isOpen={toggleExitModal}
-                  onClose={() => setToggleExitModal(false)}
-                />
-              )}
-              <button
-                className="bg-danger rounded-lg w-[50px] h-[50px] flex items-center justify-center"
-                onClick={() => setToggleExitModal(true)}
-              >
-                <img
-                  src="image/rank/rank-exit-btn.png"
-                  alt="exit-btn"
-                  className="w-[40px] hover:w-[50px] transition-all duration-300"
-                />
-              </button>
-            </div>
-            {/* 버튼 */}
           </div>
-          {/* 오른쪽 */}
+
+          {/* 비디오 */}
         </div>
       ) : // 배틀룸
       null}

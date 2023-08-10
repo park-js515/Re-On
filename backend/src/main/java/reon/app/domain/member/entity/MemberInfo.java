@@ -8,10 +8,7 @@ import org.hibernate.annotations.DynamicInsert;
 import reon.app.domain.member.dto.req.MemberUpdateRequest;
 import reon.app.global.entity.BaseEntity;
 
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Embeddable
 @Getter

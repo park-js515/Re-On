@@ -26,14 +26,14 @@ const Commentlist = ({post_id, changeShow, hierarchy}) => {
         if (more) {
             // axios로 10개씩 받아오기 post_id, page
             let data = []
-            for (let i = 0; i < 10; i++) {
+            for (let i = 0; i < 2; i++) {
                 data.push(
                     {
                         comment_id : i,
-                        content : `랄로 기다린 랄붕이면 개추-${i}`,
-                        author : "마루쉐",
+                        content : `댓글이다-${i}`,
+                        author : "희창",
                         author_id : 1,
-                        profile_url : "https://yt3.googleusercontent.com/ytc/AOPolaRGljY8JqJqiskPWVM_bOh2Lon8sbDWwD__idDP=s176-c-k-c0x00ffffff-no-rj-mo",
+                        profile_url : `https://source.unsplash.com/random?sig=888${i}`,
                     }
                 )
             }
@@ -58,7 +58,7 @@ const Commentlist = ({post_id, changeShow, hierarchy}) => {
                 content : userInput,
                 author : "마루쉐",
                 author_id : 1,
-                profile_url : "https://yt3.googleusercontent.com/ytc/AOPolaRGljY8JqJqiskPWVM_bOh2Lon8sbDWwD__idDP=s176-c-k-c0x00ffffff-no-rj-mo",
+                profile_url : "https://source.unsplash.com/random?sig=888",
             }
             setComments((comments)=>{return [temp, ...comments]})
             setUserInput("")
@@ -72,22 +72,32 @@ const Commentlist = ({post_id, changeShow, hierarchy}) => {
 
     const MoreButton = () => {
         return (
-            <div onClick={getComment} className="rounded text-center hover:cursor-pointer hover:ring-2">
+            <div onClick={getComment} className="rounded text-center cursor-pointer ring-2 p-2 hover:bg-black transition">
                 더 보기
             </div>
         )
     }
     return (
-        <div className="mt-1 h-full rounded ring-2 ring-info hover:scroll-auto overflow-y-scroll non-scroll-bar">
+        
+        <div className="h-full rounded hover:scroll-auto overflow-y-scroll scrollbar-hide">
 
             {/* 댓글 입력 창 */}
-            <div className="flex"> 
-                <input className="mx-1 mt-2 mb-1 px-3 py-2 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-green-500 focus:ring-green-500 block w-5/6 rounded-md sm:text-sm focus:ring-1"
-                type="text" placeholder="댓글 추가..."
-                value={userInput} onInput={onChange}
-                />
-                <button type="button" className="" onClick={addComment}>추가</button>
-            </div>
+            <div className="flex relative"> 
+            <input 
+                className="mx-1 mt-2 mb-1 px-3 py-2 bg-white shadow-md focus:outline-none block w-full rounded-md sm:text-sm focus:ring-2"
+                type="text" 
+                placeholder="댓글 추가..."
+                value={userInput} 
+                onInput={onChange}
+            />
+            <button 
+                type="button" 
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 "
+                onClick={addComment}
+            >
+                추가
+            </button>
+        </div>
 
             {/* 댓글 리스트 */}
             <div className="m-1">
@@ -104,3 +114,4 @@ const Commentlist = ({post_id, changeShow, hierarchy}) => {
 }
 
 export default Commentlist
+
