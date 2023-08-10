@@ -8,9 +8,12 @@ import reon.app.domain.member.dto.res.BackStageMemberResponse;
 import reon.app.domain.member.dto.res.MemberBattleInfoResponse;
 import reon.app.domain.member.dto.res.MemberResponse;
 import reon.app.domain.member.repository.MemberQueryRepository;
+import reon.app.domain.member.repository.impl.MemberQueryRepositoryImpl;
 import reon.app.domain.member.service.MemberQueryService;
 import reon.app.global.error.entity.CustomException;
 import reon.app.global.error.entity.ErrorCode;
+
+import javax.persistence.Id;
 
 @Service
 @RequiredArgsConstructor
