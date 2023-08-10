@@ -6,10 +6,11 @@ import FeedPage from './pages/FeedPage';
 import LoginPage from './pages/LoginPage';
 import MainPage from './pages/MainPage';
 import MyPage from './pages/MyPage';
-import NormalGamePage from './pages/NormalGamePage';
+
 import NormalListPage from './pages/NormalListPage';
 import RankPage from './pages/RankPage';
 import RegisterPage from './pages/RegisterPage';
+import TeamPage from './pages/TeamPage';
 
 import ResponsiveAppBar from 'components/common/NavBar';
 
@@ -25,10 +26,10 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/" element={<MainPage />} />
         <Route path="/mypage" element={<MyPage />} />
-        <Route path="/normalgame" element={<NormalGamePage />} />
         <Route path="/normallist" element={<NormalListPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/rank" element={<RankPage />} />
+        <Route path="/team" element={<TeamPage />} />
       </Routes>
     </>
   );

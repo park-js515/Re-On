@@ -7,7 +7,7 @@ const Comment = ({comment, deleteComment, changeShow, hierarchy}) => {
     const navigate = useNavigate()
     const [content, setContent] = useState(comment.content)
     const [updateMode, setUpdateMode] = useState(false)
-    // const [more, setMore] = useState(false)
+  
 
     const moveToMyPage = (event) => {
         event.preventDefault();

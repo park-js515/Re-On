@@ -24,6 +24,8 @@ const Hotlist = ({injectPostId, changeShow}) => {
       date:i,
     })
     }
+
+
     const NextArrow = ({ onClick }) => (
       <img
         src="/image/face/next-arrow.png"
@@ -41,7 +43,7 @@ const Hotlist = ({injectPostId, changeShow}) => {
         onClick={onClick}
       />
     );
-  
+      // 케러셀
     const settings = {
       dots: true,
       infinite: true,

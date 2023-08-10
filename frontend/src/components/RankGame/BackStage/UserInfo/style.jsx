@@ -3,22 +3,49 @@ import styled from "styled-components";
 export const SContainer = styled.div`
   cursor: pointer;
   position: relative;
-  background-color: #fff;
+  background: linear-gradient(
+      var(--angle, 45deg),
+      #8ccfd5 0%,
+      #a0d3d8 10%,
+      #b7d9db 20%,
+      #cedfe0 30%,
+      #e5e5e5 40%,
+      #f2ecda 50%,
+      #e5e5e5 60%,
+      #cedfe0 70%,
+      #b7d9db 80%,
+      #a0d3d8 90%,
+      #8ccfd5 100%
+    );
   background-size: cover;
   height: 20.5vw;
-  width: 55.5vw;
+  width: 45vw;
   border-radius: 12px;
-  color: #000000;
+  color: #fff;
   box-shadow: 5px 5px 15px #c5c5c5;
   transition: all 300ms linear;
-
+  box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.5);
+  
   &:hover {
-    transform: translateY(-3%);
+    background: linear-gradient(
+      var(--angle, 90deg),
+      #8ccfd5 0%,
+      #a0d3d8 10%,
+      #b7d9db 20%,
+      #cedfe0 30%,
+      #e5e5e5 40%,
+      #f2ecda 50%,
+      #e5e5e5 60%,
+      #cedfe0 70%,
+      #b7d9db 80%,
+      #a0d3d8 90%,
+      #8ccfd5 100%
+    );
+    /* background-size: 300% 100%;
+    animation: holographicShimmer 2s infinite; */
     cursor: default;
   }
-  &:hover .sns__container {
-    opacity: 1;
-  }
+ 
   .sns__container {
     width: 100%;
     height: 80%;
@@ -41,13 +68,14 @@ export const SContainer = styled.div`
     .name {
       margin: 0;
       font-size: xxx-large;
-      font-weight: bold;
       &:hover {
-        transform: translateY(-5%);
+        color: black;
+       
       }
     }
     /* 전적 */
     .recent {
+      margin-left: 4px;
       font-size: large;
       color: #3c3c3c;
     }
@@ -66,19 +94,18 @@ export const SContainer = styled.div`
       border-radius: 50%;
       object-fit: cover;
       text-align: center;
-      background-image: linear-gradient(#fff, #fff),
-        linear-gradient(to right, #D4E6A0 0%, #D4E6A0 100%);
       background-origin: border-box;
       background-clip: content-box, border-box;
       &:hover {
-        transform: translateY(-5%);
+        filter: blur(1px);
+        opacity: 1px;
       }
     }
   }
 `;
 
-// SNS 링크를 묶는 div
-export const SSNSContainer = styled.div`
+// 텍스트 div
+export const STextContainer = styled.div`
   display: flex;
   justify-content: start;
   gap: 0.67vw;
@@ -92,12 +119,15 @@ export const SSNSContainer = styled.div`
 export const SRank = styled.div`
   user-select: none;
  
-  position: absolute;
-  bottom: calc(4vw + 1px);
-  right: calc(3vw + 12px);
-  z-index: 100;
-  img {
-    width: 200px;  // 원하는 너비로 설정
-    height: 250px; // 원하는 높이로 설정
-  }
+ position: absolute;
+ bottom: calc(4vw + 1px);
+ right: calc(3vw + 12px);
+ z-index: 100;
+ 
+ img {
+   width: 15vw;  // 반응형 너비로 설정
+   height: 18.75vw; // 반응형 높이로 설정 (200px:250px의 비율 유지)
+   max-width: 200px; // 최대 너비 제한 (선택적)
+   max-height: 250px; // 최대 높이 제한 (선택적)
+ }
 `;

@@ -2,11 +2,11 @@ import React from "react";
 import { useNavigate } from 'react-router-dom';
 import Commentlist from "./Commentlist";
 import { useState } from "react";
-import "./videocomponent.css"
+
 const Videoplayer = ({post_id, changeShow}) => {
     const navigate = useNavigate();
 
-    // Dummy data generation
+    // 더미 
     let dataList = [];
     for (let i = 1; i <= 10; i++) {
         dataList.push({
@@ -51,15 +51,7 @@ const Videoplayer = ({post_id, changeShow}) => {
         setIsLike(!IsLike)
         // axios 요청까지 해야됨
     }
-    const OutBox = () => {
-        return (
-            <div 
-                className="w-2/12 text-center text-white " onClick={changeShow}
-            >
-                탈출
-            </div>
-        )
-    }
+
 
     const convertToK = (number) => {
         if (number >= 1000){
@@ -72,9 +64,10 @@ const Videoplayer = ({post_id, changeShow}) => {
         }
     }
     return (
-        <div className="fixed top-6 z-40 w-full h-full flex justify-center items-center bg-black bg-opacity-50">
-            <OutBox />
-            <div className="flex w-10/12 max-h-6/10  bg-white p-4 rounded-lg shadow-lg overflow-hidden">
+        // 모달 외부클릭시 꺼짐
+        <div className="fixed top-6 z-40 w-full h-full flex justify-center items-center bg-black bg-opacity-50" onClick={changeShow}> 
+             {/*모달 내부는 이상없게  */}
+            <div className="flex w-10/12 h-[80vh] max-h-[80vh]  bg-white p-4 rounded-lg shadow-lg overflow-hidden" onClick={e => e.stopPropagation()}>
 
             {/* Left Section */}
             <div className="w-8/12 pr-4 border-r border-gray-200 overflow-y-auto max-h-[calc(80vh-48px)] scrollbar-hide">
@@ -103,7 +96,7 @@ const Videoplayer = ({post_id, changeShow}) => {
                
             </div>
         </div>
-        <OutBox />
+       
     </div>
     )
 }
