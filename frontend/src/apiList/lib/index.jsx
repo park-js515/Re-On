@@ -10,8 +10,7 @@ function authInstance() {
   const instance = axios.create({
     baseURL: networktarget + '/api/auth',
     headers: {
-      accept: '*/*',
-      'Content-Type': 'application/json;charset=utf-8',
+      'Content-Type': 'application/json',
       Authorization: `Bearer ${accessToken}`,
     },
   });
@@ -23,7 +22,6 @@ function memberInstance() {
   const instance = axios.create({
     baseURL: networktarget + '/api/member-management',
     headers: {
-      accept: '*/*',
       'Content-Type': 'application/json;charset=utf-8',
       Authorization: `Bearer ${accessToken}`,
     },
@@ -36,7 +34,6 @@ function openviduInstance() {
   const instance = axios.create({
     baseURL: networktarget + '/api/openvidu-management',
     headers: {
-      accept: '*/*',
       'Content-Type': 'application/json;charset=utf-8',
       Authorization: `Bearer ${accessToken}`,
     },
@@ -47,9 +44,8 @@ function openviduInstance() {
 function postInstance() {
   let accessToken = getAccessToken();
   const instance = axios.create({
-    baseURL: networktarget + '/api/post-management',
+    baseURL: networktarget + '/api/post-management/post',
     headers: {
-      accept: '*/*',
       'Content-Type': 'application/json;charset=utf-8',
       Authorization: `Bearer ${accessToken}`,
     },
