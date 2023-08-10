@@ -1,10 +1,10 @@
 import React from 'react';
 import { useLottie } from 'lottie-react';
-import animationData from 'assets/animation/curtainLoading.json';
+import animationData from 'assets/animation/rankLoading.json';
 
-const CalculatingWaiting = () => {
+const LizardLoading = () => {
   const defaultOptions = {
-    loop: false,
+    loop: true,
     autoplay: true,
     animationData: animationData,
     rendererSettings: {
@@ -21,4 +21,4 @@ const CalculatingWaiting = () => {
   );
 };
 
-export default CalculatingWaiting;
+export default LizardLoading;
