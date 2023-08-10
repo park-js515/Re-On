@@ -9,7 +9,7 @@ const NaverRedirect = () => {
   const state = process.env.REACT_APP_STATE;
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  // const user = useSelector((state) => state.user); 
+  // const user = useSelector((state) => state.user);
 
   useEffect(() => {
     const NaverLogin = async () => {
@@ -25,10 +25,12 @@ const NaverRedirect = () => {
           },
         )
         .then((response) => {
+          const data = response.data;
+          const accessToken = data.accessToken;
+          // 액세스 토큰 설정
           dispatch(
             userLogin({
-              accessToken: response.data.accessToken,
-              refreshToken: response.data.refreshToken,
+              accessToken: accessToken,
             }),
           );
         })
@@ -50,6 +52,7 @@ const NaverRedirect = () => {
   return (
     <>
       <div>네이버 로그인 중입니다. 기다리세요.</div>
+      {/* 로딩창을 넣어야함. */}
     </>
   );
 };
