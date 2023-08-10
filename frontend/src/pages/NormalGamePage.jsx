@@ -5,14 +5,17 @@ import MyPageMine from "components/My/MyPageMine"
 
 const NoramalGamePage = () => {
   return(
-    <div>
+    <div className="bg-gradient-to-t from-lightBlue to-begie">
 
-    <Container>
-    <div className='border-b'>
-      <MyPageMine/>
-    </div>
+    <Container >
+      <div >
+        <MyPageMine/>
+      </div>
     </Container>
-      <Postbar/>
+      <div>
+
+        <Postbar/>
+      </div>
     </div>
   )
 

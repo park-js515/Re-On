@@ -2,8 +2,8 @@ import React from "react";
 import { useNavigate } from 'react-router-dom';
 import Commentlist from "./Commentlist";
 import { useState } from "react";
-import "./videocomponent.css"
-const Videoplayer = ({post_id, changeShow}) => {
+
+const LikesModal = ({post_id, changeShow}) => {
     const navigate = useNavigate();
 
     // Dummy data generation
@@ -24,15 +24,7 @@ const Videoplayer = ({post_id, changeShow}) => {
                 `제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 
                 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 
                 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내제곧내 제곧내 
-                제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내제곧내 제곧내 제곧내 
-                제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내제곧내 제곧내 제곧내 제곧내 제곧내 
-                제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 
-                제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 
-                제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 
-                제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내
-                제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내제곧내 제곧내 제곧내 제곧내 제곧내 
-                제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 
-                제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 
+                
                 
                 `
             });
@@ -108,5 +100,5 @@ const Videoplayer = ({post_id, changeShow}) => {
     )
 }
 
-export default Videoplayer
+export default LikesModal
 

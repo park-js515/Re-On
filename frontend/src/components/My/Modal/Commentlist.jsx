@@ -1,7 +1,7 @@
 import React from "react";
 import Comment from "./Comment";
 import { useState, useEffect } from "react";
-import './videocomponent.css'
+
 
 const Commentlist = ({post_id, changeShow, hierarchy}) => {
     // 댓글은 게시글 식별자로 조회

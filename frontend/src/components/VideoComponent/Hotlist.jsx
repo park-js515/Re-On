@@ -19,6 +19,9 @@ const Hotlist = ({injectPostId, changeShow}) => {
       title : `제목-${i}`,
       like_cnt : 2400,
       comment_cnt : 20,
+      year:'2023',
+      month:i,
+      date:i,
     })
     }
     const NextArrow = ({ onClick }) => (
@@ -54,9 +57,9 @@ const Hotlist = ({injectPostId, changeShow}) => {
     };
 
   return (
-    <div className="bg-gradient-to-b from-lightBlue to-begie my-4 py-12 sm:py-16">
-      <div className="bg-white mx-auto max-w-7xl py-16 px-2 rounded">
-      <h1 className="my-4 py-8 text-center font-bold text-3xl text-dark ">🎁인기영상</h1>
+    <div className="bg-gradient-to-b from-lightBlue to-begie mb-16 py-0 sm:py-4">
+      <div className="bg-white mx-auto max-w-7xl py-14 rounded">
+      <h1 className="my-4 py-6 text-center font-bold text-3xl text-dark ">🎁인기영상</h1>
       <div className="mx-auto max-w-7xl px-6 lg:px-8 ">
           <Slider className="py-4"ref={sliderRef} {...settings}>
               {TESTDATA.map((item) => (
