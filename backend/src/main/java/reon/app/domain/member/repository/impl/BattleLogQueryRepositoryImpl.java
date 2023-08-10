@@ -22,10 +22,10 @@ public class BattleLogQueryRepositoryImpl implements BattleLogQueryRepository {
 
     private final JPAQueryFactory queryFactory;
     @Override
-    public List<BattleLogResponse> searchBattleLogsById(Long memberId) { //나
+    public List<BattleLogResponse> findBattleLogsById(Long memberId) { //나
         return queryFactory
                 .select(Projections.fields(BattleLogResponse.class,
-                        battleLog.user2.id.as("userID"), //상대 id
+                        battleLog.user2.id.as("userId"), //상대 id
                         battleLog.user2.memberInfo.nickName.as("userNickName"),//상대 이름
                         battleLog.video.title.as("videoTitle"),//영상 제목
                         battleLog.point // 득실 포인트

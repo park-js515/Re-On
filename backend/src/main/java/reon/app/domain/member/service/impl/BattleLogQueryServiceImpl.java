@@ -17,7 +17,7 @@ public class BattleLogQueryServiceImpl implements BattleLogQueryService {
     private final BattleLogQueryRepository battleLogQueryRepository;
     @Override
     public List<BattleLogResponse> findBattleLogsById(Long memberId) {
-        List<BattleLogResponse> battleLogs = battleLogQueryRepository.searchBattleLogsById(memberId);
+        List<BattleLogResponse> battleLogs = battleLogQueryRepository.findBattleLogsById(memberId);
         return battleLogs;
     }
 }

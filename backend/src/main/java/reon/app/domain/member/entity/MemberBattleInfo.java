@@ -68,6 +68,15 @@ public class MemberBattleInfo {
         }
     }
 
+    public void updateGameCnt(int score){
+        this.gameCnt++;
+        if(score>0){
+            this.win++;
+        }else if(score<0){
+            this.lose++;
+        }
+    }
+
     public void updateTier(){
         switch (this.tier){
             case BRONZE:

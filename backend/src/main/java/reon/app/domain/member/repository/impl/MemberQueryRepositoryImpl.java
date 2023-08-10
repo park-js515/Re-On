@@ -10,6 +10,7 @@ import reon.app.domain.member.dto.res.MemberBattleInfoResponse;
 import reon.app.domain.member.dto.res.MemberResponse;
 import reon.app.domain.member.repository.MemberQueryRepository;
 
+import static reon.app.domain.member.entity.QMemberBattleInfo.memberBattleInfo;
 import static reon.app.domain.member.entity.QMember.member;
 
 @Repository

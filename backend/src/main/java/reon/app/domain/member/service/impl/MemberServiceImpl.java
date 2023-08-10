@@ -86,17 +86,19 @@ public class MemberServiceImpl implements MemberService {
         Tier tier2 = member2.getMemberBattleInfo().getTier();
 
         //티어 비교 후 승점 생성
-        int score = (1 + Math.abs(tier1.compareTo(tier2))) * result; //게임 결과로 변동할 score
-
+        int score;
         if(tier1.compareTo(tier2) < 0 && result == -1){ //내가 저티어인데 졌을때
             score = -1;
         }else if(tier1.compareTo(tier2) > 0 && result == 1){//내가 고티어인데 이겼을때
             score = 1;
+        }else{
+            score = (1 + Math.abs(tier1.compareTo(tier2))) * result; //게임 결과로 변동할 score
         }
 
         //총 스코어 갱신
         member1.getMemberBattleInfo().updateScore(score);
         member1.getMemberBattleInfo().updateTier();
+        member1.getMemberBattleInfo().updateGameCnt(score);
     }
 
 //    private void removeImgFile(String prevImg) {
