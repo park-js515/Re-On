@@ -10,7 +10,6 @@ import { useNavigate } from 'react-router-dom';
 // const AxiosInterceptor = () => {
 //   const dispatch = useDispatch();
 //   const user = useSelector((state) => state.user);
-
 // };
 
 const defaultApi = axios.create({

@@ -625,7 +625,6 @@ export default function OpenViduApp() {
             setResultScore(answer);
             setRecordOn(false);
           }
-          mySession.signal;
           setUserCamLeftBorder(false);
           setUserCamRightBorder(false);
           setStage('CALCULATION');

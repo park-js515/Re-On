@@ -1,5 +1,6 @@
-import { useEffect } from 'react';
 import axios from 'axios';
+
+import { useEffect } from 'react';
 import { userLogin } from 'redux/userSlice';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
@@ -8,7 +9,7 @@ const NaverRedirect = () => {
   const code = new URL(window.location.href).searchParams.get('code');
   const state = process.env.REACT_APP_STATE;
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   // const user = useSelector((state) => state.user);
 
   useEffect(() => {
@@ -25,14 +26,13 @@ const NaverRedirect = () => {
           },
         )
         .then((response) => {
-          const data = response.data;
-          const accessToken = data.accessToken;
+          localStorage.setItem('accessToken', response.data.accessToken);
           // 액세스 토큰 설정
-          dispatch(
-            userLogin({
-              accessToken: accessToken,
-            }),
-          );
+          // dispatch(
+          //   userLogin({
+          //     accessToken: accessToken,
+            // }),
+          // );
         })
         .then(() => {
           navigate('/', { replace: true });
