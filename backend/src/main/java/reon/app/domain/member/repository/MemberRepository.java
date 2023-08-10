@@ -2,6 +2,7 @@ package reon.app.domain.member.repository;
 
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import reon.app.domain.member.dto.req.BattleLogSaveRequest;
 import reon.app.domain.member.entity.Member;
 
 import java.util.Optional;
