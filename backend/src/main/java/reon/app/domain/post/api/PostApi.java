@@ -3,21 +3,22 @@ package reon.app.domain.post.api;
 import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import reon.app.domain.post.dto.req.UpdateCommentRequest;
 import reon.app.domain.post.dto.req.PrivatePostUpdateRequest;
+import reon.app.domain.post.dto.req.SaveCommentRequest;
 import reon.app.domain.post.dto.res.*;
 import reon.app.domain.post.entity.Scope;
+import reon.app.domain.post.service.PostCommentService;
 import reon.app.domain.post.service.PostLikeService;
 import reon.app.domain.post.service.PostQueryService;
 import reon.app.domain.post.service.PostService;
-import reon.app.domain.post.service.dto.PostSaveDto;
-import reon.app.domain.post.service.dto.PrivatePostUpdateDto;
+import reon.app.domain.post.service.dto.*;
 import reon.app.global.api.ApiResponse;
 import reon.app.global.error.entity.CustomException;
 import reon.app.global.error.entity.ErrorCode;
@@ -32,7 +33,7 @@ import java.util.List;
 public class PostApi {
     private final PostService postService;
     private final PostQueryService postQueryService;
-
+    private final PostCommentService postCommentService;
 //    private final MemberService memberService;
     private final PostLikeService postLikeService;
 
@@ -137,5 +138,45 @@ public class PostApi {
         return ApiResponse.OK(flag);
     }
 
+    @Operation(summary = "post 댓글 작성", description = "post에 댓글을 작성한다.")
+    @PostMapping("/{postId}/comment")
+    public ApiResponse<?> saveComment(@PathVariable Long postId, @RequestBody SaveCommentRequest request, @Parameter(hidden = true) @AuthenticationPrincipal User user){
+        Scope postScope = postQueryService.searchScopeById(postId);
+        if(postScope.equals(Scope.PRIVATE)){
+            throw new CustomException(ErrorCode.POST_SCOPE_ERROR);
+        }
+        Long memberId = Long.parseLong(user.getUsername());
+        PostCommentSaveDto dto = PostCommentSaveDto.builder()
+                .memberId(memberId)
+                .postId(postId)
+                .content(request.getContent())
+                .build();
+        Long response = postCommentService.save(dto);
+        return ApiResponse.OK(response);
+    }
 
+    @Operation(summary = "post 댓글 업데이트", description = "post에 작성한 댓글을 수정한다.")
+    @PutMapping("/comment/{commentId}")
+    public ApiResponse<?> updateComment(@PathVariable Long commentId, @RequestBody UpdateCommentRequest request, @Parameter(hidden = true) @AuthenticationPrincipal User user){
+        Long memberId = Long.parseLong(user.getUsername());
+        PostCommentUpdateDto dto = PostCommentUpdateDto.builder()
+                .memberId(memberId)
+                .commentId(commentId)
+                .content(request.getContent())
+                .build();
+        Long response = postCommentService.update(dto);
+        return ApiResponse.OK(response);
+    }
+
+    @Operation(summary = "post 댓글 삭제", description = "post에 작성한 댓글을 삭제한다.")
+    @DeleteMapping("/comment/{commentId}")
+    public ApiResponse<?> deleteComment(@PathVariable Long commentId, @Parameter(hidden = true) @AuthenticationPrincipal User user){
+        Long memberId = Long.parseLong(user.getUsername());
+        PostCommentDeleteDto dto = PostCommentDeleteDto.builder()
+                .commentId(commentId)
+                .memberId(memberId)
+                .build();
+        Long response = postCommentService.delete(dto);
+        return ApiResponse.OK(response);
+    }
 }
