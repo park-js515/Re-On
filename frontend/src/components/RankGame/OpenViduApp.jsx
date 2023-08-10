@@ -11,6 +11,9 @@ import MatchingWaiting from 'components/RankGame/MatchingWaiting';
 import CalculatingWaiting from 'components/RankGame/CalculatingWaiting';
 import Modal from 'components/RankGame/Modal';
 import TutorialModal from 'components/RankGame/TutorialModal';
+
+import * as faceapi from 'face-api.js'
+
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { setIsJoinSession } from 'redux/sessionSlice';
@@ -339,6 +342,116 @@ export default function OpenViduApp() {
   // ################################################################
   // ################################################################
 
+  const ort = require('onnxruntime-web/webgpu')
+  const [ortSession, setOrtSession] = useState(null);
+  useEffect(()=>{
+    async function createSession(){
+      try {
+        setOrtSession(await ort.InferenceSession.create('reon_model.onnx', {executionProviders: ['webgl']}));
+        faceapi.nets.tinyFaceDetector.loadFromUri('models');
+      }
+      catch (e) {
+        document.write(`failed to inference ONNX model: ${e}.`)
+      }
+    };
+    createSession();
+    return ()=>{setOrtSession(null)}
+  },[])
+
+  let myInterval = null;
+  let frame_cnts = 0;
+  let sum_diff = 0;
+  function face_detect() {
+    const video = document.getElementById(mySide);
+    const origin = document.getElementById("origin");
+    const canvas = faceapi.createCanvasFromMedia(video);
+    const origin_canvas = faceapi.createCanvasFromMedia(origin);
+    const videoSize = { width: video.width, height: video.height };
+    const originSize = { width: origin.width, height: origin.height };
+    faceapi.matchDimensions(canvas, videoSize);
+    faceapi.matchDimensions(origin_canvas, originSize);
+    const FPS = 10;
+    myInterval = setInterval(async () => {
+      const video_detections = await faceapi.detectAllFaces(video, new faceapi.TinyFaceDetectorOptions());
+      const origin_detections = await faceapi.detectAllFaces(origin, new faceapi.TinyFaceDetectorOptions());
+
+      const resizedDetections_video = faceapi.resizeResults(video_detections, videoSize);
+      const resizedDetections_origin = faceapi.resizeResults(origin_detections, originSize);
+      // canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
+      // faceapi.draw.drawDetections(canvas, resizedDetections);
+      if (resizedDetections_video.length > 0 && resizedDetections_origin.length > 0) {
+        try{ 
+          await image_classification(resizedDetections_video[0].box, resizedDetections_origin[0].box);
+        }
+        catch {
+          console.log("오류 발생")
+        }
+      }
+    }, 1000 / FPS)
+  }
+  async function image_classification(box1, box2) {
+
+    const [x1, y1, w1, h1] = [box1.x, box1.y, box1.width, box1.height];
+    const [x2, y2, w2, h2] = [box2.x, box2.y, box2.width, box2.height];
+    const mean = [0.485, 0.456, 0.406];
+    const std = [0.229, 0.224, 0.225];
+    const imageData1 = resizeImage(x1,y1,w1,h1)
+    const imageData2 = resizeImage(x2,y2,w2,h2)
+
+    // Create a new Float32Array for the input tensor
+    const inputData1 = new Float32Array(1 * 3 * 224 * 224);
+    const inputData2 = new Float32Array(1 * 3 * 224 * 224);
+    const pixels = 224 * 224;
+
+    // 데이터 정규화
+    for (let i = 0; i < pixels; i++) {
+      inputData1[i * 3] = (imageData1.data[i * 4] / 255.0 - mean[0]) / std[0]; // R
+      inputData1[i * 3 + 1] = (imageData1.data[i * 4 + 1] / 255.0 - mean[1]) / std[1]; // G
+      inputData1[i * 3 + 2] = (imageData1.data[i * 4 + 2] / 255.0 - mean[2]) / std[2]; // B
+      inputData2[i * 3] = (imageData2.data[i * 4] / 255.0 - mean[0]) / std[0]; // R
+      inputData2[i * 3 + 1] = (imageData2.data[i * 4 + 1] / 255.0 - mean[1]) / std[1]; // G
+      inputData2[i * 3 + 2] = (imageData2.data[i * 4 + 2] / 255.0 - mean[2]) / std[2]; // B
+    }
+
+    // Create ONNX tensor from the input array
+    const inputTensor1 = new ort.Tensor('float32', inputData1, [1, 3, 224, 224]);
+    const inputTensor2 = new ort.Tensor('float32', inputData2, [1, 3, 224, 224]);
+    const inputName = ortSession.inputNames[0];
+    const outputName = ortSession.outputNames[0];
+    const input1 = { [inputName]: inputTensor1 };
+    const input2 = { [inputName]: inputTensor1 };
+    const output1 = await ortSession.run(input1);
+    const output2 = await ortSession.run(input2);
+    let probs1 = output1[outputName].data
+    let probs2 = output1[outputName].data
+    const total1 = probs1.reduce((a, b) => a + Math.exp(b), 0);
+    const total2 = probs2.reduce((a, b) => a + Math.exp(b), 0);
+    probs1 = probs1.map((prob)=>{return (Math.exp(prob)/total1*100).toFixed(2)})
+    probs2 = probs2.map((prob)=>{return (Math.exp(prob)/total1*100).toFixed(2)})
+    for (let i = 0; i < 7; i++){
+      sum_diff += Math.abs(probs1[i]-probs2[i])
+    }
+    frame_cnts++;
+  }
+
+  function resizeImage(x,y,w,h) {
+    const video = document.getElementById(mySide)
+    const cropCanvas = document.createElement('canvas');
+    cropCanvas.width = w;
+    cropCanvas.height = h;
+    const cropContext = cropCanvas.getContext('2d');
+
+    cropContext.drawImage(video, x, y, w, h, 0, 0, w, h);
+    const croppedImageData = cropContext.getImageData(0, 0, w, h);
+
+    const resizedCanvas = document.createElement('canvas');
+    resizedCanvas.width = 224;
+    resizedCanvas.height = 224;
+    const resizedContext = resizedCanvas.getContext('2d');
+
+    resizedContext.drawImage(cropCanvas, 0, 0, w, h, 0, 0, 224, 224);
+    return resizedContext.getImageData(0, 0, 224, 224);
+  }
   // #################       게임 로그 저장      ####################
   const currentTime = new Date();
   const logMessageTime = `${currentTime.getHours()}:${currentTime.getMinutes()}:${currentTime.getSeconds()}`;
@@ -394,7 +507,7 @@ export default function OpenViduApp() {
     } else if (mySide === 'USER_ONE' && stage === 'USER_ONE_TURN') {
       setLog((prevLog) => [...prevLog, `${logMessageTime} | 내 연기 시작`]);
       handleUserOnePlay();
-
+      face_detect();
       // 내가 유저 1이면서 두번째 차례
     } else if (mySide === 'USER_ONE' && stage === 'USER_TWO_TURN') {
       setLog((prevLog) => [...prevLog, `${logMessageTime} | 상대 연기 시작`]);
@@ -409,7 +522,7 @@ export default function OpenViduApp() {
     } else if (mySide === 'USER_TWO' && stage === 'USER_TWO_TURN') {
       setLog((prevLog) => [...prevLog, `${logMessageTime} | 내 연기 시작`]);
       handleUserTwoPlay();
-
+      face_detect();
       // 점수 계산
     } else if (stage === 'CALCULATION') {
       setLog((prevLog) => [...prevLog, `${logMessageTime} | 계산 시작`]);
@@ -446,6 +559,11 @@ export default function OpenViduApp() {
             ...prevLog,
             `${logMessageTime} | 첫번째 연기 종료`,
           ]);
+          if (mySide==="USER_ONE"){
+            clearInterval(myInterval);
+            const answer = 150-sum_diff/frame_cnts
+            console.log(`answer is ${answer}`)
+          }
           setUserCamLeftBorder(false);
           setUserCamRightBorder(false);
           setStage('USER_TWO_TURN');
@@ -455,6 +573,11 @@ export default function OpenViduApp() {
             ...prevLog,
             `${logMessageTime} | 두번째 연기 종료`,
           ]);
+          if (mySide==="USER_TWO"){
+            clearInterval(myInterval);
+            const answer = 150-sum_diff/frame_cnts
+            console.log(`answer is ${answer}`)
+          }
           setUserCamLeftBorder(false);
           setUserCamRightBorder(false);
           setStage('CALCULATION');
@@ -594,7 +717,7 @@ export default function OpenViduApp() {
                     {item}
                   </div>
                 ))}
-              </div>
+              </div>mySideu
             </div>
             <div className="flex flex-wrap place-content-center ">
               {publisher !== undefined ? (
@@ -604,7 +727,7 @@ export default function OpenViduApp() {
                   }`}
                   onClick={() => handleMainVideoStream(publisher)}
                 >
-                  <UserVideoComponent streamManager={publisher} />
+                  <UserVideoComponent streamManager={publisher} mySide={mySide}/>
                 </div>
               ) : (
                 <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50">
@@ -618,6 +741,7 @@ export default function OpenViduApp() {
             flex-col flex justify-evenly w-[400px] "
               >
                 <video
+                  id="origin"
                   ref={videoRef}
                   src="video/ISawTheDevil.mp4"
                   poster="image/rank/rank-reon.png"
@@ -681,10 +805,7 @@ export default function OpenViduApp() {
                   >
                     <span>{sub.id}</span>
                     <UserVideoComponent
-                      streamManager={sub}
-                      className={
-                        userCamRightBorder ? 'border-4 border-danger' : ''
-                      }
+                      streamManager={sub} mySide={null}
                     />
                   </div>
                 ))

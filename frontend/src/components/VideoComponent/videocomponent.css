@@ -1,7 +1,0 @@
-.non-scroll-bar {
-    -ms-overflow-style: none; /* IE and Edge */
-    scrollbar-width: none; /* Firefox */
-}
-.non-scroll-bar::-webkit-scrollbar {
-    display: none; /* Chrome, Safari, Opera*/
-}

@@ -18,7 +18,15 @@ module.exports = {
       black: '#000000',
       
     },
-    extend: {},
+    extend: {
+     
+    },
   },
-  plugins: [require('@tailwindcss/typography')],
+  plugins: 
+    [
+      require('@tailwindcss/typography'),
+      require("tailwind-scrollbar-hide")
+    ],
+    
+  
 };

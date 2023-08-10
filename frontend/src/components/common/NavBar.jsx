@@ -3,12 +3,15 @@ import { Disclosure, Menu, Transition } from '@headlessui/react';
 import { Link } from 'react-router-dom';
 
 const navigation = [
-  { name: '메인페이지', to: '/', current: false },
-  { name: '랭크게임', to: '/rank', current: false },
-  { name: '일반게임', to: '/normallist', current: false },
+
+  { name: '같이하기', to: '/rank', current: false },
+  { name: '혼자하기', to: '/normallist', current: false },
   { name: '투표해줘', to: '/feed', current: false },
+  { name: '고객센터', to: '/faq', current: false },
+  { name: '팀문화', to: '/login', current: false },
   { name: '로그인', to: '/login', current: false },
   { name: '마페이지수정', to: '/normalgame', current: false },
+
   
   
 
@@ -28,11 +31,17 @@ export default function Example() {
               <div className="relative flex h-16 items-center justify-between">
                 <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
                   <div className="flex flex-shrink-0 items-center">
-                    <img
+                    
+                     <Link
+                        to="/"
+                              
+                            >
+                              <img
                       className="h-10 w-auto"
                       src="/image/logo/logo.png"
                       alt="Your Company"
                     />
+                            </Link>
                   </div>
                   <div className="hidden sm:ml-6 sm:block">
                     <div className="flex space-x-4">
