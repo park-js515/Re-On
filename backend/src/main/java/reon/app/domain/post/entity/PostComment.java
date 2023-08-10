@@ -1,6 +1,7 @@
 package reon.app.domain.post.entity;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -31,6 +32,18 @@ public class PostComment extends BaseEntity {
 
     @Column(name = "content", nullable = false, length = 100)
     private String content;
+
+    @Builder
+    public PostComment(Long id, Post post, Member member, String content) {
+        this.id = id;
+        this.post = post;
+        this.member = member;
+        this.content = content;
+    }
+
+    public void update(String content){
+        this.content = content;
+    }
 
     // 대댓글 후순위 ㅠ
 //    @Column(name = "layer", nullable = false)

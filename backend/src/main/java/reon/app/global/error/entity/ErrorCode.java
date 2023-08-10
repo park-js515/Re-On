@@ -80,6 +80,7 @@ public enum ErrorCode {
 
     POST_SCOPE_ERROR(HttpStatus.BAD_REQUEST, "게시글 범위가 유호하지 않습니다." );
 
+
     private final HttpStatus status;
     private final String message;
 
