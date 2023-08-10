@@ -1,12 +1,31 @@
-import React from 'react';
+import React,{useState} from 'react';
 
   const Posts = () => {
+
+    // ... (기존 코드 생략)
+
+    // 모달 관련 상태
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedPost, setSelectedPost] = useState(null);
+
+    const openModal = (post) => {
+        setSelectedPost(post);
+        setIsModalOpen(true);
+    }
+
+    const closeModal = () => {
+        setIsModalOpen(false);
+        setSelectedPost(null);
+    }
+
+
+
     const temp = [];
     for (let i = 1; i <= 10; i++){
         temp.push({
             id: i,
             title: `제목 넘버-${i}`,
-            likes: 2400,
+            likes: 170,
             backgroundImage: `https://source.unsplash.com/random?sig=${i}`,
             comment_cnt: 20,
         });
@@ -26,8 +45,8 @@ import React from 'react';
                  </div>
                 {/* 좋아요 */}
                 <div className="flex items-center gap-x-4 text-xs ml-2">
-                  <div className="text-gray-500">💙좋아요 {post.likes}</div>
-                  <div className="text-gray-500">💬댓글 {post.comment_cnt}</div>
+                  <div className="text-gray-500 font-semibold"><span className="text-lg">💙</span>좋아요 {post.likes}</div>
+                  <div className="text-gray-500 font-semibold"><span className="text-lg">💬</span>댓글 {post.comment_cnt}</div>
                 </div>
                 
                 <div className="group relative ml-2 pb-6 ">

@@ -11,7 +11,9 @@ import MatchingWaiting from 'components/RankGame/MatchingWaiting';
 import CalculatingWaiting from 'components/RankGame/CalculatingWaiting';
 import Modal from 'components/RankGame/Modal';
 import TutorialModal from 'components/RankGame/TutorialModal';
+
 import * as faceapi from 'face-api.js'
+
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { setIsJoinSession } from 'redux/sessionSlice';
@@ -123,8 +125,8 @@ export default function OpenViduApp() {
         try {
           console.log('토큰', token);
           await session.connect(token, { clientData: myUserName });
-
-          let publisher = await OV.current.initPublisherAsync(undefined, {
+            
+          let publisher = await OV.current.initPublisherAsync(undefined, {     
             audioSource: undefined,
             videoSource: undefined,
             publishAudio: true,

@@ -8,6 +8,7 @@
     justify-content: center;
     align-items: center;
     transform: translateY(-35%);
+    z-index: 3;
 }
 
 .testTitle {
@@ -61,20 +62,5 @@
     }
 }
 
-.testButton {
-    display: block;
-    width: 100%;  /* it will take the full width of the .testContainer */
-    padding: 10px 0;  /* 10px top/bottom padding, 0 left/right */
-    background-color: #FF4500; /* or any other color you like */
-    color: #FFFFFF;
-    border: none;
-    border-radius: 4px;
-    font-size: 20px;
-    cursor: pointer;
-    text-align: center;
-    transition: background-color 0.3s ease;
-}
 
-.testButton:hover {
-    background-color: #FF6347; /* a bit darker shade on hover */
-}
+

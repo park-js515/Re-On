@@ -34,13 +34,14 @@ const Test = () => {
           <span className={styles.testTitleSpan}>!</span>
           <div className="flex justify-center"> 
 
-          <button 
-              className="bg-info text-white px-4 py-4 rounded hover:bg-lightBlue ml-0 mr-0 w-96 text-2xl hover:scale-105"
-              onClick={handleButtonClick}
-          >
-              REON 바로시작하기
-          </button>
-            
+         
+            <button 
+                className="bg-info text-white px-4 py-4 rounded hover:bg-lightBlue ml-0 mr-0 w-96 text-2xl hover:scale-105 "
+                onClick={handleButtonClick}
+            >
+                REON 바로시작하기
+            </button>
+       
           </div>
       </h1>
     </div>
