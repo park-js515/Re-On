@@ -1,21 +1,21 @@
 import { createSlice } from '@reduxjs/toolkit';
+// import { current } from '@reduxjs/toolkit';
 
 const userSlice = createSlice({
   name: 'user',
-  initialState: { id: null, name: '아직로그인안했는데이름', isLogin: false },
+  initialState: { accessToken: '' },
   reducers: {
-    loginAccount(state, action) {
-      state.id = action.payload.id;
-      state.name = action.payload.name;
-      state.isLogin = true;
+    userLogin: (state, action) => {
+      state.accessToken = action.payload.accessToken;
     },
-    logoutAccount(state) {
-      state.id = null;
-      state.name = null;
-      state.isLogin = false;
+    userLogout: (state) => {
+      state.accessToken = '';
+    },
+    userAcessToken: (state) => {
+      return state.user.accessToken;
     },
   },
 });
 
-export const { loginAccount, logoutAccount } = userSlice.actions;
+export const { userLogin, userLogout, userAcessToken } = userSlice.actions;
 export default userSlice.reducer;

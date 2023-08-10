@@ -12,6 +12,7 @@ import RankPage from './pages/RankPage';
 import RegisterPage from './pages/RegisterPage';
 
 import ResponsiveAppBar from 'components/common/NavBar';
+import NaverRedirect from 'components/login/NaverRedirect';
 
 function App() {
   const { isJoinSession } = useSelector((state) => state.session);
@@ -29,6 +30,7 @@ function App() {
         <Route path="/normallist" element={<NormalListPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/rank" element={<RankPage />} />
+				<Route path="/login/redirect" element={<NaverRedirect/>}/>
       </Routes>
     </>
   );
