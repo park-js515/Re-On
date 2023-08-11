@@ -14,10 +14,7 @@ import reon.app.domain.post.dto.req.PrivatePostUpdateRequest;
 import reon.app.domain.post.dto.req.SaveCommentRequest;
 import reon.app.domain.post.dto.res.*;
 import reon.app.domain.post.entity.Scope;
-import reon.app.domain.post.service.PostCommentService;
-import reon.app.domain.post.service.PostLikeService;
-import reon.app.domain.post.service.PostQueryService;
-import reon.app.domain.post.service.PostService;
+import reon.app.domain.post.service.*;
 import reon.app.domain.post.service.dto.*;
 import reon.app.global.api.ApiResponse;
 import reon.app.global.error.entity.CustomException;
@@ -34,6 +31,7 @@ public class PostApi {
     private final PostService postService;
     private final PostQueryService postQueryService;
     private final PostCommentService postCommentService;
+    private final PostCommentQueryService postCommentQueryService;
 //    private final MemberService memberService;
     private final PostLikeService postLikeService;
 
@@ -152,6 +150,16 @@ public class PostApi {
                 .build();
         Long response = postCommentService.save(dto);
         return ApiResponse.OK(response);
+    }
+    @Operation(summary = "Detail post에서 댓글 10개를 조회한다.", description = "post detail에서 댓글을 조회한다.")
+    @GetMapping("/{postId}/comment")
+    public ApiResponse<?> searchComment(@PathVariable Long postId, @RequestParam(value = "offset") Long offset){
+        Scope postScope = postQueryService.searchScopeById(postId);
+        if(postScope.equals(Scope.PRIVATE)){
+            throw new CustomException(ErrorCode.POST_SCOPE_ERROR);
+        }
+        List<PostCommentResponse> responses = postCommentQueryService.searchPostComment(offset, postId);
+        return ApiResponse.OK(responses);
     }
 
     @Operation(summary = "post 댓글 업데이트", description = "post에 작성한 댓글을 수정한다.")
