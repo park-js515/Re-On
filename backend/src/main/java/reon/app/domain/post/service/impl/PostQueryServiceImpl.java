@@ -97,8 +97,9 @@ public class PostQueryServiceImpl implements PostQueryService {
     }
 
     @Override
-    public List<PostsResponse> searchFeedRankPosts() {
+    public List<PostsResponse> searchFeedRankPosts(Long loginMemberId) {
         List<PostsResponse> responses = postQueryRepository.searchFeedRankPosts();
+        responses.stream().forEach(res -> res.setIsLike(postLikeQueryRepository.isLike(res.getId(), loginMemberId)));
         return responses;
     }
 

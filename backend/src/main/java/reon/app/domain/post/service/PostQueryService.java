@@ -20,5 +20,5 @@ public interface PostQueryService {
 
     List<PostsResponse> searchFeedPosts(Long offset, Long loginMemberId);
 
-    List<PostsResponse> searchFeedRankPosts();
+    List<PostsResponse> searchFeedRankPosts(Long loginMemberId);
 }

@@ -81,7 +81,7 @@ public class PostApi {
 
     @Operation(summary = "mypage 내가 좋아요 누른 post 목록 조회", description = "liked 게시글 목록을 조회한다.")
     @GetMapping("/liked")
-    public ApiResponse<?> searchLikedPosts(@RequestParam(value = "offset") Long offset, @Parameter(hidden = true) @AuthenticationPrincipal User user ) {
+    public ApiResponse<?> searchLikedPosts(@RequestParam(value = "offset") Long offset, @Parameter(hidden = true) @AuthenticationPrincipal User user) {
         Long memberId = Long.parseLong(user.getUsername());
         List<PostsResponse> responses = postQueryService.searchLikedPosts(offset, memberId);
         return ApiResponse.OK(responses);
@@ -108,8 +108,9 @@ public class PostApi {
 
     @Operation(summary = "투표해줘 페이지 TOP10 post 조회", description = "좋아요 상태를 변경한다.")
     @GetMapping("/feed/rank")
-    public ApiResponse<?> searchFeedRankPosts(){
-        List<PostsResponse> responses = postQueryService.searchFeedRankPosts();
+    public ApiResponse<?> searchFeedRankPosts(@AuthenticationPrincipal User user){
+        Long memberId = Long.parseLong(user.getUsername());
+        List<PostsResponse> responses = postQueryService.searchFeedRankPosts(memberId);
         return ApiResponse.OK(responses);
     }
 
