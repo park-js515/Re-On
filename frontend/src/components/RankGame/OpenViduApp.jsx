@@ -899,7 +899,7 @@ export default function OpenViduApp() {
                 <video
                   id="origin"
                   ref={videoRef}
-                  src="video/아저씨-원빈-금니빨.mp4"
+                  src="video/ISawTheDevil.mp4"
                   poster="image/rank/rank-reon.png"
                   className={`mx-4 rounded-lg ${
                     isPlaying ? 'border-4 border-danger' : ''
