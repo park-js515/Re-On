@@ -1,8 +1,14 @@
 import { authInstance } from './lib/index';
 
-function getNaverToken(code, success, fail) {
+/**
+ * 
+ * @param {object} body [{authorizationCode: string, state: string}]
+ * @param {function} success [callback]
+ * @param {function} fail [callback]
+ */
+function getNaverToken(body, success, fail) {
   const api = authInstance();
-  api.post(`/naver`, JSON.stringify(code)).then(success).catch(fail);
+  api.post(`/naver`, JSON.stringify(body)).then(success).catch(fail);
 }
 
 export { getNaverToken };
