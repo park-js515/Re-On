@@ -6,7 +6,7 @@ const SBanner = styled.div`
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  background-color: #b9ceac;
+  background: linear-gradient(to right top, beige, lightBlue);
   background-size: cover;
   background-repeat: no-repeat;
   height: 100px;

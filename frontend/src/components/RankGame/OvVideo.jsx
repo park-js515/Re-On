@@ -12,6 +12,7 @@ export default function OpenViduVideoComponent({
   const [recording, setRecording] = useState(false);
   const constraints = { audio: true, video: true };
 
+ 
   useEffect(() => {
     navigator.mediaDevices
       .getUserMedia(constraints)
@@ -85,14 +86,17 @@ export default function OpenViduVideoComponent({
   // 스트림매니저가 퍼블리셔이면서 record on이 넘어올때만 녹화하도록
 
   // 스트림매니저가 퍼블리셔이면서 record off가 넘어올 때 녹화 종료하도록
-
+  
   return (
-    <video
-      id={mySide}
-      autoPlay={true}
-      ref={videoRef}
-      className={`rounded-lg ${userCamBorder ? 'border-4 border-danger' : ''}`}
-      style={{ width: '500px', height: '400px' }}
-    />
+    <div>
+     
+      <video
+        id={mySide}
+        autoPlay={true}
+        ref={videoRef}
+        className={`rounded-lg -mt-10 ${userCamBorder ? 'border-4 border-danger' : ''}`}
+        style={{ width: '500px', height: '500px'}}
+      />
+    </div>
   );
 }
