@@ -6,18 +6,21 @@ export default function OpenViduVideoComponent({
   mySide,
   recordOn,
   userCamBorder,
+  type,
 }) {
   const videoRef = useRef();
+
+  console.log(streamManager);
+
   const [mediaRecorder, setMediaRecorder] = useState(null);
   const [recording, setRecording] = useState(false);
   const constraints = { audio: true, video: true };
 
- 
   useEffect(() => {
     navigator.mediaDevices
       .getUserMedia(constraints)
       .then(function (mediaStream) {
-        if (videoRef.current) {
+        if (videoRef.current && type == 'publisher') {
           videoRef.current.srcObject = mediaStream;
         }
 
@@ -86,17 +89,14 @@ export default function OpenViduVideoComponent({
   // 스트림매니저가 퍼블리셔이면서 record on이 넘어올때만 녹화하도록
 
   // 스트림매니저가 퍼블리셔이면서 record off가 넘어올 때 녹화 종료하도록
-  
+
   return (
-    <div>
-     
-      <video
-        id={mySide}
-        autoPlay={true}
-        ref={videoRef}
-        className={`rounded-lg -mt-10 ${userCamBorder ? 'border-4 border-danger' : ''}`}
-        style={{ width: '500px', height: '500px'}}
-      />
-    </div>
+    <video
+      id={mySide}
+      autoPlay={true}
+      ref={videoRef}
+      className={`rounded-lg ${userCamBorder ? 'border-4 border-danger' : ''}`}
+      style={{ width: '500px', height: '400px' }}
+    />
   );
 }

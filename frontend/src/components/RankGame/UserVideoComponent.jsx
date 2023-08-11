@@ -6,6 +6,7 @@ export default function UserVideoComponent({
   mySide,
   recordOn,
   userCamBorder,
+  type,
 }) {
   const getNicknameTag = () => {
     // Gets the nickName of the user
@@ -17,7 +18,7 @@ export default function UserVideoComponent({
       {streamManager !== undefined ? (
         <div className="streamcomponent">
           <div className="flex">
-            <p className=" text-white relative font-semibold text-[24px] z-550">
+            <p className="text-white font-bold text-[24px]">
               {getNicknameTag()}
             </p>
           </div>
@@ -26,6 +27,7 @@ export default function UserVideoComponent({
             mySide={mySide}
             recordOn={recordOn}
             userCamBorder={userCamBorder}
+            type={type}
           />
           <div className="h-[100px] w-[100px]">
             {mySide === 'USER_ONE' && (
