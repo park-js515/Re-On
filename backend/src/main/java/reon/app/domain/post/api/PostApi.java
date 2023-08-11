@@ -100,8 +100,9 @@ public class PostApi {
 
     @Operation(summary = "투표해줘 public post 목록 전체 조회", description = "투표해줘 PUBLIC 게시글 목록을 조회한다.")
     @GetMapping("/feed")
-    public ApiResponse<?> searchFeedPosts(@RequestParam(value = "offset") Long offset){
-        List<PostsResponse> responses = postQueryService.searchFeedPosts(offset);
+    public ApiResponse<?> searchFeedPosts(@RequestParam(value = "offset") Long offset, @Parameter(hidden = true) @AuthenticationPrincipal User user){
+        Long loginMemberId = Long.parseLong(user.getUsername());
+        List<PostsResponse> responses = postQueryService.searchFeedPosts(offset, loginMemberId);
         return ApiResponse.OK(responses);
     }
 
