@@ -52,18 +52,18 @@ const DummyData = {
         </Link>
         <div>
         <Link to="/mypage">
-            <div className="name">{DummyData.name}</div>
+            <div className="name font-semibold text-6xl">{DummyData.name}</div>
         </Link>
-          <div className="recent">{DummyData.win} / {DummyData.lose} / {DummyData.draw}</div>
+          {/* <div className="recent">{DummyData.win} / {DummyData.lose} / {DummyData.draw}</div> */}
         </div>
       </div>
-      {/* SNS */}
-      <STextContainer>
+      {/* text */}
+      {/* <STextContainer>
        <h3>여기에</h3>
       </STextContainer>
       <STextContainer>
       <h3>무엇을써야하노</h3>
-      </STextContainer>
+      </STextContainer> */}
        
 
       

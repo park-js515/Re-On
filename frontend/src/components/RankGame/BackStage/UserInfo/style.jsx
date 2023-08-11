@@ -7,13 +7,13 @@ export const SContainer = styled.div`
       var(--angle, 45deg),
       #8ccfd5 0%,
       #a0d3d8 10%,
-      #b7d9db 20%,
-      #cedfe0 30%,
-      #e5e5e5 40%,
-      #f2ecda 50%,
-      #e5e5e5 60%,
-      #cedfe0 70%,
-      #b7d9db 80%,
+      #8ccfd5 20%,
+      #a0d3d8 30%,
+      #b7d9db 40%,
+      #e5e5e5 50%,
+      #b7d9db 60%,
+      #a0d3d8 70%,
+      #8ccfd5 80%,
       #a0d3d8 90%,
       #8ccfd5 100%
     );
@@ -31,16 +31,17 @@ export const SContainer = styled.div`
       var(--angle, 90deg),
       #8ccfd5 0%,
       #a0d3d8 10%,
-      #b7d9db 20%,
-      #cedfe0 30%,
-      #e5e5e5 40%,
-      #f2ecda 50%,
-      #e5e5e5 60%,
-      #cedfe0 70%,
-      #b7d9db 80%,
+      #8ccfd5 20%,
+      #a0d3d8 30%,
+      #b7d9db 40%,
+      #e5e5e5 50%,
+      #b7d9db 60%,
+      #a0d3d8 70%,
+      #8ccfd5 80%,
       #a0d3d8 90%,
       #8ccfd5 100%
-    );
+    
+      );
     /* background-size: 300% 100%;
     animation: holographicShimmer 2s infinite; */
     cursor: default;
@@ -60,16 +61,16 @@ export const SContainer = styled.div`
 
   /* 프로필 사진과 이름, 점수를 묶는 div */
   .profile-container {
-    margin: calc(0.5vw + 3px) calc(0.5vw + 5px);
+    margin: calc(1vw + 3px) calc(1vw + 3px);
     display: flex;
     align-items: center;
     
     /* 이름 */
     .name {
-      margin: 0;
-      font-size: xxx-large;
+     
+      
       &:hover {
-        color: black;
+        color: #272727;
        
       }
     }
@@ -120,13 +121,13 @@ export const SRank = styled.div`
   user-select: none;
  
  position: absolute;
- bottom: calc(4vw + 1px);
+ bottom: calc(3vw + 10px);
  right: calc(3vw + 12px);
  z-index: 100;
  
  img {
-   width: 15vw;  // 반응형 너비로 설정
-   height: 18.75vw; // 반응형 높이로 설정 (200px:250px의 비율 유지)
+   width: 16vw;  // 반응형 너비로 설정
+   height: 19.75vw; // 반응형 높이로 설정 (200px:250px의 비율 유지)
    max-width: 200px; // 최대 너비 제한 (선택적)
    max-height: 250px; // 최대 높이 제한 (선택적)
  }
