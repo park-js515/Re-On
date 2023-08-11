@@ -23,7 +23,7 @@ const Videoitem = ({props, changeMode}) => {
 
     return (
       <div className="bg-white flex max-w-xl rounded shadow-md flex-col items-start justify-between transform transition-transform duration-300 hover:scale-105 hover:shadow-lg mx-2 my-4 pb-4">
-        
+        {/* 상단 프로필, 년월일 닉넴 */}
         <div className="relative mt-2 flex items-center justify-between w-full gap-x-4 mb-1 px-1">
           <div className="flex items-center gap-x-4 ml-2">
             <img src={props.profile_img} alt="" onClick={moveToMyPage} className="h-10 w-10 rounded-full bg-gray-50 hover:cursor-pointer" />
@@ -37,9 +37,10 @@ const Videoitem = ({props, changeMode}) => {
             {props.year}년 {props.month}월 {props.date}일
           </div>
         </div>
-        
+        {/* 썸넬 */}
         <div style={{ backgroundImage: `url(${props.thumbnail})` }} className="w-full h-64 bg-cover bg-center featured-item cursor-pointer " src={props.thumbnail} alt="" onClick={changeMode}></div>
     
+        {/* 좋아요 */}
         <div className="flex items-center gap-x-4 text-xs ml-2 ">
           <div className="">
             <span className="text-xl">💙</span> {convertToK(props.like_cnt)}
@@ -48,7 +49,8 @@ const Videoitem = ({props, changeMode}) => {
             <span className="text-xl">💬</span> {convertToK(props.comment_cnt)}   
           </div>
         </div>
-        
+
+        {/* 제목 */}
         <div className="group relative ml-2">
           <h3 className="mt-3 text-lg font-semibold leading-6 text-gray-900 group-hover:text-gray-600">
             <span className="text-2xl hover:underline hover:decoration-solid hover:cursor-pointer" onClick={changeMode}>{props.title}</span>

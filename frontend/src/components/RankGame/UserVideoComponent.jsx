@@ -16,8 +16,8 @@ export default function UserVideoComponent({
     <div>
       {streamManager !== undefined ? (
         <div className="streamcomponent">
-          <div>
-            <p className="text-white font-bold text-[24px]">
+          <div className="flex">
+            <p className=" text-white relative font-semibold text-[24px] z-550">
               {getNicknameTag()}
             </p>
           </div>
@@ -27,6 +27,14 @@ export default function UserVideoComponent({
             recordOn={recordOn}
             userCamBorder={userCamBorder}
           />
+          <div className="h-[100px] w-[100px]">
+            {mySide === 'USER_ONE' && (
+              <img src="image/rank/rank-first-turn.png" alt="First Turn" />
+            )}
+            {mySide === 'USER_TWO' && (
+              <img src="image/rank/rank-second-turn.png" alt="Second Turn" />
+            )}
+          </div>
         </div>
       ) : null}
     </div>

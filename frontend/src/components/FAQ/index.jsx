@@ -2,6 +2,8 @@ import React from "react";
 import styled from "styled-components";
 import TabMenu from "./TabMenu";
 import Banner from "./Banner";
+import Banner2 from "./Banner2";
+import { Container } from '@mui/system';
 
 const FAQLayout = styled.div`
   display: flex;
@@ -13,7 +15,11 @@ const FAQLayout = styled.div`
 const FAQ = () => {
   return (
     <div>
-      <Banner />
+      {/* <Banner /> */}
+      <Container>
+      
+        <Banner2/>
+      </Container>
       <FAQLayout>
         <TabMenu />
       </FAQLayout>
