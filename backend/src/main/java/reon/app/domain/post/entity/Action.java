@@ -5,7 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
-
+//지워야함
 @Entity
 @Getter
 @NoArgsConstructor

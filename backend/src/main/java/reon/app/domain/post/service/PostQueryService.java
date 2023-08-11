@@ -10,15 +10,15 @@ public interface PostQueryService {
 
     PrivateDetailPostResponse searchPrivateById(Long postId);
 
-    PublicDetailPostResponse searchPublicById(Long postId);
+    PublicDetailPostResponse searchPublicById(Long postId, Long memberId);
 
     List<PrivatePostsResponse> searchPrivatePosts(Long offset, Long memberId);
 
-    List<PublicPostsResponse> searchPublicPosts(Long offset, Long memberId);
+    List<PublicPostsResponse> searchPublicPosts(Long offset, Long memberId, Long loginMemberId);
 
     List<PostsResponse> searchLikedPosts(Long offset, Long memberId);
 
-    List<PostsResponse> searchFeedPosts(Long offset);
+    List<PostsResponse> searchFeedPosts(Long offset, Long loginMemberId);
 
-    List<PostsResponse> searchFeedRankPosts();
+    List<PostsResponse> searchFeedRankPosts(Long loginMemberId);
 }

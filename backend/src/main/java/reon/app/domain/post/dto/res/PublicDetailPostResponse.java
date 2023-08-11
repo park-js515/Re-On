@@ -7,10 +7,11 @@ import reon.app.domain.post.entity.PostComment;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
-public class PublicDetailPostResponse {
+public class PublicDetailPostResponse { // 마이페이지 PUBLIC, LIKED, 투표해줘 상세 페이지에 사용
     private Long id;
     private Long memberId;
     private String nickName;
@@ -19,10 +20,12 @@ public class PublicDetailPostResponse {
     private String title;
     private String content;
     private int likeCnt;
+    private Boolean isLike;
+    private List<PostCommentResponse> postCommentResponses;
     private LocalDateTime createDate;
 
     @Builder
-    public PublicDetailPostResponse(Long id, Long memberId, String nickName, String profileImg, String actionPath, String title, String content, int likeCnt, LocalDateTime createDate) {
+    public PublicDetailPostResponse(Long id, Long memberId, String nickName, String profileImg, String actionPath, String title, String content, int likeCnt, Boolean isLike, List<PostCommentResponse> postCommentResponses, LocalDateTime createDate) {
         this.id = id;
         this.memberId = memberId;
         this.nickName = nickName;
@@ -31,6 +34,8 @@ public class PublicDetailPostResponse {
         this.title = title;
         this.content = content;
         this.likeCnt = likeCnt;
+        this.isLike = isLike;
+        this.postCommentResponses = postCommentResponses;
         this.createDate = createDate;
     }
 }

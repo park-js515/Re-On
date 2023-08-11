@@ -8,10 +8,7 @@ import com.querydsl.core.types.dsl.NumberPath;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
-import reon.app.domain.post.dto.res.PostsResponse;
-import reon.app.domain.post.dto.res.PrivatePostsResponse;
-import reon.app.domain.post.dto.res.PublicDetailPostResponse;
-import reon.app.domain.post.dto.res.PublicPostsResponse;
+import reon.app.domain.post.dto.res.*;
 import reon.app.domain.post.entity.Post;
 import reon.app.domain.post.entity.PostLike;
 import reon.app.domain.post.entity.Scope;
@@ -23,6 +20,7 @@ import java.util.List;
 
 import static reon.app.domain.member.entity.QMember.member;
 import static reon.app.domain.post.entity.QPost.post;
+import static reon.app.domain.post.entity.QPostLike.postLike;
 import static reon.app.domain.video.entity.QVideo.video;
 
 @Repository
@@ -45,7 +43,8 @@ public class PostQueryRepositoryImpl implements PostQueryRepository {
                 .from(post)
                 .join(post.member, member).fetchJoin()
                 .join(post.video, video).fetchJoin()
-                .where(post.id.eq(postId))
+                .where(post.id.eq(postId),
+                        post.deleted.eq(0))
                 .fetchOne();
     }
 
@@ -62,6 +61,7 @@ public class PostQueryRepositoryImpl implements PostQueryRepository {
                 .join(post.member, member)
                 .join(post.video, video)
                 .where(post.member.id.eq(memberId),
+                        post.deleted.eq(0),
                         post.scope.eq(Scope.PRIVATE))
                 .orderBy(post.createDate.desc())
                 .offset((offset-1)* 21L)
@@ -78,12 +78,14 @@ public class PostQueryRepositoryImpl implements PostQueryRepository {
                         post.title,
                         post.video.thumbnail,
                         post.postLikes.size().as("likeCnt"),
+                        post.postComments.size().as("commentCnt"),
                         post.createDate
                         ))
                 .from(post)
                 .join(post.member, member)
                 .join(post.video, video)
                 .where(post.member.id.eq(memberId),
+                        post.deleted.eq(0),
                         post.scope.eq(Scope.PUBLIC))
                 .orderBy(post.createDate.desc())
                 .offset((offset-1)* 21L)
@@ -102,12 +104,14 @@ public class PostQueryRepositoryImpl implements PostQueryRepository {
                         post.member.memberInfo.profileImg,
                         post.video.thumbnail,
                         post.postLikes.size().as("likeCnt"),
+                        post.postComments.size().as("commentCnt"),
                         post.createDate
                         ))
                 .from(post)
                 .join(post.member, member)
                 .join(post.video, video)
                 .where(post.id.in(ids),
+                        post.deleted.eq(0),
                         post.scope.eq(Scope.PUBLIC),
                         post.member.id.ne(memberId))
                 .orderBy(post.createDate.desc())
@@ -127,12 +131,14 @@ public class PostQueryRepositoryImpl implements PostQueryRepository {
                         post.member.memberInfo.profileImg,
                         post.video.thumbnail,
                         post.postLikes.size().as("likeCnt"),
+                        post.postComments.size().as("likeCnt"),
                         post.createDate
                         ))
                 .from(post)
                 .join(post.member, member)
                 .join(post.video, video)
-                .where(post.scope.eq(Scope.PUBLIC))
+                .where(post.scope.eq(Scope.PUBLIC),
+                        post.deleted.eq(0))
                 .orderBy(post.createDate.desc())
                 .offset((offset-1)* 21L)
                 .limit(21)
@@ -151,17 +157,26 @@ public class PostQueryRepositoryImpl implements PostQueryRepository {
                         post.member.memberInfo.profileImg,
                         post.video.thumbnail,
                         post.postLikes.size().as("likeCnt"),
+                        post.postComments.size().as("commentCnt"),
                         post.createDate
                 ))
                 .from(post)
                 .join(post.member, member)
                 .join(post.video, video)
-                .where(post.scope.eq(Scope.PUBLIC),
+                .where(post.deleted.eq(0),
+                        post.scope.eq(Scope.PUBLIC),
                         isCurrentMonth()
                         )
                 .orderBy(post.postLikes.size().desc())
                 .fetch();
     }
+
+//    @Override
+//    public List<PostCommentResponse> searchPostCommentResponse(Long offset, Long postId) {
+//        return queryFactory
+//                .select(Projections.fields(PostCommentResponse.class,
+//                        ));
+//    }
 
     private BooleanExpression isCurrentMonth() {
         LocalDateTime now = LocalDateTime.now();
