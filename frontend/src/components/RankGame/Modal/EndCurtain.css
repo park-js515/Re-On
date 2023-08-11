@@ -36,7 +36,7 @@
 
 .curtain__prize {
   /*This sets the background color and an image (purposesly small to not take up the whole background).  The image is centered and not repeated so that it looks like an img element was used, but is not*/
-  background: #000000;
+  background: linear-gradient(to bottom,  black 50%, darkslategray);
   background-repeat: no-repeat;
   background-position: center;
   position: absolute; /* Forces the prize position into the container start */

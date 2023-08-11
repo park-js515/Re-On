@@ -163,9 +163,12 @@ export default function OpenViduApp() {
   }, [session, myUserName]);
 
   // 세션 나가기
-  const leaveSession = useCallback(() => {
+  const leaveSession = useCallback(async () => {
     if (session) {
       session.disconnect();
+      setStage('READY');
+      await closeSession(session.sessionId);
+      window.location.reload(); // 그냥 새로고침 하자...세션 끊기는게 너무 느려~~~~!
     }
 
     OV.current = new OpenVidu();
@@ -193,7 +196,10 @@ export default function OpenViduApp() {
         return prevSubscribers;
       }
     });
-    setLog((prevLog) => [...prevLog, `상대탈주함 ㅋㅋ`]);
+    setLog((prevLog) => [
+      ...prevLog,
+      `상대가 나갔습니다. 게임을 종료하겠습니다.`,
+    ]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -253,7 +259,6 @@ export default function OpenViduApp() {
   //   return response.data; // The token
   // };
 
-  // 테스트 요청
   const getToken = async () => {
     try {
       const response = await axios.post(
@@ -276,9 +281,9 @@ export default function OpenViduApp() {
 
   const closeSession = async (sessionId) => {
     try {
-      const response = await axios.post(
-        APPLICATION_SERVER_URL + '/api/openvidu-management/test',
-        { customSessionId: sessionId },
+      const response = await axios.delete(
+        APPLICATION_SERVER_URL +
+          `/api/openvidu-management/sessions/${sessionId}/delete`,
         {}, // body
         {
           headers: {
@@ -294,38 +299,6 @@ export default function OpenViduApp() {
     }
   };
 
-  // 작업중인 요청
-  // const getToken = useCallback(async () => {
-  //   return createToken().then((response) => {
-  //     // const url = new URL(response);
-  //     // const sessionId = url.searchParams.get('sessinId');
-  //     // const token = url.searchParams.get('token');
-  //     const tmp =
-  //       'wss://i9c203.p.ssafy.io?sessionId=ses_OYSe2KtSh5&token=tok_OrWnXOs2EmioDSXR';
-  //     return tmp;
-  //   });
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
-
-  // const createToken = async () => {
-  //   try {
-  //     const response = await axios.post(
-  //       APPLICATION_SERVER_URL + '/api/openvidu-management/test',
-  //       {}, // body
-  //       {
-  //         headers: {
-  //           Authorization: 'Basic T1BFTlZJRFVBUFA6b3BlbnZpZHVyZW9uYzIwMw==',
-  //           'Content-Type': 'application/json',
-  //         },
-  //       },
-  //     );
-  //     console.log('응답', response);
-  //     return response.data;
-  //   } catch (error) {
-  //     console.error('에러', error); // 오류 로깅
-  //   }
-  // };
-
   // ################################################################
   // ################################################################
   // #################이 위로 OpenVidu 상태 관리#####################
@@ -335,6 +308,7 @@ export default function OpenViduApp() {
   // ################################################################
   // ################################################################
 
+  // #################### 초롱이초롱초롱AI ##########################
   const ort = require('onnxruntime-web/webgpu');
   const [ortSession, setOrtSession] = useState(null);
   useEffect(() => {
@@ -577,6 +551,7 @@ export default function OpenViduApp() {
         `수고하셨습니다. 점수를 계산하겠습니다.`,
       ]);
       handleCalculateScore();
+      setStage('RESULT');
 
       // 결과 보여주기
     } else if (stage === 'RESULT') {
@@ -607,7 +582,7 @@ export default function OpenViduApp() {
             clearInterval(myInterval);
             const answer = 100 - (sum_diff / frame_cnts) * 100;
             console.log(`@@@@@@@@@@@@@@ 내 점수는 ${answer}`);
-            setResultScore(answer);
+            setResultScore(Math.round(answer));
             setRecordOn(false);
           }
           setUserCamLeftBorder(false);
@@ -619,7 +594,7 @@ export default function OpenViduApp() {
             clearInterval(myInterval);
             const answer = 100 - (sum_diff / frame_cnts) * 100;
             console.log(`@@@@@@@@@@@@@@ 내 점수는 ${answer}`);
-            setResultScore(answer);
+            setResultScore(Math.round(answer));
             setRecordOn(false);
           }
           setUserCamLeftBorder(false);
@@ -734,25 +709,8 @@ export default function OpenViduApp() {
       to: [], // 빈 배열은 세션의 모든 클라이언트에게 전송
     });
 
-    setStage('RESULT'); // setStage 함수의 정의가 필요합니다.
+    // setStage 함수의 정의가 필요합니다.
   };
-
-  useEffect(() => {
-    if (session) {
-      const onScoreReceived = (e) => {
-        const receivedData = JSON.parse(e.data);
-        console.log('점수를 받았습니다.');
-        setUserOneName(receivedData.userOneName);
-        setUserOneScore(receivedData.userOneScore);
-        setUserTwoName(receivedData.userTwoName);
-        setUserTwoScore(receivedData.userTwoScore);
-      };
-
-      session.on('signal:score', onScoreReceived);
-
-      return () => session.off('signal:score', onScoreReceived);
-    }
-  }, [session]);
 
   useEffect(() => {
     if (session) {
@@ -795,7 +753,8 @@ export default function OpenViduApp() {
 
   // ############# 결과 보여주기 #############
   const handleViewResult = async () => {
-    startLoading('lizard', 3000);
+    handleCalculateScore();
+    startLoading('lizard', 1000);
     setToggleCurtain(true);
     setStage('END');
   };
@@ -810,10 +769,6 @@ export default function OpenViduApp() {
   const [toggleExitModal, setToggleExitModal] = useState(false);
   const [toggleTutorialModal, setToggleTutorialModal] = useState(false);
   const [toggleCurtain, setToggleCurtain] = useState(false);
-
-  useEffect(() => {
-    console.log('staegestagestage', stage);
-  }, [stage]);
 
   return (
     <div className="">
@@ -838,6 +793,8 @@ export default function OpenViduApp() {
               userOneScore={userOneScore}
               userTwoName={userTwoName}
               userTwoScore={userTwoScore}
+              leaveSession={leaveSession}
+              session={session}
             />
           )}
 
@@ -883,6 +840,7 @@ export default function OpenViduApp() {
                     mySide={mySide}
                     recordOn={recordOn}
                     userCamBorder={userCamLeftBorder}
+                    type="publisher"
                   />
                 </div>
               ) : (
@@ -959,6 +917,7 @@ export default function OpenViduApp() {
                       streamManager={sub}
                       mySide={null}
                       userCamBorder={userCamRightBorder}
+                      type="subscriber"
                     />
                   </div>
                 ))
@@ -967,7 +926,7 @@ export default function OpenViduApp() {
                   <div className="flex text-white">
                     <Matching typingContent="..." />
                   </div>
-                  <div className="relative -mt-10 flex items-center justify-center w-[500px] h-[500px]">
+                  <div className="relative flex items-center justify-center w-[500px] h-[500px]">
                     <img
                       src="image/rank/rank-basic-bg.png"
                       alt="waiting"
