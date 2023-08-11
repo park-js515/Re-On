@@ -6,11 +6,12 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import BackStage from './BackStage';
 import UserVideoComponent from './UserVideoComponent';
 import Matching from 'components/Typing/Matching';
-import LoadingWaiting from 'components/RankGame/LoadingWaiting';
-import MatchingWaiting from 'components/RankGame/MatchingWaiting';
-import CalculatingWaiting from 'components/RankGame/CalculatingWaiting';
-import Modal from 'components/RankGame/Modal';
-import TutorialModal from 'components/RankGame/TutorialModal';
+import LizardLoading from 'components/RankGame/Loading/LizardLoading';
+import MatchingWaiting from 'components/RankGame/Loading/MatchingWaiting';
+import CountLoading from 'components/RankGame/Loading/CountLoading';
+import Modal from 'components/RankGame/Modal/Modal';
+import TutorialModal from 'components/RankGame/Modal/TutorialModal';
+import EndCurtain from 'components/RankGame/Modal/EndCurtain';
 import * as faceapi from 'face-api.js';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
@@ -38,7 +39,6 @@ export default function OpenViduApp() {
   const [subscribers, setSubscribers] = useState([]);
   // eslint-disable-next-line no-unused-vars
   const [currentVideoDevice, setCurrentVideoDevice] = useState(null);
-  const [mySession, setMySession] = useState(null); // 밖에서 세션 시그널을 사용하기 위함
 
   const OV = useRef(new OpenVidu());
 
@@ -77,10 +77,11 @@ export default function OpenViduApp() {
       // 상대유저가 나중에 온 유저면, 나는 먼저 온 유저(첫번째)
       const me = subscriberId === secondUserId ? 'USER_ONE' : 'USER_TWO';
       setMySide(me); // 상태 업데이트
-      setLog((prevLog) => [
-        ...prevLog,
-        `${logMessageTime} | 당신은 ${me}입니다.`,
-      ]);
+      if (mySide == 'USER_ONE') {
+        setLog((prevLog) => [...prevLog, `당신은 첫번째차례 입니다!`]);
+      } else {
+        setLog((prevLog) => [...prevLog, `당신은 두번째차례 입니다!`]);
+      }
       // +++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
       // 시그널 보내기
@@ -93,15 +94,13 @@ export default function OpenViduApp() {
     // 시그널 받기
     mySession.on('signal:playVideo', async (event) => {
       // 시그널을 받으면 비디오 재생을 처리
-      setLog((prevLog) => [
-        ...prevLog,
-        `${logMessageTime} | 게임을 시작합니다.`,
-      ]);
-      await startLoading(5000); // 로딩 5초
+      setLog((prevLog) => [...prevLog, `게임을 시작합니다.`]);
+      await startLoading('count', 5000); // 로딩 5초
       handleLoadVideo(); // 영상 시작
     });
 
-    mySession.on('streamDestroyed', (event) => {
+    mySession.on('streamDestroyed', async (event) => {
+      await startLoading('lizard', 1000); // 로딩 5초
       deleteSubscriber(event.stream.streamManager);
     });
 
@@ -112,7 +111,6 @@ export default function OpenViduApp() {
     setSession(mySession);
 
     dispatch(setIsJoinSession(true));
-    setLog((prevLog) => [...prevLog, `${logMessageTime} | 참가했습니다.`]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -195,10 +193,7 @@ export default function OpenViduApp() {
         return prevSubscribers;
       }
     });
-    setLog((prevLog) => [
-      ...prevLog,
-      `${logMessageTime} | 상대방이 나갔습니다.`,
-    ]);
+    setLog((prevLog) => [...prevLog, `상대탈주함 ㅋㅋ`]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -368,17 +363,17 @@ export default function OpenViduApp() {
     console.log('@@@@@@@@@@@@@@@@@@@@@@@@@ face_detect');
     const video = document.getElementById(mySide);
     const origin = document.getElementById('origin');
-    const canvas = faceapi.createCanvasFromMedia(video);
+    // const canvas = faceapi.createCanvasFromMedia(video);
 
-    origin.addEventListener('loadeddata', () => {
-      const origin_canvas = faceapi.createCanvasFromMedia(origin);
-      faceapi.matchDimensions(origin_canvas, originSize);
-    });
+    // origin.addEventListener('loadeddata', () => {
+    //   const origin_canvas = faceapi.createCanvasFromMedia(origin);
+    //   faceapi.matchDimensions(origin_canvas, originSize);
+    // });
 
     const originSize = { width: 224, height: 224 };
     const videoSize = { width: 224, height: 224 };
-    faceapi.matchDimensions(canvas, videoSize);
-    const FPS = 10;
+    // faceapi.matchDimensions(canvas, videoSize);
+    const FPS = 5;
     myInterval = setInterval(async () => {
       const start = new Date();
       const video_detections = await faceapi.detectAllFaces(
@@ -498,38 +493,38 @@ export default function OpenViduApp() {
   // #################       게임 로그 저장      ####################
   const currentTime = new Date();
   const logMessageTime = `${currentTime.getHours()}:${currentTime.getMinutes()}:${currentTime.getSeconds()}`;
-  const [log, setLog] = useState(['게임 상태를 기록합니다.']);
+  const [log, setLog] = useState(['반갑습니다. REON입니다.']);
   const logRef = useRef(null);
 
   useEffect(() => {
     logRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [log]);
 
-  const logMessage = 'No one in the room.';
+  const logMessage = null;
 
   useEffect(() => {
     setLog((prevLog) => [...prevLog, logMessage]);
   }, [logMessage]);
 
   // ################# useLoading 훅 사용 #################
-  const { isLoading, startLoading } = useLoading(false, 5000);
+  const { loadingState, startLoading } = useLoading(
+    { isLoading: false, type: 'count' },
+    5000,
+  );
 
   useEffect(() => {
     let intervalId;
-    if (isLoading) {
-      setLog((prevLog) => [...prevLog, ` ${logMessageTime} | 로딩 시작`]);
+    if (loadingState.isLoading) {
       let counter = 0;
       intervalId = setInterval(() => {
-        setLog((prevLog) => [...prevLog, `${counter}초`]);
         counter++;
       }, 1000);
     } else {
       clearInterval(intervalId);
-      setLog((prevLog) => [...prevLog, `${logMessageTime} | 로딩 종료`]);
     }
     return () => clearInterval(intervalId);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isLoading]);
+  }, [loadingState]);
 
   // ############ 상태 관리 ###############
   const [stage, setStage] = useState('READY'); // 현재 게임 상태 관리
@@ -545,40 +540,54 @@ export default function OpenViduApp() {
   useEffect(() => {
     // 영화 미리보기
     if (stage === 'WATCHING_MOVIE') {
-      setLog((prevLog) => [...prevLog, `${logMessageTime} | 작품 미리보기`]);
+      setLog((prevLog) => [...prevLog, `연기를 감상해보세요!`]);
 
       // 내가 유저 1이면서 첫번째 차례
     } else if (mySide === 'USER_ONE' && stage === 'USER_ONE_TURN') {
-      setLog((prevLog) => [...prevLog, `${logMessageTime} | 내 연기 시작`]);
-      handleUserOnePlay();
+      setLog((prevLog) => [...prevLog, `당신 차례입니다. 연기를 준비하세요!!`]);
+      if (stage !== 'END') {
+        handleUserOnePlay();
+      }
+
       // 내가 유저 1이면서 두번째 차례
     } else if (mySide === 'USER_ONE' && stage === 'USER_TWO_TURN') {
-      setLog((prevLog) => [...prevLog, `${logMessageTime} | 상대 연기 시작`]);
-      handleUserTwoPlay();
+      setLog((prevLog) => [...prevLog, `상대의 연기에 집중해주세요!`]);
+      if (stage !== 'END') {
+        handleUserTwoPlay();
+      }
 
       // 내가 유저 2이면서 첫번째 차례
     } else if (mySide === 'USER_TWO' && stage === 'USER_ONE_TURN') {
-      setLog((prevLog) => [...prevLog, `${logMessageTime} | 상대 연기 시작`]);
-      handleUserOnePlay();
+      setLog((prevLog) => [...prevLog, `상대의 연기에 집중해주세요!`]);
+      if (stage !== 'END') {
+        handleUserOnePlay();
+      }
 
       // 내가 유저 2이면서 두번째 차례
     } else if (mySide === 'USER_TWO' && stage === 'USER_TWO_TURN') {
-      setLog((prevLog) => [...prevLog, `${logMessageTime} | 내 연기 시작`]);
-      handleUserTwoPlay();
+      setLog((prevLog) => [...prevLog, `당신 차례입니다. 연기를 준비하세요!!`]);
+      if (stage !== 'END') {
+        handleUserTwoPlay();
+      }
+
       // 점수 계산
     } else if (stage === 'CALCULATION') {
-      setLog((prevLog) => [...prevLog, `${logMessageTime} | 계산 시작`]);
-      handleCaculateScore();
+      setLog((prevLog) => [
+        ...prevLog,
+        `수고하셨습니다. 점수를 계산하겠습니다.`,
+      ]);
+      handleCalculateScore();
 
       // 결과 보여주기
     } else if (stage === 'RESULT') {
-      setLog((prevLog) => [...prevLog, `${logMessageTime} | 결과 종료`]);
+      // 커튼 닫기
+
+      setLog((prevLog) => [...prevLog, `결과를 확인하세요!`]);
       handleViewResult();
 
       // 게임 종료
     } else if (stage === 'END') {
-      setLog((prevLog) => [...prevLog, `${logMessageTime} | 게임 종료`]);
-      setToggleSaveModal(true);
+      setLog((prevLog) => [...prevLog, `안녕히 가세요!`]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [stage]);
@@ -591,17 +600,9 @@ export default function OpenViduApp() {
       const handleEnded = () => {
         // 영화 미리보기 종료
         if (stage === 'WATCHING_MOVIE') {
-          setLog((prevLog) => [
-            ...prevLog,
-            `${logMessageTime} | 작품 미리보기 종료`,
-          ]);
           setStage('USER_ONE_TURN');
           // 유저1 턴 종료
         } else if (stage === 'USER_ONE_TURN') {
-          setLog((prevLog) => [
-            ...prevLog,
-            `${logMessageTime} | 첫번째 연기 종료`,
-          ]);
           if (mySide === 'USER_ONE') {
             clearInterval(myInterval);
             const answer = 100 - (sum_diff / frame_cnts) * 100;
@@ -614,10 +615,6 @@ export default function OpenViduApp() {
           setStage('USER_TWO_TURN');
           // 유저2 턴 종료
         } else if (stage === 'USER_TWO_TURN') {
-          setLog((prevLog) => [
-            ...prevLog,
-            `${logMessageTime} | 두번째 연기 종료`,
-          ]);
           if (mySide === 'USER_TWO') {
             clearInterval(myInterval);
             const answer = 100 - (sum_diff / frame_cnts) * 100;
@@ -625,7 +622,6 @@ export default function OpenViduApp() {
             setResultScore(answer);
             setRecordOn(false);
           }
-          
           setUserCamLeftBorder(false);
           setUserCamRightBorder(false);
           setStage('CALCULATION');
@@ -647,10 +643,9 @@ export default function OpenViduApp() {
   // ############# 비디오 불러오기 함수 #############
   const handleLoadVideo = async () => {
     // setVideoSrc('video/ISawTheDevil.mp4'); // 비디오 URL 업데이트 (유튜브 API 요청해서 영상 소스 받아올 것)
-    await startLoading(3000); // 로딩
     setLog((prevLog) => [
       ...prevLog,
-      `${logMessageTime} |  작품 : ${videoRef.current.src} 작품 길이 : ${videoRef.current.duration} `,
+      `작품명 : 받아올것 시간 : ${Math.floor(videoRef.current.duration)}초`,
     ]);
     handlePlayVideo(); // 비디오 플레이
     setStage('WATCHING_MOVIE');
@@ -658,8 +653,10 @@ export default function OpenViduApp() {
 
   // ############# 유저1 플레이 함수 ##############
   const handleUserOnePlay = async () => {
-    setLog((prevLog) => [...prevLog, `${logMessageTime} | 유저 1 대기`]);
-    await startLoading(3000); // 로딩
+    await startLoading('count', 5000); // 로딩
+    if (mySide === 'USER_ONE') {
+      setLog((prevLog) => [...prevLog, `연기를 시작하세요!`]);
+    }
     handlePlayVideo();
     if (
       videoRef.current &&
@@ -669,18 +666,18 @@ export default function OpenViduApp() {
     ) {
       setRecordOn(true);
       face_detect();
-      // handleRecordVideo();
     }
     mySide === 'USER_ONE'
       ? setUserCamLeftBorder(true)
       : setUserCamRightBorder(true);
-    setLog((prevLog) => [...prevLog, `${logMessageTime} | 유저 1 시작`]);
   };
 
   // ############# 유저2 플레이 함수 ##############
   const handleUserTwoPlay = async () => {
-    setLog((prevLog) => [...prevLog, `${logMessageTime} | 유저 2 대기`]);
-    await startLoading(3000); // 로딩
+    await startLoading('count', 5000); // 로딩
+    if (mySide === 'USER_TWO') {
+      setLog((prevLog) => [...prevLog, `연기를 시작하세요!`]);
+    }
     handlePlayVideo();
     if (
       videoRef.current &&
@@ -694,48 +691,129 @@ export default function OpenViduApp() {
     mySide === 'USER_TWO'
       ? setUserCamLeftBorder(true)
       : setUserCamRightBorder(true);
-    setLog((prevLog) => [...prevLog, `${logMessageTime} | 유저 2 시작`]);
   };
 
   // ############# 점수 계산 ##############
-  // 실제 이곳에서 계산하는 게 아니라
-  const handleCaculateScore = async () => {
-    //  AI계산
-    setLog((prevLog) => [...prevLog, `${logMessageTime} | AI 점수 계산`]);
-    //  점수를 계산한다면,,,,,,
-    // 상대에게 점수랑 id 보내는 시그널
-    // 점수, id 받기
+  // 유저 식별자도 같이 보내줘야함 (수정!!!!!!!!!!!!!)
+  const [userOneName, setUserOneName] = useState(null);
+  const [userOneScore, setUserOneScore] = useState(null);
+  const [userTwoName, setUserTwoName] = useState(null);
+  const [userTwoScore, setUserTwoScore] = useState(null);
+  const [resultGame, setResultGame] = useState(0);
 
-    // 점수 비교해서 승 무 패 결정
+  const handleCalculateScore = async () => {
+    let newUserOneName = userOneName;
+    let newUserOneScore = userOneScore;
+    let newUserTwoName = userTwoName;
+    let newUserTwoScore = userTwoScore;
 
-    // 내 ID. 상대ID. 승무패 보내는 API
+    if (mySide === 'USER_ONE') {
+      newUserOneName = myUserName;
+      newUserOneScore = resultScore;
+      console.log('newUserOneScore 값 설정:', newUserOneScore); // 로그
+      setUserOneName(newUserOneName);
+      setUserOneScore(newUserOneScore);
+    } else if (mySide === 'USER_TWO') {
+      newUserTwoName = myUserName;
+      newUserTwoScore = resultScore;
+      setUserTwoName(newUserTwoName);
+      setUserTwoScore(newUserTwoScore);
+    }
 
-    setStage('RESULT');
-    // AI 계산하는 로직
-    await startLoading(3000);
+    const dataToSend = {
+      userOneName: newUserOneName,
+      userOneScore: newUserOneScore,
+      userTwoName: newUserTwoName,
+      userTwoScore: newUserTwoScore,
+    };
+
+    console.log('dataToSend:', dataToSend); // 로그
+    await session.signal({
+      type: 'score',
+      data: JSON.stringify(dataToSend),
+      to: [], // 빈 배열은 세션의 모든 클라이언트에게 전송
+    });
+
+    setStage('RESULT'); // setStage 함수의 정의가 필요합니다.
   };
+
+  useEffect(() => {
+    if (session) {
+      const onScoreReceived = (e) => {
+        const receivedData = JSON.parse(e.data);
+        console.log('점수를 받았습니다.');
+        setUserOneName(receivedData.userOneName);
+        setUserOneScore(receivedData.userOneScore);
+        setUserTwoName(receivedData.userTwoName);
+        setUserTwoScore(receivedData.userTwoScore);
+      };
+
+      session.on('signal:score', onScoreReceived);
+
+      return () => session.off('signal:score', onScoreReceived);
+    }
+  }, [session]);
+
+  useEffect(() => {
+    if (session) {
+      const onScoreReceived = (e) => {
+        const receivedData = JSON.parse(e.data);
+        console.log('점수를 받았습니다.');
+        setUserOneName(receivedData.userOneName);
+        setUserOneScore(receivedData.userOneScore);
+        setUserTwoName(receivedData.userTwoName);
+        setUserTwoScore(receivedData.userTwoScore);
+      };
+
+      session.on('signal:score', onScoreReceived);
+
+      return () => session.off('signal:score', onScoreReceived);
+    }
+  }, [session]);
+
+  useEffect(() => {
+    // 승패결정
+    if (mySide === 'USER_ONE') {
+      if (userOneScore > userTwoScore) {
+        setResultGame(1);
+      } else if (userTwoScore > userOneScore) {
+        setResultGame(-1);
+      } else {
+        setResultGame(0);
+      }
+    }
+    if (mySide === 'USER_TWO') {
+      if (userOneScore < userTwoScore) {
+        setResultGame(1);
+      } else if (userTwoScore < userOneScore) {
+        setResultGame(-1);
+      } else {
+        setResultGame(0);
+      }
+    }
+  }, [userOneScore, userTwoScore, mySide]);
 
   // ############# 결과 보여주기 #############
   const handleViewResult = async () => {
-    // 커튼 촤라라라락 결과 보여주는
-    await startLoading(3000);
-
+    startLoading('lizard', 3000);
+    setToggleCurtain(true);
     setStage('END');
   };
 
   // ############# 녹화 저장 함수 ##############
   const handleSaveVideo = async () => {
-    await startLoading(2000);
-    setLog((prevLog) => [
-      ...prevLog,
-      `${logMessageTime} | 녹화 영상을 저장했습니다!`,
-    ]);
+    await startLoading('lizard', 1000);
+    setLog((prevLog) => [...prevLog, `녹화 영상을 저장했습니다!`]);
   };
 
   // ############# 모달 ##############
   const [toggleExitModal, setToggleExitModal] = useState(false);
-  const [toggleSaveModal, setToggleSaveModal] = useState(false);
   const [toggleTutorialModal, setToggleTutorialModal] = useState(false);
+  const [toggleCurtain, setToggleCurtain] = useState(false);
+
+  useEffect(() => {
+    console.log('staegestagestage', stage);
+  }, [stage]);
 
   return (
     <div className="">
@@ -752,22 +830,29 @@ export default function OpenViduApp() {
 
       {session !== undefined ? (
         <div id="session" className="">
-          {toggleSaveModal && (
-            <Modal
-              type="save"
-              onConfirm={handleSaveVideo}
-              isOpen={toggleSaveModal}
-              onClose={() => setToggleSaveModal(false)}
+          {toggleCurtain && (
+            <EndCurtain
+              className="fixed inset-0 flex justify-center items-center z-50"
+              resultGame={resultGame}
+              userOneName={userOneName}
+              userOneScore={userOneScore}
+              userTwoName={userTwoName}
+              userTwoScore={userTwoScore}
             />
           )}
 
-          {isLoading && (
+          {loadingState.isLoading && (
             <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50">
-              <LoadingWaiting />
+              {loadingState.type === 'lizard' ? (
+                <LizardLoading /> // LizardLoading 컴포넌트
+              ) : (
+                <CountLoading /> // CountLoading 컴포넌트
+              )}
             </div>
           )}
 
           <div id="video-container" className="">
+            {/* 배너 */}
             <div className="text-center">
               <img
                 src="image/rank/rank-vs.png"
@@ -776,19 +861,20 @@ export default function OpenViduApp() {
 
               <div
                 id="log-list"
-                className=" h-[40px] mx-4 overflow-auto items-center mb-5"
+                className=" h-[60px] mx-4 overflow-auto items-center mb-5 "
               >
                 {log.map((item, index) => (
                   <div
                     key={index}
                     ref={logRef}
-                    className="log-item text-[24px] text-center"
+                    className="log-item text-[36px] text-center z-[52]"
                   >
                     <h1>{item}</h1>
                   </div>
                 ))}
               </div>
             </div>
+
             <div className="flex flex-wrap place-content-center ">
               {publisher !== undefined ? (
                 <div onClick={() => handleMainVideoStream(publisher)}>
@@ -801,7 +887,7 @@ export default function OpenViduApp() {
                 </div>
               ) : (
                 <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50">
-                  <LoadingWaiting />
+                  <LizardLoading />
                 </div>
               )}
 
@@ -813,7 +899,7 @@ export default function OpenViduApp() {
                 <video
                   id="origin"
                   ref={videoRef}
-                  src="video/아저씨-원빈-금니빨.mp4"
+                  src="video/ISawTheDevil.mp4"
                   poster="image/rank/rank-reon.png"
                   className={`mx-4 rounded-lg ${
                     isPlaying ? 'border-4 border-danger' : ''
@@ -864,12 +950,6 @@ export default function OpenViduApp() {
                 </div>
                 {/* 버튼 */}
               </div>
-
-              {stage === 'END' && (
-                <div className="fixed inset-0 flex justify-center items-center z-50">
-                  {resultScore}
-                </div>
-              )}
 
               {subscribers.length > 0 ? (
                 subscribers.map((sub, i) => (

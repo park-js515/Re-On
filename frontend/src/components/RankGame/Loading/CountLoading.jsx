@@ -1,10 +1,10 @@
 import React from 'react';
 import { useLottie } from 'lottie-react';
-import animationData from 'assets/animation/rankLoading.json';
+import animationData from 'assets/animation/fiveCount.json';
 
-const LoadingWaiting = () => {
+const CountLoading = () => {
   const defaultOptions = {
-    loop: true,
+    loop: false,
     autoplay: true,
     animationData: animationData,
     rendererSettings: {
@@ -21,4 +21,4 @@ const LoadingWaiting = () => {
   );
 };
 
-export default LoadingWaiting;
+export default CountLoading;
