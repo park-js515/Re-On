@@ -14,11 +14,11 @@ public interface PostQueryService {
 
     List<PrivatePostsResponse> searchPrivatePosts(Long offset, Long memberId);
 
-    List<PublicPostsResponse> searchPublicPosts(Long offset, Long memberId, Long loginMemberId);
+    List<PublicPostsResponse> searchPublicPosts(Long offset, Long memberId, Long loginId);
 
     List<PostsResponse> searchLikedPosts(Long offset, Long memberId);
 
-    List<PostsResponse> searchFeedPosts(Long offset, Long loginMemberId);
+    List<PostsResponse> searchFeedPosts(Long offset, Long loginId);
 
-    List<PostsResponse> searchFeedRankPosts(Long loginMemberId);
+    List<PostsResponse> searchFeedRankPosts(Long loginId);
 }
