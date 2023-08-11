@@ -4,12 +4,13 @@ import './Solo.css'
 
 
 const SoloApp = () => {
-
+ 
+  
   const ort = require('onnxruntime-web/webgpu')
 
   // ※ 이거 바꾸시려면 Solo.css도 바꾸셔야 합니다. //
   const video_width = 500; //
-  const video_height = 400;//
+  const video_height = 500;//
   ///////////////////////////
   
   const [reload, setReload] = useState(false);
@@ -33,6 +34,9 @@ const SoloApp = () => {
   useEffect(()=>{
     async function createSession(){
       try {
+        // const newSession = await ort.InferenceSession.create('reon_model-2.onnx', {executionProviders: ['webgl']});
+        // setOrtSession(newSession);
+        
         await setOrtSession(await ort.InferenceSession.create('reon_model-2.onnx', {executionProviders: ['webgl']}));
         await faceapi.nets.tinyFaceDetector.loadFromUri('models');
         console.log('ONNX, Face-API 로딩 완료')
@@ -45,17 +49,20 @@ const SoloApp = () => {
             console.log(error)
           })
         }
-
+ 
       }
+      
       catch (e) {
         document.write(`failed to inference ONNX model: ${e}.`)
       }
+      
+   
     };
   
     createSession();
 
     return ()=>{setOrtSession(null);faceapi.tf.dispose();console.log("전부 삭제")}
-  },[])
+  },[videoRef])
   
   useEffect(() => {
     if (videoRef.current) {
@@ -88,7 +95,7 @@ const SoloApp = () => {
         }
       };
     }
-  },[videoRef]);
+  },[videoRef,ortSession]);
 
   ///////////////////////////////////////// 초롱이 시작 ////////////////////////////////////////////////
   let detectInterval = null;                                                                        ///
@@ -127,6 +134,11 @@ const SoloApp = () => {
   }
   
   async function image_classification(box1, box2) {
+    if (!ortSession==null) {
+      console.log('널.');
+      return;
+    }
+    
     const [x1, y1, w1, h1] = [box1.x, box1.y, box1.width, box1.height];
     const [x2, y2, w2, h2] = [box2.x, box2.y, box2.width, box2.height];
     const mean = [0.485, 0.456, 0.406];
@@ -198,14 +210,14 @@ const SoloApp = () => {
   }
 
   return (
-    <div>
+    <div className="">
 
-      <div className="flex flex-row items-center justify-around">
-
-          <div id="webCam_container">
-              <video id="webCam"
+      <div className="flex flex-row items-center justify-around ">
+        <div className="flex flex-row items-center justify-around mt-40">
+          <div id="webCam_container ">
+              <video id="webCam" 
                 autoPlay
-                style={{ width: '500px', height: '400px' }}
+                style={{ width: '500px', height: '500px' }}
                 className="rounded-lg"
                 ref={webCamRef}
               >
@@ -237,13 +249,13 @@ const SoloApp = () => {
 
               <video id="movie"
                 src={url}
-                style={{ width: '500px', height: '400px' }}
+                style={{ width: '500px', height: '500px' }}
                 className="rounded-lg"
                 ref={videoRef}
               >
               </video>
           </div>
-
+        </div>
       </div>
 
     </div>
