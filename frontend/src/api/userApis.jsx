@@ -1,59 +1,52 @@
 import axios from 'axios';
-import { useDispatch } from 'react-redux';
-import { userAcessToken } from 'redux/userSlice';
 import { useNavigate } from 'react-router-dom';
 
-// 요청을 보낼 때마다 가장 먼저 실행될 함수
-// 사용자의 accessToken을 back으로 보내 유효한 토큰인지 확인하고
-// 처리해야할 로직을 미리 정한다.
-
-// const AxiosInterceptor = () => {
-//   const dispatch = useDispatch();
-//   const user = useSelector((state) => state.user);
-// };
-
-const defaultApi = axios.create({
-  baseURL: process.env.REACT_APP_API + `/something/else`,
+const customAxios = axios.create({
+  baseUrl: process.env.REACT_APP_API,
+  //  timeout: 1000
 });
 
-defaultApi.interceptors.request.use({
-  function(config) {
-    const accessToken = userAcessToken();
-
-    if (accessToken) {
-      config.headers['Authorization'] = `Bearer` + accessToken;
-    }
+customAxios.interceptors.request.use(
+  function (config) {
+    config.headers['Content-Type'] = 'application/json; charset=utf-8';
+    config.headers['Authorization'] = `Bearer ${localStorage.getItem(
+      'accessToken',
+    )}`;
 
     return config;
   },
 
-  async function(error) {
+  function (error) {
     return Promise.reject(error);
   },
-});
+);
 
-defaultApi.interceptors.response.use({
-  function(response) {
+customAxios.interceptors.response.use(
+  (response) => {
     return response;
   },
+  async (error) => {
+    if (error.response?.status === 401) {
+      error.config.headers = {
+        'Content-Type': 'application/json',
+        Authentication: `Bearer ${localStorage.getItem('accessToken')}`,
+      };
 
-  async function(error) {
-    const { response: errorResponse } = error;
-    // const errorResponse = error.response;
-    const originalRequest = error.config;
-
-    // AT만 만료 (임시로 401)
-    // 아니면 401에러를 받고, 그에 대한 데이터로 분화한다.
-    if (errorResponse.status === 401) {
-      return;
-    }
-    // AT, RT 만료 (임시로 403)
-    else if (errorResponse.status === 403) {
-      return;
-    }
-    // 기타 모든 것
-    else {
-      return;
+      axios
+        .request(error.config)
+        .then((response) =>
+          localStorage.setItem('accessToken', response.data.accessToken),
+        )
+        .catch((error) => {
+          console.error(error);
+          localStorage.setItem('accessToken', '');
+          const navigate = useNavigate();
+          navigate('/login');
+        });
+    } else {
+      localStorage.setItem('accessToken', '');
+      const navigate = useNavigate();
+      navigate('/login');
     }
   },
-});
+);
