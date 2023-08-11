@@ -3,22 +3,50 @@ import styled from "styled-components";
 export const SContainer = styled.div`
   cursor: pointer;
   position: relative;
-  background-color: #fff;
+  background: linear-gradient(
+      var(--angle, 45deg),
+      #8ccfd5 0%,
+      #a0d3d8 10%,
+      #8ccfd5 20%,
+      #a0d3d8 30%,
+      #b7d9db 40%,
+      #e5e5e5 50%,
+      #b7d9db 60%,
+      #a0d3d8 70%,
+      #8ccfd5 80%,
+      #a0d3d8 90%,
+      #8ccfd5 100%
+    );
   background-size: cover;
   height: 20.5vw;
-  width: 55.5vw;
+  width: 45vw;
   border-radius: 12px;
-  color: #000000;
+  color: #fff;
   box-shadow: 5px 5px 15px #c5c5c5;
   transition: all 300ms linear;
-
+  box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.5);
+  
   &:hover {
-    transform: translateY(-3%);
+    background: linear-gradient(
+      var(--angle, 90deg),
+      #8ccfd5 0%,
+      #a0d3d8 10%,
+      #8ccfd5 20%,
+      #a0d3d8 30%,
+      #b7d9db 40%,
+      #e5e5e5 50%,
+      #b7d9db 60%,
+      #a0d3d8 70%,
+      #8ccfd5 80%,
+      #a0d3d8 90%,
+      #8ccfd5 100%
+    
+      );
+    /* background-size: 300% 100%;
+    animation: holographicShimmer 2s infinite; */
     cursor: default;
   }
-  &:hover .sns__container {
-    opacity: 1;
-  }
+ 
   .sns__container {
     width: 100%;
     height: 80%;
@@ -33,21 +61,22 @@ export const SContainer = styled.div`
 
   /* 프로필 사진과 이름, 점수를 묶는 div */
   .profile-container {
-    margin: calc(0.5vw + 3px) calc(0.5vw + 5px);
+    margin: calc(1vw + 3px) calc(1vw + 3px);
     display: flex;
     align-items: center;
     
     /* 이름 */
     .name {
-      margin: 0;
-      font-size: xxx-large;
-      font-weight: bold;
+     
+      
       &:hover {
-        transform: translateY(-5%);
+        color: #272727;
+       
       }
     }
     /* 전적 */
     .recent {
+      margin-left: 4px;
       font-size: large;
       color: #3c3c3c;
     }
@@ -66,19 +95,18 @@ export const SContainer = styled.div`
       border-radius: 50%;
       object-fit: cover;
       text-align: center;
-      background-image: linear-gradient(#fff, #fff),
-        linear-gradient(to right, #D4E6A0 0%, #D4E6A0 100%);
       background-origin: border-box;
       background-clip: content-box, border-box;
       &:hover {
-        transform: translateY(-5%);
+        filter: blur(1px);
+        opacity: 1px;
       }
     }
   }
 `;
 
-// SNS 링크를 묶는 div
-export const SSNSContainer = styled.div`
+// 텍스트 div
+export const STextContainer = styled.div`
   display: flex;
   justify-content: start;
   gap: 0.67vw;
@@ -92,12 +120,15 @@ export const SSNSContainer = styled.div`
 export const SRank = styled.div`
   user-select: none;
  
-  position: absolute;
-  bottom: calc(4vw + 1px);
-  right: calc(3vw + 12px);
-  z-index: 100;
-  img {
-    width: 200px;  // 원하는 너비로 설정
-    height: 250px; // 원하는 높이로 설정
-  }
+ position: absolute;
+ bottom: calc(3vw + 10px);
+ right: calc(3vw + 12px);
+ z-index: 100;
+ 
+ img {
+   width: 16vw;  // 반응형 너비로 설정
+   height: 19.75vw; // 반응형 높이로 설정 (200px:250px의 비율 유지)
+   max-width: 200px; // 최대 너비 제한 (선택적)
+   max-height: 250px; // 최대 높이 제한 (선택적)
+ }
 `;

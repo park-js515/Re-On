@@ -2,11 +2,11 @@ import React from "react";
 import { useNavigate } from 'react-router-dom';
 import Commentlist from "./Commentlist";
 import { useState } from "react";
-import "./videocomponent.css"
-const Videoplayer = ({post_id, changeShow}) => {
+
+const LikesModal = ({post_id, changeShow}) => {
     const navigate = useNavigate();
 
-    // Dummy data generation
+    // 더미임요
     let dataList = [];
     for (let i = 1; i <= 10; i++) {
         dataList.push({
@@ -24,16 +24,7 @@ const Videoplayer = ({post_id, changeShow}) => {
                 `제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 
                 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 
                 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내제곧내 제곧내 
-                제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내제곧내 제곧내 제곧내 
-                제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내제곧내 제곧내 제곧내 제곧내 제곧내 
-                제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 
-                제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 
-                제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 
-                제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내
-                제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내제곧내 제곧내 제곧내 제곧내 제곧내 
-                제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 
-                제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 
-                
+
                 `
             });
     }
@@ -41,7 +32,8 @@ const Videoplayer = ({post_id, changeShow}) => {
     const data = dataList.find(data => data.post_id === post_id) || dataList[0];
     
     const [IsLike, setIsLike] = useState(data.isLike);
-
+    
+    //마페이지 이동 
     const moveToMyPage = (event) => {
         navigate('/mypage')
     }
@@ -50,15 +42,6 @@ const Videoplayer = ({post_id, changeShow}) => {
         event.preventDefault()
         setIsLike(!IsLike)
         // axios 요청까지 해야됨
-    }
-    const OutBox = () => {
-        return (
-            <div 
-                className="w-2/12 text-center text-white " onClick={changeShow}
-            >
-                탈출
-            </div>
-        )
     }
 
     const convertToK = (number) => {
@@ -72,10 +55,15 @@ const Videoplayer = ({post_id, changeShow}) => {
         }
     }
     return (
-        <div className="fixed top-6 z-40 w-full h-full flex justify-center items-center bg-black bg-opacity-50">
-            <OutBox />
-            <div className="flex w-10/12 max-h-6/10  bg-white p-4 rounded-lg shadow-lg overflow-hidden">
-
+        <div 
+                className="fixed z-40 top-0 left-0 w-full h-full flex justify-center items-center bg-black bg-opacity-50"
+                onClick={changeShow} 
+            >
+            <div 
+                className="flex w-10/12 h-[80vh] max-h-[80vh] bg-white p-4 rounded-lg shadow-lg overflow-hidden"
+                onClick={e => e.stopPropagation()} 
+            >
+                
             {/* Left Section */}
             <div className="w-8/12 pr-4 border-r border-gray-200 overflow-y-auto max-h-[calc(80vh-48px)] scrollbar-hide">
                 
@@ -88,7 +76,7 @@ const Videoplayer = ({post_id, changeShow}) => {
                     <div className="flex items-center">
                         <img className="rounded-full w-16 h-16 mr-4 hover:shadow-lg transition-shadow cursor-pointer" src={data.profile_img} alt="" onClick={() => {changeShow(); moveToMyPage();}} />
                         <p className="flex-grow text-lg truncate cursor-pointer" onClick={()=>{changeShow(); moveToMyPage();}}>{data.nick_name}</p>
-                        <button className={`ml-4 px-4 py-2 rounded ${IsLike ? "bg-[#ecebeb] hover:bg-[#aaa6a6] text-[#000]" : "bg-[#8d8d8d] text-black hover:bg-inss"} transition-all`} onClick={likeVideo}>
+                        <button className={`ml-4 px-4 py-2 rounded ${IsLike ? "bg-[#ecebeb] hover:bg-[#aaa6a6] text-[#000]" : "bg-[#8d8d8d] text-black hover:bg-[#8d8d8d]"} transition-all`} onClick={likeVideo}>
                             영상 좋아요 {convertToK(data.like_cnt)}
                         </button>
                     </div>
@@ -103,10 +91,10 @@ const Videoplayer = ({post_id, changeShow}) => {
                
             </div>
         </div>
-        <OutBox />
+       
     </div>
     )
 }
 
-export default Videoplayer
+export default LikesModal
 

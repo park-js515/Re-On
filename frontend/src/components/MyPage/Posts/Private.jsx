@@ -29,6 +29,8 @@ import React,{useState} from 'react';
     const posts = temp;
     return (
       <div className="bg-white py-24 sm:py-32">
+        {/* 모달창 */}
+        
         {isModalOpen && (
                 <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50 z-50">
                     <div className="bg-white p-4 rounded-md">
@@ -40,6 +42,8 @@ import React,{useState} from 'react';
             )}
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="mx-auto  grid max-w-2xl grid-cols-1 gap-x-8 gap-y-4 sm:mt-1 sm:pt-1 lg:mx-0 lg:max-w-none lg:grid-cols-3">
+
+            {/* 사진 */}
             {posts.map((post) => (
               <div key={post.id} className="flex shadow-md rounded max-w-xl flex-col items-start justify-between transform transition-transform duration-300 hover:scale-105 hover:shadow-lg my-2 ">  
                  <div 

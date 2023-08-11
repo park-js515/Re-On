@@ -8,9 +8,9 @@ const navigation = [
   { name: '혼자하기', to: '/normallist', current: false },
   { name: '투표해줘', to: '/feed', current: false },
   { name: '고객센터', to: '/faq', current: false },
-  { name: '팀문화', to: '/login', current: false },
+  { name: '팀문화', to: '/team', current: false },
   { name: '로그인', to: '/login', current: false },
-  { name: '마페이지수정', to: '/normalgame', current: false },
+ 
 
   
   
