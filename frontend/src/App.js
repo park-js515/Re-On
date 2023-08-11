@@ -26,6 +26,7 @@ function App() {
         <Route path="/faq" element={<FAQPage />} />
         <Route path="/feed" element={<FeedPage />} />
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/login/redirect" element={<NaverRedirect />} />
         <Route path="/" element={<MainPage />} />
         <Route path="/mypage" element={<MyPage />} />
         <Route path="/normallist" element={<NormalListPage />} />
