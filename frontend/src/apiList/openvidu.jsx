@@ -13,7 +13,7 @@ function destorySession(sessionId, success, fail) {
   api.delete(`/sessions/${sessionId}/delete`).then(success).catch(fail);
 }
 
-// 2. 배틀룸 세션 생성 // body에 전달할 게 필요?
+// 2. 배틀룸 세션 생성
 /**
  *
  * @param {function} success [callback]
