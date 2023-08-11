@@ -10,7 +10,7 @@ public interface PostQueryService {
 
     PrivateDetailPostResponse searchPrivateById(Long postId);
 
-    PublicDetailPostResponse searchPublicById(Long postId);
+    PublicDetailPostResponse searchPublicById(Long postId, Long memberId);
 
     List<PrivatePostsResponse> searchPrivatePosts(Long offset, Long memberId);
 

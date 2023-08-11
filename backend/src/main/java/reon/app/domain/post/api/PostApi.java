@@ -52,16 +52,17 @@ public class PostApi {
     // 단건 조회
     @Operation(summary = "post 상세 조회", description = "postId로 post 상세 조회")
     @GetMapping("/{postId}")
-    public ApiResponse<?> searchPost(@PathVariable Long postId){
+    public ApiResponse<?> searchPost(@PathVariable Long postId, @Parameter(hidden = true) @AuthenticationPrincipal User user){
         Scope postScope = postQueryService.searchScopeById(postId);
         if(postScope == null){
             throw new CustomException(ErrorCode.POSTS_NOT_FOUND);
         }
+        Long memberId = Long.parseLong(user.getUsername());
         if(postScope.equals(Scope.PRIVATE)){ // title, content 제공 x
             PrivateDetailPostResponse response = postQueryService.searchPrivateById(postId);
             return ApiResponse.OK(response);
         }else{
-            PublicDetailPostResponse response = postQueryService.searchPublicById(postId);
+            PublicDetailPostResponse response = postQueryService.searchPublicById(postId, memberId);
             return ApiResponse.OK(response);
         }
     }

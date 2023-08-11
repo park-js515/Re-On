@@ -47,11 +47,12 @@ public class PostQueryServiceImpl implements PostQueryService {
 
     // TODO: 2023-08-08 좋아요, 댓글구 현 후 작성 필요
     @Override
-    public PublicDetailPostResponse searchPublicById(Long postId) {
+    public PublicDetailPostResponse searchPublicById(Long postId, Long memberId) {
         Post post = postQueryRepository.searchById(postId);
         if(post == null){
             throw new CustomException(ErrorCode.POSTS_NOT_FOUND);
         }
+        Boolean isLike = postLikeQueryRepository.isLike(postId, memberId);
         List<PostCommentResponse> commentResponses = postCommentQueryRepository.searchPostCommentResponse(1L, postId);
         return PublicDetailPostResponse.builder()
                 .id(post.getId())
@@ -62,6 +63,7 @@ public class PostQueryServiceImpl implements PostQueryService {
                 .title(post.getTitle())
                 .content(post.getContent())
                 .likeCnt(post.getPostLikes().size())
+                .isLike(isLike)
                 .postCommentResponses(commentResponses)
                 .createDate(post.getCreateDate())
                 .build();

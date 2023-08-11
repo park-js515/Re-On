@@ -45,10 +45,10 @@ public class MemberApi {
 
 
     @Operation(summary = "mypage member 조회", description = "memberId로 mypage member 상세 조회")
-    @GetMapping("/member") // 시큐리티를 사용한다면 로그인이 됐으면 ? user 있을꺼고 나도 사용하고싶당~
-    public ApiResponse<MemberResponse> findMemberById(@Parameter(hidden = true) @AuthenticationPrincipal User user){
-        Long memberId = Long.parseLong(user.getUsername()); //null exception -> 500 에러가 나감.
-        MemberResponse memberResponse = memberQueryService.findById(memberId);
+    @GetMapping("/member/{id}") // 시큐리티를 사용한다면 로그인이 됐으면 ? user 있을꺼고 나도 사용하고싶당~
+    public ApiResponse<MemberResponse> findMemberById(@PathVariable("id") @ApiParam("유저 id") Long id, @Parameter(hidden = true) @AuthenticationPrincipal User user){
+//        Long memberId = Long.parseLong(user.getUsername()); //null exception -> 500 에러가 나감.
+        MemberResponse memberResponse = memberQueryService.findById(id);
         return ApiResponse.OK(memberResponse);
     }
 

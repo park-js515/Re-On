@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
-public class PostCommentResponse {
+public class    PostCommentResponse {
     private Long id; // 댓글 id
     private Long memberId;
     private Long postId;
