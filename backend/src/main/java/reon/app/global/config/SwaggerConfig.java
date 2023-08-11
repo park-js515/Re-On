@@ -29,6 +29,8 @@ public class SwaggerConfig {
                 .paths(PathSelectors.any())
                 .build()
                 .host("https://i9c203.p.ssafy.io/api")
+                .securitySchemes(Arrays.asList(apiKey()))
+                .securityContexts(Arrays.asList(securityContext()))
                 .apiInfo(apiInfo());
     }
 
