@@ -13,6 +13,8 @@ import RegisterPage from './pages/RegisterPage';
 import TeamPage from './pages/TeamPage';
 
 import ResponsiveAppBar from 'components/common/NavBar';
+import NaverRedirect from 'components/login/NaverRedirect';
+import TestPage from 'apiList/TestPage';
 
 function App() {
   const { isJoinSession } = useSelector((state) => state.session);

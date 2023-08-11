@@ -1,14 +1,16 @@
 package reon.app.domain.member.dto.res;
 
+import lombok.Data;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 import reon.app.domain.member.entity.MemberBattleInfo;
 
-@ToString
-@Getter
+@Data
+@NoArgsConstructor
 public class MemberBattleInfoResponse {
-    private int score;
-    private int gameCnt;
+    private int score; //누적점수
+    private int gameCnt; //
     private int win;
     private int lose;
 

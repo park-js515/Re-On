@@ -9,7 +9,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import reon.app.domain.openvidu.service.OpenViduService;
@@ -122,7 +121,7 @@ public class OpenViduApi {
     }
     @Tag(name = "OpenVidu")
     @Operation(summary = "배틀룸 세션 종료",description = "sessionId에 해당하는 세션 종료")
-    @PostMapping("/sessions/{sessionId}/delete")
+    @DeleteMapping("/sessions/{sessionId}/delete")
     public ApiResponse<?> endSession(@PathVariable("sessionId") String sessionId)
             throws OpenViduJavaClientException, OpenViduHttpException {
             openViduService.deleteSession(sessionId);
