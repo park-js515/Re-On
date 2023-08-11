@@ -3,10 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import Commentlist from "./Commentlist";
 import { useState } from "react";
 
-const Videoplayer = ({post_id, changeShow}) => {
+const PostModal = ({post_id, changeShow}) => {
     const navigate = useNavigate();
 
-    // 더미 
+    // 더미임요
     let dataList = [];
     for (let i = 1; i <= 10; i++) {
         dataList.push({
@@ -24,16 +24,7 @@ const Videoplayer = ({post_id, changeShow}) => {
                 `제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 
                 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 
                 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내제곧내 제곧내 
-                제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내제곧내 제곧내 제곧내 
-                제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내제곧내 제곧내 제곧내 제곧내 제곧내 
-                제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 
-                제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 
-                제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 
-                제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내
-                제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내제곧내 제곧내 제곧내 제곧내 제곧내 
-                제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 
-                제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 
-                
+
                 `
             });
     }
@@ -41,7 +32,8 @@ const Videoplayer = ({post_id, changeShow}) => {
     const data = dataList.find(data => data.post_id === post_id) || dataList[0];
     
     const [IsLike, setIsLike] = useState(data.isLike);
-
+    
+    //마페이지 이동 
     const moveToMyPage = (event) => {
         navigate('/mypage')
     }
@@ -51,7 +43,6 @@ const Videoplayer = ({post_id, changeShow}) => {
         setIsLike(!IsLike)
         // axios 요청까지 해야됨
     }
-
 
     const convertToK = (number) => {
         if (number >= 1000){
@@ -64,11 +55,15 @@ const Videoplayer = ({post_id, changeShow}) => {
         }
     }
     return (
-        // 모달 외부클릭시 꺼짐
-        <div className="fixed top-6 z-40 w-full h-full flex justify-center items-center bg-black bg-opacity-50" onClick={changeShow}> 
-             {/*모달 내부는 이상없게  */}
-            <div className="flex w-10/12 h-[80vh] max-h-[80vh]  bg-white p-4 rounded-lg shadow-lg overflow-hidden" onClick={e => e.stopPropagation()}>
-
+        <div 
+                className="fixed z-40 top-0 left-0 w-full h-full flex justify-center items-center bg-black bg-opacity-50"
+                onClick={changeShow} 
+            >
+            <div 
+                className="flex w-10/12 h-[80vh] max-h-[80vh] bg-white p-4 rounded-lg shadow-lg overflow-hidden"
+                onClick={e => e.stopPropagation()} 
+            >
+                
             {/* Left Section */}
             <div className="w-8/12 pr-4 border-r border-gray-200 overflow-y-auto max-h-[calc(80vh-48px)] scrollbar-hide">
                 
@@ -81,7 +76,7 @@ const Videoplayer = ({post_id, changeShow}) => {
                     <div className="flex items-center">
                         <img className="rounded-full w-16 h-16 mr-4 hover:shadow-lg transition-shadow cursor-pointer" src={data.profile_img} alt="" onClick={() => {changeShow(); moveToMyPage();}} />
                         <p className="flex-grow text-lg truncate cursor-pointer" onClick={()=>{changeShow(); moveToMyPage();}}>{data.nick_name}</p>
-                        <button className={`ml-4 px-4 py-2 rounded ${IsLike ? "bg-[#ecebeb] hover:bg-[#aaa6a6] text-[#000]" : "bg-[#8d8d8d] text-black hover:bg-inss"} transition-all`} onClick={likeVideo}>
+                        <button className={`ml-4 px-4 py-2 rounded ${IsLike ? "bg-[#ecebeb] hover:bg-[#aaa6a6] text-[#000]" : "bg-[#8d8d8d] text-black hover:bg-[#8d8d8d]"} transition-all`} onClick={likeVideo}>
                             영상 좋아요 {convertToK(data.like_cnt)}
                         </button>
                     </div>
@@ -101,5 +96,5 @@ const Videoplayer = ({post_id, changeShow}) => {
     )
 }
 
-export default Videoplayer
+export default PostModal
 
