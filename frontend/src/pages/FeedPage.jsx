@@ -2,8 +2,7 @@ import Hotlist from "components/VideoComponent/Hotlist";
 import Videolist from "components/VideoComponent/Videolist";
 import Videoplayer from "components/VideoComponent/Videoplayer";
 import { useState, useEffect } from "react";
-import Banner from '../components/home/Banner';
-import { Container } from '@mui/system';
+
 
 const FeedPage = () => {
   const [show, setShow] = useState(false);
@@ -53,10 +52,7 @@ const FeedPage = () => {
 
    
     <div className="bg-gradient-to-t from-lightBlue via-begie to-begie" >
-        {/* <Container>
-          <Banner/>
-        </Container> */}
-        {/* <div className={show? "w-3/4 mx-auto blur-md" : "w-3/4 mx-auto"}> */}
+       
         <Hotlist 
           injectPostId={injectPostId}
           changeShow={changeShow}
@@ -66,7 +62,7 @@ const FeedPage = () => {
           injectPostId={injectPostId}
           changeShow={changeShow}
           />
-      {/* </div> */}
+   
       {show ? <Videoplayer changeShow={changeShow} post_id={post_id}/> : null}
       
 

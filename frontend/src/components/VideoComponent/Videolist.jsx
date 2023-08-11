@@ -42,6 +42,7 @@ const Videolist = ({injectPostId, changeShow}) => {
     useEffect(()=>{
         observer.observe(target.current)
     }, []);
+
     // 검색
     const [searchTerm, setSearchTerm] = useState(""); // 검색어를 저장하는 상태
   
@@ -55,7 +56,7 @@ const Videolist = ({injectPostId, changeShow}) => {
         <div className="py-8 sm:py-8 ">
             <div className="bg-white mx-auto max-w-7xl px-2 lg:px-8">
                 <h1 className="my-8 py-24 text-center font-bold text-3xl text-dark ">💌투표해줘</h1>           
-                <div className="flex justify-end my-4 rounded"> {/* flex를 사용하여 우측으로 정렬 */}
+                <div className="flex justify-end my-4 rounded"> 
                     <div className="relative">
                         <input 
                             type="text" 
