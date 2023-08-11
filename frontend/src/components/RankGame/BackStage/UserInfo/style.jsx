@@ -4,7 +4,7 @@ export const SContainer = styled.div`
   cursor: pointer;
   position: relative;
   background: linear-gradient(
-      var(--angle, 45deg),
+      var(--angle, 0deg),
       #8ccfd5 0%,
       #a0d3d8 10%,
       #8ccfd5 20%,
@@ -120,15 +120,17 @@ export const STextContainer = styled.div`
 export const SRank = styled.div`
   user-select: none;
  
- position: absolute;
- bottom: calc(3vw + 10px);
- right: calc(3vw + 12px);
- z-index: 100;
+ position: relative;
+ bottom: calc(10vw + 10px);
+ right: calc(-30vw + 12px);
+
  
  img {
    width: 16vw;  // 반응형 너비로 설정
    height: 19.75vw; // 반응형 높이로 설정 (200px:250px의 비율 유지)
    max-width: 200px; // 최대 너비 제한 (선택적)
    max-height: 250px; // 최대 높이 제한 (선택적)
+   min-height: 100px;
+   min-width: 100px;
  }
 `;

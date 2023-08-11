@@ -1,5 +1,7 @@
 #webCam_container {
   position: relative;
+  
+ 
 }
 #movie_container {
   position: relative;
@@ -9,9 +11,10 @@ canvas {
   position: absolute;
   left: 0;
   top: 0;
+  
 }
 
 video {
   object-fit: fill;
-
+  
 }
