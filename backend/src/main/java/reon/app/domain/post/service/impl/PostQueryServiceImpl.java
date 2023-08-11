@@ -45,7 +45,6 @@ public class PostQueryServiceImpl implements PostQueryService {
                 .build();
     }
 
-    // TODO: 2023-08-08 좋아요, 댓글구 현 후 작성 필요
     @Override
     public PublicDetailPostResponse searchPublicById(Long postId, Long memberId) {
         Post post = postQueryRepository.searchById(postId);
@@ -78,14 +77,15 @@ public class PostQueryServiceImpl implements PostQueryService {
     @Override
     public List<PublicPostsResponse> searchPublicPosts(Long offset, Long memberId) {
         List<PublicPostsResponse> responses = postQueryRepository.searchPublicPosts(offset, memberId);
+
         return responses;
     }
 
     @Override
     public List<PostsResponse> searchLikedPosts(Long offset, Long memberId) {
         List<Long> ids = postLikeQueryRepository.searchLikedPostByMemberId(memberId);
-
         List<PostsResponse> responses = postQueryRepository.searchLikedPosts(ids ,offset,memberId);
+        responses.stream().forEach(res -> res.setIsLike(true));
         return responses;
     }
 

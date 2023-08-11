@@ -16,11 +16,12 @@ public class PostsResponse {
     private String profileImg;
     private String thumbnail;
     private int likeCnt;
+    private Boolean isLike;
     private int commentCnt;
     private LocalDateTime createDate;
 
     @Builder
-    public PostsResponse(Long id, Long memberId, String title, String nickName, String profileImg, String thumbnail, int likeCnt, int commentCnt, LocalDateTime createDate) {
+    public PostsResponse(Long id, Long memberId, String title, String nickName, String profileImg, String thumbnail, int likeCnt, Boolean isLike, int commentCnt, LocalDateTime createDate) {
         this.id = id;
         this.memberId = memberId;
         this.title = title;
@@ -28,6 +29,7 @@ public class PostsResponse {
         this.profileImg = profileImg;
         this.thumbnail = thumbnail;
         this.likeCnt = likeCnt;
+        this.isLike = isLike;
         this.commentCnt = commentCnt;
         this.createDate = createDate;
     }

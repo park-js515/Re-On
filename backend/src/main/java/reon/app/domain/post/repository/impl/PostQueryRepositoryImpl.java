@@ -20,6 +20,7 @@ import java.util.List;
 
 import static reon.app.domain.member.entity.QMember.member;
 import static reon.app.domain.post.entity.QPost.post;
+import static reon.app.domain.post.entity.QPostLike.postLike;
 import static reon.app.domain.video.entity.QVideo.video;
 
 @Repository
