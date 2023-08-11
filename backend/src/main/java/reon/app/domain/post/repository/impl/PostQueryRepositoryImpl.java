@@ -8,10 +8,7 @@ import com.querydsl.core.types.dsl.NumberPath;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
-import reon.app.domain.post.dto.res.PostsResponse;
-import reon.app.domain.post.dto.res.PrivatePostsResponse;
-import reon.app.domain.post.dto.res.PublicDetailPostResponse;
-import reon.app.domain.post.dto.res.PublicPostsResponse;
+import reon.app.domain.post.dto.res.*;
 import reon.app.domain.post.entity.Post;
 import reon.app.domain.post.entity.PostLike;
 import reon.app.domain.post.entity.Scope;
@@ -45,7 +42,8 @@ public class PostQueryRepositoryImpl implements PostQueryRepository {
                 .from(post)
                 .join(post.member, member).fetchJoin()
                 .join(post.video, video).fetchJoin()
-                .where(post.id.eq(postId))
+                .where(post.id.eq(postId),
+                        post.deleted.eq(0))
                 .fetchOne();
     }
 
@@ -171,6 +169,13 @@ public class PostQueryRepositoryImpl implements PostQueryRepository {
                 .orderBy(post.postLikes.size().desc())
                 .fetch();
     }
+
+//    @Override
+//    public List<PostCommentResponse> searchPostCommentResponse(Long offset, Long postId) {
+//        return queryFactory
+//                .select(Projections.fields(PostCommentResponse.class,
+//                        ));
+//    }
 
     private BooleanExpression isCurrentMonth() {
         LocalDateTime now = LocalDateTime.now();

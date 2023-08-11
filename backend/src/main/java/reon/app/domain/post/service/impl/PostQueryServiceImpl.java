@@ -7,10 +7,13 @@ import org.springframework.transaction.annotation.Transactional;
 import reon.app.domain.post.dto.res.*;
 import reon.app.domain.post.entity.Post;
 import reon.app.domain.post.entity.Scope;
+import reon.app.domain.post.repository.PostCommentQueryRepository;
 import reon.app.domain.post.repository.PostLikeQueryRepository;
 import reon.app.domain.post.repository.PostQueryRepository;
 import reon.app.domain.post.repository.PostRepository;
 import reon.app.domain.post.service.PostQueryService;
+import reon.app.global.error.entity.CustomException;
+import reon.app.global.error.entity.ErrorCode;
 
 import javax.swing.text.html.Option;
 import java.util.List;
@@ -24,6 +27,7 @@ import java.util.stream.Collectors;
 public class PostQueryServiceImpl implements PostQueryService {
     private final PostQueryRepository postQueryRepository;
     private final PostLikeQueryRepository postLikeQueryRepository;
+    private final PostCommentQueryRepository postCommentQueryRepository;
     @Override
     public Scope searchScopeById(Long postId) {
         return postQueryRepository.searchScopeById(postId);
@@ -45,7 +49,10 @@ public class PostQueryServiceImpl implements PostQueryService {
     @Override
     public PublicDetailPostResponse searchPublicById(Long postId) {
         Post post = postQueryRepository.searchById(postId);
-        List<PostCommentResponse> commentResponses = getCommentResponse(post);
+        if(post == null){
+            throw new CustomException(ErrorCode.POSTS_NOT_FOUND);
+        }
+        List<PostCommentResponse> commentResponses = postCommentQueryRepository.searchPostCommentResponse(1L, postId);
         return PublicDetailPostResponse.builder()
                 .id(post.getId())
                 .memberId(post.getMember().getId())
