@@ -1,20 +1,23 @@
 // useLoading.js
 import { useState, useEffect } from 'react';
 
-const useLoading = (initialState, duration) => {
-  const [isLoading, setLoading] = useState(initialState);
+const useLoading = (
+  initialState = { isLoading: false, type: 'count' },
+  duration,
+) => {
+  const [loadingState, setLoadingState] = useState(initialState);
 
-  const startLoading = (durationOverride = duration) => {
-    setLoading(true);
+  const startLoading = (type, durationOverride = duration) => {
+    setLoadingState({ isLoading: true, type });
     return new Promise((resolve) => {
       setTimeout(() => {
-        setLoading(false);
+        setLoadingState({ isLoading: false, type: 'count' }); // 초기 상태로 돌아가거나 다른 로직을 추가할 수 있습니다.
         resolve();
       }, durationOverride);
     });
   };
 
-  return { isLoading, startLoading };
+  return { loadingState, startLoading };
 };
 
 export default useLoading;
