@@ -9,8 +9,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import reon.app.domain.member.dto.req.BattleLogSaveRequest;
 import reon.app.domain.member.dto.req.MemberUpdateRequest;
 import reon.app.domain.member.entity.Member;
+import reon.app.domain.member.entity.Tier;
 import reon.app.domain.member.repository.MemberRepository;
 import reon.app.domain.member.service.MemberService;
 import reon.app.global.error.entity.CustomException;
@@ -19,6 +21,7 @@ import reon.app.global.util.FileManger;
 //import reon.app.global.util.FileManger;
 
 import java.io.IOException;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -28,7 +31,6 @@ import java.util.UUID;
 public class MemberServiceImpl implements MemberService {
     private FileManger fileManger = new FileManger();
 //    private final String imgPath = "https://storage.googleapis.com/reon-bucket/";
-
     private final Storage storage;
     private final MemberRepository memberRepository;
 
@@ -43,14 +45,12 @@ public class MemberServiceImpl implements MemberService {
 //        }
         return findMember;
     }
-
     @Override
     public void deleteRefreshToken(Long id) {
         Member findMember = memberRepository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
         findMember.deleteRefreshToken();
     }
-
     @Override
     public void updateProfileImg(MultipartFile profileImg, Long id) {
         Member findMember = memberRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
@@ -62,7 +62,6 @@ public class MemberServiceImpl implements MemberService {
 //        String imgName = imgPath + updateImgFile(profileImg);
         findMember.getMemberInfo().updateProfileImg(imgName);
     }
-
     @Override
     public void removeProfileImg(Long id) {
         Member findMember = memberRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
@@ -72,12 +71,35 @@ public class MemberServiceImpl implements MemberService {
         }
         findMember.getMemberInfo().updateProfileImg(null);
     }
-
     @Override
     public void delete(Long id) {
         memberRepository.deleteById(id);
     }
 
+    @Override
+    public void updateBattleInfo(BattleLogSaveRequest battleLogSaveRequest) {
+        Member member1 = memberRepository.findById(battleLogSaveRequest.getUser1Id()).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+        Member member2 = memberRepository.findById(battleLogSaveRequest.getUser2Id()).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+        int result = battleLogSaveRequest.getResult(); //-1 패 0 무 1 승
+
+        Tier tier1 = member1.getMemberBattleInfo().getTier();
+        Tier tier2 = member2.getMemberBattleInfo().getTier();
+
+        //티어 비교 후 승점 생성
+        int score;
+        if(tier1.compareTo(tier2) < 0 && result == -1){ //내가 저티어인데 졌을때
+            score = -1;
+        }else if(tier1.compareTo(tier2) > 0 && result == 1){//내가 고티어인데 이겼을때
+            score = 1;
+        }else{
+            score = (1 + Math.abs(tier1.compareTo(tier2))) * result; //게임 결과로 변동할 score
+        }
+
+        //총 스코어 갱신
+        member1.getMemberBattleInfo().updateScore(score);
+        member1.getMemberBattleInfo().updateTier();
+        member1.getMemberBattleInfo().updateGameCnt(score);
+    }
 
 //    private void removeImgFile(String prevImg) {
 //        Blob blob = storage.get(bucketName).get(prevImg);
@@ -97,8 +119,7 @@ public class MemberServiceImpl implements MemberService {
 //        log.info(uuid);
 //        log.info(ext);
 //        log.info(bucketName);
-//
-//
+
 //        try {
 //            storage.create(
 //                    BlobInfo.newBuilder(bucketName, uuid)
@@ -113,4 +134,21 @@ public class MemberServiceImpl implements MemberService {
 //
 //        return uuid;
 //    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

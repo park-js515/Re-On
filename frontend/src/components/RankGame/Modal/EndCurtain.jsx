@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import './EndCurtain.css';
 
 const EndCurtain = ({
+  className,
   resultGame,
   userOneName,
   userOneScore,
@@ -11,7 +12,7 @@ const EndCurtain = ({
   const [isChecked, setIsChecked] = useState(true);
 
   return (
-    <div className="curtain">
+    <div className={`curtain ${className}`}>
       <div className="curtain__wrapper">
         <input
           type="checkbox"
@@ -23,7 +24,7 @@ const EndCurtain = ({
             isChecked ? '' : 'open'
           }`}
         ></div>
-        <div className="curtain__prize text-white">
+        <div className="curtain__prize text-white fixed inset-0 flex justify-center items-center">
           {resultGame === 1 ? '승' : resultGame === -1 ? '패' : '무'}
           <br />
           {userOneName} : {userOneScore}

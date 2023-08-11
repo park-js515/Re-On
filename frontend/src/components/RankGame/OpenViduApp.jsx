@@ -9,9 +9,9 @@ import Matching from 'components/Typing/Matching';
 import LizardLoading from 'components/RankGame/Loading/LizardLoading';
 import MatchingWaiting from 'components/RankGame/Loading/MatchingWaiting';
 import CountLoading from 'components/RankGame/Loading/CountLoading';
-import EndCurtain from 'components/RankGame/EndCurtain';
 import Modal from 'components/RankGame/Modal/Modal';
 import TutorialModal from 'components/RankGame/Modal/TutorialModal';
+import EndCurtain from 'components/RankGame/Modal/EndCurtain';
 import * as faceapi from 'face-api.js';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
@@ -363,17 +363,17 @@ export default function OpenViduApp() {
     console.log('@@@@@@@@@@@@@@@@@@@@@@@@@ face_detect');
     const video = document.getElementById(mySide);
     const origin = document.getElementById('origin');
-    const canvas = faceapi.createCanvasFromMedia(video);
+    // const canvas = faceapi.createCanvasFromMedia(video);
 
-    origin.addEventListener('loadeddata', () => {
-      const origin_canvas = faceapi.createCanvasFromMedia(origin);
-      faceapi.matchDimensions(origin_canvas, originSize);
-    });
+    // origin.addEventListener('loadeddata', () => {
+    //   const origin_canvas = faceapi.createCanvasFromMedia(origin);
+    //   faceapi.matchDimensions(origin_canvas, originSize);
+    // });
 
     const originSize = { width: 224, height: 224 };
     const videoSize = { width: 224, height: 224 };
-    faceapi.matchDimensions(canvas, videoSize);
-    const FPS = 10;
+    // faceapi.matchDimensions(canvas, videoSize);
+    const FPS = 5;
     myInterval = setInterval(async () => {
       const start = new Date();
       const video_detections = await faceapi.detectAllFaces(
@@ -622,7 +622,6 @@ export default function OpenViduApp() {
             setResultScore(answer);
             setRecordOn(false);
           }
-
           setUserCamLeftBorder(false);
           setUserCamRightBorder(false);
           setStage('CALCULATION');
@@ -797,7 +796,7 @@ export default function OpenViduApp() {
   // ############# 결과 보여주기 #############
   const handleViewResult = async () => {
     startLoading('lizard', 3000);
-    setToggleSaveModal(true);
+    setToggleCurtain(true);
     setStage('END');
   };
 
@@ -809,8 +808,12 @@ export default function OpenViduApp() {
 
   // ############# 모달 ##############
   const [toggleExitModal, setToggleExitModal] = useState(false);
-  const [toggleSaveModal, setToggleSaveModal] = useState(false);
   const [toggleTutorialModal, setToggleTutorialModal] = useState(false);
+  const [toggleCurtain, setToggleCurtain] = useState(false);
+
+  useEffect(() => {
+    console.log('staegestagestage', stage);
+  }, [stage]);
 
   return (
     <div className="">
@@ -827,23 +830,14 @@ export default function OpenViduApp() {
 
       {session !== undefined ? (
         <div id="session" className="">
-          {stage === 'END' && (
+          {toggleCurtain && (
             <EndCurtain
+              className="fixed inset-0 flex justify-center items-center z-50"
               resultGame={resultGame}
               userOneName={userOneName}
               userOneScore={userOneScore}
               userTwoName={userTwoName}
               userTwoScore={userTwoScore}
-              className="fixed inset-0 flex justify-center items-center z-[9999]"
-            />
-          )}
-
-          {toggleSaveModal && (
-            <Modal
-              type="save"
-              onConfirm={handleSaveVideo}
-              isOpen={toggleSaveModal}
-              onClose={() => setToggleSaveModal(false)}
             />
           )}
 
@@ -867,13 +861,13 @@ export default function OpenViduApp() {
 
               <div
                 id="log-list"
-                className=" h-[60px] mx-4 overflow-auto items-center mb-5"
+                className=" h-[60px] mx-4 overflow-auto items-center mb-5 "
               >
                 {log.map((item, index) => (
                   <div
                     key={index}
                     ref={logRef}
-                    className="log-item text-[36px] text-center font-serif "
+                    className="log-item text-[36px] text-center z-[52]"
                   >
                     <h1>{item}</h1>
                   </div>

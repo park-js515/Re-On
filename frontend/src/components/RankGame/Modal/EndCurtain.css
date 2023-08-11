@@ -13,7 +13,7 @@
 .curtain__panel {
   /*These sets a background color as well as an img to make it look like an actual curtain*/
   background: #8b0000;
-  background-image: url("https://images.vexels.com/media/users/17482/101168/preview2/01bdac45c37aff22f75230abf3f019d4-red-curtain-background.png");
+  background-image: url('https://images.vexels.com/media/users/17482/101168/preview2/01bdac45c37aff22f75230abf3f019d4-red-curtain-background.png');
   background-repeat: no-repeat;
   background-size: cover;
   width: 50%; /* Each panel takes up half the container */
@@ -49,7 +49,7 @@
     text-align: center;
   }
 }
-input[type="checkbox"] {
+input[type='checkbox'] {
   position: absolute; /* Force the checkbox at the start of the container */
   cursor: pointer; /* Indicate the curtain is clickable */
   width: 100%; /* The checkbox is as wide as the component */
@@ -60,11 +60,11 @@ input[type="checkbox"] {
 
 /* When the checkbox is checked... */
 /* Slide the first panel in */
-input[type="checkbox"]:checked ~ div.curtain__panel--left {
+input[type='checkbox']:checked ~ div.curtain__panel--left {
   transform: translateX(0);
 }
 
 /* Slide the second panel in */
-input[type="checkbox"]:checked ~ div.curtain__panel--right {
+input[type='checkbox']:checked ~ div.curtain__panel--right {
   transform: translateX(0);
 }
