@@ -50,27 +50,38 @@ public class PostApi {
     }
 
     // 단건 조회
-    @Operation(summary = "post 상세 조회", description = "postId로 post 상세 조회")
-    @GetMapping("/{postId}")
-    public ApiResponse<?> searchPost(@PathVariable Long postId, @Parameter(hidden = true) @AuthenticationPrincipal User user){
+    @Operation(summary = "private post 상세 조회", description = "postId로 private post 상세 조회")
+    @GetMapping("private/{postId}")
+    public ApiResponse<PrivateDetailPostResponse> searchPirvatePost(@PathVariable Long postId, @Parameter(hidden = true) @AuthenticationPrincipal User user){
         Scope postScope = postQueryService.searchScopeById(postId);
         if(postScope == null){
             throw new CustomException(ErrorCode.POSTS_NOT_FOUND);
         }
-        Long memberId = Long.parseLong(user.getUsername());
-        if(postScope.equals(Scope.PRIVATE)){ // title, content 제공 x
-            PrivateDetailPostResponse response = postQueryService.searchPrivateById(postId);
-            return ApiResponse.OK(response);
-        }else{
-            PublicDetailPostResponse response = postQueryService.searchPublicById(postId, memberId);
-            return ApiResponse.OK(response);
+        if(postScope == Scope.PUBLIC){
+            throw new CustomException(ErrorCode.BAD_REQUEST);
         }
+        PrivateDetailPostResponse response = postQueryService.searchPrivateById(postId);
+        return ApiResponse.OK(response);
     }
 
+    @Operation(summary = "public post 상세 조회", description = "postId로 public post 상세 조회")
+    @GetMapping("public/{postId}")
+    public ApiResponse<PublicDetailPostResponse> searchPost(@PathVariable Long postId, @Parameter(hidden = true) @AuthenticationPrincipal User user){
+        Scope postScope = postQueryService.searchScopeById(postId);
+        if(postScope == null){
+            throw new CustomException(ErrorCode.POSTS_NOT_FOUND);
+        }
+        if(postScope == Scope.PRIVATE){
+            throw new CustomException(ErrorCode.BAD_REQUEST);
+        }
+        Long memberId = Long.parseLong(user.getUsername());
+        PublicDetailPostResponse response = postQueryService.searchPublicById(postId, memberId);
+        return ApiResponse.OK(response);
+    }
 
     @Operation(summary = "mypage private post 목록 조회", description = "PRIVATE 게시글 목록을 조회한다.")
     @GetMapping("/private")
-    public ApiResponse<?> searchPrivatePosts(@RequestParam(value = "offset") Long offset, @Parameter(hidden = true) @AuthenticationPrincipal User user ){
+    public ApiResponse<List<PrivatePostsResponse>> searchPrivatePosts(@RequestParam(value = "offset") Long offset, @Parameter(hidden = true) @AuthenticationPrincipal User user ){
         Long memberId = Long.parseLong(user.getUsername());
         log.info(String.valueOf(memberId));
         List<PrivatePostsResponse> responses = postQueryService.searchPrivatePosts(offset, memberId);
@@ -78,10 +89,9 @@ public class PostApi {
         return ApiResponse.OK(responses);
     }
 
-
     @Operation(summary = "mypage 내가 좋아요 누른 post 목록 조회", description = "liked 게시글 목록을 조회한다.")
     @GetMapping("/liked")
-    public ApiResponse<?> searchLikedPosts(@RequestParam(value = "offset") Long offset, @Parameter(hidden = true) @AuthenticationPrincipal User user) {
+    public ApiResponse<List<PostsResponse>> searchLikedPosts(@RequestParam(value = "offset") Long offset, @Parameter(hidden = true) @AuthenticationPrincipal User user) {
         Long memberId = Long.parseLong(user.getUsername());
         List<PostsResponse> responses = postQueryService.searchLikedPosts(offset, memberId);
         return ApiResponse.OK(responses);
@@ -90,7 +100,7 @@ public class PostApi {
 
     @Operation(summary = "mypage public post 목록 조회", description = "PUBLIC 게시글 목록을 조회한다.")
     @GetMapping("/public")
-    public ApiResponse<?> searchPublicPosts(@RequestParam(value = "offset") Long offset, @RequestParam(value = "memberId") Long memberId, @Parameter(hidden = true) @AuthenticationPrincipal User user) {
+    public ApiResponse<List<PublicPostsResponse>> searchPublicPosts(@RequestParam(value = "offset") Long offset, @RequestParam(value = "memberId") Long memberId, @Parameter(hidden = true) @AuthenticationPrincipal User user) {
         Long loginMemberId = Long.parseLong(user.getUsername());
         log.info(String.valueOf(memberId));
         List<PublicPostsResponse> responses = postQueryService.searchPublicPosts(offset, memberId, loginMemberId);
@@ -100,7 +110,7 @@ public class PostApi {
 
     @Operation(summary = "투표해줘 public post 목록 전체 조회", description = "투표해줘 PUBLIC 게시글 목록을 조회한다.")
     @GetMapping("/feed")
-    public ApiResponse<?> searchFeedPosts(@RequestParam(value = "offset") Long offset, @Parameter(hidden = true) @AuthenticationPrincipal User user){
+    public ApiResponse<List<PostsResponse>> searchFeedPosts(@RequestParam(value = "offset") Long offset, @Parameter(hidden = true) @AuthenticationPrincipal User user){
         Long loginMemberId = Long.parseLong(user.getUsername());
         List<PostsResponse> responses = postQueryService.searchFeedPosts(offset, loginMemberId);
         return ApiResponse.OK(responses);
@@ -108,7 +118,7 @@ public class PostApi {
 
     @Operation(summary = "투표해줘 페이지 TOP10 post 조회", description = "좋아요 상태를 변경한다.")
     @GetMapping("/feed/rank")
-    public ApiResponse<?> searchFeedRankPosts(@AuthenticationPrincipal User user){
+    public ApiResponse<List<PostsResponse>> searchFeedRankPosts(@AuthenticationPrincipal User user){
         Long memberId = Long.parseLong(user.getUsername());
         List<PostsResponse> responses = postQueryService.searchFeedRankPosts(memberId);
         return ApiResponse.OK(responses);
@@ -157,7 +167,7 @@ public class PostApi {
     }
     @Operation(summary = "Detail post에서 댓글 10개를 조회한다.", description = "post detail에서 댓글을 조회한다.")
     @GetMapping("/{postId}/comment")
-    public ApiResponse<?> searchComment(@PathVariable Long postId, @RequestParam(value = "offset") Long offset){
+    public ApiResponse<List<PostCommentResponse>> searchComment(@PathVariable Long postId, @RequestParam(value = "offset") Long offset){
         Scope postScope = postQueryService.searchScopeById(postId);
         if(postScope.equals(Scope.PRIVATE)){
             throw new CustomException(ErrorCode.POST_SCOPE_ERROR);
