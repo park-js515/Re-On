@@ -8,7 +8,7 @@ const SButton = styled.button`
   border: none;
   background-color: ${(props) => (props.$isActive ? "#b9ceac" : "#f0f0f0")};
   cursor: pointer;
-
+  
   &:hover {
     background-color: #b9ceac;
   }
