@@ -18,7 +18,7 @@ export default function UserVideoComponent({
       {streamManager !== undefined ? (
         <div className="streamcomponent">
           <div className="flex">
-            <p className="text-white font-bold text-[24px]">
+            <p className="text-white relative font-bold text-[24px] z-550">
               {getNicknameTag()}
             </p>
           </div>

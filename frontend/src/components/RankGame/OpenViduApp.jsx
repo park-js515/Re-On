@@ -926,7 +926,7 @@ export default function OpenViduApp() {
                   <div className="flex text-white">
                     <Matching typingContent="..." />
                   </div>
-                  <div className="relative flex items-center justify-center w-[500px] h-[400px]">
+                  <div className="relative flex items-center justify-center w-[500px] h-[500px]">
                     <img
                       src="image/rank/rank-basic-bg.png"
                       alt="waiting"
