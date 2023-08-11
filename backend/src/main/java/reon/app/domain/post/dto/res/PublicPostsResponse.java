@@ -14,6 +14,7 @@ public class PublicPostsResponse {
     private String title;
     private String thumbnail;
     private int likeCnt;
+    private Boolean isLike;
     private int commentCnt;
     private LocalDateTime createDate;
 

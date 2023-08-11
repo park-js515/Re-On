@@ -75,9 +75,9 @@ public class PostQueryServiceImpl implements PostQueryService {
     }
 
     @Override
-    public List<PublicPostsResponse> searchPublicPosts(Long offset, Long memberId) {
+    public List<PublicPostsResponse> searchPublicPosts(Long offset, Long memberId, Long loginMemberId) {
         List<PublicPostsResponse> responses = postQueryRepository.searchPublicPosts(offset, memberId);
-
+        responses.stream().forEach(res -> res.setIsLike(postLikeQueryRepository.isLike(res.getId(), loginMemberId)));
         return responses;
     }
 

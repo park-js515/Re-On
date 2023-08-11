@@ -90,9 +90,10 @@ public class PostApi {
 
     @Operation(summary = "mypage public post 목록 조회", description = "PUBLIC 게시글 목록을 조회한다.")
     @GetMapping("/public")
-    public ApiResponse<?> searchPublicPosts(@RequestParam(value = "offset") Long offset, @RequestParam(value = "memberId") Long memberId){
+    public ApiResponse<?> searchPublicPosts(@RequestParam(value = "offset") Long offset, @RequestParam(value = "memberId") Long memberId, @Parameter(hidden = true) @AuthenticationPrincipal User user) {
+        Long loginMemberId = Long.parseLong(user.getUsername());
         log.info(String.valueOf(memberId));
-        List<PublicPostsResponse> responses = postQueryService.searchPublicPosts(offset, memberId);
+        List<PublicPostsResponse> responses = postQueryService.searchPublicPosts(offset, memberId, loginMemberId);
         log.info(responses.toString());
         return ApiResponse.OK(responses);
     }
