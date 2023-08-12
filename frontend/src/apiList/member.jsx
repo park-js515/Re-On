@@ -2,20 +2,20 @@ import { memberInstance } from './lib/index';
 
 // 1. Back stage member 조회
 /**
- * 
- * @param {number} memberId
+ *
+ * @param {number} id
  * @param {function} success [callback]
  * @param {function} fail [callback]
  */
-function searchBackStageMembmerInfo(memberId, success, fail) {
+function searchBackStageMembmerInfo(id, success, fail) {
   const api = memberInstance();
 
-  api.get(`/back-stage/${memberId}`).then(success).catch(fail);
+  api.get(`/back-stage/${id}`).then(success).catch(fail);
 }
 
 // 2. Battle 기록 조회
 /**
- * 
+ *
  * @param {function} success [callback]
  * @param {function} fail [callback]
  */
@@ -27,7 +27,7 @@ function searchBattleLog(success, fail) {
 
 // 3. Battle 결과 등록
 /**
- * 
+ *
  * @param {object} body [{result: number, user1Id: number, user2Id: number, videoId: number}]
  * @param {function} success [callback]
  * @param {function} fail [callback]
@@ -40,7 +40,7 @@ function registerBattleLog(success, fail) {
 
 // 4. member profile image 삭제
 /**
- * 
+ *
  * @param {function} success [callback]
  * @param {function} fail [callback]
  */
@@ -52,7 +52,7 @@ function deleteMemberImg(success, fail) {
 
 // 5. member profile image 수정
 /**
- * 
+ *
  * @param {formData} profileImg
  * @param {function} success [callback]
  * @param {function} fail [callback]
@@ -68,66 +68,67 @@ function updateMemberImg(profileImg, success, fail) {
 
 // 6. mypage member 조회
 /**
- * 
+ *
+ * @param {number} id 
  * @param {function} success [callback]
  * @param {function} fail [callback]
  */
-function searchMypageMember(success, fail) {
+function searchMypageMemberInfo(id, success, fail) {
   const api = memberInstance();
 
-  api.put(`/member`).then(success).catch(fail);
+  api.get(`/member/${id}`).then(success).catch(fail);
 }
 
 // 7. 회원탈퇴
 /**
  *
- * @param {number} memberId
+ * @param {number} id
  * @param {function} success [callback]
  * @param {function} fail [callback]
  */
-function deleteMember(memberId, success, fail) {
+function deleteMember(id, success, fail) {
   const api = memberInstance();
 
-  api.delete(`/member/${memberId}`).then(success).catch(fail);
+  api.delete(`/member/${id}`).then(success).catch(fail);
 }
 
 // 8. member 배틀 정보 조회
 /**
  *
- * @param {number} memberId
+ * @param {number} id
  * @param {function} success [callback]
  * @param {function} fail [callback]
  */
-function searchMemberInfo(memberId, success, fail) {
+function searchMemberBattleInfo(id, success, fail) {
   const api = memberInstance();
 
-  api.get(`/member/${memberId}/battleInfo`).then(success).catch(fail);
+  api.get(`/member/${id}/battleInfo`).then(success).catch(fail);
 }
 
 // 9. 로그아웃
 /**
  *
- * @param {number} memberId
+ * @param {number} id
  * @param {function} success [callback]
  * @param {function} fail [callback]
  */
-function logoutMember(memberId, success, fail) {
+function logoutMember(id, success, fail) {
   const api = memberInstance();
 
-  api.get(`/member/logout/${memberId}`).then(success).catch(fail);
+  api.get(`/member/logout/${id}`).then(success).catch(fail);
 }
 
-// 10.
+// 10. member 정보 수정
 /**
  *
- * @param {object} data [{memberId: number, introduce: string, nickName: string}]
+ * @param {object} data [{id: number, introduce: string, nickName: string}]
  * @param {function} success [callback]
  * @param {function} fail [callback]
  */
-function updateMember(data, success, fail) {
+function updateMemberInfo(data, success, fail) {
   const api = memberInstance();
 
-  api.get(`/member/update`, JSON.stringify(data)).then(success).catch(fail);
+  api.put(`/member/update`, JSON.stringify(data)).then(success).catch(fail);
 }
 export {
   searchBackStageMembmerInfo,
@@ -135,9 +136,9 @@ export {
   registerBattleLog,
   deleteMemberImg,
   updateMemberImg,
-  searchMypageMember,
+  searchMypageMemberInfo,
   deleteMember,
-  searchMemberInfo,
+  searchMemberBattleInfo,
   logoutMember,
-  updateMember,
+  updateMemberInfo,
 };

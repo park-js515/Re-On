@@ -14,10 +14,18 @@ import TeamPage from './pages/TeamPage';
 
 import ResponsiveAppBar from 'components/common/NavBar';
 import NaverRedirect from 'components/login/NaverRedirect';
+import LogoutRedirectPage from 'components/logout/LogoutRedirectPage';
+
+import AuthComponent from 'components/auth/AuthComponent'; // 사용자가 로그인되었는지 확인하고, 로그인이 안됬다면 로그인페이지로 이동
+import LoginDupPreventComponent from 'components/auth/LoginDupPreventComponent'; // 중복 로그인 방지
+import LogoutDupPreventComponent from 'components/auth/LogoutDupPreventComponent'; // 로그인되어 있지 않는데 로그아웃 방지
+
 import TestPage from 'apiList/TestPage';
 
 function App() {
   const { isJoinSession } = useSelector((state) => state.session);
+	const isLogin = useSelector((state) => state.user.isLogin);
+
 
   // 뒤로가기 방지
   const location = useLocation();
@@ -32,15 +40,17 @@ function App() {
       {!isJoinSession && <ResponsiveAppBar />}
       <Routes>
         <Route path="/faq" element={<FAQPage />} />
-        <Route path="/feed" element={<FeedPage />} />
-        <Route path="/login" element={<LoginPage />} />
+        <Route path="/feed" element= {<AuthComponent authenticated={isLogin} component={<FeedPage />} />} />
+        <Route path="/login" element={<LoginDupPreventComponent authenticated={isLogin} component={<LoginPage/>}/>} />
         <Route path="/" element={<MainPage />} />
-        <Route path="/mypage" element={<MyPage />} />
-        <Route path="/normallist" element={<NormalListPage />} />
+        <Route path="/mypage" element={<AuthComponent authenticated={isLogin} component={<MyPage />}/>} />
+        <Route path="/normallist" element={<AuthComponent authenticated={isLogin} component={<NormalListPage />} />} />
         <Route path="/register" element={<RegisterPage />} />
-        <Route path="/rank" element={<RankPage />} />
-        <Route path="/team" element={<TeamPage />} />
-        <Route path="/login/redirect" element={<NaverRedirect/>}/>
+        <Route path="/rank" element={<AuthComponent authenticated={isLogin} component={<RankPage />} />} />
+        <Route path="/team" element={<TeamPage/>} />
+        <Route path="/login/redirect" element={<LoginDupPreventComponent authenticated={isLogin} component={<NaverRedirect />}/>} />
+        <Route path="/logout" element={<LogoutDupPreventComponent authenticated={isLogin} component={<LogoutRedirectPage />} />} />
+        <Route path="/test" element={<TestPage />}></Route>
       </Routes>
     </>
   );

@@ -1,9 +1,17 @@
 import { useEffect } from 'react';
-import { searchBackStageMembmerInfo } from './member';
+import { searchBackStageMembmerInfo, updateMemberInfo } from './member';
 
 const TestPage = () => {
   useEffect(() => {
-    searchBackStageMembmerInfo(1, (res) => {console.log(res)}, (error) => {console.error(error)})
+    updateMemberInfo(
+      { id: 1, introduce: '안녕하세요.', nickName: '주성' },
+      (res) => {
+        console.log(res);
+      },
+      (error) => {
+        console.error(error);
+      },
+    );
   }, []);
 
   return (
