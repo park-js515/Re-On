@@ -18,7 +18,16 @@ public class PostCommentQueryServiceImpl implements PostCommentQueryService {
     private final PostCommentQueryRepository postCommentQueryRepository;
 
     @Override
-    public List<PostCommentResponse> searchPostComment(Long offset, Long postId) {
-        return postCommentQueryRepository.searchPostCommentResponse(offset, postId);
+    public List<PostCommentResponse> searchPostComment(Long offset, Long postId, Long loginId) {
+        List<PostCommentResponse> responses = postCommentQueryRepository.searchPostCommentResponse(offset, postId);
+        responses.forEach(res -> {
+            if(res.getMemberId().equals(loginId)){
+                res.setIsMyComment(true);
+            }else{
+                res.setIsMyComment(false);
+            }
+        });
+
+        return responses;
     }
 }

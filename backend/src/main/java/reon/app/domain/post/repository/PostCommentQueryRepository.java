@@ -8,4 +8,5 @@ import java.util.List;
 public interface PostCommentQueryRepository {
 
     List<PostCommentResponse> searchPostCommentResponse(Long offset, Long postId);
+
 }
