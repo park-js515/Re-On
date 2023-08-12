@@ -7,10 +7,9 @@ export default function OpenViduVideoComponent({
   recordOn,
   userCamBorder,
   type,
+  handleSaveblob,
 }) {
   const videoRef = useRef();
-
-  console.log(streamManager);
 
   const [mediaRecorder, setMediaRecorder] = useState(null);
   const [recording, setRecording] = useState(false);
@@ -34,6 +33,7 @@ export default function OpenViduVideoComponent({
         };
         recorder.onstop = () => {
           const blob = new Blob(recordedChunksLocal, { type: 'video/mp4' });
+          handleSaveblob(blob);
           const url = URL.createObjectURL(blob);
 
           // FormData 객체를 사용하여 파일을 서버로 전송
@@ -55,12 +55,9 @@ export default function OpenViduVideoComponent({
           //   });
 
           const myFile = new File([url], 'demo.mp4', { type: 'video/mp4' });
-          console.log(myFile);
-
           const a = document.createElement('a');
           a.href = url;
           a.download = 'recorded-video.mp4'; // 저장될 파일 이름
-          // a.click();
         };
         setMediaRecorder(recorder);
       });
