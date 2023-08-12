@@ -135,11 +135,16 @@ function searchLikePost(offset, success, fail) {
  * @param {function} success
  * @param {function} fail
  */
-function searchPrivatePost(offset, success, fail) {
+async function searchPrivatePost(offset, success, fail) {
   const api = postInstance();
-
-  api.get(`/private?offset=${offset}`).then(success).catch(fail);
+  await api.get(`/private?offset=${offset}`).then(success).catch(fail);
 }
+
+async function searchPrivatePostDetail(postId, success, fail) {
+  const api = postInstance();
+  await api.get(`/private/${postId}`).then(success).catch(fail);
+}
+
 
 // 11. private post upload
 /**
@@ -152,7 +157,7 @@ function searchPrivatePost(offset, success, fail) {
 function uploadPrivatePost(postId, body, success, fail) {
   const api = postInstance();
 
-  api.put(`private/${postId}`, JSON.stringify(body)).then(success).catch(fail);
+  api.put(`/private/${postId}`, JSON.stringify(body)).then(success).catch(fail);
 }
 
 // 12. mypage public post 목록 조회
@@ -185,4 +190,5 @@ export {
   searchPrivatePost,
   uploadPrivatePost,
   searchPublicPost,
+  searchPrivatePostDetail
 };

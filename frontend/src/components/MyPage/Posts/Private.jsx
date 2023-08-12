@@ -1,34 +1,45 @@
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { stringify } from '../../../../node_modules/postcss/lib/postcss';
-
+import { searchPrivatePost, searchPrivatePostDetail } from 'apiList/post';
 
   const Private = () => {
     //모달
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedPost, setSelectedPost] = useState(null);
     const [posts, setPosts] = useState([]);
+    const navigate = useNavigate();
+
 
     const openModal = (post) => {
 
-      axios.get(
-        process.env.REACT_APP_API + `/api/post-management/post/${post.id}`,{
-          headers: {
-            "Authorization": `Bearer ${localStorage.getItem('accessToken')}`,
-            'Content-Type': 'application/json',
-          },
-        },
-      )
-      .then((response) => {
+      searchPrivatePostDetail(post.id,(response) => {
         console.log(response.data.response);
         setSelectedPost(response.data.response);
-        setIsModalOpen(true);
+        setIsModalOpen(true) },
+        (error) => {
+          console.log(error)
+          navigate('/login');
+        }
+      )
+      // axios.get(
+      //   process.env.REACT_APP_API + `/api/post-management/post/${post.id}`,{
+      //     headers: {
+      //       "Authorization": `Bearer ${localStorage.getItem('accessToken')}`,
+      //       'Content-Type': 'application/json',
+      //     },
+      //   },
+      // )
+      // .then((response) => {
+      //   console.log(response.data.response);
+      //   setSelectedPost(response.data.response);
+      //   setIsModalOpen(true);
 
-      })
-      .catch((error) => {
-        console.log(error)
-      });
+      // })
+      // .catch((error) => {
+      //   console.log(error)
+      //   navigate('/login');
+      // });
     }
 
     const closeModal = () => {
@@ -37,28 +48,34 @@ import { stringify } from '../../../../node_modules/postcss/lib/postcss';
     }
 
     useEffect(() => {
-      const accessToken = localStorage.getItem("accessToken");
-      const test = async () => {
-        axios
-          .get(
-            process.env.REACT_APP_API + `/api/post-management/post/private?offset=1`,
-            {
-              headers: {
-                "Authorization": `Bearer ${accessToken}`,
-                'Content-Type': 'application/json',
-              },
-            },
-          )
-          .then((response) => {
-            console.log(response.data.response);
-            setPosts(response.data.response)
-          })
-          .catch((error) => {
-            console.log(error)
+      const test = () => {
 
-          });
+        searchPrivatePost(1, (response) => {
+          console.log(response.data.response);
+          setPosts(response.data.response)
+        },
+          (error) => {
+            console.log(error)
+          }
+        )
+        // await axios
+        //   .get(
+        //     process.env.REACT_APP_API + `/api/post-management/post/private?offset=1`,
+        //     {
+        //       headers: {
+        //         "Authorization": `Bearer ${accessToken}`,
+        //         'Content-Type': 'application/json',
+        //       },
+        //     },
+        //   )
+        //   .then((response) => {
+        //     console.log(response.data.response);
+        //     setPosts(response.data.response)
+        //   })
+        //   .catch((error) => {
+        //     console.log(error)
+        //   });
       };
-  
       test();
     }, []);
 
