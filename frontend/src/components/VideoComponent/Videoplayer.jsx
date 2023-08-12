@@ -2,10 +2,19 @@ import React from "react";
 import { useNavigate } from 'react-router-dom';
 import Commentlist from "./Commentlist";
 import { useState } from "react";
+import { searchPublicPostDetail } from "apiList/post";
 
 const Videoplayer = ({post_id, changeShow}) => {
+    console.log(post_id)
     const navigate = useNavigate();
 
+    const success = (response)=>{
+        console.log(response.data)
+    }
+    const fail = (error)=>{
+        console.log(error)
+    }
+    searchPublicPostDetail(2, success, fail)
     // 더미 
     let dataList = [];
     for (let i = 1; i <= 10; i++) {

@@ -11,6 +11,7 @@ const Videolist = ({injectPostId, changeShow}) => {
         function success(response) {
             setPage((page)=>{return page+1})
             const newdata = response.data.response
+            console.log(newdata)
             setData((data)=>{return [...data,...newdata]})
         }
         function fail(error) {
@@ -65,10 +66,10 @@ const Videolist = ({injectPostId, changeShow}) => {
                     {filteredData.map((item, idx) => {
                         return (
                             <Videoitem
-                                key={idx}
+                                key={item.id}
                                 props={item}
                                 changeMode={() => {
-                                    injectPostId(item.post_id);
+                                    injectPostId(item.id);
                                     changeShow();
                                 }}
                             />

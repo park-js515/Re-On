@@ -69,11 +69,11 @@ const Hotlist = ({injectPostId, changeShow}) => {
       <div className="mx-auto max-w-7xl px-6 lg:px-8 ">
           <Slider className="py-4"ref={sliderRef} {...settings}>
               {data.map((item) => (
-                  <div key={item.video_id}>
+                  <div key={item.id}>
                       <Videoitem
                           props={item}
                           changeMode={() => {
-                              injectPostId(item.video_id);
+                              injectPostId(item.id);
                               changeShow();
                           }}
                       />
