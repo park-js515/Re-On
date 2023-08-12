@@ -213,7 +213,8 @@ const SoloApp = () => {
     <div className="">
 
       <div className="flex flex-row items-center justify-around ">
-        <div className="flex flex-row items-center justify-around mt-40">
+        {/* 문제의 파일 */}
+        {/* <div className="flex flex-row items-center justify-around mt-40"> */}
           <div id="webCam_container ">
               <video id="webCam" 
                 autoPlay
@@ -255,7 +256,7 @@ const SoloApp = () => {
               >
               </video>
           </div>
-        </div>
+        {/* </div> */}
       </div>
 
     </div>
