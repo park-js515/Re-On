@@ -48,10 +48,16 @@ const LogoutRedirectPage = () => {
     return () => {};
   }, []);
 
+  const loading = '/image/login/loading.svg';
+
   return (
     <>
-      {/* 로딩창 만들기 */}
-      <div>로그아웃 시 나와야 할 로딩창</div>
+      <div
+        className="flex w-screen justify-center align-middle"
+        style={{ height: '90vh' }}
+      >
+        <img src={loading} alt="loading" width="150px" height="150px" />
+      </div>
     </>
   );
 };
