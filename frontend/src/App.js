@@ -24,16 +24,19 @@ function App() {
       {!isJoinSession && <ResponsiveAppBar />}
       <Routes>
         <Route path="/faq" element={<FAQPage />} />
-        <Route path="/feed" element={<FeedPage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/login/redirect" element={<NaverRedirect />} />
+        <Route path="/feed" element= {<AuthComponent authenticated={isLogin} component={<FeedPage />} />} />
+        <Route path="/login" element={<LoginDupPreventComponent authenticated={isLogin} component={<LoginPage/>}/>} />
         <Route path="/" element={<MainPage />} />
-        <Route path="/mypage" element={<MyPage />} />
-        <Route path="/normallist" element={<NormalListPage />} />
+        <Route path="/mypage" element={<AuthComponent authenticated={isLogin} component={<MyPage />}/>} />
+        <Route path="/normallist" element={<AuthComponent authenticated={isLogin} component={<NormalListPage />} />} />
         <Route path="/register" element={<RegisterPage />} />
-        <Route path="/rank" element={<RankPage />} />
-        <Route path="/team" element={<TeamPage />} />
+        <Route path="/rank" element={<AuthComponent authenticated={isLogin} component={<RankPage />} />} />
+        <Route path="/team" element={<TeamPage/>} />
+        <Route path="/login/redirect" element={<LoginDupPreventComponent authenticated={isLogin} component={<NaverRedirect />}/>} />
+        <Route path="/logout" element={<LogoutDupPreventComponent authenticated={isLogin} component={<LogoutRedirectPage />} />} />
+        <Route path="/test" element={<TestPage />}></Route>
       </Routes>
+
     </>
   );
 }
