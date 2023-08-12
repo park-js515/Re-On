@@ -27,17 +27,17 @@ export default function Example() {
       setProfileImg("/image/login/LoginDefaultImg.png");
 
       // 프로필 이미지를 받아올 수 있으면 이렇게 하겠슴둥.
-      searchMypageMemberInfo( 
-        1,
-        (res) => {
-          if (res.data.response.profileImg) {
-            setProfileImg(res.data.response.profileImg);
-          }
-        },
-        (error) => {  
-          console.error(error);
-        },
-      );
+      // searchMypageMemberInfo( 
+      //   1,
+      //   (res) => {
+      //     if (res.data.response.profileImg) {
+      //       setProfileImg(res.data.response.profileImg);
+      //     }
+      //   },
+      //   (error) => {  
+      //     console.error(error);
+      //   },
+      // );
     }
     else {
       setProfileImg("/image/login/unLoginDefaultImg.png")
