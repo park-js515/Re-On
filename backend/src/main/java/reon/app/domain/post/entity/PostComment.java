@@ -16,7 +16,7 @@ import javax.persistence.*;
 @SuperBuilder
 public class PostComment extends BaseEntity {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id")
     private Long id;
 

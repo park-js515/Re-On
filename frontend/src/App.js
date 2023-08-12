@@ -1,5 +1,6 @@
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, useLocation } from 'react-router-dom';
 import FAQPage from './pages/FAQPage';
 import FeedPage from './pages/FeedPage';
 import LoginPage from './pages/LoginPage';
@@ -25,6 +26,14 @@ function App() {
   const { isJoinSession } = useSelector((state) => state.session);
 	const isLogin = useSelector((state) => state.user.isLogin);
 
+
+  // 뒤로가기 방지
+  const location = useLocation();
+  useEffect(() => {
+    if (location.pathname !== '/rank' && isJoinSession) {
+      window.location.reload();
+    }
+  }, [location, isJoinSession]);
 
   return (
     <>

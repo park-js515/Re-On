@@ -17,6 +17,9 @@ public class AuthTokens {
     private String refreshToken;
     private String grantType;
     private Long expiresIn;
+    // TODO: 2023-08-11 아이디,닉네임
+    //private Long memberId;
+    //private Long nickName;
 
     public static AuthTokens of(String accessToken, String refreshToken, String grantType, Long expiresIn) {
         return new AuthTokens(accessToken, refreshToken, grantType, expiresIn);

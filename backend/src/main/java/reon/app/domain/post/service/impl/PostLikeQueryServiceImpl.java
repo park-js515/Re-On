@@ -13,4 +13,5 @@ import reon.app.domain.post.service.PostLikeQueryService;
 @Slf4j
 public class PostLikeQueryServiceImpl implements PostLikeQueryService {
     private final PostQueryRepository postQueryRepository;
+
 }

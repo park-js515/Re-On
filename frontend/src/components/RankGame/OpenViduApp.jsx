@@ -52,6 +52,13 @@ export default function OpenViduApp() {
   );
 
   const [mySide, setMySide] = useState(null); // mySide 상태 선언
+
+  const [userOneName, setUserOneName] = useState(null);
+  const [userOneScore, setUserOneScore] = useState(0);
+  const [userTwoName, setUserTwoName] = useState(null);
+  const [userTwoScore, setUserTwoScore] = useState(0);
+  const [resultGame, setResultGame] = useState(0);
+
   const joinSession = useCallback(() => {
     const mySession = OV.current.initSession();
     const connections = [];
@@ -77,10 +84,14 @@ export default function OpenViduApp() {
       // 상대유저가 나중에 온 유저면, 나는 먼저 온 유저(첫번째)
       const me = subscriberId === secondUserId ? 'USER_ONE' : 'USER_TWO';
       setMySide(me); // 상태 업데이트
-      if (mySide == 'USER_ONE') {
+      if (me === 'USER_ONE') {
         setLog((prevLog) => [...prevLog, `당신은 첫번째차례 입니다!`]);
+        setUserOneName(myUserName);
+        console.log('유저1 이름 변경');
       } else {
         setLog((prevLog) => [...prevLog, `당신은 두번째차례 입니다!`]);
+        setUserTwoName(myUserName);
+        console.log('유저2 이름 변경');
       }
       // +++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -100,8 +111,8 @@ export default function OpenViduApp() {
     });
 
     mySession.on('streamDestroyed', async (event) => {
-      await startLoading('lizard', 1000); // 로딩 5초
       deleteSubscriber(event.stream.streamManager);
+      setStage('CALCULATION');
     });
 
     mySession.on('exception', (exception) => {
@@ -163,9 +174,12 @@ export default function OpenViduApp() {
   }, [session, myUserName]);
 
   // 세션 나가기
-  const leaveSession = useCallback(() => {
+  const leaveSession = useCallback(async () => {
     if (session) {
       session.disconnect();
+      setStage('READY');
+      await closeSession(session.sessionId);
+      window.location.reload(); // 그냥 새로고침 하자...세션 끊기는게 너무 느려~~~~!
     }
 
     OV.current = new OpenVidu();
@@ -193,7 +207,10 @@ export default function OpenViduApp() {
         return prevSubscribers;
       }
     });
-    setLog((prevLog) => [...prevLog, `상대탈주함 ㅋㅋ`]);
+    setLog((prevLog) => [
+      ...prevLog,
+      `상대가 나갔습니다. 게임을 종료하겠습니다.`,
+    ]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -253,7 +270,6 @@ export default function OpenViduApp() {
   //   return response.data; // The token
   // };
 
-  // 테스트 요청
   const getToken = async () => {
     try {
       const response = await axios.post(
@@ -276,9 +292,9 @@ export default function OpenViduApp() {
 
   const closeSession = async (sessionId) => {
     try {
-      const response = await axios.post(
-        APPLICATION_SERVER_URL + '/api/openvidu-management/test',
-        { customSessionId: sessionId },
+      const response = await axios.delete(
+        APPLICATION_SERVER_URL +
+          `/api/openvidu-management/sessions/${sessionId}/delete`,
         {}, // body
         {
           headers: {
@@ -294,38 +310,6 @@ export default function OpenViduApp() {
     }
   };
 
-  // 작업중인 요청
-  // const getToken = useCallback(async () => {
-  //   return createToken().then((response) => {
-  //     // const url = new URL(response);
-  //     // const sessionId = url.searchParams.get('sessinId');
-  //     // const token = url.searchParams.get('token');
-  //     const tmp =
-  //       'wss://i9c203.p.ssafy.io?sessionId=ses_OYSe2KtSh5&token=tok_OrWnXOs2EmioDSXR';
-  //     return tmp;
-  //   });
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
-
-  // const createToken = async () => {
-  //   try {
-  //     const response = await axios.post(
-  //       APPLICATION_SERVER_URL + '/api/openvidu-management/test',
-  //       {}, // body
-  //       {
-  //         headers: {
-  //           Authorization: 'Basic T1BFTlZJRFVBUFA6b3BlbnZpZHVyZW9uYzIwMw==',
-  //           'Content-Type': 'application/json',
-  //         },
-  //       },
-  //     );
-  //     console.log('응답', response);
-  //     return response.data;
-  //   } catch (error) {
-  //     console.error('에러', error); // 오류 로깅
-  //   }
-  // };
-
   // ################################################################
   // ################################################################
   // #################이 위로 OpenVidu 상태 관리#####################
@@ -335,6 +319,7 @@ export default function OpenViduApp() {
   // ################################################################
   // ################################################################
 
+  // #################### 초롱이초롱초롱AI ##########################
   const ort = require('onnxruntime-web/webgpu');
   const [ortSession, setOrtSession] = useState(null);
   useEffect(() => {
@@ -360,7 +345,6 @@ export default function OpenViduApp() {
   let frame_cnts = 0;
   let sum_diff = 0;
   function face_detect() {
-    console.log('@@@@@@@@@@@@@@@@@@@@@@@@@ face_detect');
     const video = document.getElementById(mySide);
     const origin = document.getElementById('origin');
     // const canvas = faceapi.createCanvasFromMedia(video);
@@ -408,7 +392,7 @@ export default function OpenViduApp() {
           console.log('오류 발생');
         }
       }
-      console.log(new Date() - start);
+      // console.log(new Date() - start);
     }, 1000 / FPS);
   }
   async function image_classification(box1, box2) {
@@ -536,110 +520,6 @@ export default function OpenViduApp() {
   // useEffect보다 위에 선언해야 했다.
   const { videoRef, isPlaying, handlePlayVideo } = useVideoPlayer();
 
-  // ############ 턴 시작 ###############
-  useEffect(() => {
-    // 영화 미리보기
-    if (stage === 'WATCHING_MOVIE') {
-      setLog((prevLog) => [...prevLog, `연기를 감상해보세요!`]);
-
-      // 내가 유저 1이면서 첫번째 차례
-    } else if (mySide === 'USER_ONE' && stage === 'USER_ONE_TURN') {
-      setLog((prevLog) => [...prevLog, `당신 차례입니다. 연기를 준비하세요!!`]);
-      if (stage !== 'END') {
-        handleUserOnePlay();
-      }
-
-      // 내가 유저 1이면서 두번째 차례
-    } else if (mySide === 'USER_ONE' && stage === 'USER_TWO_TURN') {
-      setLog((prevLog) => [...prevLog, `상대의 연기에 집중해주세요!`]);
-      if (stage !== 'END') {
-        handleUserTwoPlay();
-      }
-
-      // 내가 유저 2이면서 첫번째 차례
-    } else if (mySide === 'USER_TWO' && stage === 'USER_ONE_TURN') {
-      setLog((prevLog) => [...prevLog, `상대의 연기에 집중해주세요!`]);
-      if (stage !== 'END') {
-        handleUserOnePlay();
-      }
-
-      // 내가 유저 2이면서 두번째 차례
-    } else if (mySide === 'USER_TWO' && stage === 'USER_TWO_TURN') {
-      setLog((prevLog) => [...prevLog, `당신 차례입니다. 연기를 준비하세요!!`]);
-      if (stage !== 'END') {
-        handleUserTwoPlay();
-      }
-
-      // 점수 계산
-    } else if (stage === 'CALCULATION') {
-      setLog((prevLog) => [
-        ...prevLog,
-        `수고하셨습니다. 점수를 계산하겠습니다.`,
-      ]);
-      handleCalculateScore();
-
-      // 결과 보여주기
-    } else if (stage === 'RESULT') {
-      // 커튼 닫기
-
-      setLog((prevLog) => [...prevLog, `결과를 확인하세요!`]);
-      handleViewResult();
-
-      // 게임 종료
-    } else if (stage === 'END') {
-      setLog((prevLog) => [...prevLog, `안녕히 가세요!`]);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [stage]);
-
-  // ############ 턴 종료 ###############
-  const [resultScore, setResultScore] = useState(0);
-
-  useEffect(() => {
-    if (videoRef.current) {
-      const handleEnded = () => {
-        // 영화 미리보기 종료
-        if (stage === 'WATCHING_MOVIE') {
-          setStage('USER_ONE_TURN');
-          // 유저1 턴 종료
-        } else if (stage === 'USER_ONE_TURN') {
-          if (mySide === 'USER_ONE') {
-            clearInterval(myInterval);
-            const answer = 100 - (sum_diff / frame_cnts) * 100;
-            console.log(`@@@@@@@@@@@@@@ 내 점수는 ${answer}`);
-            setResultScore(answer);
-            setRecordOn(false);
-          }
-          setUserCamLeftBorder(false);
-          setUserCamRightBorder(false);
-          setStage('USER_TWO_TURN');
-          // 유저2 턴 종료
-        } else if (stage === 'USER_TWO_TURN') {
-          if (mySide === 'USER_TWO') {
-            clearInterval(myInterval);
-            const answer = 100 - (sum_diff / frame_cnts) * 100;
-            console.log(`@@@@@@@@@@@@@@ 내 점수는 ${answer}`);
-            setResultScore(answer);
-            setRecordOn(false);
-          }
-          setUserCamLeftBorder(false);
-          setUserCamRightBorder(false);
-          setStage('CALCULATION');
-        }
-      };
-
-      // 비디오 요소에 이벤트 리스너 추가
-      videoRef.current.addEventListener('ended', handleEnded); // ended면 handleEnded() 실행
-      // 클린업 함수에서 이벤트 리스너 제거
-      return () => {
-        if (videoRef.current) {
-          videoRef.current.removeEventListener('ended', handleEnded);
-        }
-      };
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [videoRef, stage]); // videoRef 변화 시 useEffect 실행
-
   // ############# 비디오 불러오기 함수 #############
   const handleLoadVideo = async () => {
     // setVideoSrc('video/ISawTheDevil.mp4'); // 비디오 URL 업데이트 (유튜브 API 요청해서 영상 소스 받아올 것)
@@ -694,108 +574,67 @@ export default function OpenViduApp() {
   };
 
   // ############# 점수 계산 ##############
-  // 유저 식별자도 같이 보내줘야함 (수정!!!!!!!!!!!!!)
-  const [userOneName, setUserOneName] = useState(null);
-  const [userOneScore, setUserOneScore] = useState(null);
-  const [userTwoName, setUserTwoName] = useState(null);
-  const [userTwoScore, setUserTwoScore] = useState(null);
-  const [resultGame, setResultGame] = useState(0);
-
   const handleCalculateScore = async () => {
-    let newUserOneName = userOneName;
-    let newUserOneScore = userOneScore;
-    let newUserTwoName = userTwoName;
-    let newUserTwoScore = userTwoScore;
+    const onScoreReceived = (e) => {
+      const receivedData = JSON.parse(e.data);
+      let response_userOneName = receivedData.userOneName;
+      let response_userOneScore = receivedData.userOneScore;
+      let response_userTwoName = receivedData.userTwoName;
+      let response_userTwoScore = receivedData.userTwoScore;
+      if (response_userOneName !== null) {
+        setUserOneName(response_userOneName);
+      }
+      if (response_userOneScore !== 0) {
+        setUserOneScore(response_userOneScore);
+      }
+      if (response_userTwoName !== null) {
+        setUserTwoName(response_userTwoName);
+      }
+      if (response_userTwoScore !== 0) {
+        setUserTwoScore(response_userTwoScore);
+      }
+    };
+
+    session.on('signal:score', onScoreReceived);
+    console.log(
+      '함수',
+      '시그널을 받았습니다.',
+      userOneName,
+      userOneScore,
+      userTwoName,
+      userTwoScore,
+    );
 
     if (mySide === 'USER_ONE') {
-      newUserOneName = myUserName;
-      newUserOneScore = resultScore;
-      console.log('newUserOneScore 값 설정:', newUserOneScore); // 로그
-      setUserOneName(newUserOneName);
-      setUserOneScore(newUserOneScore);
+      if (resultScore !== 0) {
+        setUserOneScore(resultScore);
+      }
     } else if (mySide === 'USER_TWO') {
-      newUserTwoName = myUserName;
-      newUserTwoScore = resultScore;
-      setUserTwoName(newUserTwoName);
-      setUserTwoScore(newUserTwoScore);
+      if (resultScore !== 0) {
+        setUserTwoScore(resultScore);
+      }
     }
 
     const dataToSend = {
-      userOneName: newUserOneName,
-      userOneScore: newUserOneScore,
-      userTwoName: newUserTwoName,
-      userTwoScore: newUserTwoScore,
+      userOneName: userOneName,
+      userOneScore: userOneScore,
+      userTwoName: userTwoName,
+      userTwoScore: userTwoScore,
     };
 
-    console.log('dataToSend:', dataToSend); // 로그
+    console.log('보내는 시그널 데이터', dataToSend); // 로그
     await session.signal({
       type: 'score',
       data: JSON.stringify(dataToSend),
       to: [], // 빈 배열은 세션의 모든 클라이언트에게 전송
     });
-
-    setStage('RESULT'); // setStage 함수의 정의가 필요합니다.
   };
-
-  useEffect(() => {
-    if (session) {
-      const onScoreReceived = (e) => {
-        const receivedData = JSON.parse(e.data);
-        console.log('점수를 받았습니다.');
-        setUserOneName(receivedData.userOneName);
-        setUserOneScore(receivedData.userOneScore);
-        setUserTwoName(receivedData.userTwoName);
-        setUserTwoScore(receivedData.userTwoScore);
-      };
-
-      session.on('signal:score', onScoreReceived);
-
-      return () => session.off('signal:score', onScoreReceived);
-    }
-  }, [session]);
-
-  useEffect(() => {
-    if (session) {
-      const onScoreReceived = (e) => {
-        const receivedData = JSON.parse(e.data);
-        console.log('점수를 받았습니다.');
-        setUserOneName(receivedData.userOneName);
-        setUserOneScore(receivedData.userOneScore);
-        setUserTwoName(receivedData.userTwoName);
-        setUserTwoScore(receivedData.userTwoScore);
-      };
-
-      session.on('signal:score', onScoreReceived);
-
-      return () => session.off('signal:score', onScoreReceived);
-    }
-  }, [session]);
-
-  useEffect(() => {
-    // 승패결정
-    if (mySide === 'USER_ONE') {
-      if (userOneScore > userTwoScore) {
-        setResultGame(1);
-      } else if (userTwoScore > userOneScore) {
-        setResultGame(-1);
-      } else {
-        setResultGame(0);
-      }
-    }
-    if (mySide === 'USER_TWO') {
-      if (userOneScore < userTwoScore) {
-        setResultGame(1);
-      } else if (userTwoScore < userOneScore) {
-        setResultGame(-1);
-      } else {
-        setResultGame(0);
-      }
-    }
-  }, [userOneScore, userTwoScore, mySide]);
 
   // ############# 결과 보여주기 #############
   const handleViewResult = async () => {
-    startLoading('lizard', 3000);
+    handleCalculateScore();
+    await startLoading('lizard', 1000); // 왜 넣음?
+    // API 보내는 곳 (결과) if(resultGame !=== 999)
     setToggleCurtain(true);
     setStage('END');
   };
@@ -806,14 +645,179 @@ export default function OpenViduApp() {
     setLog((prevLog) => [...prevLog, `녹화 영상을 저장했습니다!`]);
   };
 
+  // ############ 턴 시작 ###############
+  useEffect(() => {
+    // 영화 미리보기
+    if (stage === 'WATCHING_MOVIE') {
+      setLog((prevLog) => [...prevLog, `연기를 감상해보세요!`]);
+      handleCalculateScore();
+
+      // 내가 유저 1이면서 첫번째 차례
+    } else if (mySide === 'USER_ONE' && stage === 'USER_ONE_TURN') {
+      setLog((prevLog) => [...prevLog, `당신 차례입니다. 연기를 준비하세요!!`]);
+      if (stage !== 'END') {
+        handleUserOnePlay();
+      }
+
+      // 내가 유저 1이면서 두번째 차례
+    } else if (mySide === 'USER_ONE' && stage === 'USER_TWO_TURN') {
+      setLog((prevLog) => [...prevLog, `상대의 연기에 집중해주세요!`]);
+      if (stage !== 'END') {
+        handleUserTwoPlay();
+      }
+
+      // 내가 유저 2이면서 첫번째 차례
+    } else if (mySide === 'USER_TWO' && stage === 'USER_ONE_TURN') {
+      setLog((prevLog) => [...prevLog, `상대의 연기에 집중해주세요!`]);
+      if (stage !== 'END') {
+        handleUserOnePlay();
+      }
+
+      // 내가 유저 2이면서 두번째 차례
+    } else if (mySide === 'USER_TWO' && stage === 'USER_TWO_TURN') {
+      setLog((prevLog) => [...prevLog, `당신 차례입니다. 연기를 준비하세요!!`]);
+      if (stage !== 'END') {
+        handleUserTwoPlay();
+      }
+
+      // 점수 계산
+    } else if (stage === 'CALCULATION') {
+      setLog((prevLog) => [
+        ...prevLog,
+        `수고하셨습니다. 점수를 계산하겠습니다.`,
+      ]);
+      handleCalculateScore();
+      setStage('RESULT');
+
+      // 결과 보여주기
+    } else if (stage === 'RESULT') {
+      // 커튼 닫기
+
+      setLog((prevLog) => [...prevLog, `결과를 확인하세요!`]);
+      handleViewResult();
+
+      // 게임 종료
+    } else if (stage === 'END') {
+      setLog((prevLog) => [...prevLog, `안녕히 가세요!`]);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [stage]);
+
+  // ############ 턴 종료 ###############
+  const [resultScore, setResultScore] = useState(0);
+
+  useEffect(() => {
+    if (videoRef.current) {
+      const handleEnded = () => {
+        // 영화 미리보기 종료
+        if (stage === 'WATCHING_MOVIE') {
+          setStage('USER_ONE_TURN');
+          // 유저1 턴 종료
+        } else if (stage === 'USER_ONE_TURN') {
+          if (mySide === 'USER_ONE') {
+            clearInterval(myInterval);
+            const answer = 100 - (sum_diff / frame_cnts) * 100;
+            console.log(`나는 유저 원, 유저 원 점수는 ${answer}`);
+            setResultScore(Math.round(answer));
+            setRecordOn(false);
+          }
+          setUserCamLeftBorder(false);
+          setUserCamRightBorder(false);
+          handleCalculateScore();
+          setStage('USER_TWO_TURN');
+          // 유저2 턴 종료
+        } else if (stage === 'USER_TWO_TURN') {
+          if (mySide === 'USER_TWO') {
+            clearInterval(myInterval);
+            const answer = 100 - (sum_diff / frame_cnts) * 100;
+            console.log(`나는 유저 투, 유저 투 점수는 ${answer}`);
+            setResultScore(Math.round(answer));
+            setRecordOn(false);
+          }
+          setUserCamLeftBorder(false);
+          setUserCamRightBorder(false);
+          handleCalculateScore();
+          setStage('CALCULATION');
+        }
+      };
+
+      // 비디오 요소에 이벤트 리스너 추가
+      videoRef.current.addEventListener('ended', handleEnded); // ended면 handleEnded() 실행
+      // 클린업 함수에서 이벤트 리스너 제거
+      return () => {
+        if (videoRef.current) {
+          videoRef.current.removeEventListener('ended', handleEnded);
+        }
+      };
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [videoRef, stage]); // videoRef 변화 시 useEffect 실행
+
+  useEffect(() => {
+    if (session) {
+      const onScoreReceived = (e) => {
+        const receivedData = JSON.parse(e.data);
+        let response_userOneName = receivedData.userOneName;
+        let response_userOneScore = receivedData.userOneScore;
+        let response_userTwoName = receivedData.userTwoName;
+        let response_userTwoScore = receivedData.userTwoScore;
+        if (response_userOneName !== null) {
+          setUserOneName(response_userOneName);
+        }
+        if (response_userOneScore !== 0) {
+          setUserOneScore(response_userOneScore);
+        }
+        if (response_userTwoName !== null) {
+          setUserTwoName(response_userTwoName);
+        }
+        if (response_userTwoScore !== 0) {
+          setUserTwoScore(response_userTwoScore);
+        }
+      };
+      session.on('signal:score', onScoreReceived);
+      console.log(
+        'UseEffect',
+        '시그널을 받았습니다.',
+        userOneName,
+        userOneScore,
+        userTwoName,
+        userTwoScore,
+      );
+
+      return () => session.off('signal:score', onScoreReceived);
+    }
+  }, [session]);
+
+  useEffect(() => {
+    // 승패결정
+    if (mySide === 'USER_ONE') {
+      if (userOneScore == null || userTwoScore == null) {
+        setResultGame(999);
+      } else if (userOneScore > userTwoScore) {
+        setResultGame(1);
+      } else if (userTwoScore > userOneScore) {
+        setResultGame(-1);
+      } else if (userOneScore === userTwoScore) {
+        setResultGame(0);
+      }
+    }
+    if (mySide === 'USER_TWO') {
+      if (userOneScore == null || userTwoScore == null) {
+        setResultGame(999);
+      } else if (userOneScore < userTwoScore) {
+        setResultGame(1);
+      } else if (userTwoScore < userOneScore) {
+        setResultGame(-1);
+      } else if (userOneScore === userTwoScore) {
+        setResultGame(0);
+      }
+    }
+  }, [userOneScore, userTwoScore, mySide]);
+
   // ############# 모달 ##############
   const [toggleExitModal, setToggleExitModal] = useState(false);
   const [toggleTutorialModal, setToggleTutorialModal] = useState(false);
   const [toggleCurtain, setToggleCurtain] = useState(false);
-
-  useEffect(() => {
-    console.log('staegestagestage', stage);
-  }, [stage]);
 
   return (
     <div className="">
@@ -838,6 +842,8 @@ export default function OpenViduApp() {
               userOneScore={userOneScore}
               userTwoName={userTwoName}
               userTwoScore={userTwoScore}
+              leaveSession={leaveSession}
+              session={session}
             />
           )}
 
@@ -883,6 +889,7 @@ export default function OpenViduApp() {
                     mySide={mySide}
                     recordOn={recordOn}
                     userCamBorder={userCamLeftBorder}
+                    type="publisher"
                   />
                 </div>
               ) : (
@@ -899,7 +906,7 @@ export default function OpenViduApp() {
                 <video
                   id="origin"
                   ref={videoRef}
-                  src="video/ISawTheDevil.mp4"
+                  src="video/test-short(light).mp4"
                   poster="image/rank/rank-reon.png"
                   className={`mx-4 rounded-lg ${
                     isPlaying ? 'border-4 border-danger' : ''
@@ -959,6 +966,7 @@ export default function OpenViduApp() {
                       streamManager={sub}
                       mySide={null}
                       userCamBorder={userCamRightBorder}
+                      type="subscriber"
                     />
                   </div>
                 ))
@@ -967,7 +975,7 @@ export default function OpenViduApp() {
                   <div className="flex text-white">
                     <Matching typingContent="..." />
                   </div>
-                  <div className="relative -mt-10 flex items-center justify-center w-[500px] h-[500px]">
+                  <div className="relative flex items-center justify-center w-[500px] h-[500px]">
                     <img
                       src="image/rank/rank-basic-bg.png"
                       alt="waiting"
