@@ -19,28 +19,30 @@ function classNames(...classes) {
 
 export default function Example() {
   const userIsLogin = useSelector((state) => state.user.isLogin);
-  const [profileImg, setProfileImg] = useState(
-    '/image/login/defaultProfileImg.png',
-  );
+  const [profileImg, setProfileImg] = useState(null);
   // const id = localStorage.getItem('id');
 
-  // id를 얻을 수 있으면 사용해야 함.
-  // useEffect(() => {
-  //   if (userIsLogin && id) {
-  //     searchMypageMemberInfo(
-  //       id,
-  //       (response) => {
-  //         console.log(response);
-  //         if (response?.profileImg) {
-  //           setProfileImg(response.profileImg);
-  //         }
-  //       },
-  //       (error) => {
-  //         console.error(error);
-  //       },
-  //     );
-  //   }
-  // }, []);
+  useEffect(() => {
+    if (userIsLogin) {
+      setProfileImg("/image/login/LoginDefaultImg.png");
+
+      // 프로필 이미지를 받아올 수 있으면 이렇게 하겠슴둥.
+      // searchMypageMemberInfo( 
+      //   1,
+      //   (res) => {
+      //     if (res.data.response.profileImg) {
+      //       setProfileImg(res.data.response.profileImg);
+      //     }
+      //   },
+      //   (error) => {  
+      //     console.error(error);
+      //   },
+      // );
+    }
+    else {
+      setProfileImg("/image/login/unLoginDefaultImg.png")
+    }
+  }, [userIsLogin])
 
   return (
     <div className="sticky top-0 z-50">

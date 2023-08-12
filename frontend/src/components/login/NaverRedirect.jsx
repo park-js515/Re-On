@@ -30,24 +30,30 @@ const NaverRedirect = () => {
           dispatch(userLogin());
         })
         .then(() => {
-          navigate('/', { replace: true });
+          // navigate('/', { replace: true });
         })
         .catch((error) => {
           console.error(error);
           alert(
             '로그인에 문제가 발생했습니다. 로그인페이지로 다시 이동합니다.',
           );
-          navigate('/login', { replace: true });
+          // navigate('/login', { replace: true });
         });
     };
 
     NaverLogin();
   }, []);
 
+  const loading = '/image/login/loading.svg';
+
   return (
     <>
-      <div>네이버 로그인 중입니다. 기다리세요.</div>
-      {/* 로딩창을 넣어야함. */}
+      <div
+        className="flex w-screen justify-center align-middle"
+        style={{ height: '90vh' }}
+      >
+        <img src={loading} alt="loading" width="150px" height="150px" />
+      </div>
     </>
   );
 };
