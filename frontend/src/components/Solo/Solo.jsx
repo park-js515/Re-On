@@ -210,40 +210,74 @@ const SoloApp = () => {
   }
 
   return (
-    <div className="">
-
-      <div className="flex flex-row items-center justify-around ">
-        {/* 문제의 파일 */}
-        {/* <div className="flex flex-row items-center justify-around mt-40"> */}
+  
+      <div>
+        <img
+                src="image/solo/solo.png"
+                className="mx-auto h-[200px] w-[300px]"
+              />
+      <div className="flex flex-row items-center justify-around">
+        {/* 이게문젠가 ? */}
+        <div className="flex flex-row items-center justify-around mt-20">
           <div id="webCam_container ">
-              <video id="webCam" 
+              <video id="movie" 
                 autoPlay
                 style={{ width: '500px', height: '500px' }}
                 className="rounded-lg"
                 ref={webCamRef}
               >
               </video>
+              
           </div>
+          <div className="flex flex-col justify-center items-center my-12 mx-6 mb-6 space-y-4">
+                  <button 
+                      onClick={startActing}
+                      disabled={ortSession ? false : true}
+                      className="bg-[#BCD570] text-white font-extrabold text-4xl px-20 py-6 rounded-full transform transition-transform duration-300 hover:scale-105 hover:bg-[#C3E166] shadow-2xl hover:shadow-3xl focus:outline-none ">
+                      
+                      {reload ? "다시하기" : "게임시작"}
+                  </button>
 
+                  <button 
+                      onClick={getURL}
+                      disabled={reload ? true : false}
+                      className="bg-[#BCD570] text-white font-extrabold text-4xl px-20 py-6 rounded-full transform transition-transform duration-300 hover:scale-105 hover:bg-[#C3E166] shadow-2xl hover:shadow-3xl focus:outline-none ">
+                      영화변경
+                     
+                  </button>
+
+                  <span className="mt-2 rounded outline outline-green text-md p-2 text-center">
+                  {answer.toFixed(0) <= 33
+                    ? '분발하세요'
+                    : answer.toFixed(0) <= 70
+                    ? '잘하고 있어요'
+                    : answer.toFixed(0) < 100
+                    ? '너무 완벽한 연기에요'
+                    : '퍼펙트'}
+                  점수 : {answer.toFixed(0) <= 100 ? answer.toFixed(0) : '제 점수는요 ?'}
+                </span>
+                </div>
           <div className="flex flex-col">
-            {/* 재시작 버튼 */}
+
+            {/* 재시작 버튼
             <button 
               className="outline text-md rounded p-2 text-center"
               onClick={startActing}
               disabled={ortSession ? false : true}
             >
               {reload ? "RESTART" : "START"}
-            </button>
+            </button> */}
+
             {/* 영화 바꾸기 버튼 */}
-            <button 
+            {/* <button 
               className="mt-2 outline text-md rounded p-2 text-center"
               onClick={getURL}
               disabled={reload ? true : false}
             >
-              Change Movie
-            </button>
+              영화변경
+            </button> */}
             {/* 점수 */}
-            <span className="mt-2 rounded outline outline-green text-md p-2 text-center">점수 : {answer.toFixed(2)}</span>
+            {/* <span className="mt-2 rounded outline outline-green text-md p-2 text-center">점수 : {answer.toFixed(2)}</span> */}
           </div>
 
           <div id="movie_container">
@@ -256,10 +290,10 @@ const SoloApp = () => {
               >
               </video>
           </div>
-        {/* </div> */}
+        </div>
       </div>
 
-    </div>
+  </div>
   )
 }
 

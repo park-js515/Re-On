@@ -920,7 +920,7 @@ export default function OpenViduApp() {
               <div
                 id="movie-container"
                 className="rounded-lg
-            flex-col flex justify-evenly"
+            flex-col flex justify-evenly my-9"
               >
                 <video
                   id="origin"
@@ -930,7 +930,7 @@ export default function OpenViduApp() {
                   className={`mx-4 rounded-lg ${
                     isPlaying ? 'border-4 border-danger' : ''
                   }`}
-                  style={{ width: '400px', height: '500px' }}
+                  style={{ width: '500px', height: '500px' }}
                 />
 
                 <div className="flex justify-center gap-5 mt-10">
@@ -950,7 +950,7 @@ export default function OpenViduApp() {
                     <img
                       src="image/rank/rank-tutorial-btn.png"
                       alt="tutorial-btn"
-                      className="w-[150px] hover:w-[200px] transition-all duration-300"
+                      className="w-[250px] hover:scale-110 "
                     />
                   </button>
 
@@ -970,7 +970,7 @@ export default function OpenViduApp() {
                     <img
                       src="image/rank/rank-exit-btn.png"
                       alt="exit-btn"
-                      className="w-[150px] hover:w-[180px] transition-all duration-300"
+                      className="w-[250px] hover:scale-110 "
                     />
                   </button>
                 </div>
