@@ -131,7 +131,7 @@ public class PostQueryRepositoryImpl implements PostQueryRepository {
                         post.member.memberInfo.profileImg,
                         post.video.thumbnail,
                         post.postLikes.size().as("likeCnt"),
-                        post.postComments.size().as("likeCnt"),
+                        post.postComments.size().as("commentCnt"),
                         post.createDate
                         ))
                 .from(post)

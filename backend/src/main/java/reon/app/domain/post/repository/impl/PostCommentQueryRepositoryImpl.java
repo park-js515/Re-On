@@ -38,4 +38,5 @@ public class PostCommentQueryRepositoryImpl implements PostCommentQueryRepositor
                 .limit(10)
                 .fetch();
    }
+
 }

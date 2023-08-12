@@ -49,13 +49,21 @@ public class PostQueryServiceImpl implements PostQueryService {
     }
 
     @Override
-    public PublicDetailPostResponse searchPublicById(Long postId, Long memberId) {
+    public PublicDetailPostResponse searchPublicById(Long postId, Long loginId) {
         Post post = postQueryRepository.searchById(postId);
         if(post == null){
             throw new CustomException(ErrorCode.POSTS_NOT_FOUND);
         }
-        Boolean isLike = postLikeQueryRepository.isLike(postId, memberId);
+        Boolean isLike = postLikeQueryRepository.isLike(postId, loginId);
+        Boolean isMyPost = post.getMember().getId().equals(loginId);
         List<PostCommentResponse> commentResponses = postCommentQueryRepository.searchPostCommentResponse(1L, postId);
+        commentResponses.forEach(res -> {
+            if(res.getMemberId().equals(loginId)){
+                res.setIsMyComment(true);
+            }else{
+                res.setIsMyComment(false);
+            }
+        });
         return PublicDetailPostResponse.builder()
                 .id(post.getId())
                 .memberId(post.getMember().getId())
@@ -66,6 +74,7 @@ public class PostQueryServiceImpl implements PostQueryService {
                 .content(post.getContent())
                 .likeCnt(post.getPostLikes().size())
                 .isLike(isLike)
+                .isMyPost(isMyPost)
                 .postCommentResponses(commentResponses)
                 .createDate(post.getCreateDate())
                 .build();
@@ -114,7 +123,7 @@ public class PostQueryServiceImpl implements PostQueryService {
                 .nickName(post.getMember().getMemberInfo().getNickName())
                 .profileImg(post.getMember().getMemberInfo().getProfileImg())
                 .content(postComment.getContent())
-                .createdDate(postComment.getCreateDate())
+                .createDate(postComment.getCreateDate())
                 .build()).collect(Collectors.toList());
     }
 }
