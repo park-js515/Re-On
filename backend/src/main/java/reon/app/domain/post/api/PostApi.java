@@ -9,6 +9,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import reon.app.domain.post.dto.req.PostUpdateRequest;
 import reon.app.domain.post.dto.req.UpdateCommentRequest;
 import reon.app.domain.post.dto.req.PrivatePostUpdateRequest;
 import reon.app.domain.post.dto.req.SaveCommentRequest;
@@ -20,6 +21,7 @@ import reon.app.global.api.ApiResponse;
 import reon.app.global.error.entity.CustomException;
 import reon.app.global.error.entity.ErrorCode;
 
+import javax.persistence.Id;
 import java.util.List;
 
 @Api(tags = "Post")
@@ -37,17 +39,77 @@ public class PostApi {
 
     @Operation(summary = "post 저장", description = "유저 연기 영상, 원본 영상ID를 입력받아 post를 저장")
     @PostMapping
-    public ApiResponse<?> savePost(@RequestPart MultipartFile actionVideo, @RequestParam("videoId") Long videoId,
+    public ApiResponse<Long> savePost(@RequestPart MultipartFile actionVideo, @RequestParam("videoId") Long videoId,
                                    @Parameter(hidden = true) @AuthenticationPrincipal User user){
         PostSaveDto postSaveDto = PostSaveDto.builder()
                 .memberId(Long.parseLong(user.getUsername()))
                 .actionVideo(actionVideo)
                 .videoId(videoId)
                 .build();
-        postService.save(postSaveDto);
-
-        return ApiResponse.OK(null);
+        return ApiResponse.OK(postService.save(postSaveDto));
     }
+
+    @Operation(summary = "post 수정", description = "post의 title, content를 수정한다")
+    @PutMapping("/{postId}")
+    public ApiResponse<Long> updatePost(@PathVariable Long postId, @RequestBody PostUpdateRequest request, @Parameter(hidden = true) @AuthenticationPrincipal User user){
+        Long loginId = Long.parseLong(user.getUsername());
+        Scope postScope = postQueryService.searchScopeById(postId);
+        if(postScope == null){
+            throw new CustomException(ErrorCode.POSTS_NOT_FOUND);
+        }
+        if(postScope == Scope.PRIVATE){
+            throw new CustomException(ErrorCode.POST_SCOPE_ERROR);
+        }
+        PostUpdateDto dto = PostUpdateDto.builder()
+                .id(postId)
+                .loginId(loginId)
+                .title(request.getTitle())
+                .content(request.getContent())
+                .build();
+        return ApiResponse.OK(postService.update(dto));
+    }
+
+    @Operation(summary = "post 수정", description = "post의 title, content를 수정한다")
+    @PutMapping("delete/{postId}") // delete 0 -> 1 바꾸기 때문에 Put 매핑
+    public ApiResponse<Long> deletePost(@PathVariable Long postId, @Parameter(hidden = true) @AuthenticationPrincipal User user){
+        Long loginId = Long.parseLong(user.getUsername());
+        return ApiResponse.OK(postService.delete(postId, loginId));
+    }
+
+    @Operation(summary = "private to public post", description = "PRIVATE 게시글을 PUBLIC으로 변경한다.")
+    @PutMapping("/private/{postId}")
+    public ApiResponse<?> updatePrivateToPublicPost(@PathVariable Long postId, @RequestBody PrivatePostUpdateRequest request, @AuthenticationPrincipal User user){
+        Long loginId = Long.parseLong(user.getUsername());
+        Scope postScope = postQueryService.searchScopeById(postId);
+        if(postScope == null){
+            throw new CustomException(ErrorCode.POSTS_NOT_FOUND);
+        }
+        if(postScope.equals(Scope.PUBLIC)){
+            throw new CustomException(ErrorCode.POST_SCOPE_ERROR);
+        }
+        PrivatePostUpdateDto dto = PrivatePostUpdateDto.builder()
+                .id(postId)
+                .loginId(loginId)
+                .title(request.getTitle())
+                .content(request.getContent())
+                .build();
+        return ApiResponse.OK(postService.updatePrivateToPublic(dto));
+    }
+
+    @Operation(summary = "public to private post", description = "PUBLIC 게시글을 PRIVATE으로 변경한다. / 게시글의 좋아요, 댓글 기록은 삭제된다. ")
+    @PutMapping("/public/{postId}")
+    public ApiResponse<?> updatePublicToPrivatePost(@PathVariable Long postId, @Parameter(hidden = true) @AuthenticationPrincipal User user){
+        Long loginId = Long.parseLong(user.getUsername());
+        Scope postScope = postQueryService.searchScopeById(postId);
+        if(postScope == null){
+            throw new CustomException(ErrorCode.POSTS_NOT_FOUND);
+        }
+        if(postScope.equals(Scope.PRIVATE)){
+            throw new CustomException(ErrorCode.POST_SCOPE_ERROR);
+        }
+        return ApiResponse.OK(postService.updatePublicToPrivate(postId, loginId));
+    }
+
 
     // 단건 조회
     @Operation(summary = "private post 상세 조회", description = "postId로 private post 상세 조회")
@@ -66,7 +128,7 @@ public class PostApi {
 
     @Operation(summary = "public post 상세 조회", description = "postId로 public post 상세 조회")
     @GetMapping("public/{postId}")
-    public ApiResponse<PublicDetailPostResponse> searchPost(@PathVariable Long postId, @Parameter(hidden = true) @AuthenticationPrincipal User user){
+    public ApiResponse<PublicDetailPostResponse> searchPublicPost(@PathVariable Long postId, @Parameter(hidden = true) @AuthenticationPrincipal User user){
         Scope postScope = postQueryService.searchScopeById(postId);
         if(postScope == null){
             throw new CustomException(ErrorCode.POSTS_NOT_FOUND);
@@ -101,9 +163,9 @@ public class PostApi {
     @Operation(summary = "mypage public post 목록 조회", description = "PUBLIC 게시글 목록을 조회한다.")
     @GetMapping("/public")
     public ApiResponse<List<PublicPostsResponse>> searchPublicPosts(@RequestParam(value = "offset") Long offset, @RequestParam(value = "memberId") Long memberId, @Parameter(hidden = true) @AuthenticationPrincipal User user) {
-        Long loginMemberId = Long.parseLong(user.getUsername());
+        Long loginId = Long.parseLong(user.getUsername());
         log.info(String.valueOf(memberId));
-        List<PublicPostsResponse> responses = postQueryService.searchPublicPosts(offset, memberId, loginMemberId);
+        List<PublicPostsResponse> responses = postQueryService.searchPublicPosts(offset, memberId, loginId);
         log.info(responses.toString());
         return ApiResponse.OK(responses);
     }
@@ -111,8 +173,8 @@ public class PostApi {
     @Operation(summary = "투표해줘 public post 목록 전체 조회", description = "투표해줘 PUBLIC 게시글 목록을 조회한다.")
     @GetMapping("/feed")
     public ApiResponse<List<PostsResponse>> searchFeedPosts(@RequestParam(value = "offset") Long offset, @Parameter(hidden = true) @AuthenticationPrincipal User user){
-        Long loginMemberId = Long.parseLong(user.getUsername());
-        List<PostsResponse> responses = postQueryService.searchFeedPosts(offset, loginMemberId);
+        Long loginId = Long.parseLong(user.getUsername());
+        List<PostsResponse> responses = postQueryService.searchFeedPosts(offset, loginId);
         return ApiResponse.OK(responses);
     }
 
@@ -124,21 +186,6 @@ public class PostApi {
         return ApiResponse.OK(responses);
     }
 
-    @Operation(summary = "private post upload", description = "PRIVATE 게시글을 PUBLIC으로 변경한다.")
-    @PutMapping("/private/{postId}")
-    public ApiResponse<?> updatePrivatePost(@PathVariable Long postId, @RequestBody PrivatePostUpdateRequest request){
-        Scope scope = postQueryService.searchScopeById(postId);
-        if(scope.equals(Scope.PUBLIC)){
-            throw new CustomException(ErrorCode.POST_SCOPE_ERROR);
-        }
-        PrivatePostUpdateDto dto = PrivatePostUpdateDto.builder()
-                .id(postId)
-                .title(request.getTitle())
-                .content(request.getContent())
-                .build();
-        postService.updatePrivateToPublic(dto);
-        return ApiResponse.OK(null);
-    }
 
 
     @Operation(summary = "post 좋아요", description = "좋아요 상태를 변경한다.")
