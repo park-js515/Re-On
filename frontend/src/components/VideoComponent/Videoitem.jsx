@@ -8,7 +8,7 @@ const convertToK = (number) => {
         return front + '.' + back + 'k'
     }
     else{
-        return number
+        return number ? number : 0
     }
 }
 
@@ -16,25 +16,28 @@ const Videoitem = ({props, changeMode}) => {
     const navigate = useNavigate();
     const moveToMyPage = (event) => {
         event.preventDefault();
-        navigate('/mypage')
+        navigate(`/mypage/${props.memberId}`)
     }
     
-
+    const date = new Date(props.createDate);
+    const year = date.getFullYear();
+    const month = date.getMonth();
+    const day = date.getDate();
 
     return (
       <div className="bg-white flex max-w-xl rounded shadow-md flex-col items-start justify-between transform transition-transform duration-300 hover:scale-105 hover:shadow-lg mx-2 my-4 pb-4">
         {/* 상단 프로필, 년월일 닉넴 */}
         <div className="relative mt-2 flex items-center justify-between w-full gap-x-4 mb-1 px-1">
           <div className="flex items-center gap-x-4 ml-2">
-            <img src={props.profile_img} alt="" onClick={moveToMyPage} className="h-10 w-10 rounded-full bg-gray-50 hover:cursor-pointer" />
+            <img src={props.profileImg} alt="" onClick={moveToMyPage} className="h-10 w-10 rounded-full bg-gray-50 hover:cursor-pointer" />
             <div className="text-sm leading-6">
               <p className="font-semibold text-gray-900">
-                <span className="text-xs hover:underline hover:decoration-solid hover:cursor-pointer" onClick={moveToMyPage}>{props.nick_name}</span>
+                <span className="text-xs hover:underline hover:decoration-solid hover:cursor-pointer" onClick={moveToMyPage}>{props.nickName}</span>
               </p>
             </div>
           </div>
           <div className="text-sm leading-6 text-gray-700 font-semibold">
-            {props.year}년 {props.month}월 {props.date}일
+            {year}년 {month}월 {day}일
           </div>
         </div>
         {/* 썸넬 */}
@@ -43,10 +46,10 @@ const Videoitem = ({props, changeMode}) => {
         {/* 좋아요 */}
         <div className="flex items-center gap-x-4 text-xs ml-2 ">
           <div className="">
-            <span className="text-xl">💙</span> {convertToK(props.like_cnt)}
+            <span className="text-xl">{props.isLike ? "💙" : "🖤"}</span> {convertToK(props.likeCnt)}
           </div>
           <div className="relative z-10 rounded-full bg-gray-50 px-3 py-3 font-medium text-gray-600 hover:bg-gray-100">
-            <span className="text-xl">💬</span> {convertToK(props.comment_cnt)}   
+            <span className="text-xl">💬</span> {convertToK(props.commentCnt)}   
           </div>
         </div>
 
