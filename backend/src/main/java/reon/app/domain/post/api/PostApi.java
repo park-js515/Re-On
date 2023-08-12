@@ -214,12 +214,13 @@ public class PostApi {
     }
     @Operation(summary = "Detail post에서 댓글 10개를 조회한다.", description = "post detail에서 댓글을 조회한다.")
     @GetMapping("/{postId}/comment")
-    public ApiResponse<List<PostCommentResponse>> searchComment(@PathVariable Long postId, @RequestParam(value = "offset") Long offset){
+    public ApiResponse<List<PostCommentResponse>> searchComment(@PathVariable Long postId, @RequestParam(value = "offset") Long offset, @Parameter(hidden = true) @AuthenticationPrincipal User user){
         Scope postScope = postQueryService.searchScopeById(postId);
         if(postScope.equals(Scope.PRIVATE)){
             throw new CustomException(ErrorCode.POST_SCOPE_ERROR);
         }
-        List<PostCommentResponse> responses = postCommentQueryService.searchPostComment(offset, postId);
+        Long loginId = Long.parseLong(user.getUsername());
+        List<PostCommentResponse> responses = postCommentQueryService.searchPostComment(offset, postId, loginId);
         return ApiResponse.OK(responses);
     }
 

@@ -57,6 +57,13 @@ public class PostQueryServiceImpl implements PostQueryService {
         Boolean isLike = postLikeQueryRepository.isLike(postId, loginId);
         Boolean isMyPost = post.getMember().getId().equals(loginId);
         List<PostCommentResponse> commentResponses = postCommentQueryRepository.searchPostCommentResponse(1L, postId);
+        commentResponses.forEach(res -> {
+            if(res.getMemberId().equals(loginId)){
+                res.setIsMyComment(true);
+            }else{
+                res.setIsMyComment(false);
+            }
+        });
         return PublicDetailPostResponse.builder()
                 .id(post.getId())
                 .memberId(post.getMember().getId())
@@ -116,7 +123,7 @@ public class PostQueryServiceImpl implements PostQueryService {
                 .nickName(post.getMember().getMemberInfo().getNickName())
                 .profileImg(post.getMember().getMemberInfo().getProfileImg())
                 .content(postComment.getContent())
-                .createdDate(postComment.getCreateDate())
+                .createDate(postComment.getCreateDate())
                 .build()).collect(Collectors.toList());
     }
 }
