@@ -17,17 +17,18 @@ function savePost(videoId, actionVideo, success, fail) {
     .catch(fail);
 }
 
-// 2. post 상세 조회
+// 2. Detail post에서 댓글 10개를 조회한다.
 /**
- *
- * @param {number} postId
+ * 
+ * @param {number} postId 
+ * @param {number} offset 
  * @param {function} success [callback]
  * @param {function} fail [callback]
  */
-function searchPostInfo(postId, success, fail) {
+function searchPostDetailComment(postId, offset, success, fail) {
   const api = postInstance();
 
-  api.get(`/${postId}`).then(success).catch(fail);
+  api.get(`/${postId}/comment?offset=${offset}`).then(success).catch(fail);
 }
 
 // 3. post 댓글 작성
@@ -141,7 +142,20 @@ function searchPrivatePost(offset, success, fail) {
   api.get(`/private?offset=${offset}`).then(success).catch(fail);
 }
 
-// 11. private post upload
+// 11. private post 상세 조회
+/**
+ * 
+ * @param {number} postId 
+ * @param {function} success [callback]
+ * @param {functoin} fail [callback]
+ */
+function searchPrivatePostDetail(postId, success, fail) {
+  const api = postInstance();
+
+  api.get(`/private/${postId}`).then(success).catch(fail);
+}
+
+// 12. private post upload
 /**
  *
  * @param {number} postId
@@ -155,7 +169,7 @@ function uploadPrivatePost(postId, body, success, fail) {
   api.put(`private/${postId}`, JSON.stringify(body)).then(success).catch(fail);
 }
 
-// 12. mypage public post 목록 조회
+// 13. mypage public post 목록 조회
 /**
  *
  * @param {number} offset
@@ -172,9 +186,22 @@ function searchPublicPost(offset, memberId, success, fail) {
     .catch(fail);
 }
 
+// 14. public post 상세 조회
+/**
+ * 
+ * @param {number} postId 
+ * @param {function} success [callback] 
+ * @param {function} fail [callback]
+ */
+function searchPublicPostDetail(postId, success, fail) {
+  const api = postInstance();
+
+  api.get(`/public/${postId}`).then(success).catch(fail);
+}
+
 export {
   savePost,
-  searchPostInfo,
+  searchPostDetailComment,
   createPostComment,
   updatePostComment,
   deletePostComment,
@@ -183,6 +210,8 @@ export {
   likePost,
   searchLikePost,
   searchPrivatePost,
+  searchPrivatePostDetail,
   uploadPrivatePost,
   searchPublicPost,
+  searchPublicPostDetail
 };
