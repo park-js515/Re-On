@@ -1,17 +1,24 @@
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { searchPrivatePost, searchPrivatePostDetail } from 'apiList/post';
+import { searchPrivatePost, searchPrivatePostDetail, uploadPrivatePost } from 'apiList/post';
+import { Hidden } from '../../../../node_modules/@mui/material/index';
 
   const Private = () => {
     //모달
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedPost, setSelectedPost] = useState(null);
     const [posts, setPosts] = useState([]);
+
+    const [isInputOpen, setInputOpen] = useState(false);
+    const [title, setTitle] = useState("");
+    const [content, setContent] = useState("");
+
+
+
     const navigate = useNavigate();
 
     const openModal = (post) => {
-
       searchPrivatePostDetail(post.id,(response) => {
         console.log(response.data.response);
         setSelectedPost(response.data.response);
@@ -21,29 +28,27 @@ import { searchPrivatePost, searchPrivatePostDetail } from 'apiList/post';
           navigate('/login');
         }
       )
-      // axios.get(
-      //   process.env.REACT_APP_API + `/api/post-management/post/${post.id}`,{
-      //     headers: {
-      //       "Authorization": `Bearer ${localStorage.getItem('accessToken')}`,
-      //       'Content-Type': 'application/json',
-      //     },
-      //   },
-      // )
-      // .then((response) => {
-      //   console.log(response.data.response);
-      //   setSelectedPost(response.data.response);
-      //   setIsModalOpen(true);
-
-      // })
-      // .catch((error) => {
-      //   console.log(error)
-      //   navigate('/login');
-      // });
     }
 
+    //private 영상을 public에 게시하는 api
+    const uploadPost = () => {
+      uploadPrivatePost(selectedPost.id, { title: title, content: content }, ((response) => {
+        closeModal();
+        openInput();
+      }), ((error) => {
+        console.log(error);
+      }));
+    }
+
+    //상세보기 모달 닫기
     const closeModal = () => {
         setIsModalOpen(false);
         setSelectedPost(null);
+    }
+
+    //업로드를 위한 title, content 창 열기
+    const openInput = () => {
+      setInputOpen(!isInputOpen);
     }
 
     useEffect(() => {
@@ -56,23 +61,6 @@ import { searchPrivatePost, searchPrivatePostDetail } from 'apiList/post';
             console.log(error)
           }
         )
-        // await axios
-        //   .get(
-        //     process.env.REACT_APP_API + `/api/post-management/post/private?offset=1`,
-        //     {
-        //       headers: {
-        //         "Authorization": `Bearer ${accessToken}`,
-        //         'Content-Type': 'application/json',
-        //       },
-        //     },
-        //   )
-        //   .then((response) => {
-        //     console.log(response.data.response);
-        //     setPosts(response.data.response)
-        //   })
-        //   .catch((error) => {
-        //     console.log(error)
-        //   });
       };
       test();
     }, []);
@@ -83,10 +71,20 @@ import { searchPrivatePost, searchPrivatePostDetail } from 'apiList/post';
         {isModalOpen && (
                 <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50 z-50">
                     <div className="bg-white p-4 rounded-md">
-                        {/* <img src={selectedPost.thumbnail} alt={selectedPost.title} className="w-full h-64 object-cover mb-4" /> */}
-              {/* <h3>{selectedPost.title}</h3> */}
-              <video style={{ 'width': "500px" }} autoPlay src={"https://storage.googleapis.com/reon-bucket/"+selectedPost.actionPath}/>
-                        <button onClick={closeModal} className="mt-4 px-4 py-2 bg-red-500 text-black rounded-md">닫기</button>
+                        <video controls style={{ 'width': "500px" }} autoPlay src={"https://storage.googleapis.com/reon-bucket/" + selectedPost.actionPath} />
+              <h3>{selectedPost.title}</h3>
+              <h3>{selectedPost.createdDate}</h3>
+              {isInputOpen && (<div className='uploadInput'>
+                <div>
+                  게시글 제목 : <input ></input></div>
+                <div>
+                  내용 : <input ></input></div>
+              </div>
+          )}
+              {isInputOpen && (<button onClick={uploadPost}>영상 게시</button>)}
+              <button onClick={openInput} className="mt-4 px-4 py-2 bg-red-500 text-black rounded-md">업로드 폼 열기</button>
+              <button onClick={closeModal} className="mt-4 px-4 py-2 bg-red-500 text-black rounded-md">닫기</button>
+
                     </div>
                 </div>
         )}
