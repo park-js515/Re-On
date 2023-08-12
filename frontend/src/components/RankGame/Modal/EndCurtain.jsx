@@ -15,7 +15,7 @@ const EndCurtain = ({
 
   useEffect(() => {
     if (countdown <= 0) {
-      leaveSession();
+      // leaveSession();
       return;
     }
 
@@ -41,7 +41,15 @@ const EndCurtain = ({
         ></div>
         <div className="curtain__prize text-white fixed inset-0 flex flex-col items-center text-4xl">
           <div className="mb-4 mt-20">
-            {resultGame === 1 ? '승' : resultGame === -1 ? '패' : '무'}
+            <div>
+              {resultGame === 999
+                ? '죄송합니다. 통신의 문제가 발생했습니다.'
+                : resultGame === 1
+                ? '승'
+                : resultGame === -1
+                ? '패'
+                : '무'}
+            </div>
           </div>
           <div className="flex justify-between w-3/4">
             <div>{userOneName}</div>
