@@ -69,13 +69,14 @@ function updateMemberImg(profileImg, success, fail) {
 // 6. mypage member 조회
 /**
  *
+ * @param {number} id 
  * @param {function} success [callback]
  * @param {function} fail [callback]
  */
-function searchMypageMember(success, fail) {
+function searchMypageMemberInfo(id, success, fail) {
   const api = memberInstance();
 
-  api.put(`/member`).then(success).catch(fail);
+  api.get(`/member/${id}`).then(success).catch(fail);
 }
 
 // 7. 회원탈퇴
@@ -98,7 +99,7 @@ function deleteMember(id, success, fail) {
  * @param {function} success [callback]
  * @param {function} fail [callback]
  */
-function searchMemberInfo(id, success, fail) {
+function searchMemberBattleInfo(id, success, fail) {
   const api = memberInstance();
 
   api.get(`/member/${id}/battleInfo`).then(success).catch(fail);
@@ -124,7 +125,7 @@ function logoutMember(id, success, fail) {
  * @param {function} success [callback]
  * @param {function} fail [callback]
  */
-function updateMember(data, success, fail) {
+function updateMemberInfo(data, success, fail) {
   const api = memberInstance();
 
   api.put(`/member/update`, JSON.stringify(data)).then(success).catch(fail);
@@ -135,9 +136,9 @@ export {
   registerBattleLog,
   deleteMemberImg,
   updateMemberImg,
-  searchMypageMember,
+  searchMypageMemberInfo,
   deleteMember,
-  searchMemberInfo,
+  searchMemberBattleInfo,
   logoutMember,
-  updateMember,
+  updateMemberInfo,
 };

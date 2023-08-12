@@ -1,20 +1,16 @@
-import { Fragment } from 'react';
+import { Fragment, useState } from 'react';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { useEffect } from 'react';
+import { searchMypageMemberInfo } from 'apiList/member';
 
 const navigation = [
-
   { name: '같이하기', to: '/rank', current: false },
   { name: '혼자하기', to: '/normallist', current: false },
   { name: '투표해줘', to: '/feed', current: false },
   { name: '고객센터', to: '/faq', current: false },
   { name: '팀문화', to: '/team', current: false },
-  { name: '로그인', to: '/login', current: false },
- 
-
-  
-  
-
 ];
 
 function classNames(...classes) {
@@ -22,6 +18,30 @@ function classNames(...classes) {
 }
 
 export default function Example() {
+  const userIsLogin = useSelector((state) => state.user.isLogin);
+  const [profileImg, setProfileImg] = useState(
+    '/image/login/defaultProfileImg.png',
+  );
+  // const id = localStorage.getItem('id');
+
+  // id를 얻을 수 있으면 사용해야 함.
+  // useEffect(() => {
+  //   if (userIsLogin && id) {
+  //     searchMypageMemberInfo(
+  //       id,
+  //       (response) => {
+  //         console.log(response);
+  //         if (response?.profileImg) {
+  //           setProfileImg(response.profileImg);
+  //         }
+  //       },
+  //       (error) => {
+  //         console.error(error);
+  //       },
+  //     );
+  //   }
+  // }, []);
+
   return (
     <div className="sticky top-0 z-50">
       <Disclosure as="nav" className="bg-white">
@@ -31,17 +51,13 @@ export default function Example() {
               <div className="relative flex h-16 items-center justify-between">
                 <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
                   <div className="flex flex-shrink-0 items-center">
-                    
-                     <Link
-                        to="/"
-                              
-                            >
-                              <img
-                      className="h-10 w-auto"
-                      src="/image/logo/logo.png"
-                      alt="Your Company"
-                    />
-                            </Link>
+                    <Link to="/">
+                      <img
+                        className="h-10 w-auto"
+                        src="/image/logo/logo.png"
+                        alt="Your Company"
+                      />
+                    </Link>
                   </div>
                   <div className="hidden sm:ml-6 sm:block">
                     <div className="flex space-x-4">
@@ -71,39 +87,57 @@ export default function Example() {
                         <span className="sr-only">Open user menu</span>
                         <img
                           className="h-8 w-8 rounded-full"
-                          src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                          alt=""
+                          src={profileImg}
+                          alt="profileImg"
                         />
                       </Menu.Button>
                     </div>
                     <Transition as={Fragment}>
                       <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                        <Menu.Item>
-                          {({ active }) => (
-                            <Link
-                              to="/mypage"
-                              className={classNames(
-                                active ? 'bg-gray-100' : '',
-                                'block px-4 py-2 text-sm text-gray-700',
-                              )}
-                            >
-                              마이페이지
-                            </Link>
-                          )}
-                        </Menu.Item>
-                        <Menu.Item>
-                          {({ active }) => (
-                            <Link
-                              to="/logout"
-                              className={classNames(
-                                active ? 'bg-gray-100' : '',
-                                'block px-4 py-2 text-sm text-gray-700',
-                              )}
-                            >
-                              로그아웃
-                            </Link>
-                          )}
-                        </Menu.Item>
+                        {userIsLogin ? (
+                          <Menu.Item>
+                            {({ active }) => (
+                              <Link
+                                to="/mypage"
+                                className={classNames(
+                                  active ? 'bg-gray-100' : '',
+                                  'block px-4 py-2 text-sm text-gray-700',
+                                )}
+                              >
+                                마이페이지
+                              </Link>
+                            )}
+                          </Menu.Item>
+                        ) : null}
+                        {userIsLogin ? (
+                          <Menu.Item>
+                            {({ active }) => (
+                              <Link
+                                to="/logout"
+                                className={classNames(
+                                  active ? 'bg-gray-100' : '',
+                                  'block px-4 py-2 text-sm text-gray-700',
+                                )}
+                              >
+                                로그아웃
+                              </Link>
+                            )}
+                          </Menu.Item>
+                        ) : (
+                          <Menu.Item>
+                            {({ active }) => (
+                              <Link
+                                to="/login"
+                                className={classNames(
+                                  active ? 'bg-gray-100' : '',
+                                  'block px-4 py-2 text-sm text-gray-700',
+                                )}
+                              >
+                                로그인
+                              </Link>
+                            )}
+                          </Menu.Item>
+                        )}
                       </Menu.Items>
                     </Transition>
                   </Menu>

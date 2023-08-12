@@ -9,7 +9,7 @@ const NaverRedirect = () => {
   const code = new URL(window.location.href).searchParams.get('code');
   const state = process.env.REACT_APP_STATE;
   const navigate = useNavigate();
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
   // const user = useSelector((state) => state.user);
 
   useEffect(() => {
@@ -20,7 +20,6 @@ const NaverRedirect = () => {
           { authorizationCode: code, state: state },
           {
             headers: {
-              accept: '*/*',
               'Content-Type': 'application/json',
             },
           },
@@ -28,11 +27,7 @@ const NaverRedirect = () => {
         .then((response) => {
           localStorage.setItem('accessToken', response.data.accessToken);
           // 액세스 토큰 설정
-          // dispatch(
-          //   userLogin({
-          //     accessToken: accessToken,
-            // }),
-          // );
+          dispatch(userLogin());
         })
         .then(() => {
           navigate('/', { replace: true });
