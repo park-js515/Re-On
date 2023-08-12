@@ -4,6 +4,7 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.DynamicInsert;
 import reon.app.domain.member.entity.Member;
+import reon.app.domain.post.service.dto.PostUpdateDto;
 import reon.app.domain.post.service.dto.PrivatePostUpdateDto;
 import reon.app.domain.video.entity.Video;
 import reon.app.global.entity.BaseEntity;
@@ -61,6 +62,21 @@ public class Post extends BaseEntity {
         this.title = privatePostUpdateDto.getTitle();
         this.content = privatePostUpdateDto.getContent();
         this.scope = Scope.PUBLIC;
+    }
+
+    public void updatePost(PostUpdateDto postUpdateDto){
+        this.title = postUpdateDto.getTitle();
+        this.content = postUpdateDto.getContent();
+    }
+
+    public void updatePublicToPrivate(String title) {
+        this.title = title;
+        this.content = null;
+        this.scope = Scope.PRIVATE;
+    }
+
+    public void delete() {
+        this.deleted = 1;
     }
 }
 

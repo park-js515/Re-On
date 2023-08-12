@@ -36,6 +36,9 @@ public class PostQueryServiceImpl implements PostQueryService {
     @Override
     public PrivateDetailPostResponse searchPrivateById(Long postId) {
         Post post = postQueryRepository.searchById(postId);
+        if(post == null){
+            throw new CustomException(ErrorCode.POSTS_NOT_FOUND);
+        }
         return PrivateDetailPostResponse.builder()
                 .id(post.getId())
                 .memberId(post.getMember().getId())
@@ -75,9 +78,9 @@ public class PostQueryServiceImpl implements PostQueryService {
     }
 
     @Override
-    public List<PublicPostsResponse> searchPublicPosts(Long offset, Long memberId, Long loginMemberId) {
+    public List<PublicPostsResponse> searchPublicPosts(Long offset, Long memberId, Long loginId) {
         List<PublicPostsResponse> responses = postQueryRepository.searchPublicPosts(offset, memberId);
-        responses.stream().forEach(res -> res.setIsLike(postLikeQueryRepository.isLike(res.getId(), loginMemberId)));
+        responses.stream().forEach(res -> res.setIsLike(postLikeQueryRepository.isLike(res.getId(), loginId)));
         return responses;
     }
 
@@ -90,16 +93,16 @@ public class PostQueryServiceImpl implements PostQueryService {
     }
 
     @Override
-    public List<PostsResponse> searchFeedPosts(Long offset, Long loginMemberId) {
+    public List<PostsResponse> searchFeedPosts(Long offset, Long loginId) {
         List<PostsResponse> responses = postQueryRepository.searchFeedPosts(offset);
-        responses.stream().forEach(res -> res.setIsLike(postLikeQueryRepository.isLike(res.getId(), loginMemberId)));
+        responses.stream().forEach(res -> res.setIsLike(postLikeQueryRepository.isLike(res.getId(), loginId)));
         return responses;
     }
 
     @Override
-    public List<PostsResponse> searchFeedRankPosts(Long loginMemberId) {
+    public List<PostsResponse> searchFeedRankPosts(Long loginId) {
         List<PostsResponse> responses = postQueryRepository.searchFeedRankPosts();
-        responses.stream().forEach(res -> res.setIsLike(postLikeQueryRepository.isLike(res.getId(), loginMemberId)));
+        responses.stream().forEach(res -> res.setIsLike(postLikeQueryRepository.isLike(res.getId(), loginId)));
         return responses;
     }
 
