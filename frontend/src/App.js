@@ -48,6 +48,7 @@ function App() {
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/rank" element={<RankPage />} />
         <Route path="/team" element={<TeamPage />} />
+        <Route path="/login/redirect" element={<NaverRedirect/>}/>
       </Routes>
     </>
   );
