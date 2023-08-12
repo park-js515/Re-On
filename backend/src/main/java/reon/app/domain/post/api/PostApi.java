@@ -134,10 +134,10 @@ public class PostApi {
             throw new CustomException(ErrorCode.POSTS_NOT_FOUND);
         }
         if(postScope == Scope.PRIVATE){
-            throw new CustomException(ErrorCode.BAD_REQUEST);
+            throw new CustomException(ErrorCode.POST_SCOPE_ERROR);
         }
-        Long memberId = Long.parseLong(user.getUsername());
-        PublicDetailPostResponse response = postQueryService.searchPublicById(postId, memberId);
+        Long loginId = Long.parseLong(user.getUsername());
+        PublicDetailPostResponse response = postQueryService.searchPublicById(postId, loginId);
         return ApiResponse.OK(response);
     }
 

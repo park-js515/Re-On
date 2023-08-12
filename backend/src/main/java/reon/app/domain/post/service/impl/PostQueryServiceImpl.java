@@ -49,12 +49,13 @@ public class PostQueryServiceImpl implements PostQueryService {
     }
 
     @Override
-    public PublicDetailPostResponse searchPublicById(Long postId, Long memberId) {
+    public PublicDetailPostResponse searchPublicById(Long postId, Long loginId) {
         Post post = postQueryRepository.searchById(postId);
         if(post == null){
             throw new CustomException(ErrorCode.POSTS_NOT_FOUND);
         }
-        Boolean isLike = postLikeQueryRepository.isLike(postId, memberId);
+        Boolean isLike = postLikeQueryRepository.isLike(postId, loginId);
+        Boolean isMyPost = post.getMember().getId().equals(loginId);
         List<PostCommentResponse> commentResponses = postCommentQueryRepository.searchPostCommentResponse(1L, postId);
         return PublicDetailPostResponse.builder()
                 .id(post.getId())
@@ -66,6 +67,7 @@ public class PostQueryServiceImpl implements PostQueryService {
                 .content(post.getContent())
                 .likeCnt(post.getPostLikes().size())
                 .isLike(isLike)
+                .isMyPost(isMyPost)
                 .postCommentResponses(commentResponses)
                 .createDate(post.getCreateDate())
                 .build();

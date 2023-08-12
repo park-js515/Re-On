@@ -21,11 +21,12 @@ public class PublicDetailPostResponse { // 마이페이지 PUBLIC, LIKED, 투표
     private String content;
     private int likeCnt;
     private Boolean isLike;
+    private Boolean isMyPost;
     private List<PostCommentResponse> postCommentResponses;
     private LocalDateTime createDate;
 
     @Builder
-    public PublicDetailPostResponse(Long id, Long memberId, String nickName, String profileImg, String actionPath, String title, String content, int likeCnt, Boolean isLike, List<PostCommentResponse> postCommentResponses, LocalDateTime createDate) {
+    public PublicDetailPostResponse(Long id, Long memberId, String nickName, String profileImg, String actionPath, String title, String content, int likeCnt,  Boolean isLike, Boolean isMyPost, List<PostCommentResponse> postCommentResponses, LocalDateTime createDate) {
         this.id = id;
         this.memberId = memberId;
         this.nickName = nickName;
@@ -35,6 +36,7 @@ public class PublicDetailPostResponse { // 마이페이지 PUBLIC, LIKED, 투표
         this.content = content;
         this.likeCnt = likeCnt;
         this.isLike = isLike;
+        this.isMyPost = isMyPost;
         this.postCommentResponses = postCommentResponses;
         this.createDate = createDate;
     }
