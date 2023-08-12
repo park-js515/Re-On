@@ -21,19 +21,11 @@ function App() {
 
   // 뒤로가기 방지
   const location = useLocation();
-  const [prevLocation, setPrevLocation] = useState(location);
   useEffect(() => {
-    // 페이지가 이동되었으면서
-    if (prevLocation.pathname !== location.pathname) {
-      // 페이지 기록
-      setPrevLocation(location);
-      // 이전 페이지가 rank이면서 세션에 접속된 상태라면 새로고침
-      if (prevLocation.pathname === '/rank' && isJoinSession) {
-        console.log('이전페이지는 랭크');
-        window.location.reload();
-      }
+    if (location.pathname !== '/rank' && isJoinSession) {
+      window.location.reload();
     }
-  }, [location, prevLocation]);
+  }, [location, isJoinSession]);
 
   return (
     <>
