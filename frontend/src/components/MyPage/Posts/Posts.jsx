@@ -1,27 +1,47 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PostModal from '../Modal/PostModal';
+import { searchPublicPost, searchPublicPostDetail } from 'apiList/post';
 
   const Posts = () => {
 
-
     //모달
     const [showModal, setShowModal] = useState(false);
-    const [selectedPostId, setSelectedPostId] = useState(null);
+    const [selectedPostId, setSelectedPostId] = useState();
+    const [posts, setPosts] = useState([]);
+    const [detailPost, setDetailPost] = useState();
+
+
+    useEffect(() => {
+      const getPosts = () => {
+        searchPublicPost(1, 1, (response) => {
+          console.log(response.data.response);
+          setPosts(response.data.response)
+        }, (error) => {
+          console.log(error);
+        })
+      }
+      getPosts();
+    },[]);
+
+    const getPostDetail = (id) => {
+      searchPublicPostDetail(id, (response) => {
+        console.log("zz");
+        console.log(response.data.response);
+        setDetailPost(response.data.response)
+      }, (error) => {
+        console.log(error);
+      })
+    };
+    
+    const OpenModal = (id) => {
+      console.log(id);
+      setSelectedPostId(id);
+      getPostDetail(id);
+      setShowModal(true);
+    };
 
 
 
-
-    const temp = [];
-    for (let i = 1; i <= 10; i++){
-        temp.push({
-            id: i,
-            title: `제목 넘버-${i}`,
-            likes: 170,
-            backgroundImage: `https://source.unsplash.com/random?sig=${i}`,
-            comment_cnt: 20,
-        });
-    }
-    const posts = temp;
    
     return (
       <div className="bg-white py-24 sm:py-32 ">
@@ -32,16 +52,16 @@ import PostModal from '../Modal/PostModal';
                 
                 {/* 썸넬 */}
                 <div 
-                    style={{ backgroundImage: `url(${post.backgroundImage})` }} 
+                    style={{ backgroundImage: `url(${post.thumbnail})` }} 
                     className="w-full h-64 bg-cover bg-center rounded featured-item cursor-pointer" 
-                    onClick={() => {setShowModal(true); setSelectedPostId(post.id);}}
+                  onClick={() => { OpenModal(post.id)}}
                     alt=""
                 ></div>
 
                 {/* 좋아요 */}
                 <div className="flex items-center gap-x-4 text-xs ml-2">
-                  <div className="text-gray-500 font-semibold"><span className="text-lg">💙</span>좋아요 {post.likes}</div>
-                  <div className="text-gray-500 font-semibold"><span className="text-lg">💬</span>댓글 {post.comment_cnt}</div>
+                  <div className="text-gray-500 font-semibold"><span className="text-lg">💙</span>좋아요 {post.likeCnt}</div>
+                  <div className="text-gray-500 font-semibold"><span className="text-lg">💬</span>댓글 {post.commentCnt}</div>
                 </div>
                 {/* 제목이에용 */}
                 <div className="group relative ml-2 pb-6 ">
@@ -49,22 +69,18 @@ import PostModal from '../Modal/PostModal';
                     <span className="text-2xl hover:underline hover:decoration-solid hover:cursor-pointer">{post.title}</span>
                     </h3>
                 </div>
-                
-                
-    
               </div>
             ))}
             {/* 모달창이에용 */}
             {
                 showModal && (
                     <PostModal 
-                        post_id={selectedPostId} 
+                    detailPost={detailPost} 
                         changeShow={() => setShowModal(false)}
                     />
                 )
             }
           </div>
-    
         </div>
       </div>
     );

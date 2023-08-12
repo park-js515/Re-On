@@ -181,7 +181,7 @@ function searchPublicPost(offset, memberId, success, fail) {
   const api = postInstance();
 
   api
-    .get(`/public?offset=${offset}&memberId${memberId}`)
+    .get(`/public?offset=${offset}&memberId=${memberId}`)
     .then(success)
     .catch(fail);
 }
