@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './EndCurtain.css';
+import Click from './Click';
 
 const EndCurtain = ({
   className,
@@ -9,13 +10,28 @@ const EndCurtain = ({
   userTwoName,
   userTwoScore,
   leaveSession,
+  recordedFile,
 }) => {
   const [isChecked, setIsChecked] = useState(true);
   const [countdown, setCountdown] = useState(10); // 카운트다운을 위한 상태
 
+  const handleSaveRecordedFile = () => {
+    if (recordedFile) {
+      const url = window.URL.createObjectURL(recordedFile);
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', 'recorded-video.mp4');
+      document.body.appendChild(link);
+      link.click();
+      window.URL.revokeObjectURL(url);
+    } else {
+      alert('녹화된 영상이 없습니다.');
+    }
+  };
+
   useEffect(() => {
     if (countdown <= 0) {
-      // leaveSession();
+      leaveSession();
       return;
     }
 
@@ -28,11 +44,19 @@ const EndCurtain = ({
 
   return (
     <div className={`curtain ${className}`}>
+      <div className={`curtain__image-container ${isChecked ? '' : 'hidden'}`}>
+        <Click />
+      </div>
       <div className="curtain__wrapper">
         <input
           type="checkbox"
           checked={isChecked}
-          onChange={() => setIsChecked(!isChecked)}
+          onChange={() => {
+            if (isChecked) {
+              setIsChecked(false);
+            }
+          }}
+          style={{ zIndex: isChecked ? 100 : -1 }}
         />
         <div
           className={`curtain__panel curtain__panel--left ${
@@ -60,6 +84,7 @@ const EndCurtain = ({
             <div>점수 : {userOneScore}</div>
             <div>점수 : {userTwoScore}</div>
           </div>
+          <button onClick={handleSaveRecordedFile}>저장</button>
           <div className="countdown">
             {countdown}초 후에 대기실로 이동합니다.
           </div>

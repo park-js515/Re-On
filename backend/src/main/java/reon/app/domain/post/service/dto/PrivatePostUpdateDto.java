@@ -9,16 +9,16 @@ import javax.validation.constraints.Size;
 
 @Data
 @NoArgsConstructor
-public class PrivatePostUpdateDto {
+public class PrivatePostUpdateDto { // private -> public
     private Long id;
-    @Size(max = 50)
+    private Long loginId;
     private String title;
-    @NotBlank
     private String content;
 
     @Builder
-    public PrivatePostUpdateDto(Long id, String title, String content) {
+    public PrivatePostUpdateDto(Long id, Long loginId, String title, String content) {
         this.id = id;
+        this.loginId = loginId;
         this.title = title;
         this.content = content;
     }

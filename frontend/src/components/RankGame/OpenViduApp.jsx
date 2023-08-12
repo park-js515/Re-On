@@ -105,13 +105,16 @@ export default function OpenViduApp() {
     // 시그널 받기
     mySession.on('signal:playVideo', async (event) => {
       // 시그널을 받으면 비디오 재생을 처리
-      setLog((prevLog) => [...prevLog, `게임을 시작합니다.`]);
-      await startLoading('count', 5000); // 로딩 5초
-      handleLoadVideo(); // 영상 시작
+      if (stage === 'READY') {
+        setLog((prevLog) => [...prevLog, `게임을 시작합니다.`]);
+        await startLoading('count', 5000); // 로딩 5초
+        handleLoadVideo(); // 영상 시작
+      }
     });
 
     mySession.on('streamDestroyed', async (event) => {
       deleteSubscriber(event.stream.streamManager);
+      pauseVideo();
       setStage('CALCULATION');
     });
 
@@ -545,7 +548,7 @@ export default function OpenViduApp() {
       stage === 'USER_ONE_TURN'
     ) {
       setRecordOn(true);
-      face_detect();
+      // face_detect();
     }
     mySide === 'USER_ONE'
       ? setUserCamLeftBorder(true)
@@ -566,7 +569,7 @@ export default function OpenViduApp() {
       stage === 'USER_TWO_TURN'
     ) {
       setRecordOn(true);
-      face_detect();
+      // face_detect();
     }
     mySide === 'USER_TWO'
       ? setUserCamLeftBorder(true)
@@ -640,9 +643,19 @@ export default function OpenViduApp() {
   };
 
   // ############# 녹화 저장 함수 ##############
-  const handleSaveVideo = async () => {
-    await startLoading('lizard', 1000);
-    setLog((prevLog) => [...prevLog, `녹화 영상을 저장했습니다!`]);
+  const [recordedFile, setRecordedFile] = useState(null);
+  const handleSaveblob = (blob) => {
+    setRecordedFile(blob); // 녹화된 blob 저장
+  };
+
+  // ############# 비디오 정지 함수 ##############
+  const pauseVideo = () => {
+    const videoElement = videoRef.current;
+    if (stage == 'RESULT' || stage == 'END') {
+      if (videoElement) {
+        videoElement.pause();
+      }
+    }
   };
 
   // ############ 턴 시작 ###############
@@ -686,6 +699,7 @@ export default function OpenViduApp() {
         ...prevLog,
         `수고하셨습니다. 점수를 계산하겠습니다.`,
       ]);
+      startLoading(1000);
       handleCalculateScore();
       setStage('RESULT');
 
@@ -814,6 +828,10 @@ export default function OpenViduApp() {
     }
   }, [userOneScore, userTwoScore, mySide]);
 
+  useEffect(() => {
+    pauseVideo();
+  }, [stage]);
+
   // ############# 모달 ##############
   const [toggleExitModal, setToggleExitModal] = useState(false);
   const [toggleTutorialModal, setToggleTutorialModal] = useState(false);
@@ -843,7 +861,7 @@ export default function OpenViduApp() {
               userTwoName={userTwoName}
               userTwoScore={userTwoScore}
               leaveSession={leaveSession}
-              session={session}
+              recordedFile={recordedFile}
             />
           )}
 
@@ -890,6 +908,7 @@ export default function OpenViduApp() {
                     recordOn={recordOn}
                     userCamBorder={userCamLeftBorder}
                     type="publisher"
+                    handleSaveblob={handleSaveblob}
                   />
                 </div>
               ) : (

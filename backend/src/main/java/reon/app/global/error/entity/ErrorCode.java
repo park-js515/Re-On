@@ -78,7 +78,9 @@ public enum ErrorCode {
      */
     LOGIN_UNAUTHORIZED_ERROR(HttpStatus.UNAUTHORIZED, "로그인정보가 유효하지 않습니다."),
 
-    POST_SCOPE_ERROR(HttpStatus.BAD_REQUEST, "게시글 범위가 유호하지 않습니다." );
+    USER_FORBIDDEN_ERROR(HttpStatus.FORBIDDEN, "해당 요청의 접근권한이 없습니다."),
+
+    POST_SCOPE_ERROR(HttpStatus.BAD_REQUEST, "게시글 범위가 유효하지 않습니다." );
 
 
     private final HttpStatus status;
