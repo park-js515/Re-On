@@ -9,6 +9,7 @@ const LogoutRedirectPage = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    let ignore = false;
     // 아직 id가 없어서 일단 1번으로 하겠습니다. -> id를 사용하지 않기로 하기에 나중에 수정이 필요합니다.
     // const id = localStorage.getItem('id');
     const clearLocalStorage = () => {
@@ -45,7 +46,9 @@ const LogoutRedirectPage = () => {
     navigate('/');
     // 후에 삭제할 코드
 
-    return () => {};
+    return () => {
+      ignore = true;
+    };
   }, []);
 
   const loading = '/image/login/loading.svg';

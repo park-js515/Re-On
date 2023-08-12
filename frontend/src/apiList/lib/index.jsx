@@ -1,55 +1,32 @@
-import axios from 'axios';
-const networktarget = process.env.REACT_APP_API;
+// import axios from "axios"
+import createCustomAxios from "./createCustomAxios";
+// const networktarget = process.env.REACT_APP_API;
 
-function getAccessToken() {
-  return localStorage.getItem('accessToken');
-}
+// function getAccessToken() {
+//   return localStorage.getItem('accessToken');
+// }
 
 function authInstance() {
-  let accessToken = getAccessToken();
-  const instance = axios.create({
-    baseURL: networktarget + '/api/auth',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${accessToken}`,
-    },
-  });
+  const instance = createCustomAxios('/api/auth');
+
   return instance;
 }
 
 function memberInstance() {
-  let accessToken = getAccessToken();
-  const instance = axios.create({
-    baseURL: networktarget + '/api/member-management',
-    headers: {
-      'Content-Type': 'application/json;charset=utf-8',
-      Authorization: `Bearer ${accessToken}`,
-    },
-  });
+  const instance = createCustomAxios('/api/member-management');
+
   return instance;
 }
 
 function openviduInstance() {
-  let accessToken = getAccessToken();
-  const instance = axios.create({
-    baseURL: networktarget + '/api/openvidu-management',
-    headers: {
-      'Content-Type': 'application/json;charset=utf-8',
-      Authorization: `Bearer ${accessToken}`,
-    },
-  });
+  const instance = createCustomAxios('/api/openvidu-management');
+
   return instance;
 }
 
 function postInstance() {
-  let accessToken = getAccessToken();
-  const instance = axios.create({
-    baseURL: networktarget + '/api/post-management/post',
-    headers: {
-      'Content-Type': 'application/json;charset=utf-8',
-      Authorization: `Bearer ${accessToken}`,
-    },
-  });
+  const instance = createCustomAxios('/api/post-management/post');
+
   return instance;
 }
 

@@ -1,12 +1,5 @@
 import { memberInstance } from './lib/index';
 
-const defaultFail = (error) => {
-  if (error.status === 401 || error.status === 403) {
-    alert("세션이 만료되었습니다.")
-    window.location.replace('/logout');
-  }
-}
-
 // 1. Back stage member 조회
 /**
  *

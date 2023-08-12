@@ -13,6 +13,7 @@ const NaverRedirect = () => {
   // const user = useSelector((state) => state.user);
 
   useEffect(() => {
+    let ignore = false;
     const NaverLogin = async () => {
       axios
         .post(
@@ -42,6 +43,10 @@ const NaverRedirect = () => {
     };
 
     NaverLogin();
+
+    return () => {
+      ignore = true;
+    };
   }, []);
 
   const loading = '/image/login/loading.svg';

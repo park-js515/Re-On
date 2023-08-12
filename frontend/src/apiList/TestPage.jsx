@@ -1,12 +1,15 @@
 import { useEffect } from 'react';
-import { searchBackStageMembmerInfo, updateMemberInfo } from './member';
+import { searchBackStageMembmerInfo, searchMypageMemberInfo} from './member';
+import { searchAllPublicPost, searchPublicPostDetail } from './post';
+import { postInstance } from './lib/index';
+
 
 const TestPage = () => {
   useEffect(() => {
-    updateMemberInfo(
-      { id: 1, introduce: '안녕하세요.', nickName: '주성' },
+    searchAllPublicPost(   
+      1,
       (res) => {
-        console.log(res);
+        console.log(res); 
       },
       (error) => {
         console.error(error);
