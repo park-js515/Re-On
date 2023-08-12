@@ -73,6 +73,7 @@ export default function TutorialModal({ onConfirm, isOpen, onClose }) {
     'image/rank/rank-tutorial-1.png',
     'image/rank/rank-tutorial-2.png',
     'image/rank/rank-tutorial-3.png',
+    'image/rank/rank-tutorial-4.png',
   ]; // 이미지 경로 배열
 
   const handleClose = () => {
@@ -111,7 +112,7 @@ export default function TutorialModal({ onConfirm, isOpen, onClose }) {
               />
             </SButton> // 마지막 이미지가 아니면 "다음" 버튼 표시
           )}
-          {imageIndex === 2 && (
+          {imageIndex === 3 && (
             <SButton autoFocus onClick={handleClose}>
               <img
                 src="image/rank/rank-cancel.png"
