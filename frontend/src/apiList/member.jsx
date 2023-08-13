@@ -59,9 +59,10 @@ function deleteMemberImg(success, fail) {
  */
 function updateMemberImg(profileImg, success, fail) {
   const api = memberInstance();
+  api.defaults.headers['Content-Type'] = 'multipart/form-data';
 
   api
-    .put('/images/update', JSON.stringify(profileImg))
+    .put('/images/update', profileImg)
     .then(success)
     .catch(fail);
 }
