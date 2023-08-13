@@ -18,7 +18,6 @@ import javax.persistence.*;
 @DynamicInsert
 @ToString
 public class BattleLog extends BaseEntity {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

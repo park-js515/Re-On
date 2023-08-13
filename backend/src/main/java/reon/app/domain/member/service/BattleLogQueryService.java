@@ -5,5 +5,5 @@ import reon.app.domain.member.dto.res.BattleLogResponse;
 import java.util.List;
 
 public interface BattleLogQueryService {
-    List<BattleLogResponse> findBattleLogsById(Long id);
+    List<BattleLogResponse> findBattleLogsById(Long loginId);
 }

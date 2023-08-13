@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface BattleLogQueryRepository {
 
-    List<BattleLogResponse> findBattleLogsById(Long memberId);
+    List<BattleLogResponse> findBattleLogsById(Long loginId);
 
 
 }

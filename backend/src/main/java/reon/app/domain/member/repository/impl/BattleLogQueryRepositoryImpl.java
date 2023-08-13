@@ -22,19 +22,18 @@ public class BattleLogQueryRepositoryImpl implements BattleLogQueryRepository {
 
     private final JPAQueryFactory queryFactory;
     @Override
-    public List<BattleLogResponse> findBattleLogsById(Long memberId) { //나
+    public List<BattleLogResponse> findBattleLogsById(Long loginId) { //나
         return queryFactory
                 .select(Projections.fields(BattleLogResponse.class,
-                        battleLog.user2.id.as("userId"), //상대 id
-                        battleLog.user2.memberInfo.nickName.as("userNickName"),//상대 이름
-                        battleLog.video.title.as("videoTitle"),//영상 제목
+                        battleLog.user2.email.as("opponentEmail"), // 상대 이메일
+                        battleLog.user2.memberInfo.nickName.as("opponentNickName"),//상대 이름
                         battleLog.point // 득실 포인트
                         ))
                 .from(battleLog) //배틀 기록에서
                 .join(battleLog.user2, member)
-                .join(battleLog.video, video)
                 .join(battleLog.user1,member)
-                .where(battleLog.user1.id.eq(memberId))
+                .where(battleLog.user1.id.eq(loginId),
+                        battleLog.user2.memberInfo.deleted.eq(0))
                 .orderBy(battleLog.createDate.desc())
                 .limit(10)
                 .fetch();

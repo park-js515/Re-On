@@ -10,6 +10,7 @@ import reon.app.domain.member.dto.res.BackStageMemberResponse;
 import reon.app.domain.member.dto.res.BattleLogResponse;
 import reon.app.domain.member.dto.res.MemberBattleInfoResponse;
 import reon.app.domain.member.service.*;
+import reon.app.domain.member.service.dto.BattleLogSaveDto;
 import reon.app.domain.member.service.dto.MemberUpdateDto;
 import reon.app.domain.post.entity.PostComment;
 import reon.app.domain.post.service.PostCommentService;
@@ -62,7 +63,7 @@ public class MemberApi {
         return ApiResponse.OK(memberResponse);
     }
 
-    @Operation(summary = "Back stage member 조회", description = "Token 정보 기반 BackStage Member 정보 조회")
+    @Operation(summary = "Back stage member 정보 조회", description = "Token 정보 기반 BackStage Member 정보 조회")
     @GetMapping("/back-stage")
     public ApiResponse<BackStageMemberResponse> findBackStageMemberById(@Parameter(hidden = true) @AuthenticationPrincipal User user){
         Long loginId = Long.parseLong(user.getUsername());
@@ -122,27 +123,37 @@ public class MemberApi {
         return ApiResponse.OK(null);
     }
 
-
-    @Operation(summary = "member 배틀 정보 조회", description = "회원 베틀 정보를 조회한다.")
-    @GetMapping("/member/{id}/battleInfo")
-    public ApiResponse<MemberBattleInfoResponse> findMemberBattleInfo(@PathVariable("id") Long id) {
-        MemberBattleInfoResponse memberBattleInfoResponse = memberQueryService.findMemberBattleInfoById(id);
-        return OK(memberBattleInfoResponse);
-    }
+//    @Operation(summary = "배틀 정보 상세 조회", description = "최근 전적 10개의 베틀 정보를 상세 조회한다.")
+//    @GetMapping("/member/{email}/battlelog")
+//    public ApiResponse<MemberBattleInfoResponse> findMemberBattleInfo(@PathVariable("email") Long email, @Parameter(hidden = true) @AuthenticationPrincipal User user) {
+//        MemberBattleInfoResponse memberBattleInfoResponse = memberQueryService.findMemberBattleInfoById();
+//        return OK(memberBattleInfoResponse);
+//    }
     
-    @Operation(summary = "Battle 결과 등록", description = "배틀 결과를 저장한다")
+    @Operation(summary = "Battle 결과 등록", description = "배틀 결과를 저장한다 result : -1(패), 0(무), 1(승) ")
     @PostMapping("/battlelog")
-    public ApiResponse<Void> saveBattleLog(@RequestBody BattleLogSaveRequest battleLogSaveRequest){
-        battleLogService.saveBattleLog(battleLogSaveRequest);//배틀 결과 저장
-        memberService.updateBattleInfo(battleLogSaveRequest);//member battle info 갱신
+    public ApiResponse<Void> saveBattleLog(@RequestBody BattleLogSaveRequest battleLogSaveRequest, @Parameter(hidden = true) @AuthenticationPrincipal User user){
+
+        Long user1Id = Long.parseLong(user.getUsername());
+        Long user2Id = memberQueryService.searchMemberIdByEmail(battleLogSaveRequest.getOpponentEmail());
+
+        BattleLogSaveDto dto = BattleLogSaveDto.builder()
+            .user1Id(user1Id)
+            .user2Id(user2Id)
+            .videoId(battleLogSaveRequest.getVideoId())
+            .result(battleLogSaveRequest.getResult())
+            .build();
+
+        int score = battleLogService.saveBattleLog(dto);//배틀 결과 저장
+        memberService.updateBattleInfo(dto, score);//member battle info 갱신
         return OK(null);
     }
 
     @Operation(summary = "Battle 기록 조회", description = "배틀 기록을 10개를 조회한다.")
     @GetMapping("/battlelog")
     public ApiResponse<?> findBattleLogById(@Parameter(hidden = true) @AuthenticationPrincipal User user){
-        Long memberId = Long.parseLong(user.getUsername());
-        List<BattleLogResponse> battleLogResponseList = battleLogQueryService.findBattleLogsById(memberId);
+        Long loginId = Long.parseLong(user.getUsername());
+        List<BattleLogResponse> battleLogResponseList = battleLogQueryService.findBattleLogsById(loginId);
         return OK(battleLogResponseList);
     }
 
