@@ -1,16 +1,17 @@
 import React from "react";
 import Comment from "./Comment";
 import { useState, useEffect } from "react";
+import { createPostComment, searchPostDetailComment } from 'apiList/post';
 
-
-const Commentlist = ({post_id, changeShow, hierarchy}) => {
+const Commentlist = ({post_id, commentList, changeShow, hierarchy}) => {
     // 댓글은 게시글 식별자로 조회
-    const [comments, setComments] = useState([])
+    const [comments, setComments] = useState(commentList)
     const [userInput, setUserInput] = useState("");
     const [page, setPage] = useState(0)
     const [more, setMore] = useState(true) // 댓글 더보기 가능 여부
 
-    useEffect(()=>{
+    useEffect(() => {
+        console.log(comments)
         getComment()
     }, []);
 
@@ -24,22 +25,9 @@ const Commentlist = ({post_id, changeShow, hierarchy}) => {
 
     const getComment = () => {
         if (more) {
-            // axios로 10개씩 받아오기 post_id, page
-            let data = []
-            for (let i = 0; i < 2; i++) {
-                data.push(
-                    {
-                        comment_id : i,
-                        content : `댓글이다-${i}`,
-                        author : "희창",
-                        author_id : 1,
-                        profile_url : `https://source.unsplash.com/random?sig=888${i}`,
-                    }
-                )
-            }
-            setComments((comments) => {return [...data, ...comments]})
+            setComments((comments) => {return [...comments]})
             setPage((page)=>{return page+1})
-            if (data.length < 10){
+            if (comments.length < 10){
                 setMore(false)
             }
         }
@@ -48,19 +36,20 @@ const Commentlist = ({post_id, changeShow, hierarchy}) => {
     const addComment = () => {
         if (userInput.length < 1) {
             alert("댓글 작성 후 눌러주세요")
-            return
         }
         else {
             // axios로 API 서버에 댓글 생성 보내기
-            // 필요 내용 받아서 다시 렌더링 (실제로는 리턴으로 받을 가장 최신 댓글 10개로 다시 랜더링)
-            const temp = {
-                comment_id : Math.round(Math.random()*100),
-                content : userInput,
-                author : "마루쉐",
-                author_id : 1,
-                profile_url : "https://source.unsplash.com/random?sig=888",
-            }
-            setComments((comments)=>{return [temp, ...comments]})
+            createPostComment(post_id, { content: userInput }, () => {
+                //성공시에 다시 댓글 불러오기
+                searchPostDetailComment(post_id, 1, (response) => {
+                    console.log(response.data.response);
+                    setComments(response.data.response);
+                }, (error) => {
+                    console.log(error);
+                })
+            }, (error) => {
+                console.log(error);
+            } )
             setUserInput("")
         }
     }
@@ -103,12 +92,11 @@ const Commentlist = ({post_id, changeShow, hierarchy}) => {
             <div className="m-1">
                 {comments.map((comment)=>{
                     return (
-                        <Comment comment={comment} key={comment.comment_id} deleteComment={deleteComment} changeShow={changeShow} hierarchy={hierarchy}/>
+                        <Comment comment={comment} key={comment.id} deleteComment={deleteComment} changeShow={changeShow} hierarchy={hierarchy}/>
                     )
                 })}
                 { more ? <MoreButton/> : null }
             </div>
-            
         </div>
     )
 }

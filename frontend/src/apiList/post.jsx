@@ -181,7 +181,7 @@ function searchPublicPost(offset, memberId, success, fail) {
   const api = postInstance();
 
   api
-    .get(`/public?offset=${offset}&memberId${memberId}`)
+    .get(`/public?offset=${offset}&memberId=${memberId}`)
     .then(success)
     .catch(fail);
 }
@@ -193,10 +193,9 @@ function searchPublicPost(offset, memberId, success, fail) {
  * @param {function} success [callback] 
  * @param {function} fail [callback]
  */
-function searchPublicPostDetail(postId, success, fail) {
+async function searchPublicPostDetail(postId, success, fail) {
   const api = postInstance();
-
-  api.get(`/public/${postId}`).then(success).catch(fail);
+  await api.get(`/public/${postId}`).then(success).catch(fail);
 }
 
 export {
