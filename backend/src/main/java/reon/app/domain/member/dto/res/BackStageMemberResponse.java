@@ -8,7 +8,6 @@ import reon.app.domain.member.entity.Tier;
 @NoArgsConstructor
 public class BackStageMemberResponse {
     //닉네임, 프로필 사진, 티어, 통산전적
-    private Long id;
     private String nickName;
     private String profileImg;
     private Tier tier;
@@ -16,8 +15,7 @@ public class BackStageMemberResponse {
     private int win;
     private int lose;
 
-    public BackStageMemberResponse(Long id, String nickName, String profileImg, Tier tier, int gameCnt, int win, int lose) {
-        this.id = id;
+    public BackStageMemberResponse(String nickName, String profileImg, Tier tier, int gameCnt, int win, int lose) {
         this.nickName = nickName;
         this.profileImg = profileImg;
         this.tier = tier;

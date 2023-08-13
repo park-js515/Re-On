@@ -10,8 +10,7 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @SuperBuilder
 public class BattleLogSaveRequest {
-    private Long user1Id;//사용자 1 id
-    private Long user2Id;//사용자 2 id
-    private Long videoId;//연기 원본 영상
+    private String opponentEmail;// 상대 유저 email
+    private Long videoId;//연기 원본 영상 id
     private int result;//승패 여부
 }

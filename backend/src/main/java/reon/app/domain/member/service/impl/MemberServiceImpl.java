@@ -1,28 +1,23 @@
 package reon.app.domain.member.service.impl;
 
-import com.google.cloud.storage.Blob;
-import com.google.cloud.storage.BlobInfo;
 import com.google.cloud.storage.Storage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import reon.app.domain.member.dto.req.BattleLogSaveRequest;
-import reon.app.domain.member.dto.req.MemberUpdateRequest;
 import reon.app.domain.member.entity.Member;
 import reon.app.domain.member.entity.Tier;
 import reon.app.domain.member.repository.MemberRepository;
 import reon.app.domain.member.service.MemberService;
+import reon.app.domain.member.service.dto.BattleLogSaveDto;
+import reon.app.domain.member.service.dto.MemberUpdateDto;
 import reon.app.global.error.entity.CustomException;
 import reon.app.global.error.entity.ErrorCode;
 import reon.app.global.util.FileManger;
 //import reon.app.global.util.FileManger;
 
-import java.io.IOException;
-import java.util.Optional;
-import java.util.UUID;
 
 @Service
 @Slf4j
@@ -35,15 +30,10 @@ public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;
 
     @Override
-    public Member updateMember(MemberUpdateRequest memberUpdateRequest) {
-        Member findMember = memberRepository.findById(memberUpdateRequest.getId()).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
-        findMember = memberRepository.save(findMember);
-        findMember.getMemberInfo().updateMemberInfo(memberUpdateRequest);
-//        if(findMember != null){
-//            findMember.getMemberInfo().updateMemberInfo(memberUpdateRequest);
-//            findMember = memberRepository.save(findMember);
-//        }
-        return findMember;
+    public String updateMember(MemberUpdateDto memberUpdateDto) {
+        Member findMember = memberRepository.findById(memberUpdateDto.getLoginId()).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+        findMember.getMemberInfo().updateMemberInfo(memberUpdateDto);
+        return findMember.getEmail();
     }
     @Override
     public void deleteRefreshToken(Long id) {
@@ -52,48 +42,36 @@ public class MemberServiceImpl implements MemberService {
         findMember.deleteRefreshToken();
     }
     @Override
-    public void updateProfileImg(MultipartFile profileImg, Long id) {
-        Member findMember = memberRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+    public String updateProfileImg(MultipartFile profileImg, Long loginId) {
+        Member findMember = memberRepository.findById(loginId).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
         if(findMember.getMemberInfo().getProfileImg() != null){
             fileManger.removeImgFile(findMember.getMemberInfo().getProfileImg(), storage);
-//            removeImgFile(findMember.getMemberInfo().getProfileImg());
         }
         String imgName = fileManger.updateImgFile(profileImg, storage);
-//        String imgName = imgPath + updateImgFile(profileImg);
         findMember.getMemberInfo().updateProfileImg(imgName);
+        return findMember.getEmail();
     }
     @Override
-    public void removeProfileImg(Long id) {
-        Member findMember = memberRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+    public String removeProfileImg(Long loginId) {
+        Member findMember = memberRepository.findById(loginId).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
         if(findMember.getMemberInfo().getProfileImg() != null){
             fileManger.removeImgFile(findMember.getMemberInfo().getProfileImg(), storage);
 //            removeImgFile(findMember.getMemberInfo().getProfileImg());
         }
         findMember.getMemberInfo().updateProfileImg(null);
+        return findMember.getEmail();
     }
     @Override
-    public void delete(Long id) {
-        memberRepository.deleteById(id);
+    public String delete(Long loginId) {
+        Member findMember = memberRepository.findById(loginId).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+        findMember.getMemberInfo().updateDeleted(1);
+
+        return findMember.getEmail();
     }
 
     @Override
-    public void updateBattleInfo(BattleLogSaveRequest battleLogSaveRequest) {
-        Member member1 = memberRepository.findById(battleLogSaveRequest.getUser1Id()).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
-        Member member2 = memberRepository.findById(battleLogSaveRequest.getUser2Id()).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
-        int result = battleLogSaveRequest.getResult(); //-1 패 0 무 1 승
-
-        Tier tier1 = member1.getMemberBattleInfo().getTier();
-        Tier tier2 = member2.getMemberBattleInfo().getTier();
-
-        //티어 비교 후 승점 생성
-        int score;
-        if(tier1.compareTo(tier2) < 0 && result == -1){ //내가 저티어인데 졌을때
-            score = -1;
-        }else if(tier1.compareTo(tier2) > 0 && result == 1){//내가 고티어인데 이겼을때
-            score = 1;
-        }else{
-            score = (1 + Math.abs(tier1.compareTo(tier2))) * result; //게임 결과로 변동할 score
-        }
+    public void updateBattleInfo(BattleLogSaveDto dto, int score) {
+        Member member1 = memberRepository.findById(dto.getUser1Id()).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
 
         //총 스코어 갱신
         member1.getMemberBattleInfo().updateScore(score);

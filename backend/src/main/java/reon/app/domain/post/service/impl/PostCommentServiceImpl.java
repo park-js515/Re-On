@@ -55,4 +55,9 @@ public class PostCommentServiceImpl implements PostCommentService {
         findComment.update(dto.getContent());
         return findComment.getId();
     }
+
+    @Override
+    public void deleteByMemberId(Long loginId) {
+        postCommentRepository.deleteAllByMemberId(loginId);
+    }
 }

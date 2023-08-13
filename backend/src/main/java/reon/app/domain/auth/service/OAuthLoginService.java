@@ -29,16 +29,34 @@ public class OAuthLoginService {
         log.info(oAuthInfoResponse.getProfileImage());
         // member가 없으면 회원가입 진행
         Member member = findOrCreateMember(oAuthInfoResponse);
+        if(member.getMemberInfo().getDeleted() == 1){ // 탈퇴한 회원이면
+            reJoin(oAuthInfoResponse, member);
+            member.getMemberInfo().updateDeleted(0);
+        }
         log.info(member.toString());
 
         AuthTokens authTokens = authTokensGenerator.generate(member.getId());
         // RT 추가
         member.updateRefreshToken(authTokens.getRefreshToken());
         log.info(authTokens.getAccessToken());
+        authTokens.setEmail(member.getEmail());
+        authTokens.setNickName(member.getMemberInfo().getNickName());
+        authTokens.setEmail(member.getEmail());
         return authTokens;
     }
+    private void reJoin(OAuthInfoResponse oAuthInfoResponse, Member member){
+        MemberInfo memberInfo = MemberInfo.builder()
+                .nickName(oAuthInfoResponse.getNickName())
+                .build();
+
+        MemberBattleInfo memberBattleInfo = MemberBattleInfo.builder()
+                .tier(Tier.BRONZE)
+                .build();
+        member.reJoinMember(memberBattleInfo, memberInfo);
+    }
+
+
     private Member newMember(OAuthInfoResponse oAuthInfoResponse) {
-        //TODO 2023.08.03 : 회원가입 후 바로 로그인 ? -> 그러면 RT도 부여해줘야함
 
         MemberInfo memberInfo = MemberInfo.builder()
                 .nickName(oAuthInfoResponse.getNickName())
@@ -48,9 +66,12 @@ public class OAuthLoginService {
                 .tier(Tier.BRONZE)
                 .build();
 
+        String fullEmail = oAuthInfoResponse.getEmail();
+        String email = fullEmail.substring(0, fullEmail.indexOf("@"));
+
         Member member = Member.builder()
                 .name(oAuthInfoResponse.getName())
-                .email(oAuthInfoResponse.getEmail())
+                .email(email)
                 .birthday(oAuthInfoResponse.getBirthday())
                 .gender(oAuthInfoResponse.getGender())
                 .code(oAuthInfoResponse.getCode())
