@@ -12,16 +12,30 @@ function savePost(videoId, actionVideo, success, fail) {
   const api = postInstance();
 
   api
-    .post(`?/${videoId}`, JSON.stringify(actionVideo))
+    .post(`?videoId=${videoId}`, JSON.stringify(actionVideo))
     .then(success)
     .catch(fail);
 }
 
-// 2. Detail post에서 댓글 10개를 조회한다.
+// 2. post 수정
 /**
- * 
- * @param {number} postId 
- * @param {number} offset 
+ *
+ * @param {number} postId
+ * @param {object} body [{content: string, title: string}]
+ * @param {function} success [callback]
+ * @param {function} fail [callback]
+ */
+function updatePost(postId, body, success, fail) {
+  const api = postInstance();
+
+  api.put(`/${postId}`, JSON.stringify(body)).then(success).catch(fail);
+}
+
+// 3. Detail post에서 댓글 10개를 조회한다.
+/**
+ *
+ * @param {number} postId
+ * @param {number} offset
  * @param {function} success [callback]
  * @param {function} fail [callback]
  */
@@ -31,7 +45,7 @@ function searchPostDetailComment(postId, offset, success, fail) {
   api.get(`/${postId}/comment?offset=${offset}`).then(success).catch(fail);
 }
 
-// 3. post 댓글 작성
+// 4. post 댓글 작성
 /**
  *
  * @param {number} postId
@@ -48,7 +62,7 @@ function createPostComment(postId, body, success, fail) {
     .catch(fail);
 }
 
-// 4. post 댓글 업데이트
+// 5. post 댓글 업데이트
 /**
  *
  * @param {number} commentId
@@ -65,7 +79,7 @@ function updatePostComment(commentId, body, success, fail) {
     .catch(fail);
 }
 
-// 5. post 댓글 삭제
+// 6. post 댓글 삭제
 /**
  *
  * @param {number} commentId
@@ -78,7 +92,20 @@ function deletePostComment(commentId, success, fail) {
   api.delete(`/comment/${commentId}`).then(success).catch(fail);
 }
 
-// 6. 투표해줘 public post 목록 전체 조회
+// 7. post 삭제 (swagger에 put으로 되어있는 듯)
+/**
+ *
+ * @param {number} postId
+ * @param {function} success [callback]
+ * @param {function} fail [callback]
+ */
+function deletePost(postId, success, fail) {
+  const api = postInstance();
+
+  api.delete(`/delete/${postId}`).then(success).catch(fail);
+}
+
+// 8. 투표해줘 public post 목록 전체 조회
 /**
  *
  * @param {number} offset
@@ -91,7 +118,7 @@ function searchAllPublicPost(offset, success, fail) {
   api.get(`/feed?offset=${offset}`).then(success).catch(fail);
 }
 
-// 7. 투표해줘 페이지 TOP10 post 조회
+// 9. 투표해줘 페이지 TOP10 post 조회
 /**
  *
  * @param {function} success [callback]
@@ -103,7 +130,7 @@ function searchTop10Post(success, fail) {
   api.get('/feed/rank').then(success).catch(fail);
 }
 
-// 8. post 좋아요
+// 10. post 좋아요
 /**
  *
  * @param {number} postId
@@ -116,7 +143,7 @@ function likePost(postId, success, fail) {
   api.post(`/like/${postId}`).then(success).catch(fail);
 }
 
-// 9. mypage 내가 좋아요 누른 post 목록 조회
+// 11. mypage 내가 좋아요 누른 post 목록 조회
 /**
  *
  * @param {number} offset
@@ -129,7 +156,7 @@ function searchLikePost(offset, success, fail) {
   api.get(`/liked?offset=${offset}`).then(success).catch(fail);
 }
 
-// 10. mypage private post 목록 조회
+// 12. mypage private post 목록 조회
 /**
  *
  * @param {number} offset
@@ -142,12 +169,12 @@ function searchPrivatePost(offset, success, fail) {
   api.get(`/private?offset=${offset}`).then(success).catch(fail);
 }
 
-// 11. private post 상세 조회
+// 13. private post 상세 조회
 /**
- * 
- * @param {number} postId 
+ *
+ * @param {number} postId
  * @param {function} success [callback]
- * @param {functoin} fail [callback]
+ * @param {function} fail [callback]
  */
 function searchPrivatePostDetail(postId, success, fail) {
   const api = postInstance();
@@ -155,7 +182,7 @@ function searchPrivatePostDetail(postId, success, fail) {
   api.get(`/private/${postId}`).then(success).catch(fail);
 }
 
-// 12. private post upload
+// 14. private to public post
 /**
  *
  * @param {number} postId
@@ -166,10 +193,10 @@ function searchPrivatePostDetail(postId, success, fail) {
 function uploadPrivatePost(postId, body, success, fail) {
   const api = postInstance();
 
-  api.put(`private/${postId}`, JSON.stringify(body)).then(success).catch(fail);
+  api.put(`/private/${postId}`, JSON.stringify(body)).then(success).catch(fail);
 }
 
-// 13. mypage public post 목록 조회
+// 15. mypage public post 목록 조회
 /**
  *
  * @param {number} offset
@@ -186,11 +213,11 @@ function searchPublicPost(offset, memberId, success, fail) {
     .catch(fail);
 }
 
-// 14. public post 상세 조회
+// 16. public post 상세 조회
 /**
- * 
- * @param {number} postId 
- * @param {function} success [callback] 
+ *
+ * @param {number} postId
+ * @param {function} success [callback]
  * @param {function} fail [callback]
  */
 async function searchPublicPostDetail(postId, success, fail) {
@@ -198,12 +225,27 @@ async function searchPublicPostDetail(postId, success, fail) {
   await api.get(`/public/${postId}`).then(success).catch(fail);
 }
 
+// 17. public to private post
+/**
+ *
+ * @param {number} postId
+ * @param {function} success
+ * @param {function} fail
+ */
+function pullDownPublicPost(postId, success, fail) {
+  const api = postInstance();
+
+  api.put(`/public/${postId}`).then(success).catch(fail);
+}
+
 export {
   savePost,
+  updatePost,
   searchPostDetailComment,
   createPostComment,
   updatePostComment,
   deletePostComment,
+  deletePost,
   searchAllPublicPost,
   searchTop10Post,
   likePost,
@@ -212,5 +254,6 @@ export {
   searchPrivatePostDetail,
   uploadPrivatePost,
   searchPublicPost,
-  searchPublicPostDetail
-};
+  searchPublicPostDetail,
+  pullDownPublicPost
+}

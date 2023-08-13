@@ -24,25 +24,22 @@ export default function Example() {
 
   useEffect(() => {
     if (userIsLogin) {
-      setProfileImg("/image/login/LoginDefaultImg.png");
+      setProfileImg('/image/login/LoginDefaultImg.png');
 
       // 프로필 이미지를 받아올 수 있으면 이렇게 하겠슴둥.
-      // searchMypageMemberInfo( 
+      // searchMypageMemberInfo(
       //   1,
       //   (res) => {
       //     if (res.data.response.profileImg) {
       //       setProfileImg(res.data.response.profileImg);
       //     }
       //   },
-      //   (error) => {  
+      //   (error) => {
       //     console.error(error);
       //   },
       // );
-    }
-    else {
-      setProfileImg("/image/login/unLoginDefaultImg.png")
-    }
-  }, [userIsLogin])
+    } 
+  }, [userIsLogin]);
 
   return (
     <div className="sticky top-0 z-50">
@@ -84,15 +81,22 @@ export default function Example() {
                 <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
                   <Menu as="div" className="relative ml-3">
                     <div>
-                      <Menu.Button className="relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-lightBlue focus:ring-offset-2 focus:ring-offset-gray-800">
-                        <span className="absolute -inset-1.5" />
-                        <span className="sr-only">Open user menu</span>
-                        <img
-                          className="h-8 w-8 rounded-full"
-                          src={profileImg}
-                          alt="profileImg"
-                        />
-                      </Menu.Button>
+                      {userIsLogin ? (
+                        <Menu.Button className="relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-lightBlue focus:ring-offset-2 focus:ring-offset-gray-800">
+                          <span className="absolute -inset-1.5" />
+                          <span className="sr-only">Open user menu</span>
+                          <img
+                            className="h-8 w-8 rounded-full"
+                            src={profileImg}
+                            alt="profileImg"
+                          />
+                        </Menu.Button>
+                      ) : (
+                        <Link
+                          to="/login"
+                          className="hover:text-lightBlue cursor-pointer"
+                        >로그인</Link>
+                      )}
                     </div>
                     <Transition as={Fragment}>
                       <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
@@ -125,21 +129,7 @@ export default function Example() {
                               </Link>
                             )}
                           </Menu.Item>
-                        ) : (
-                          <Menu.Item>
-                            {({ active }) => (
-                              <Link
-                                to="/login"
-                                className={classNames(
-                                  active ? 'bg-gray-100' : '',
-                                  'block px-4 py-2 text-sm text-gray-700',
-                                )}
-                              >
-                                로그인
-                              </Link>
-                            )}
-                          </Menu.Item>
-                        )}
+                        ) : null}
                       </Menu.Items>
                     </Transition>
                   </Menu>

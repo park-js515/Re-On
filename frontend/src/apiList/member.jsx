@@ -1,12 +1,5 @@
 import { memberInstance } from './lib/index';
 
-const defaultFail = (error) => {
-  if (error.status === 401 || error.status === 403) {
-    alert("세션이 만료되었습니다.")
-    window.location.replace('/logout');
-  }
-}
-
 // 1. Back stage member 조회
 /**
  *
@@ -128,14 +121,14 @@ function logoutMember(id, success, fail) {
 // 10. member 정보 수정
 /**
  *
- * @param {object} data [{id: number, introduce: string, nickName: string}]
+ * @param {object} body [{id: number, introduce: string, nickName: string}]
  * @param {function} success [callback]
  * @param {function} fail [callback]
  */
-function updateMemberInfo(data, success, fail) {
+function updateMemberInfo(body, success, fail) {
   const api = memberInstance();
 
-  api.put(`/member/update`, JSON.stringify(data)).then(success).catch(fail);
+  api.put(`/member/update`, JSON.stringify(body)).then(success).catch(fail);
 }
 export {
   searchBackStageMembmerInfo,
