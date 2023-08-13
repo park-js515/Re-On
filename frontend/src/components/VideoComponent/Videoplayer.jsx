@@ -1,64 +1,58 @@
 import React from "react";
 import { useNavigate } from 'react-router-dom';
 import Commentlist from "./Commentlist";
-import { useState } from "react";
-import { searchPublicPostDetail } from "apiList/post";
+import { useState, useEffect } from "react";
+import { searchPublicPostDetail, likePost, updatePost, pullDownPublicPost } from "apiList/post";
 
 const Videoplayer = ({post_id, changeShow}) => {
-    console.log(post_id)
+    let ignore = false;
+    
+    const [data, setData] = useState([])
+    const [edit, setEdit] = useState(false)
+    const [content, setContent] = useState("")
+    const [title, setTitle] = useState("")
+
+    useEffect(()=>{
+        if (!ignore){
+            searchPublicPostDetail(
+                post_id,
+                (response)=>{
+                    const newdata = response.data.response
+                    setData(newdata)
+                    setTitle(newdata.title)
+                    setContent(newdata.content)
+                },
+                (error)=>{console.log(error)}
+            )
+        }
+        return ()=>{
+            ignore = true;
+        }
+    },[]);
+
     const navigate = useNavigate();
 
-    const success = (response)=>{
-        console.log(response.data)
-    }
-    const fail = (error)=>{
-        console.log(error)
-    }
-    searchPublicPostDetail(2, success, fail)
-    // 더미 
-    let dataList = [];
-    for (let i = 1; i <= 10; i++) {
-        dataList.push({
-            post_id: i,
-            thumbnail: `https://source.unsplash.com/random?sig=${i}`,
-            member_id: i,
-            nick_name: `닉네임 넘버-${i}`,
-            profile_img: `https://source.unsplash.com/random?sig=123${i}`,
-            title: `제목 넘버-${i}`,
-            like_cnt: 12 + i,
-            comment_cnt: 20 + i,
-            isLike: true,
-            video_list: "https://www.youtube.com/embed/OpJOUU5rePY",
-            content: 
-                `제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 
-                제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 
-                제곧내 제곧내 제곧내 제곧내 제곧내 제곧내제곧내 제곧내 
-                제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내제곧내 제곧내 제곧내 
-                제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내제곧내 제곧내 제곧내 제곧내 제곧내 
-                제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 
-                제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 
-                제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 
-                제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내
-                제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내제곧내 제곧내 제곧내 제곧내 제곧내 
-                제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 
-                제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 제곧내 
-                
-                `
-            });
-    }
-
-    const data = dataList.find(data => data.post_id === post_id) || dataList[0];
-    
-    const [IsLike, setIsLike] = useState(data.isLike);
-
-    const moveToMyPage = (event) => {
+    const moveToMyPage = () => {
         navigate('/mypage')
     }
 
     const likeVideo = (event) => {
         event.preventDefault()
-        setIsLike(!IsLike)
-        // axios 요청까지 해야됨
+        likePost(
+            post_id,
+            (response)=>{
+                let temp = {...data}
+                if (temp.isLike){
+                    temp.likeCnt--;
+                }
+                else {
+                    temp.likeCnt++;
+                }
+                temp.isLike = !temp.isLike
+                setData({...temp})
+            },
+            (error)=>{console.log(error)}
+        )
     }
 
 
@@ -72,6 +66,47 @@ const Videoplayer = ({post_id, changeShow}) => {
             return number
         }
     }
+    const deletePost = () => {
+        pullDownPublicPost(
+            post_id,
+            (response)=>{
+                console.log(response.data)
+                changeShow();
+            },
+            (error)=>{
+                console.log(error)
+            }
+        )
+    }
+
+    const editPost = () => {
+        if (edit){
+            if (title.trim() === "" || content.trim() === ""){
+                alert("입력 후에 수정해주세요.")
+                setTitle(data.title)
+                setContent(data.content)
+            }
+            else {
+                updatePost(
+                    post_id,
+                    { title : title, content : content},
+                    (response)=>{
+                        console.log(response.data)
+                    },
+                    (error)=>{
+                        console.log(error)
+                    }
+                )
+            }
+        }
+        setEdit((edit)=>{return !edit})
+    }
+    const changeContent = (event) => {
+        setContent(event.target.value)
+    }
+    const changeTitle = (event) => {
+        setTitle(event.target.value)
+    }
     return (
         // 모달 외부클릭시 꺼짐
         <div className="fixed top-6 z-40 w-full h-full flex justify-center items-center bg-black bg-opacity-50" onClick={changeShow}> 
@@ -82,27 +117,55 @@ const Videoplayer = ({post_id, changeShow}) => {
             <div className="w-8/12 pr-4 border-r border-gray-200 overflow-y-auto max-h-[calc(80vh-48px)] scrollbar-hide">
                 
                 {/* 비디오 */}
-                <iframe className="w-full h-full rounded-md shadow-sm" title="Youtube"  src={data.video_list}></iframe>
+                <video className="w-full h-full rounded-md shadow-sm" controls src={"https://storage.googleapis.com/reon-bucket/" + data.actionPath}></video>
                 
                 {/* 작성자 정보 */}
                 <div className="my-4 p-3 bg-gray-100 rounded-lg">
-                    <span className="block font-bold text-2xl mb-2">{data.title}</span>
+                    <textarea 
+                        rows="2"
+                        value={title}
+                        className={`resize-none text-2xl block font-bold mb-2 w-11/12 rounded ${edit ? "outline" : null}`}
+                        onChange={changeTitle}
+                        disabled={!edit}
+                    >
+                    </textarea>
                     <div className="flex items-center">
-                        <img className="rounded-full w-16 h-16 mr-4 hover:shadow-lg transition-shadow cursor-pointer" src={data.profile_img} alt="" onClick={() => {changeShow(); moveToMyPage();}} />
-                        <p className="flex-grow text-lg truncate cursor-pointer" onClick={()=>{changeShow(); moveToMyPage();}}>{data.nick_name}</p>
-                        <button className={`ml-4 px-4 py-2 rounded ${IsLike ? "bg-[#ecebeb] hover:bg-[#aaa6a6] text-[#000]" : "bg-[#8d8d8d] text-black hover:bg-inss"} transition-all`} onClick={likeVideo}>
-                            영상 좋아요 {convertToK(data.like_cnt)}
+                        <img className="rounded-full w-16 h-16 mr-4 hover:shadow-lg transition-shadow cursor-pointer" src={data.profileImg} alt="" onClick={() => {changeShow(); moveToMyPage();}} />
+                        <p className="flex-grow text-lg truncate cursor-pointer" onClick={()=>{changeShow(); moveToMyPage();}}>{data.nickName}</p>
+                        <button className={`ml-4 px-4 py-2 rounded ${data.isLike ? "bg-[#ecebeb] hover:bg-[#aaa6a6] text-[#000]" : "bg-[#8d8d8d] text-black hover:bg-inss"} transition-all`} onClick={likeVideo}>
+                            {data.isLike ? "👍️" : "🤜"} {convertToK(data.likeCnt)}
                         </button>
+                        {/* 내 게시글이면 수정 삭제 버튼 */}
+                        {data.isMyPost ?
+                            <div>
+                                <button
+                                    className="bg-warning rounded px-3 py-2 ml-4 text-md"
+                                    onClick={editPost}
+                                >✍️</button>
+
+                                <button
+                                    className="bg-danger rounded px-3 py-2 ml-4 text-md"
+                                    onClick={deletePost}
+                                >🗑️</button>
+                            </div>
+                        : null}
                     </div>
                 </div>
-                
-                <div className="h-1/5 overflow-y-scroll mt-4 p-2 border-t border-gray-200 text-lg scrollbar-hide">{data.content}</div>
+                <textarea 
+                    value={content}
+                    className={`ml-3 p-3 resize-none rounded w-11/12 ${edit ? "outline" : null}`}
+                    disabled={!edit}
+                    onChange={changeContent}
+                >
+                </textarea>
             </div>
             
             {/* 오른쪽 */}
             <div className="w-4/12 pl-4 overflow-y-auto max-h-[calc(80vh-48px)] scrollbar-hide">
-                <Commentlist post_id={data.post_id} changeShow={changeShow} hierarchy={0} />
-               
+                {data.postCommentResponses ? 
+                    <Commentlist post_id={data.id} changeShow={changeShow} initialData={[...data.postCommentResponses]} />
+                    : null
+                }
             </div>
         </div>
        

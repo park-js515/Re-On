@@ -1,22 +1,16 @@
 import React from "react";
 import Comment from "./Comment";
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import { searchPostDetailComment, createPostComment, deletePostComment } from "apiList/post";
 
+const Commentlist = ({post_id, changeShow, initialData}) => {
+    let page = 2;
 
-const Commentlist = ({post_id, changeShow, hierarchy}) => {
     // 댓글은 게시글 식별자로 조회
-    const [comments, setComments] = useState([])
-    const [userInput, setUserInput] = useState("");
-    const [page, setPage] = useState(0)
-    const [more, setMore] = useState(true) // 댓글 더보기 가능 여부
+    const [comments, setComments] = useState(initialData) // 초기 댓글 (VideoPlayer에서 받아온거)
+    const [userInput, setUserInput] = useState(""); // 댓글 쓰기 창
+    const [more, setMore] = useState(initialData.length > 10 ? true : false) // 댓글 더보기 가능 여부
 
-    useEffect(()=>{
-        getComment()
-    }, []);
-
-    if (hierarchy > 1) {
-        return
-    }
 
     const onChange = (event) => {
         setUserInput(event.target.value)
@@ -24,59 +18,106 @@ const Commentlist = ({post_id, changeShow, hierarchy}) => {
 
     const getComment = () => {
         if (more) {
-            // axios로 10개씩 받아오기 post_id, page
-            let data = []
-            for (let i = 0; i < 2; i++) {
-                data.push(
-                    {
-                        comment_id : i,
-                        content : `댓글이다-${i}`,
-                        author : "희창",
-                        author_id : 1,
-                        profile_url : `https://source.unsplash.com/random?sig=888${i}`,
+            searchPostDetailComment(
+                post_id,
+                page,
+                (response)=> {
+                    const newData= response.data.response
+                    setComments((comments) => {return [...comments, ...newData]})
+                    page++;
+                    if (newData.length < 10){
+                        setMore(false)
                     }
-                )
-            }
-            setComments((comments) => {return [...data, ...comments]})
-            setPage((page)=>{return page+1})
-            if (data.length < 10){
-                setMore(false)
-            }
+                },
+                (error)=>{
+                    console.log(error)
+                }
+            )
         }
     }
 
     const addComment = () => {
-        if (userInput.length < 1) {
+        if (userInput.trim().length < 1) {
             alert("댓글 작성 후 눌러주세요")
             return
         }
         else {
             // axios로 API 서버에 댓글 생성 보내기
             // 필요 내용 받아서 다시 렌더링 (실제로는 리턴으로 받을 가장 최신 댓글 10개로 다시 랜더링)
-            const temp = {
-                comment_id : Math.round(Math.random()*100),
+            const body = {
                 content : userInput,
-                author : "마루쉐",
-                author_id : 1,
-                profile_url : "https://source.unsplash.com/random?sig=888",
             }
-            setComments((comments)=>{return [temp, ...comments]})
+            createPostComment(
+                post_id,
+                body,
+                (notUseResponse)=>{
+                    searchPostDetailComment(
+                        post_id,
+                        1,
+                        (response)=>{
+                            const newdata = response.data.response
+                            page = 2;
+                            setComments(newdata)
+                            if (newdata.length === 10){
+                                setMore(true);
+                            }
+                        },
+                        (error)=>{
+                            console.log(error)
+                        }
+                    )
+                },
+                (error)=>{
+                    console.log(error)
+                }
+            )
             setUserInput("")
         }
     }
 
     const deleteComment = (id) => {
-        const newComments = comments.filter((comment)=> comment.comment_id !== id)
-        setComments([...newComments])
+        deletePostComment(
+            id,
+            (notUseResponse)=>{
+                searchPostDetailComment(
+                    post_id,
+                    1,
+                    (response)=>{
+                        const newdata = response.data.response
+                        page = 2;
+                        setComments(newdata)
+                        if (newdata.length === 10){
+                            setMore(true);
+                        }
+                    },
+                    (error)=>{
+                        console.log(error)
+                    }
+                )
+            },
+            (error)=>{
+                console.log(error)
+            }
+        )
     }
 
     const MoreButton = () => {
-        return (
-            <div onClick={getComment} className="rounded text-center cursor-pointer ring-2 p-2 hover:bg-black transition">
-                더 보기
-            </div>
-        )
+        if (more) {
+            return (
+                <div onClick={getComment} className="rounded text-center cursor-pointer ring-2 p-2 hover:bg-black transition">
+                    더 보기
+                </div>
+            )
+        }
+        else {
+            return (
+                <div className="rounded text-center ring-2 p-2 transition">
+                    댓글이 없어요...
+                </div>
+            )
+        }
     }
+
     return (
         
         <div className="h-full rounded hover:scroll-auto overflow-y-scroll scrollbar-hide">
@@ -88,7 +129,7 @@ const Commentlist = ({post_id, changeShow, hierarchy}) => {
                 type="text" 
                 placeholder="댓글 추가..."
                 value={userInput} 
-                onInput={onChange}
+                onInput={onChange} // 댓글 남기기 변화 감지
             />
             <button 
                 type="button" 
@@ -103,10 +144,10 @@ const Commentlist = ({post_id, changeShow, hierarchy}) => {
             <div className="m-1">
                 {comments.map((comment)=>{
                     return (
-                        <Comment comment={comment} key={comment.comment_id} deleteComment={deleteComment} changeShow={changeShow} hierarchy={hierarchy}/>
+                        <Comment comment={comment} key={comment.id} deleteComment={deleteComment} changeShow={changeShow}/>
                     )
                 })}
-                { more ? <MoreButton/> : null }
+                <MoreButton/> 
             </div>
             
         </div>
