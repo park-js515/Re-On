@@ -104,7 +104,7 @@ export default function Example() {
                           <Menu.Item>
                             {({ active }) => (
                               <Link
-                                to="/mypage"
+                                to={"/mypage/"+localStorage.getItem("email")}
                                 className={classNames(
                                   active ? 'bg-gray-100' : '',
                                   'block px-4 py-2 text-sm text-gray-700',

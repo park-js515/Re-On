@@ -5,7 +5,7 @@ import Likes from './Posts/Likes';
 import React, { useState } from "react";
 
 
-const Postbar = () => {
+const Postbar = ({myPage, email}) => {
   
 
   const [activeComponent, setActiveComponent] = useState('Posts');
@@ -26,7 +26,7 @@ const Postbar = () => {
             </button>
             </div>
           </div>
-
+          {myPage &&<div>
           <div className="flex text-gray-700 text-center py-2 m-4 pr-5">
             <div className="flex">
             <button
@@ -50,13 +50,12 @@ const Postbar = () => {
             </button>
             </div>
           </div>
-
+          </div>}
         </div>
       </ul>
-      {activeComponent === 'Posts' && <Posts />}
-      {activeComponent === 'Private' && <Private />}
-      {activeComponent === 'Likes' && <Likes />}
-
+      {activeComponent === 'Posts' && <Posts email={email} />}
+      {activeComponent === 'Private' && <Private email={email}/>}
+      {activeComponent === 'Likes' && <Likes email={email}/>}
     </>
   );
 };

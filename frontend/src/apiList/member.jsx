@@ -48,7 +48,7 @@ function registerBattleLog(success, fail) {
 function deleteMemberImg(success, fail) {
   const api = memberInstance();
 
-  api.delete('/images/delete').then(success).catch(fail);
+  api.delete('/ member/images/delete').then(success).catch(fail);
 }
 
 // 5. member profile image 수정
@@ -66,7 +66,7 @@ function updateMemberImg(profileImg, success, fail) {
       Authorization: `Bearer ${accessToken}`,
     },
   });
-  api.put('/images/update', profileImg)
+  api.put('/member/image/update', profileImg)
     .then(success)
     .catch(fail);
 }

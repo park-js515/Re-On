@@ -4,7 +4,7 @@ import Commentlist from "./Commentlist";
 import { useState, useEffect } from "react";
 import { searchPublicPostDetail, likePost, updatePost,deletePost } from 'apiList/post';
 
-const PostModal = ({ detailPost, changeShow,getPosts }) => {
+const PostModal = ({ detailPost, changeShow, getPosts }) => {
     
     const navigate = useNavigate();
     const [likeCnt, setIsLikeCnt] = useState(detailPost.likeCnt);

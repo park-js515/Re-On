@@ -1,21 +1,18 @@
 import React, { useState, useEffect } from 'react';
+
 import axios from 'axios';
 import { searchMypageMemberInfo, updateMemberInfo, updateMemberImg } from 'apiList/member';
 
-const MyPageMine = () => {
+const MyPageMine = ({setMyPage, email}) => {
 
-  // 더미
-  const DummyData = {
-    name: '종상시치',
-    image: 'https://source.unsplash.com/random?sig=169',
-
-    introduction: '안녕하세요, 종상시치입니다.',
-  };
   //페이지 유저 정보
   const [memberInfo, setMemberInfo] = useState({});
   // 자기소개
   const [introduce, setIntroduce] = useState("");
   const [nickName, setNickName] = useState("");
+  // 내 페이지인지
+  const [ismyPage, setIsmyPage] = useState(false);
+
 
   const [selectedImage, setSelectedImage] = useState(null);
   //새로 업로드할 사진
@@ -30,11 +27,13 @@ const MyPageMine = () => {
 
   useEffect(() => {
     const getmemberInfo = async() => {
-      await searchMypageMemberInfo(1, (response) => {
+      await searchMypageMemberInfo(email, (response) => {
         console.log(response.data.response);
         setMemberInfo(response.data.response)
         setIntroduce(response.data.response.introduce)
         setNickName(response.data.response.nickName)
+        setMyPage(response.data.response.isMyPage);
+        setIsmyPage(response.data.response.isMyPage);
       }, (error) => {
         console.log(error);
       })
@@ -55,7 +54,7 @@ const MyPageMine = () => {
 
   // 자기소개 수정함수
   const saveIntroduction = () => {
-    updateMemberInfo({ id: memberInfo.id, introduce: introduce, nickName: memberInfo.nickName }, () => {
+    updateMemberInfo({ introduce: introduce, nickName: memberInfo.nickName }, () => {
       alert("수정이 완료되었습니다");
       getmemberInfo();
     }, (error) => {
@@ -99,7 +98,6 @@ const MyPageMine = () => {
   // profileImg 변경 테스트 임 수정할거
   const saveProfileImage = () => {
     if (!selectedImageFile) return;
-
     const formData = new FormData();
     formData.append('profileImg', selectedImageFile);
     updateMemberImg(formData,(response) => {
@@ -112,51 +110,36 @@ const MyPageMine = () => {
     },(error) => {
       console.log(error);
     })
-    // axios.create({
-    //   baseURL: 'http:localhost:8080/api/member-management'
-    // }).put('/images/update', formData,
-    //   {
-    // // axios.put('https://i9c203.p.ssafy.io/api/member-management/images/update', formData, {
-    //   headers: {
-    //     'Content-Type': 'multipart/form-data'
-    //   }
-    //   }
-    // )
-    // .then(response => {
-    //   if (response.data.success) {
-    //     setShowProfileModal(false);
-    //   } else {
-    //     alert('안되노.');
-    //   }
-    // })
-    // .catch(error => {
-    //   console.log(error);
-    // });
   };
-
-
-  
 
   return (
     <div className="pt-12 flex items-start">
       
       {/* 프로필사진 */}
-      <img
-        className="rounded-full w-[200px] h-[200px] object-cover mr-4 hover:opacity-70 hover:blur-s cursor-pointer"
-        src={memberInfo.profileImg}
-        alt={DummyData.name}
-        onClick={toggleProfileModal}
-      />
+      {ismyPage &&
+        <img
+          className="rounded-full w-[200px] h-[200px] object-cover mr-4 hover:opacity-70 hover:blur-s cursor-pointer"
+          src={memberInfo.profileImg}
+          alt={memberInfo.name}
+          onClick={toggleProfileModal}
+        />}
+      {!ismyPage &&
+        <img
+          className="rounded-full w-[200px] h-[200px] object-cover mr-4 hover:opacity-70 hover:blur-s cursor-pointer"
+          src={memberInfo.profileImg}
+          alt={memberInfo.name}
+        />}
       {/* 프로필수정 */}
       <div className="flex flex-col justify-start flex-grow">
         <div className="flex items-center justify-between w-full ml-12">
           <h1 className="text-2xl font-bold">{memberInfo.nickName}</h1>
           {/* 티어 */}
           <div className="flex flex-col justify-start flex-grow">{memberInfo.tier}</div>
-          <button className="rounded bg-[#dfe0e2] text-lg hover:bg-[#9fa3a3] font-semibold px-6 py-2"
+          {ismyPage &&<button className="rounded bg-[#dfe0e2] text-lg hover:bg-[#9fa3a3] font-semibold px-6 py-2"
             onClick={toggleModal}>
             수정
-          </button>
+          </button>}
+          
         </div>
         {/* 이메일 */}
 
@@ -164,7 +147,6 @@ const MyPageMine = () => {
         {/* 게시물수 및 내용 */}
         <div className="mt-2 ml-12">
           <div className="flex flex-col justify-start flex-grow">{memberInfo.email}</div>
-
           <h3 className="text-lg text-gray-500">{memberInfo.introduce}</h3>
         </div>
       </div>
