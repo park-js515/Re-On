@@ -14,8 +14,6 @@ import { Hidden } from '../../../../node_modules/@mui/material/index';
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
 
-
-
     const navigate = useNavigate();
 
     const openModal = (post) => {
@@ -32,18 +30,35 @@ import { Hidden } from '../../../../node_modules/@mui/material/index';
 
     //private 영상을 public에 게시하는 api
     const uploadPost = () => {
-      uploadPrivatePost(selectedPost.id, { title: title, content: content }, ((response) => {
-        closeModal();
-        openInput();
-      }), ((error) => {
-        console.log(error);
-      }));
+      if (title.trim().length == 0) {
+        alert("제목을 입력해주세요")
+      } else if (content.trim().length == 0) {
+        alert("내용을 입력해주세요")
+      } else {
+        uploadPrivatePost(selectedPost.id, { title: title, content: content }, ((response) => {
+          closeModal();
+          openInput();
+          searchPrivatePost(1, (response) => {
+            console.log(response.data.response);
+            setPosts(response.data.response)
+          },
+            (error) => {
+              console.log(error)
+            }
+          )
+        }), ((error) => {
+          console.log(error);
+        }));
+      }
     }
 
     //상세보기 모달 닫기
     const closeModal = () => {
-        setIsModalOpen(false);
-        setSelectedPost(null);
+      setIsModalOpen(false);
+      setTitle("");
+      setContent("");
+      setSelectedPost(null);
+      openInput();
     }
 
     //업로드를 위한 title, content 창 열기
@@ -65,6 +80,16 @@ import { Hidden } from '../../../../node_modules/@mui/material/index';
       test();
     }, []);
 
+    //제목 값 변경
+    const titleHandleChange = (event) =>{
+      setTitle(event.target.value)
+  }
+  //내용 변경
+  const contentHandleChange = (event) =>{
+      setContent(event.target.value)
+  }
+
+
     return (
       <div className="bg-white py-24 sm:py-32">
         {/* 모달창 */}
@@ -76,15 +101,18 @@ import { Hidden } from '../../../../node_modules/@mui/material/index';
               <h3>{selectedPost.createdDate}</h3>
               {isInputOpen && (<div className='uploadInput'>
                 <div>
-                  게시글 제목 : <input ></input></div>
+                제목
+                    <textarea cols="30" rows="1" className="border-white border text-sm rounded resize-none w-full bg-white focus:outline-none" disabled={!isInputOpen} value={title} onChange={titleHandleChange}></textarea>
+</div>
                 <div>
-                  내용 : <input ></input></div>
+                  내용
+                  <textarea cols="30" rows="1" className="border-white bordertext-sm rounded resize-none w-full bg-white focus:outline-none" disabled={!isInputOpen} value={content} onChange={contentHandleChange}></textarea>
+</div>
               </div>
           )}
               {isInputOpen && (<button onClick={uploadPost}>영상 게시</button>)}
-              <button onClick={openInput} className="mt-4 px-4 py-2 bg-red-500 text-black rounded-md">업로드 폼 열기</button>
+              {!isInputOpen && (<button onClick={openInput} className="mt-4 px-4 py-2 bg-red-500 text-black rounded-md">업로드</button>)}
               <button onClick={closeModal} className="mt-4 px-4 py-2 bg-red-500 text-black rounded-md">닫기</button>
-
                     </div>
                 </div>
         )}
@@ -102,8 +130,8 @@ import { Hidden } from '../../../../node_modules/@mui/material/index';
 
                  <div className="group relative ml-2 pb-4 ">
                     <h3 className="mt-3 text-lg leading-6 text-gray-900 group-hover:text-gray-600">
-                    <h3>{post.title}</h3>
-                    <span className="text-2xl hover:underline hover:decoration-solid hover:cursor-pointer">{post.createDate}</span>
+                    <div className="text-2xl hover:underline hover:decoration-solid hover:cursor-pointer">{post.title}</div>
+                    <span className="hover:underline hover:decoration-solid hover:cursor-pointer">{post.createDate}</span>
                     </h3>
                 </div>
               </div>

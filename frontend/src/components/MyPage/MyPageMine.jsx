@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-export default function MyPageMine() {
+const MyPageMine = () => {
 
 
   // 더미
@@ -154,3 +154,4 @@ export default function MyPageMine() {
     </div>
   );
 }
+export default MyPageMine;

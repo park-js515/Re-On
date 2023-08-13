@@ -3,13 +3,11 @@ import PostModal from '../Modal/PostModal';
 import { searchPublicPost, searchPublicPostDetail } from 'apiList/post';
 
   const Posts = () => {
-
     //모달
     const [showModal, setShowModal] = useState(false);
     const [selectedPostId, setSelectedPostId] = useState();
     const [posts, setPosts] = useState([]);
     const [detailPost, setDetailPost] = useState();
-
 
     useEffect(() => {
       const getPosts = () => {
@@ -23,13 +21,19 @@ import { searchPublicPost, searchPublicPostDetail } from 'apiList/post';
       getPosts();
     },[]);
     
-     const OpenModal = async (id) => {
-      console.log(id);
+    const getPosts = () => {
+      searchPublicPost(1, 1, (response) => {
+        console.log(response.data.response);
+        setPosts(response.data.response)
+      }, (error) => {
+        console.log(error);
+      })
+    }
+
+     const OpenModal = async(id) => {
       setSelectedPostId(id);
 
        await searchPublicPostDetail(id, (response) => {
-        console.log("zz");
-        console.log(response.data.response);
         setDetailPost(response.data.response)
       }, (error) => {
         console.log(error);
@@ -72,7 +76,8 @@ import { searchPublicPost, searchPublicPostDetail } from 'apiList/post';
                 showModal && (
                     <PostModal 
                     detailPost={detailPost} 
-                        changeShow={() => setShowModal(false)}
+                  changeShow={() => setShowModal(false)}
+                  getPosts = {getPosts}
                     />
                 )
             }
