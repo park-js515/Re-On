@@ -1,17 +1,27 @@
-import { useEffect } from 'react';
-import { searchBackStageMembmerInfo, updateMemberInfo } from './member';
+import { useEffect, useRef } from 'react';
+import { searchBackStageMembmerInfo, searchMypageMemberInfo} from './member';
+import { searchAllPublicPost, searchPublicPostDetail } from './post';
+import { postInstance } from './lib/index';
+
 
 const TestPage = () => {
+  const check = useRef(false);
   useEffect(() => {
-    updateMemberInfo(
-      { id: 1, introduce: '안녕하세요.', nickName: '주성' },
-      (res) => {
-        console.log(res);
-      },
-      (error) => {
-        console.error(error);
-      },
-    );
+    if(check.current === false) {
+      searchAllPublicPost(   
+        1,
+        (res) => {
+          console.log(res); 
+        },
+        (error) => {
+          console.error(error);
+        },
+      );
+    }
+
+    return () => {
+      check.current = true;
+    }
   }, []);
 
   return (

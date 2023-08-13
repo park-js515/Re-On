@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { Route, Routes, useLocation } from 'react-router-dom';
+import { Route, Routes, useLocation, Navigate } from 'react-router-dom';
 import FAQPage from './pages/FAQPage';
 import FeedPage from './pages/FeedPage';
 import LoginPage from './pages/LoginPage';
@@ -50,7 +50,10 @@ function App() {
         <Route path="/team" element={<TeamPage/>} />
         <Route path="/login/redirect" element={<LoginDupPreventComponent authenticated={isLogin} component={<NaverRedirect />}/>} />
         <Route path="/logout" element={<LogoutDupPreventComponent authenticated={isLogin} component={<LogoutRedirectPage />} />} />
-        <Route path="/test" element={<TestPage />}></Route>
+        {/* 예외처리: 없는 페이지 -> MainPage로 보냄 */}
+				<Route path="*" element={<Navigate to="/" />}></Route>
+				
+				<Route path="/test" element={<TestPage />}></Route>
       </Routes>
     </>
   );
