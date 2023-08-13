@@ -1,20 +1,27 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { searchBackStageMembmerInfo, searchMypageMemberInfo} from './member';
 import { searchAllPublicPost, searchPublicPostDetail } from './post';
 import { postInstance } from './lib/index';
 
 
 const TestPage = () => {
+  const check = useRef(false);
   useEffect(() => {
-    searchAllPublicPost(   
-      1,
-      (res) => {
-        console.log(res); 
-      },
-      (error) => {
-        console.error(error);
-      },
-    );
+    if(check.current === false) {
+      searchAllPublicPost(   
+        1,
+        (res) => {
+          console.log(res); 
+        },
+        (error) => {
+          console.error(error);
+        },
+      );
+    }
+
+    return () => {
+      check.current = true;
+    }
   }, []);
 
   return (
