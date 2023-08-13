@@ -41,7 +41,7 @@ const MyPageMine = ({setMyPage, email}) => {
   },[]);
 
   const getmemberInfo = async() => {
-    await searchMypageMemberInfo(1, (response) => {
+    await searchMypageMemberInfo(email, (response) => {
       console.log(response.data.response);
       setMemberInfo(response.data.response)
       setIntroduce(response.data.response.introduce)
