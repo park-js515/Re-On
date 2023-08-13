@@ -5,19 +5,27 @@ import { searchAllPublicPost } from "apiList/post";
 
 const Videolist = ({injectPostId, changeShow}) => {
     const [data, setData] = useState([])
-    const [page, setPage] = useState(1)
+    const [rest, setRest] = useState(true)
+    let page = 1;
 
-    const addData = () => {
-        function success(response) {
-            setPage((page)=>{return page+1})
-            const newdata = response.data.response
-            console.log(newdata)
-            setData((data)=>{return [...data,...newdata]})
+    function addData () {
+        if (rest){
+            searchAllPublicPost(
+                page,
+                (response)=>{
+                    const newdata = response.data.response
+                    if (newdata.length > 0){
+                        page++;
+                        setData((data)=>{return [...data,...newdata]})
+                    }
+                    else{
+                        setRest(false)
+                    }
+                },
+                (error)=>{
+                    console.log(error)
+                })
         }
-        function fail(error) {
-            console.log(error)
-        }
-        searchAllPublicPost(page,success,fail)
     }
     
     const target = useRef()
@@ -30,7 +38,6 @@ const Videolist = ({injectPostId, changeShow}) => {
         observer.observe(target.current)
         return ()=>{
             setData([])
-            setPage(1)
         }
     }, []);
 
@@ -75,8 +82,8 @@ const Videolist = ({injectPostId, changeShow}) => {
                             />
                         );
                     })}
-                    <div className="text-center" ref={target}>🚝찾는중🚝</div>
                 </div>
+                <div className="text-center" ref={target}>{rest ? "🚝찾는중🚝" : "🛑모든 영상 로딩 완료🛑" }</div>
             </div>
         </div>
     );
