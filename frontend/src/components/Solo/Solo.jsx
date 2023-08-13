@@ -8,6 +8,9 @@ const SoloApp = () => {
   
   const ort = require('onnxruntime-web/webgpu')
 
+  //연기끝난지 아는거
+
+  
   // ※ 이거 바꾸시려면 Solo.css도 바꾸셔야 합니다. //
   const video_width = 500; //
   const video_height = 500;//
@@ -208,18 +211,28 @@ const SoloApp = () => {
       setReload(!reload)
     }
   }
+  function getScoreText(score) {
+    if (score >= 90) return `명품 연기! ${answer.toFixed(0)} 점`;
+    if (score >= 70) return `인상적인 연기! ${answer.toFixed(0)} 점`;
+    if (score >= 50) return `안정적인 연기! ${answer.toFixed(0)} 점`;
+    if (score >= 30) return `노력이 필요해! ${answer.toFixed(0)} 점`;
+    if (score >= 10) return `더 연습해봐! ${answer.toFixed(0)} 점`;
+    return `내가 평가를 진행할게!`;
+}
+
+  
 
   return (
   
       <div>
         <img
                 src="image/solo/solo.png"
-                className="mx-auto h-[200px] w-[300px]"
+                className="mx-auto h-[200px] w-[300px] -mt-5"
               />
       <div className="flex flex-row items-center justify-around">
         {/* 이게문젠가 ? */}
-        <div className="flex flex-row items-center justify-around mt-20">
-          <div id="webCam_container ">
+        <div className="flex flex-row items-center justify-around mt-10">
+          <div id="webCam_container">
               <video id="movie" 
                 autoPlay
                 style={{ width: '500px', height: '500px' }}
@@ -229,56 +242,35 @@ const SoloApp = () => {
               </video>
               
           </div>
-          <div className="flex flex-col justify-center items-center my-12 mx-6 mb-6 space-y-4">
-                  <button 
-                      onClick={startActing}
-                      disabled={ortSession ? false : true}
-                      className="bg-[#BCD570] text-white font-extrabold text-4xl px-20 py-6 rounded-full transform transition-transform duration-300 hover:scale-105 hover:bg-[#C3E166] shadow-2xl hover:shadow-3xl focus:outline-none ">
+          <div className="flex flex-col justify-center items-center my-4 mx-6 mb-10 space-y-4">
+                  {/* 점수 */}
+                  {typeof answer !== 'undefined' && (
+                    <div className="score-animation mt-4 text-black font-extrabold text-3xl px-8 py-4 rounded-lg shadow-xl flex items-center justify-center ">
+                      <span>{getScoreText(answer.toFixed(0))} </span>
                       
-                      {reload ? "다시하기" : "게임시작"}
-                  </button>
+                    </div>
+                  )}
+                  <img className="h-[200px] w-[300px]" src="/image/character/cutereon2.png" alt="" />
 
+                {/* 영화 바꾸기 버튼 */}
                   <button 
                       onClick={getURL}
                       disabled={reload ? true : false}
-                      className="bg-[#BCD570] text-white font-extrabold text-4xl px-20 py-6 rounded-full transform transition-transform duration-300 hover:scale-105 hover:bg-[#C3E166] shadow-2xl hover:shadow-3xl focus:outline-none ">
+                      className="bg-[#BCD570] text-white font-extrabold text-3xl px-20 py-6 rounded-full transform transition-transform duration-300 hover:scale-105 hover:bg-[#C3E166] shadow-2xl hover:shadow-3xl focus:outline-none ">
                       영화변경
                      
                   </button>
+               {/* 재시작 버튼 */}
+               <button 
+                  onClick={startActing}
+                  disabled={ortSession ? false : true}
+                  className={`text-white font-extrabold text-3xl px-20 py-6 rounded-full transform transition-transform duration-300 hover:scale-105 shadow-2xl hover:shadow-3xl focus:outline-none ${reload ? 'bg-[#9ac8cc] hover:bg-[#8ccfd5]' : 'bg-[#BCD570] hover:bg-[#C3E166]'}`}
+              >
+                  {reload ? "다시하기" : "게임시작"}
+              </button>
 
-                  <span className="mt-2 rounded outline outline-green text-md p-2 text-center">
-                  {answer.toFixed(0) <= 33
-                    ? '분발하세요'
-                    : answer.toFixed(0) <= 70
-                    ? '잘하고 있어요'
-                    : answer.toFixed(0) < 100
-                    ? '너무 완벽한 연기에요'
-                    : '퍼펙트'}
-                  점수 : {answer.toFixed(0) <= 100 ? answer.toFixed(0) : '제 점수는요 ?'}
-                </span>
-                </div>
-          <div className="flex flex-col">
-
-            {/* 재시작 버튼
-            <button 
-              className="outline text-md rounded p-2 text-center"
-              onClick={startActing}
-              disabled={ortSession ? false : true}
-            >
-              {reload ? "RESTART" : "START"}
-            </button> */}
-
-            {/* 영화 바꾸기 버튼 */}
-            {/* <button 
-              className="mt-2 outline text-md rounded p-2 text-center"
-              onClick={getURL}
-              disabled={reload ? true : false}
-            >
-              영화변경
-            </button> */}
-            {/* 점수 */}
-            {/* <span className="mt-2 rounded outline outline-green text-md p-2 text-center">점수 : {answer.toFixed(2)}</span> */}
           </div>
+        
 
           <div id="movie_container">
 
