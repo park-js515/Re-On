@@ -144,7 +144,7 @@ export default function OpenViduApp() {
             videoSource: undefined,
             publishAudio: true,
             publishVideo: true,
-            resolution: '500x600',
+            resolution: '500x500',
             frameRate: 30,
             insertMode: 'APPEND',
             mirror: true,
@@ -993,10 +993,6 @@ export default function OpenViduApp() {
                 src="image/rank/rank-vs.png"
                 className="mx-auto h-[200px] w-[300px]"
               />
-              <div>{originalText}</div>
-              <div>{transcript}</div>
-              <div>{userOneSttScore}</div>
-              <div>{userTwoSttScore}</div>
 
               <div
                 id="log-list"
@@ -1035,7 +1031,7 @@ export default function OpenViduApp() {
               <div
                 id="movie-container"
                 className="rounded-lg
-            flex-col flex justify-evenly "
+            flex-col flex justify-evenly my-9"
               >
                 <video
                   id="origin"
@@ -1109,7 +1105,7 @@ export default function OpenViduApp() {
                   <div className="flex text-white">
                     <Matching typingContent="..." />
                   </div>
-                  <div className="relative flex items-center justify-center w-[500px] h-[600px]">
+                  <div className="relative flex items-center justify-center w-[500px] h-[500px]">
                     <img
                       src="image/rank/rank-basic-bg.png"
                       alt="waiting"

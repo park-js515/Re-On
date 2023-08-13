@@ -94,7 +94,7 @@ export default function OpenViduVideoComponent({
       ref={videoRef}
       className={`rounded-lg ${
         userCamBorder ? 'border-4 border-danger' : ''
-      } w-[500px] h-[600px]`}
+      } w-[500px] h-[500px]`}
     />
   );
 }
