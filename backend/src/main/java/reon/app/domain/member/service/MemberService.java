@@ -11,9 +11,9 @@ public interface MemberService {
     String updateProfileImg(MultipartFile profileImg, Long loginId);
     void deleteRefreshToken(Long id);
 
-    void removeProfileImg(Long id);
+    String removeProfileImg(Long loginId);
 
-    void delete(Long id);
+    String delete(Long loginId);
     void updateBattleInfo(BattleLogSaveRequest battleLogSaveRequest);
 
 }

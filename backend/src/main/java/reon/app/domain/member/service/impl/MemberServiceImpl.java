@@ -51,17 +51,21 @@ public class MemberServiceImpl implements MemberService {
         return findMember.getEmail();
     }
     @Override
-    public void removeProfileImg(Long id) {
-        Member findMember = memberRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+    public String removeProfileImg(Long loginId) {
+        Member findMember = memberRepository.findById(loginId).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
         if(findMember.getMemberInfo().getProfileImg() != null){
             fileManger.removeImgFile(findMember.getMemberInfo().getProfileImg(), storage);
 //            removeImgFile(findMember.getMemberInfo().getProfileImg());
         }
         findMember.getMemberInfo().updateProfileImg(null);
+        return findMember.getEmail();
     }
     @Override
-    public void delete(Long id) {
-        memberRepository.deleteById(id);
+    public String delete(Long loginId) {
+        Member findMember = memberRepository.findById(loginId).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+        findMember.getMemberInfo().updateDeleted(1);
+
+        return findMember.getEmail();
     }
 
     @Override

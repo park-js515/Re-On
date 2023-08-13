@@ -11,6 +11,10 @@ import reon.app.domain.member.dto.res.BattleLogResponse;
 import reon.app.domain.member.dto.res.MemberBattleInfoResponse;
 import reon.app.domain.member.service.*;
 import reon.app.domain.member.service.dto.MemberUpdateDto;
+import reon.app.domain.post.entity.PostComment;
+import reon.app.domain.post.service.PostCommentService;
+import reon.app.domain.post.service.PostLikeService;
+import reon.app.domain.post.service.PostService;
 import reon.app.global.api.ApiResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiParam;
@@ -39,7 +43,9 @@ public class MemberApi {
     private final BattleLogService battleLogService;
     private final BattleLogQueryService battleLogQueryService;
     private final FileExtFilter fileExtFilter;
-
+    private final PostService postService;
+    private final PostLikeService postLikeService;
+    private final PostCommentService postCommentService;
 
     @Operation(summary = "mypage member 조회", description = "email로 mypage member 상세 조회")
     @GetMapping("/{email}") // 시큐리티를 사용한다면 로그인이 됐으면 ? user 있을꺼고 나도 사용하고싶당~
@@ -80,34 +86,39 @@ public class MemberApi {
     }
 
     @Operation(summary = "member profile image 수정", description = "회원 프로필 이미지를 수정한다.")
-    @PutMapping("/images/update")
+    @PutMapping("/image/update")
     public ApiResponse<String> updateProfileImg(@RequestPart MultipartFile profileImg, @Parameter(hidden = true) @AuthenticationPrincipal User user) {
         fileExtFilter.imageFilter(profileImg); // 이미지 확장자 검사
         Long loginId = Long.parseLong(user.getUsername());
         String updateMemberEmail = memberService.updateProfileImg(profileImg, loginId);
         return ApiResponse.OK(updateMemberEmail);
     }
-    @Operation(summary = "member image 삭제", description = "회원 프로필 이미지를 삭제한다.")
-    @DeleteMapping("/images/delete")
-    public ApiResponse<Void> removeProfileImg(@Parameter(hidden = true) @AuthenticationPrincipal User user) {
-        memberService.removeProfileImg(Long.parseLong(user.getUsername()));
-        return ApiResponse.OK(null);
+    @Operation(summary = "member profile image 수정", description = "회원 프로필 이미지를 삭제한다.")
+    @DeleteMapping("/image/delete")
+    public ApiResponse<String> removeProfileImg(@Parameter(hidden = true) @AuthenticationPrincipal User user) {
+        Long loginId = Long.parseLong(user.getUsername());
+        String MemberEmail =memberService.removeProfileImg(loginId);
+        return ApiResponse.OK(MemberEmail);
     }
     
     @Operation(summary = "로그아웃", description = "로그아웃")
-    @GetMapping("/member/logout/{id}")
-    public ApiResponse<Void> logout(@PathVariable("id") Long id, HttpServletRequest httpServletRequest){
+    @GetMapping("/logout")
+    public ApiResponse<Void> logout(HttpServletRequest httpServletRequest, @Parameter(hidden = true) @AuthenticationPrincipal User user){
         HttpSession session = httpServletRequest.getSession();
         session.invalidate();
-        memberService.deleteRefreshToken(id);
+        Long loginId = Long.parseLong(user.getUsername());
+        memberService.deleteRefreshToken(loginId);
         return ApiResponse.OK(null);
     }
 
-    // TODO: 2023-08-01 아이디를 인자로 받을지 그냥 Authentication으로 처리할지 결정
     @Operation(summary = "회원 탈퇴", description = "회원 탈퇴")
-    @DeleteMapping("/member/{id}")
-    public ApiResponse<Void> delete(@PathVariable("id") @ApiParam("탈퇴를 진행할 유저의 아이디") Long id){
-        memberService.delete(id);
+    @DeleteMapping()
+    public ApiResponse<Void> delete(@Parameter(hidden = true) @AuthenticationPrincipal User user){
+        Long loginId = Long.parseLong(user.getUsername());
+        memberService.delete(loginId);
+        postService.deleteByMemberId(loginId);
+        postLikeService.deleteByMemberId(loginId);
+        postCommentService.deleteByMemberId(loginId);
         return ApiResponse.OK(null);
     }
 
@@ -127,7 +138,7 @@ public class MemberApi {
         return OK(null);
     }
 
-    @Operation(summary = "Battle 기록 조회", description = "배틀 기록을 조회한다.")
+    @Operation(summary = "Battle 기록 조회", description = "배틀 기록을 10개를 조회한다.")
     @GetMapping("/battlelog")
     public ApiResponse<?> findBattleLogById(@Parameter(hidden = true) @AuthenticationPrincipal User user){
         Long memberId = Long.parseLong(user.getUsername());
