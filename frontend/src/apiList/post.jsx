@@ -10,11 +10,9 @@ import { postInstance } from './lib/index';
  */
 function savePost(videoId, actionVideo, success, fail) {
   const api = postInstance();
+  api.defaults.headers['Content-Type'] = 'multipart/form-data';
 
-  api
-    .post(`?videoId=${videoId}`, JSON.stringify(actionVideo))
-    .then(success)
-    .catch(fail);
+  api.post(`?videoId=${videoId}`, actionVideo).then(success).catch(fail);
 }
 
 // 2. post 수정
@@ -42,7 +40,10 @@ function updatePost(postId, body, success, fail) {
 async function searchPostDetailComment(postId, offset, success, fail) {
   const api = postInstance();
 
-  await api.get(`/${postId}/comment?offset=${offset}`).then(success).catch(fail);
+  await api
+    .get(`/${postId}/comment?offset=${offset}`)
+    .then(success)
+    .catch(fail);
 }
 
 // 4. post 댓글 작성
@@ -255,5 +256,5 @@ export {
   uploadPrivatePost,
   searchPublicPost,
   searchPublicPostDetail,
-  pullDownPublicPost
-}
+  pullDownPublicPost,
+};

@@ -36,7 +36,7 @@ function searchBattleLog(success, fail) {
 function registerBattleLog(success, fail) {
   const api = memberInstance();
 
-  api.post('/battlelog').then(success).then(fail);
+  api.post('/member/battlelog').then(success).catch(fail);
 }
 
 // 4. member profile image 삭제
@@ -48,7 +48,7 @@ function registerBattleLog(success, fail) {
 function deleteMemberImg(success, fail) {
   const api = memberInstance();
 
-  api.delete('/ member/images/delete').then(success).catch(fail);
+  api.delete('/member/images/delete').then(success).catch(fail);
 }
 
 // 5. member profile image 수정
@@ -59,22 +59,20 @@ function deleteMemberImg(success, fail) {
  * @param {function} fail [callback]
  */
 function updateMemberImg(profileImg, success, fail) {
-  let accessToken = localStorage.getItem("accessToken");
+  let accessToken = localStorage.getItem('accessToken');
   const api = axios.create({
     baseURL: networktarget + '/api/member-management',
     headers: {
       Authorization: `Bearer ${accessToken}`,
     },
   });
-  api.put('/member/image/update', profileImg)
-    .then(success)
-    .catch(fail);
+  api.put('/member/image/update', profileImg).then(success).catch(fail);
 }
 
 // 6. mypage member 조회
 /**
  *
- * @param {number} id 
+ * @param {number} id
  * @param {function} success [callback]
  * @param {function} fail [callback]
  */
