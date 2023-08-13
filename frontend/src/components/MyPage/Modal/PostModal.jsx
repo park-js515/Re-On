@@ -64,7 +64,8 @@ const PostModal = ({detailPost, changeShow}) => {
             
             {/* 오른쪽 */}
             <div className="w-4/12 pl-4 overflow-y-auto max-h-[calc(80vh-48px)] scrollbar-hide">
-                <Commentlist post_id={detailPost.post_id} changeShow={changeShow} hierarchy={0} />
+                    <Commentlist post_id={ detailPost.id} commentList = {detailPost.postCommentResponses}
+ changeShow={changeShow} hierarchy={0} />
             </div>
         </div>
        

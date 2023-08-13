@@ -22,25 +22,21 @@ import { searchPublicPost, searchPublicPostDetail } from 'apiList/post';
       }
       getPosts();
     },[]);
+    
+     const OpenModal = async (id) => {
+      console.log(id);
+      setSelectedPostId(id);
 
-    const getPostDetail = (id) => {
-      searchPublicPostDetail(id, (response) => {
+       await searchPublicPostDetail(id, (response) => {
         console.log("zz");
         console.log(response.data.response);
         setDetailPost(response.data.response)
       }, (error) => {
         console.log(error);
       })
-    };
-    
-    const OpenModal = (id) => {
-      console.log(id);
-      setSelectedPostId(id);
-      getPostDetail(id);
+
       setShowModal(true);
     };
-
-
 
    
     return (

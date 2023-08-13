@@ -102,7 +102,7 @@ import { Hidden } from '../../../../node_modules/@mui/material/index';
 
                  <div className="group relative ml-2 pb-4 ">
                     <h3 className="mt-3 text-lg leading-6 text-gray-900 group-hover:text-gray-600">
-                    <h4>{post.title}</h4>
+                    <h3>{post.title}</h3>
                     <span className="text-2xl hover:underline hover:decoration-solid hover:cursor-pointer">{post.createDate}</span>
                     </h3>
                 </div>
