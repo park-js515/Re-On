@@ -1,8 +1,8 @@
-import React from "react";
-import { SContainer, STextContainer, SRank } from "./style";
+import React, { useState, useEffect } from 'react';
+import { SContainer, SRank } from "./style";
 import { Link } from 'react-router-dom';
 // import defaultProfile from "/image/character/cuetreon.png";
-
+import { searchBackStageMembmerInfo } from 'apiList/member'
 
 const DummyData = {
     name: '종상시치',
@@ -17,9 +17,25 @@ const DummyData = {
     
   };
 
-  // 마우스 위치찾는거 info 포켓몬카드 처럼
+  
   const UserInfo = () => {
+    //이건 마우스 위치찾기
     const containerRef = React.useRef(null);
+    
+    //api 맴버 데이터
+    const [memberData, setMemberData] = useState(null);
+  
+    useEffect(() => {
+      
+      searchBackStageMembmerInfo(id, // id는 필요한 member의 아이디로 수정해야 합니다.
+        (response) => {
+          setMemberData(response.data); // API 응답에 따라 변경해야 할 수 있습니다.
+        },
+        (error) => {
+          console.error("실패 미세지", error);
+        }
+      );
+    }, []);  
 
   React.useEffect(() => {
     const handleMouseMove = (e) => {
@@ -48,13 +64,13 @@ const DummyData = {
       {/* 프로필 사진, 이름, 점수 표시 */}
       <div className="profile-container">
         <Link to="/mypage">
-         <img src={DummyData.image} alt=""className="h-10 w-10 rounded-full bg-gray-50" />
+         <img src={memberData.image} alt=""className="h-10 w-10 rounded-full bg-gray-50" />
         </Link>
         <div>
         <Link to="/mypage">
-            <div className="name font-semibold text-6xl">{DummyData.name}</div>
+            <div className="name font-semibold text-6xl">{memberData.name}</div>
         </Link>
-          {/* <div className="recent">{DummyData.win} / {DummyData.lose} / {DummyData.draw}</div> */}
+         
         </div>
       </div>
       {/* text */}

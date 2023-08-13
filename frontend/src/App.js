@@ -6,6 +6,7 @@ import FeedPage from './pages/FeedPage';
 import LoginPage from './pages/LoginPage';
 import MainPage from './pages/MainPage';
 import MyPage from './pages/MyPage';
+import NotFoundPage from './pages/NotFoundPage';
 
 import NormalListPage from './pages/NormalListPage';
 import RankPage from './pages/RankPage';
@@ -48,12 +49,15 @@ function App() {
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/rank" element={<AuthComponent authenticated={isLogin} component={<RankPage />} />} />
         <Route path="/team" element={<TeamPage/>} />
+        <Route path="/NotFoundPage" element={<AuthComponent authenticated={isLogin} component={<NotFoundPage />} />} />
+
         <Route path="/login/redirect" element={<LoginDupPreventComponent authenticated={isLogin} component={<NaverRedirect />}/>} />
         <Route path="/logout" element={<LogoutDupPreventComponent authenticated={isLogin} component={<LogoutRedirectPage />} />} />
+       
         {/* 예외처리: 없는 페이지 -> MainPage로 보냄 */}
-				<Route path="*" element={<Navigate to="/" />}></Route>
 				
 				<Route path="/test" element={<TestPage />}></Route>
+				<Route path="*" element={<Navigate to="/NotFoundPage" />}></Route>
       </Routes>
     </>
   );
