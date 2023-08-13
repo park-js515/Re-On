@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import PostModal from '../Modal/PostModal';
 import { searchPublicPost, searchPublicPostDetail } from 'apiList/post';
 
-  const Posts = () => {
+  const Posts = ({email}) => {
     //모달
     const [showModal, setShowModal] = useState(false);
     const [selectedPostId, setSelectedPostId] = useState();
@@ -11,7 +11,7 @@ import { searchPublicPost, searchPublicPostDetail } from 'apiList/post';
 
     useEffect(() => {
       const getPosts = () => {
-        searchPublicPost(1, 1, (response) => {
+        searchPublicPost(email, 1, (response) => {
           console.log(response.data.response);
           setPosts(response.data.response)
         }, (error) => {
@@ -22,7 +22,7 @@ import { searchPublicPost, searchPublicPostDetail } from 'apiList/post';
     },[]);
     
     const getPosts = () => {
-      searchPublicPost(1, 1, (response) => {
+      searchPublicPost(email, 1, (response) => {
         console.log(response.data.response);
         setPosts(response.data.response)
       }, (error) => {

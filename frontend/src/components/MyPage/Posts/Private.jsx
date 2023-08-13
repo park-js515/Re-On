@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { searchPrivatePost, searchPrivatePostDetail, uploadPrivatePost } from 'apiList/post';
 import { Hidden } from '../../../../node_modules/@mui/material/index';
 
-  const Private = () => {
+  const Private = ({email}) => {
     //모달
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedPost, setSelectedPost] = useState(null);

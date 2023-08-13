@@ -13,7 +13,6 @@ const MyPageMine = ({setMyPage, email}) => {
   // 내 페이지인지
   const [ismyPage, setIsmyPage] = useState(false);
 
-
   const [selectedImage, setSelectedImage] = useState(null);
   //새로 업로드할 사진
   const [selectedImageFile, setSelectedImageFile] = useState(null);
