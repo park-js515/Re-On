@@ -51,9 +51,7 @@ public class MemberApi {
     public ApiResponse<MemberResponse> findMemberById(@PathVariable("email") @ApiParam("유저 email") String email, @Parameter(hidden = true) @AuthenticationPrincipal User user){
         Long loginId = Long.parseLong(user.getUsername()); //null exception -> 500 에러가 나감.
         Long findId = memberQueryService.searchMemberIdByEmail(email);
-        if(findId == null){
-            throw new CustomException(ErrorCode.MEMBER_NOT_FOUND);
-        }
+
         MemberResponse memberResponse = memberQueryService.findById(findId);
         if(loginId == findId){
             memberResponse.setIsMyPage(true);
@@ -63,18 +61,14 @@ public class MemberApi {
         return ApiResponse.OK(memberResponse);
     }
 
-    @Operation(summary = "Back stage member 조회", description = "memberId로 BackStage Member 정보 조회")
-    @GetMapping("/back-stage/{id}")
-    public ApiResponse<BackStageMemberResponse> findBackStageMemberById(@PathVariable("id") @ApiParam("유저 ID") Long id){
-        BackStageMemberResponse backStageMemberResponse = memberQueryService.findBackStageMemberById(id);
+    @Operation(summary = "Back stage member 조회", description = "Token 정보 기반 BackStage Member 정보 조회")
+    @GetMapping("/back-stage")
+    public ApiResponse<BackStageMemberResponse> findBackStageMemberById(@Parameter(hidden = true) @AuthenticationPrincipal User user){
+        Long loginId = Long.parseLong(user.getUsername());
+        BackStageMemberResponse backStageMemberResponse = memberQueryService.findBackStageMemberById(loginId);
         return ApiResponse.OK(backStageMemberResponse);
     }
 
-//    @Operation(tags = "회원", description = "이메일로 유저 정보를 조회한다")
-//    @GetMapping("/member/{email}")
-//    public ApiResponse<MemberResponse> findMemberByEmail(@PathVariable("email") @ApiParam("유저 이메일") String email){
-//        return ApiResponse.OK(null);
-//    }
 
     @Operation(summary = "member 정보 수정", description = "회원 정보(닉네임, 자기소개)를 수정한다.")
     @PutMapping("/member/update")

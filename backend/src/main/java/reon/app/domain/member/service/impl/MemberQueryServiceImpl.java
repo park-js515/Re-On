@@ -33,7 +33,11 @@ public class MemberQueryServiceImpl implements MemberQueryService {
 
     @Override
     public Long searchMemberIdByEmail(String email) {
-        return memberQueryRepository.searchMemberIdByEmail(email);
+        Long findId = memberQueryRepository.searchMemberIdByEmail(email);
+        if(findId == null){
+            throw new CustomException(ErrorCode.MEMBER_NOT_FOUND);
+        }
+        return findId;
     }
 
     @Override

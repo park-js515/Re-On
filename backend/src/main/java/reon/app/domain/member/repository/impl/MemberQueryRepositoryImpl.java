@@ -39,7 +39,6 @@ public class MemberQueryRepositoryImpl implements MemberQueryRepository {
     public BackStageMemberResponse findBackStageMemberById(Long id) {
         return queryFactory
                 .select(Projections.fields(BackStageMemberResponse.class,
-                        member.id,
                         member.memberInfo.nickName,
                         member.memberInfo.profileImg,
                         member.memberBattleInfo.tier,
@@ -48,7 +47,8 @@ public class MemberQueryRepositoryImpl implements MemberQueryRepository {
                         member.memberBattleInfo.lose
                 ))
                 .from(member)
-                .where(member.id.eq(id))
+                .where(member.id.eq(id),
+                        member.memberInfo.deleted.eq(0))
                 .fetchOne();
     }
 
