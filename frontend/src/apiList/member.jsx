@@ -3,14 +3,14 @@ import { memberInstance } from './lib/index';
 // 1. Back stage member 조회
 /**
  *
- * @param {number} id
+ * @param {number} email
  * @param {function} success [callback]
  * @param {function} fail [callback]
  */
-function searchBackStageMembmerInfo(id, success, fail) {
+function searchBackStageMembmerInfo(email, success, fail) {
   const api = memberInstance();
 
-  api.get(`/back-stage/${id}`).then(success).catch(fail);
+  api.get(`member/back-stage/${email}`).then(success).catch(fail);
 }
 
 // 2. Battle 기록 조회
