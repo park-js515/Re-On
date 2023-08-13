@@ -11,6 +11,8 @@ const EndCurtain = ({
   userTwoScore,
   leaveSession,
   recordedFile,
+  userOneSttScore,
+  userTwoSttScore,
 }) => {
   const [isChecked, setIsChecked] = useState(true);
   const [countdown, setCountdown] = useState(10); // 카운트다운을 위한 상태
@@ -83,6 +85,10 @@ const EndCurtain = ({
           <div className="flex justify-between w-3/4">
             <div>점수 : {userOneScore}</div>
             <div>점수 : {userTwoScore}</div>
+          </div>
+          <div className="flex justify-between w-3/4">
+            <div>음성점수 : {userOneSttScore}</div>
+            <div>음성점수 : {userTwoSttScore}</div>
           </div>
           <button onClick={handleSaveRecordedFile}>저장</button>
           <div className="countdown">

@@ -17,6 +17,9 @@ import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { setIsJoinSession } from 'redux/sessionSlice';
 
+import * as Levinshtein from './Levinshtein';
+import useSpeechToText from 'hooks/useSpeechToText';
+
 import useLoading from 'hooks/useLoading';
 import useVideoPlayer from 'hooks/useVideoPlayer';
 
@@ -141,7 +144,7 @@ export default function OpenViduApp() {
             videoSource: undefined,
             publishAudio: true,
             publishVideo: true,
-            resolution: '500x400',
+            resolution: '500x600',
             frameRate: 30,
             insertMode: 'APPEND',
             mirror: true,
@@ -477,6 +480,76 @@ export default function OpenViduApp() {
     return resizedContext.getImageData(0, 0, 224, 224);
   }
 
+  // #################       STT   ####################
+  const script = 'stt_script.txt';
+  const [originalText, setOriginalText] = useState('');
+  const [userOneText, setUserOneText] = useState('');
+  const [userTwoText, setUserTwoText] = useState('');
+  const [userOneSttScore, setUserOneSttScore] = useState(0);
+  const [userTwoSttScore, setUserTwoSttScore] = useState(0);
+  const {
+    transcript,
+    resetTranscript,
+    listening,
+    startListening,
+    stopListening,
+  } = useSpeechToText();
+
+  //  원본 대사 가져오기
+  useEffect(() => {
+    fetch(script)
+      .then((response) => response.text())
+      .then((text) => {
+        setOriginalText(text);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
+
+  useEffect(() => {
+    console.log('현재 transcript:', transcript);
+    if (mySide === 'USER_ONE') {
+      setUserOneText(transcript);
+    } else if (mySide === 'USER_TWO') {
+      setUserTwoText(transcript);
+    }
+
+    let tempScore = 0;
+    if (mySide === 'USER_ONE') {
+      console.log('ot', originalText);
+      console.log('uot', userOneText);
+      tempScore = Levinshtein.textSimilarity(originalText, userOneText);
+    } else if (mySide === 'USER_TWO') {
+      console.log('ot', originalText);
+      console.log('uot', userTwoText);
+      tempScore = Levinshtein.textSimilarity(originalText, userTwoText);
+    }
+
+    if (mySide === 'USER_ONE') {
+      setUserOneSttScore(
+        isNaN(tempScore) ? 0 : Math.round(tempScore * 1000) / 10,
+      );
+    } else if (mySide === 'USER_TWO') {
+      setUserTwoSttScore(
+        isNaN(tempScore) ? 0 : Math.round(tempScore * 1000) / 10,
+      );
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+
+    if (stage !== 'READY') {
+      handleCalculateScore();
+    }
+  }, [transcript]);
+
+  // 점수 계산
+  const handleSttScore = () => {
+    stopListening();
+    setTimeout(() => {
+      resetTranscript();
+    }, 1000);
+  };
+
   // #################       게임 로그 저장      ####################
   const currentTime = new Date();
   const logMessageTime = `${currentTime.getHours()}:${currentTime.getMinutes()}:${currentTime.getSeconds()}`;
@@ -548,7 +621,8 @@ export default function OpenViduApp() {
       stage === 'USER_ONE_TURN'
     ) {
       setRecordOn(true);
-      // face_detect();
+      face_detect();
+      startListening();
     }
     mySide === 'USER_ONE'
       ? setUserCamLeftBorder(true)
@@ -569,7 +643,8 @@ export default function OpenViduApp() {
       stage === 'USER_TWO_TURN'
     ) {
       setRecordOn(true);
-      // face_detect();
+      face_detect();
+      startListening();
     }
     mySide === 'USER_TWO'
       ? setUserCamLeftBorder(true)
@@ -584,6 +659,8 @@ export default function OpenViduApp() {
       let response_userOneScore = receivedData.userOneScore;
       let response_userTwoName = receivedData.userTwoName;
       let response_userTwoScore = receivedData.userTwoScore;
+      let response_userOneSttScore = receivedData.userOneSttScore;
+      let response_userTwoSttScore = receivedData.userTwoSttScore;
       if (response_userOneName !== null) {
         setUserOneName(response_userOneName);
       }
@@ -596,6 +673,12 @@ export default function OpenViduApp() {
       if (response_userTwoScore !== 0) {
         setUserTwoScore(response_userTwoScore);
       }
+      if (response_userOneSttScore !== 0) {
+        setUserOneSttScore(response_userOneSttScore);
+      }
+      if (response_userTwoSttScore !== 0) {
+        setUserTwoSttScore(response_userTwoSttScore);
+      }
     };
 
     session.on('signal:score', onScoreReceived);
@@ -606,15 +689,23 @@ export default function OpenViduApp() {
       userOneScore,
       userTwoName,
       userTwoScore,
+      userOneSttScore,
+      userTwoSttScore,
     );
 
     if (mySide === 'USER_ONE') {
       if (resultScore !== 0) {
         setUserOneScore(resultScore);
       }
+      if (resultSttScore !== 0) {
+        setUserOneSttScore(resultSttScore);
+      }
     } else if (mySide === 'USER_TWO') {
       if (resultScore !== 0) {
         setUserTwoScore(resultScore);
+      }
+      if (resultSttScore !== 0) {
+        setUserTwoSttScore(resultSttScore);
       }
     }
 
@@ -623,6 +714,8 @@ export default function OpenViduApp() {
       userOneScore: userOneScore,
       userTwoName: userTwoName,
       userTwoScore: userTwoScore,
+      userOneSttScore: userOneSttScore,
+      userTwoSttScore: userTwoSttScore,
     };
 
     console.log('보내는 시그널 데이터', dataToSend); // 로그
@@ -719,6 +812,7 @@ export default function OpenViduApp() {
 
   // ############ 턴 종료 ###############
   const [resultScore, setResultScore] = useState(0);
+  const [resultSttScore, setResultSttScore] = useState(0);
 
   useEffect(() => {
     if (videoRef.current) {
@@ -732,9 +826,12 @@ export default function OpenViduApp() {
             clearInterval(myInterval);
             const answer = 100 - (sum_diff / frame_cnts) * 100;
             console.log(`나는 유저 원, 유저 원 점수는 ${answer}`);
+            handleSttScore();
+            console.log('@@턴종료 stt', userOneSttScore);
             setResultScore(Math.round(answer));
             setRecordOn(false);
           }
+
           setUserCamLeftBorder(false);
           setUserCamRightBorder(false);
           handleCalculateScore();
@@ -745,6 +842,8 @@ export default function OpenViduApp() {
             clearInterval(myInterval);
             const answer = 100 - (sum_diff / frame_cnts) * 100;
             console.log(`나는 유저 투, 유저 투 점수는 ${answer}`);
+            handleSttScore();
+            console.log('@@턴종료 stt', userTwoSttScore);
             setResultScore(Math.round(answer));
             setRecordOn(false);
           }
@@ -775,6 +874,8 @@ export default function OpenViduApp() {
         let response_userOneScore = receivedData.userOneScore;
         let response_userTwoName = receivedData.userTwoName;
         let response_userTwoScore = receivedData.userTwoScore;
+        let response_userOneSttScore = receivedData.userOneSttScore;
+        let response_userTwoSttScore = receivedData.userTwoSttScore;
         if (response_userOneName !== null) {
           setUserOneName(response_userOneName);
         }
@@ -787,6 +888,12 @@ export default function OpenViduApp() {
         if (response_userTwoScore !== 0) {
           setUserTwoScore(response_userTwoScore);
         }
+        if (response_userOneSttScore !== 0) {
+          setUserOneSttScore(response_userOneSttScore);
+        }
+        if (response_userTwoSttScore !== 0) {
+          setUserTwoSttScore(response_userTwoSttScore);
+        }
       };
       session.on('signal:score', onScoreReceived);
       console.log(
@@ -796,6 +903,8 @@ export default function OpenViduApp() {
         userOneScore,
         userTwoName,
         userTwoScore,
+        userOneSttScore,
+        userTwoSttScore,
       );
 
       return () => session.off('signal:score', onScoreReceived);
@@ -862,6 +971,8 @@ export default function OpenViduApp() {
               userTwoScore={userTwoScore}
               leaveSession={leaveSession}
               recordedFile={recordedFile}
+              userOneSttScore={userOneSttScore}
+              userTwoSttScore={userTwoSttScore}
             />
           )}
 
@@ -882,6 +993,10 @@ export default function OpenViduApp() {
                 src="image/rank/rank-vs.png"
                 className="mx-auto h-[200px] w-[300px]"
               />
+              <div>{originalText}</div>
+              <div>{transcript}</div>
+              <div>{userOneSttScore}</div>
+              <div>{userTwoSttScore}</div>
 
               <div
                 id="log-list"
@@ -920,14 +1035,14 @@ export default function OpenViduApp() {
               <div
                 id="movie-container"
                 className="rounded-lg
-            flex-col flex justify-evenly my-9"
+            flex-col flex justify-evenly "
               >
                 <video
                   id="origin"
                   ref={videoRef}
-                  src="video/test-short(light).mp4"
+                  src="video/아저씨-원빈-금니빨.mp4"
                   poster="image/rank/rank-reon.png"
-                  className={`mx-4 rounded-lg ${
+                  className={`h-[450px] mx-4 rounded-lg ${
                     isPlaying ? 'border-4 border-danger' : ''
                   }`}
                   style={{ width: '500px', height: '500px' }}
@@ -994,7 +1109,7 @@ export default function OpenViduApp() {
                   <div className="flex text-white">
                     <Matching typingContent="..." />
                   </div>
-                  <div className="relative flex items-center justify-center w-[500px] h-[500px]">
+                  <div className="relative flex items-center justify-center w-[500px] h-[600px]">
                     <img
                       src="image/rank/rank-basic-bg.png"
                       alt="waiting"

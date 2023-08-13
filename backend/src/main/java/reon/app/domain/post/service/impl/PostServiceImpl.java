@@ -42,7 +42,7 @@ public class PostServiceImpl implements PostService {
                 .video(Video.builder().id(postSaveDto.getVideoId()).build())
                 .build();
         postRepository.save(post);
-        return 1L;
+        return post.getId();
     }
 
     @Override

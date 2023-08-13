@@ -1,5 +1,5 @@
 const NaverLogin = () => {
-  const NAVER_AUTHORIZATION_URL = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${process.env.REACT_APP_NAVER_CLIENT_ID}&state=${process.env.REACT_APP_STATE}&redirect_uri=${process.env.REACT_APP_LOCAL_REDIRECT_URI}`;
+  const NAVER_AUTHORIZATION_URL = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${process.env.REACT_APP_NAVER_CLIENT_ID}&state=${process.env.REACT_APP_STATE}&redirect_uri=${process.env.REACT_APP_REDIRECT_URI}`;
 
   return (
     <a

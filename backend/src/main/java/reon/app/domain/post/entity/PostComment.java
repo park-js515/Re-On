@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.DynamicInsert;
 import reon.app.domain.member.entity.Member;
 import reon.app.global.entity.BaseEntity;
 
@@ -14,10 +15,10 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @SuperBuilder
+@DynamicInsert
 public class PostComment extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="id")
     private Long id;
 
 //    TODO: 2023-07-25 post entity 생성 시 주석 해제 필요
@@ -33,7 +34,6 @@ public class PostComment extends BaseEntity {
     @Column(name = "content", nullable = false, length = 100)
     private String content;
 
-    @Builder
     public PostComment(Long id, Post post, Member member, String content) {
         this.id = id;
         this.post = post;

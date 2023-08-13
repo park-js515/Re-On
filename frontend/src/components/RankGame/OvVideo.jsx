@@ -92,8 +92,9 @@ export default function OpenViduVideoComponent({
       id={mySide}
       autoPlay={true}
       ref={videoRef}
-      className={`rounded-lg ${userCamBorder ? 'border-4 border-danger' : ''}`}
-      style={{ width: '500px', height: '500px' }}
+      className={`rounded-lg ${
+        userCamBorder ? 'border-4 border-danger' : ''
+      } w-[500px] h-[600px]`}
     />
   );
 }
