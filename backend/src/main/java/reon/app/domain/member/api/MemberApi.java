@@ -6,9 +6,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
 import reon.app.domain.member.dto.req.BattleLogSaveRequest;
 import reon.app.domain.member.dto.req.MemberUpdateRequest;
-import reon.app.domain.member.dto.res.BackStageMemberResponse;
-import reon.app.domain.member.dto.res.BattleLogResponse;
-import reon.app.domain.member.dto.res.MemberBattleInfoResponse;
+import reon.app.domain.member.dto.res.*;
 import reon.app.domain.member.service.*;
 import reon.app.domain.member.service.dto.BattleLogSaveDto;
 import reon.app.domain.member.service.dto.MemberUpdateDto;
@@ -23,7 +21,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import reon.app.domain.member.dto.res.MemberResponse;
 import reon.app.global.util.FileExtFilter;
 
 import javax.servlet.http.HttpServletRequest;
@@ -146,15 +143,22 @@ public class MemberApi {
 
         int score = battleLogService.saveBattleLog(dto);//배틀 결과 저장
         memberService.updateBattleInfo(dto, score);//member battle info 갱신
-        return OK(null);
+        return ApiResponse.OK(null);
     }
 
     @Operation(summary = "Battle 기록 조회", description = "배틀 기록을 10개를 조회한다.")
     @GetMapping("/battlelog")
-    public ApiResponse<?> findBattleLogById(@Parameter(hidden = true) @AuthenticationPrincipal User user){
+    public ApiResponse<List<BattleLogResponse>> findBattleLogById(@Parameter(hidden = true) @AuthenticationPrincipal User user){
         Long loginId = Long.parseLong(user.getUsername());
         List<BattleLogResponse> battleLogResponseList = battleLogQueryService.findBattleLogsById(loginId);
-        return OK(battleLogResponseList);
+        return ApiResponse.OK(battleLogResponseList);
+    }
+
+    @Operation(summary = "Battle top 5 유저 조회", description = "배틀 점수 상위 top5 유저를 조회한다.")
+    @GetMapping("/battlelog/rank")
+    public ApiResponse<List<BattleLogRankResponse>> findBattleLogsRank(@Parameter(hidden = true) @AuthenticationPrincipal User user){
+        List<BattleLogRankResponse> battleLogRankResponses = memberQueryService.findBattleLogsRank();
+        return ApiResponse.OK(battleLogRankResponses);
     }
 
 }

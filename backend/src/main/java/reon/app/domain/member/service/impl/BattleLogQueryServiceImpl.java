@@ -3,6 +3,7 @@ package reon.app.domain.member.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import reon.app.domain.member.dto.res.BattleLogRankResponse;
 import reon.app.domain.member.dto.res.BattleLogResponse;
 import reon.app.domain.member.repository.BattleLogQueryRepository;
 import reon.app.domain.member.service.BattleLogQueryService;
@@ -20,4 +21,5 @@ public class BattleLogQueryServiceImpl implements BattleLogQueryService {
         List<BattleLogResponse> battleLogs = battleLogQueryRepository.findBattleLogsById(loginId);
         return battleLogs;
     }
+
 }

@@ -4,6 +4,7 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+import reon.app.domain.member.dto.res.BattleLogRankResponse;
 import reon.app.domain.member.dto.res.BattleLogResponse;
 import reon.app.domain.member.repository.BattleLogQueryRepository;
 
@@ -38,4 +39,5 @@ public class BattleLogQueryRepositoryImpl implements BattleLogQueryRepository {
                 .limit(10)
                 .fetch();
     }
+
 }

@@ -6,9 +6,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Repository;
 import reon.app.domain.member.dto.res.BackStageMemberResponse;
+import reon.app.domain.member.dto.res.BattleLogRankResponse;
 import reon.app.domain.member.dto.res.MemberBattleInfoResponse;
 import reon.app.domain.member.dto.res.MemberResponse;
 import reon.app.domain.member.repository.MemberQueryRepository;
+
+import java.util.List;
 
 import static reon.app.domain.member.entity.QMemberBattleInfo.memberBattleInfo;
 import static reon.app.domain.member.entity.QMember.member;
@@ -74,6 +77,23 @@ public class MemberQueryRepositoryImpl implements MemberQueryRepository {
                 .where(member.email.eq(email),
                         member.memberInfo.deleted.eq(0))
                 .fetchOne();
+    }
+
+    @Override
+    public List<BattleLogRankResponse> findBattleLogsRank() {
+        return queryFactory
+                .select(Projections.fields(BattleLogRankResponse.class,
+                        member.email,
+                        member.memberInfo.nickName,
+                        member.memberInfo.profileImg,
+                        member.memberBattleInfo.tier,
+                        member.memberBattleInfo.score
+                        ))
+                .from(member)
+                .where(member.memberInfo.deleted.eq(0))
+                .orderBy(member.memberBattleInfo.score.desc())
+                .limit(5)
+                .fetch();
     }
 
 
