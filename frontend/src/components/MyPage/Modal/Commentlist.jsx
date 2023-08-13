@@ -1,18 +1,19 @@
 import React from "react";
 import Comment from "./Comment";
 import { useState, useEffect } from "react";
-import { createPostComment, searchPostDetailComment } from 'apiList/post';
+import { createPostComment, searchPostDetailComment, deletePostComment, updatePostComment } from 'apiList/post';
 
 const Commentlist = ({post_id, commentList, changeShow, hierarchy}) => {
     // 댓글은 게시글 식별자로 조회
     const [comments, setComments] = useState(commentList)
     const [userInput, setUserInput] = useState("");
-    const [page, setPage] = useState(0)
-    const [more, setMore] = useState(true) // 댓글 더보기 가능 여부
+    const [page, setPage] = useState(1)
+    const [more, setMore] = useState(false) // 댓글 더보기 가능 여부
 
     useEffect(() => {
-        console.log(comments)
-        getComment()
+        if (comments.length == 10) {
+            setMore(true)
+        }
     }, []);
 
     if (hierarchy > 1) {
@@ -22,15 +23,24 @@ const Commentlist = ({post_id, commentList, changeShow, hierarchy}) => {
     const onChange = (event) => {
         setUserInput(event.target.value)
     }
+    
+    const checkModal = () => {
+        if (comments.length >= 10) {
+            setMore(true)
+        }
+    }
 
-    const getComment = () => {
-        if (more) {
-            setComments((comments) => {return [...comments]})
-            setPage((page)=>{return page+1})
-            if (comments.length < 10){
+    // 댓글 더보기
+    const getComment = async() => {
+        await searchPostDetailComment(post_id, page + 1, (response) => {
+            setPage((page) => { return page + 1 });
+            setComments([...comments, ...response.data.response]);
+            if (response.data.response.length < 10) {
                 setMore(false)
             }
-        }
+        }, (error) => {
+            console.log(error);
+        });
     }
 
     const addComment = () => {
@@ -44,6 +54,9 @@ const Commentlist = ({post_id, commentList, changeShow, hierarchy}) => {
                 searchPostDetailComment(post_id, 1, (response) => {
                     console.log(response.data.response);
                     setComments(response.data.response);
+                    if (response.data.response == 10) {
+                        setMore(true)
+                    }
                 }, (error) => {
                     console.log(error);
                 })
@@ -57,7 +70,28 @@ const Commentlist = ({post_id, commentList, changeShow, hierarchy}) => {
     const deleteComment = (id) => {
         const newComments = comments.filter((comment)=> comment.comment_id !== id)
         setComments([...newComments])
+        deletePostComment(id, () => {
+            searchPostDetailComment(post_id, 1, (response) => {
+                console.log(response.data.response);
+                setComments(response.data.response);
+                if (response.data.response == 10) {
+                    setMore(true)
+                }
+            }, (error) => {
+                console.log(error);
+            },(error) => {
+                console.log(error);
+            })
+        })
     }
+
+    const updateComment = (id, content) => {
+        updatePostComment(id, { content: content }, () => {
+        }, (error) => {
+            console.log(error);
+        })
+    }
+
 
     const MoreButton = () => {
         return (
@@ -92,11 +126,12 @@ const Commentlist = ({post_id, commentList, changeShow, hierarchy}) => {
             <div className="m-1">
                 {comments.map((comment)=>{
                     return (
-                        <Comment comment={comment} key={comment.id} deleteComment={deleteComment} changeShow={changeShow} hierarchy={hierarchy}/>
+                        <Comment comment={comment} key={comment.id} deleteComment={deleteComment} updateComment={updateComment} changeShow={changeShow} hierarchy={hierarchy}/>
                     )
                 })}
                 { more ? <MoreButton/> : null }
             </div>
+
         </div>
     )
 }

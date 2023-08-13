@@ -39,10 +39,10 @@ function updatePost(postId, body, success, fail) {
  * @param {function} success [callback]
  * @param {function} fail [callback]
  */
-function searchPostDetailComment(postId, offset, success, fail) {
+async function searchPostDetailComment(postId, offset, success, fail) {
   const api = postInstance();
 
-  api.get(`/${postId}/comment?offset=${offset}`).then(success).catch(fail);
+  await api.get(`/${postId}/comment?offset=${offset}`).then(success).catch(fail);
 }
 
 // 4. post 댓글 작성
@@ -102,7 +102,7 @@ function deletePostComment(commentId, success, fail) {
 function deletePost(postId, success, fail) {
   const api = postInstance();
 
-  api.delete(`/delete/${postId}`).then(success).catch(fail);
+  api.put(`/delete/${postId}`).then(success).catch(fail);
 }
 
 // 8. 투표해줘 public post 목록 전체 조회
