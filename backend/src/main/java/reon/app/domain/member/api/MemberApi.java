@@ -2,20 +2,15 @@ package reon.app.domain.member.api;
 
 import io.swagger.v3.oas.annotations.Parameter;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
 import reon.app.domain.member.dto.req.BattleLogSaveRequest;
-import reon.app.domain.member.dto.req.MemberBattleInfoUpdateRequest;
 import reon.app.domain.member.dto.req.MemberUpdateRequest;
 import reon.app.domain.member.dto.res.BackStageMemberResponse;
 import reon.app.domain.member.dto.res.BattleLogResponse;
 import reon.app.domain.member.dto.res.MemberBattleInfoResponse;
-import reon.app.domain.member.entity.Member;
-import reon.app.domain.member.service.BattleLogQueryService;
-import reon.app.domain.member.service.BattleLogService;
-import reon.app.domain.member.service.MemberQueryService;
-import reon.app.domain.member.service.MemberService;
+import reon.app.domain.member.service.*;
+import reon.app.domain.member.service.dto.MemberUpdateDto;
 import reon.app.global.api.ApiResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiParam;
@@ -24,8 +19,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import reon.app.domain.member.dto.res.MemberResponse;
-import reon.app.global.error.entity.CustomException;
-import reon.app.global.error.entity.ErrorCode;
+import reon.app.global.util.FileExtFilter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -44,6 +38,7 @@ public class MemberApi {
     private final MemberQueryService memberQueryService;
     private final BattleLogService battleLogService;
     private final BattleLogQueryService battleLogQueryService;
+    private final FileExtFilter fileExtFilter;
 
 
     @Operation(summary = "mypage member 조회", description = "email로 mypage member 상세 조회")
@@ -71,21 +66,26 @@ public class MemberApi {
 
 
     @Operation(summary = "member 정보 수정", description = "회원 정보(닉네임, 자기소개)를 수정한다.")
-    @PutMapping("/member/update")
-    public ApiResponse<?> update(@RequestBody @ApiParam("수정할 회원 정보") MemberUpdateRequest memberUpdateRequest){
-        // TODO 2023.08.04 : ERROR처리 어떻게 ?
-        Member updateMember = memberService.updateMember(memberUpdateRequest);
-        if(updateMember == null){
-            return ApiResponse.ERROR("회원이 존재하지 않습니다", HttpStatus.BAD_REQUEST);
-        }
-        return ApiResponse.OK(updateMember);
+    @PutMapping("/update")
+    public ApiResponse<String> update(@RequestBody @ApiParam("수정할 회원 정보") MemberUpdateRequest memberUpdateRequest, @Parameter(hidden = true) @AuthenticationPrincipal User user){
+        Long loginId = Long.parseLong(user.getUsername());
+
+        MemberUpdateDto dto = MemberUpdateDto.builder()
+                .loginId(loginId)
+                .nickName(memberUpdateRequest.getNickName())
+                .introduce(memberUpdateRequest.getIntroduce())
+                .build();
+        String updateMemberEmail = memberService.updateMember(dto);
+        return ApiResponse.OK(updateMemberEmail);
     }
 
     @Operation(summary = "member profile image 수정", description = "회원 프로필 이미지를 수정한다.")
     @PutMapping("/images/update")
-    public ApiResponse<Void> updateProfileImg(@RequestPart MultipartFile profileImg, @Parameter(hidden = true) @AuthenticationPrincipal User user) {
-        memberService.updateProfileImg(profileImg, Long.parseLong(user.getUsername()));
-        return ApiResponse.OK(null);
+    public ApiResponse<String> updateProfileImg(@RequestPart MultipartFile profileImg, @Parameter(hidden = true) @AuthenticationPrincipal User user) {
+        fileExtFilter.imageFilter(profileImg); // 이미지 확장자 검사
+        Long loginId = Long.parseLong(user.getUsername());
+        String updateMemberEmail = memberService.updateProfileImg(profileImg, loginId);
+        return ApiResponse.OK(updateMemberEmail);
     }
     @Operation(summary = "member image 삭제", description = "회원 프로필 이미지를 삭제한다.")
     @DeleteMapping("/images/delete")

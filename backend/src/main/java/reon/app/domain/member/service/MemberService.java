@@ -1,16 +1,14 @@
 package reon.app.domain.member.service;
 
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import reon.app.domain.member.dto.req.BattleLogSaveRequest;
-import reon.app.domain.member.dto.req.MemberUpdateRequest;
-import reon.app.domain.member.entity.Member;
+import reon.app.domain.member.service.dto.MemberUpdateDto;
 
 @Transactional
 public interface MemberService {
-    Member updateMember(MemberUpdateRequest memberUpdateRequest);
-    void updateProfileImg(MultipartFile profileImg, Long id);
+    String updateMember(MemberUpdateDto memberUpdateDto);
+    String updateProfileImg(MultipartFile profileImg, Long loginId);
     void deleteRefreshToken(Long id);
 
     void removeProfileImg(Long id);
