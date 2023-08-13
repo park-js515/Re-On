@@ -1,5 +1,19 @@
 import { memberInstance } from './lib/index';
 
+
+// 1. 회원 탈퇴
+/**
+ * 
+ * @param {function} success [callback] 
+ * @param {function} fail [callback]
+ */
+function deleteMember(success, fail) {
+  const api = memberInstance();
+
+  api.delete(`/member`).then(success).catch(fail);
+}
+
+
 // 1. Back stage member 조회
 /**
  *
@@ -10,7 +24,7 @@ import { memberInstance } from './lib/index';
 function searchBackStageMembmerInfo(id, success, fail) {
   const api = memberInstance();
 
-  api.get(`/back-stage/${id}`).then(success).catch(fail);
+  api.get(`/member/${id}`).then(success).catch(fail);
 }
 
 // 2. Battle 기록 조회
@@ -22,7 +36,7 @@ function searchBackStageMembmerInfo(id, success, fail) {
 function searchBattleLog(success, fail) {
   const api = memberInstance();
 
-  api.get('/battlelog').then(success).catch(fail);
+  api.get('/member/battlelog').then(success).catch(fail);
 }
 
 // 3. Battle 결과 등록
@@ -35,7 +49,7 @@ function searchBattleLog(success, fail) {
 function registerBattleLog(success, fail) {
   const api = memberInstance();
 
-  api.post('/battlelog').then(success).then(fail);
+  api.post('/member/battlelog').then(success).then(fail);
 }
 
 // 4. member profile image 삭제
@@ -47,7 +61,7 @@ function registerBattleLog(success, fail) {
 function deleteMemberImg(success, fail) {
   const api = memberInstance();
 
-  api.delete('/images/delete').then(success).catch(fail);
+  api.delete('/member/images/delete').then(success).catch(fail);
 }
 
 // 5. member profile image 수정
@@ -62,7 +76,7 @@ function updateMemberImg(profileImg, success, fail) {
   api.defaults.headers['Content-Type'] = 'multipart/form-data';
 
   api
-    .put('/images/update', profileImg)
+    .put('/member/image/update', profileImg)
     .then(success)
     .catch(fail);
 }
@@ -81,17 +95,6 @@ function searchMypageMemberInfo(id, success, fail) {
 }
 
 // 7. 회원탈퇴
-/**
- *
- * @param {number} id
- * @param {function} success [callback]
- * @param {function} fail [callback]
- */
-function deleteMember(id, success, fail) {
-  const api = memberInstance();
-
-  api.delete(`/member/${id}`).then(success).catch(fail);
-}
 
 // 8. member 배틀 정보 조회
 /**

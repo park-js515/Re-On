@@ -27,18 +27,11 @@ export default function Navbar() {
     if (userIsLogin) {
       setProfileImg('/image/login/LoginDefaultImg.png');
 
-      // 프로필 이미지를 받아올 수 있으면 이렇게 하겠슴둥.
-      // searchMypageMemberInfo(
-      //   1,
-      //   (res) => {
-      //     if (res.data.response.profileImg) {
-      //       setProfileImg(res.data.response.profileImg);
-      //     }
-      //   },
-      //   (error) => {
-      //     console.error(error);
-      //   },
-      // );
+      // string 이라 "null"로 받아야 한다.
+      const profileImg = localStorage.getItem('profileImg');
+      if (profileImg !== "null" && profileImg !== '') {
+        setProfileImg(profileImg);
+      }
     }
   }, [userIsLogin]);
 
