@@ -68,7 +68,7 @@ export const SContainer = styled.div`
     
     /* 이름 */
     .name {
-     
+      margin-top: 2vw;
       
       &:hover {
         color: #272727;
@@ -78,7 +78,13 @@ export const SContainer = styled.div`
     /* 전적 */
     .recent {
       margin-left: 8px;
-      margin-top: 19px;
+      margin-top: 2vw;
+      font-size: x-large;
+      color: #3c3c3c;
+    }
+    .recentwdl {
+      margin-left: 8px;
+      margin-top: 0vw;
       font-size: x-large;
       color: #3c3c3c;
     }
@@ -128,6 +134,7 @@ export const SRank = styled.div`
 
  
  img {
+  margin-top: -1vw;
    width: 25vw;  // 반응형 너비로 설정
    height: 19.75vw; // 반응형 높이로 설정 (200px:250px의 비율 유지)
    max-width: 300px; // 최대 너비 제한 (선택적)

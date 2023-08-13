@@ -17,7 +17,7 @@ function BackStage({ myUserName, mySessionId, joinSession }) {
             </div>
             
             {/* Right Side */}
-            <div className="w-2/5 h-[90%] flex flex-col justify-center">
+            <div className="w-2/5 h-[90%] flex flex-col justify-center z-50">
               <RightSide />
 
               {/* 선수입장 */}

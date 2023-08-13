@@ -22,7 +22,7 @@ const UserInfo = () => {
   const containerRef = React.useRef(null);
 
   useEffect(() => {
-    const email = "[]";
+    const email = "park_js515@naver.com";
 
     
     searchBackStageMembmerInfo(email, 
@@ -75,7 +75,7 @@ return (
         <div className="name font-semibold text-6xl">{userData.nickName || "개똥이"}</div>
         </Link>
         <div className="recent">총전적</div>
-        <div className="recent">{userData.win}승 {userData.gameCnt - userData.win - userData.lose}무 {userData.lose}패</div>
+        <div className="recentwdl">{userData.win}승 {userData.gameCnt - userData.win - userData.lose}무 {userData.lose}패</div>
       </div>
     </div>
     <SRank className="rank">
