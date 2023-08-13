@@ -24,6 +24,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import reon.app.domain.member.dto.res.MemberResponse;
+import reon.app.global.error.entity.CustomException;
+import reon.app.global.error.entity.ErrorCode;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -36,7 +38,7 @@ import static reon.app.global.api.ApiResponse.OK;
 @RestController
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping("/api/member-management")
+@RequestMapping("/api/member-management/member")
 public class MemberApi {
     private final MemberService memberService;
     private final MemberQueryService memberQueryService;
@@ -44,11 +46,20 @@ public class MemberApi {
     private final BattleLogQueryService battleLogQueryService;
 
 
-    @Operation(summary = "mypage member 조회", description = "memberId로 mypage member 상세 조회")
-    @GetMapping("/member/{id}") // 시큐리티를 사용한다면 로그인이 됐으면 ? user 있을꺼고 나도 사용하고싶당~
-    public ApiResponse<MemberResponse> findMemberById(@PathVariable("id") @ApiParam("유저 id") Long id, @Parameter(hidden = true) @AuthenticationPrincipal User user){
-//        Long memberId = Long.parseLong(user.getUsername()); //null exception -> 500 에러가 나감.
-        MemberResponse memberResponse = memberQueryService.findById(id);
+    @Operation(summary = "mypage member 조회", description = "email로 mypage member 상세 조회")
+    @GetMapping("/{email}") // 시큐리티를 사용한다면 로그인이 됐으면 ? user 있을꺼고 나도 사용하고싶당~
+    public ApiResponse<MemberResponse> findMemberById(@PathVariable("email") @ApiParam("유저 email") String email, @Parameter(hidden = true) @AuthenticationPrincipal User user){
+        Long loginId = Long.parseLong(user.getUsername()); //null exception -> 500 에러가 나감.
+        Long findId = memberQueryService.searchMemberIdByEmail(email);
+        if(findId == null){
+            throw new CustomException(ErrorCode.MEMBER_NOT_FOUND);
+        }
+        MemberResponse memberResponse = memberQueryService.findById(findId);
+        if(loginId == findId){
+            memberResponse.setIsMyPage(true);
+        }else{
+            memberResponse.setIsMyPage(false);
+        }
         return ApiResponse.OK(memberResponse);
     }
 

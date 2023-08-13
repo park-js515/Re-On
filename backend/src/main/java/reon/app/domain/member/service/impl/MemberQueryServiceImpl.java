@@ -32,6 +32,11 @@ public class MemberQueryServiceImpl implements MemberQueryService {
     }
 
     @Override
+    public Long searchMemberIdByEmail(String email) {
+        return memberQueryRepository.searchMemberIdByEmail(email);
+    }
+
+    @Override
     public BackStageMemberResponse findBackStageMemberById(Long id) {
         BackStageMemberResponse res = memberQueryRepository.findBackStageMemberById(id);
         if(res == null){

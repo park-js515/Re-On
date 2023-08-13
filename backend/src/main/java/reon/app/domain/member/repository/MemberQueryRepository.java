@@ -10,4 +10,6 @@ public interface MemberQueryRepository {
     BackStageMemberResponse findBackStageMemberById(Long id);
 
     MemberBattleInfoResponse findMemberBattleInfoById(Long id);
+
+    Long searchMemberIdByEmail(String email);
 }

@@ -11,13 +11,11 @@ import reon.app.domain.member.entity.Member;
 public interface MemberService {
     Member updateMember(MemberUpdateRequest memberUpdateRequest);
     void updateProfileImg(MultipartFile profileImg, Long id);
-
     void deleteRefreshToken(Long id);
 
     void removeProfileImg(Long id);
 
     void delete(Long id);
-
     void updateBattleInfo(BattleLogSaveRequest battleLogSaveRequest);
 
 }

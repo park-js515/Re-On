@@ -23,7 +23,6 @@ public class MemberQueryRepositoryImpl implements MemberQueryRepository {
     public MemberResponse findById(Long id) {
         return queryFactory
                 .select(Projections.fields(MemberResponse.class,
-                        member.id,
                         member.memberInfo.nickName,
                         member.memberInfo.introduce,
                         member.memberInfo.profileImg,
@@ -31,7 +30,8 @@ public class MemberQueryRepositoryImpl implements MemberQueryRepository {
                         member.memberBattleInfo.tier
                 ))
                 .from(member)
-                .where(member.id.eq(id))
+                .where(member.id.eq(id),
+                        member.memberInfo.deleted.eq(0))
                 .fetchOne();
     }
 
@@ -63,6 +63,16 @@ public class MemberQueryRepositoryImpl implements MemberQueryRepository {
                 ))
                 .from(member)
                 .where(member.id.eq(id))
+                .fetchOne();
+    }
+
+    @Override
+    public Long searchMemberIdByEmail(String email) {
+        return queryFactory
+                .select(member.id)
+                .from(member)
+                .where(member.email.eq(email),
+                        member.memberInfo.deleted.eq(0))
                 .fetchOne();
     }
 
