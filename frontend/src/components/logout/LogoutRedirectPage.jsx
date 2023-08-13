@@ -15,7 +15,6 @@ const LogoutRedirectPage = () => {
       const clearLocalStorage = () => {
         localStorage.clear();
       };
-
       clearLocalStorage();
       dispatch(userLogout());
       navigate('/');
