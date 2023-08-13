@@ -7,27 +7,28 @@ import { searchTop10Post } from "apiList/post";
 
 const Hotlist = ({injectPostId, changeShow}) => {
   const sliderRef = useRef(null);
-  // 실질 데이터는 API 완성 후 axios로
-  const [data, setData] = useState([])
-  // 테스트 데이터
+  let ignore = false;
+  const [data, setData] = useState([]);
+  useEffect(() => {
 
-  const addData = () => {
-    function success(response) {
-        const newdata = response.data.response
-        setData((data)=>{return [...data,...newdata]})
+    // 최초 렌더링 시에만 실행
+    if (!ignore){
+      searchTop10Post(
+        (response) => {
+          const newdata = response.data.response;
+          setData(prevData => [...prevData, ...newdata]);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
     }
-    function fail(error) {
-        console.log(error)
-    }
-    searchTop10Post(success,fail)
-  }
 
-  useEffect(()=>{
-    addData();
+    // 컴포넌트가 언마운트되면 데이터 삭제
     return () => {
-      setData([]);
-    }
-  },[])
+      ignore = true;
+    };
+  }, []);
 
   const NextArrow = ({ onClick }) => (
     <img
