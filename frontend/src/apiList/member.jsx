@@ -1,5 +1,6 @@
 import { memberInstance } from './lib/index';
-
+import axios from 'axios';
+const networktarget = process.env.REACT_APP_API;
 // 1. Back stage member 조회
 /**
  *
@@ -58,10 +59,14 @@ function deleteMemberImg(success, fail) {
  * @param {function} fail [callback]
  */
 function updateMemberImg(profileImg, success, fail) {
-  const api = memberInstance();
-
-  api
-    .put('/images/update', JSON.stringify(profileImg))
+  let accessToken = localStorage.getItem("accessToken");
+  const api = axios.create({
+    baseURL: networktarget + '/api/member-management',
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+  api.put('/images/update', profileImg)
     .then(success)
     .catch(fail);
 }
@@ -73,10 +78,9 @@ function updateMemberImg(profileImg, success, fail) {
  * @param {function} success [callback]
  * @param {function} fail [callback]
  */
-function searchMypageMemberInfo(id, success, fail) {
+async function searchMypageMemberInfo(id, success, fail) {
   const api = memberInstance();
-
-  api.get(`/member/${id}`).then(success).catch(fail);
+  await api.get(`/member/${id}`).then(success).catch(fail);
 }
 
 // 7. 회원탈퇴
@@ -88,7 +92,6 @@ function searchMypageMemberInfo(id, success, fail) {
  */
 function deleteMember(id, success, fail) {
   const api = memberInstance();
-
   api.delete(`/member/${id}`).then(success).catch(fail);
 }
 

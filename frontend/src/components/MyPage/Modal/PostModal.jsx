@@ -8,7 +8,7 @@ const PostModal = ({ detailPost, changeShow,getPosts }) => {
     
     const navigate = useNavigate();
     const [likeCnt, setIsLikeCnt] = useState(detailPost.likeCnt);
-    const [IsLike, setIsLike] = useState(false);
+    const [IsLike, setIsLike] = useState(detailPost.isLike);
     const [updateMode, setUpdateMode] = useState(false)
     const [title, setTitle] = useState(detailPost.title)
     const [content, setContent] = useState(detailPost.content)
