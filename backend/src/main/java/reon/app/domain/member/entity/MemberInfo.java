@@ -2,11 +2,9 @@ package reon.app.domain.member.entity;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.DynamicInsert;
-import reon.app.domain.member.dto.req.MemberUpdateRequest;
-import reon.app.global.entity.BaseEntity;
+import reon.app.domain.member.service.dto.MemberUpdateDto;
 
 import javax.persistence.*;
 
@@ -26,9 +24,9 @@ public class MemberInfo {
     private int deleted;//탈퇴 여부
     private int banned;//신고 여부
 
-    public void updateMemberInfo(MemberUpdateRequest memberUpdateRequest){
-        this.nickName = memberUpdateRequest.getNickName();
-        this.introduce = memberUpdateRequest.getIntroduce();
+    public void updateMemberInfo(MemberUpdateDto memberUpdateDto){
+        this.nickName = memberUpdateDto.getNickName();
+        this.introduce = memberUpdateDto.getIntroduce();
     }
 
     public void updateProfileImg(String profileImg) {

@@ -34,4 +34,9 @@ public class PostLikeServiceImpl implements PostLikeService {
         postLikeRepository.delete(findPostLike);
         return Boolean.FALSE;
     }
+
+    @Override
+    public void deleteByMemberId(Long loginId) {
+        postLikeRepository.deleteAllByMemberId(loginId);
+    }
 }

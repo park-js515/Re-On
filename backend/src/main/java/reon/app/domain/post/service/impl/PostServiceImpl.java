@@ -20,6 +20,8 @@ import reon.app.global.error.entity.CustomException;
 import reon.app.global.error.entity.ErrorCode;
 import reon.app.global.util.FileManger;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -92,5 +94,14 @@ public class PostServiceImpl implements PostService {
         postLikeRepository.deleteAllByMemberId(loginId);
         post.delete();
         return post.getId();
+    }
+
+    @Override
+    public void deleteByMemberId(Long loginId) {
+        postRepository.deleteAllPostByLoginId(loginId);
+//        List<Post> posts = postRepository.findAllByMember_Id(loginId);
+//        for(Post post : posts){
+//            post.delete();
+//        }
     }
 }

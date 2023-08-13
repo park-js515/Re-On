@@ -1,21 +1,20 @@
 package reon.app.domain.member.dto.res;
 
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
 public class BattleLogResponse {
-
-    private Long userId;//상대 Id
-    private String userNickName;//상대 닉네임
-    private String videoTitle;//연기 영상
+    private String opponentEmail; // 상대 이메일
+    private String opponentNickName;//상대 닉네임
     private int point;//점수
 
-    public BattleLogResponse(Long userId, String userNickName, String videoTitle, int point ){
-        this.userId = userId;
-        this.userNickName=userNickName;
-        this.videoTitle = videoTitle;
-        this.point=point;
+    @Builder
+    public BattleLogResponse(String opponentEmail, String opponentNickName, int point) {
+        this.opponentEmail = opponentEmail;
+        this.opponentNickName = opponentNickName;
+        this.point = point;
     }
 }
