@@ -18,6 +18,7 @@ export const SContainer = styled.div`
       #8ccfd5 100%
     );
   background-size: cover;
+  margin-top: 6vw;
   height: 20.5vw;
   width: 45vw;
   border-radius: 12px;

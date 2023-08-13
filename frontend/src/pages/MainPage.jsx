@@ -2,7 +2,6 @@
 import { useLottie } from 'lottie-react';
 import animationData from '../assets/animation/animationlogo'
 import React, { useRef, useState } from 'react';
-
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import './styles.css';

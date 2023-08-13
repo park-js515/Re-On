@@ -1065,7 +1065,7 @@ export default function OpenViduApp() {
                     <img
                       src="image/rank/rank-tutorial-btn.png"
                       alt="tutorial-btn"
-                      className="w-[150px] hover:w-[200px] transition-all duration-300"
+                      className="w-[250px] hover:scale-110 "
                     />
                   </button>
 
@@ -1085,7 +1085,7 @@ export default function OpenViduApp() {
                     <img
                       src="image/rank/rank-exit-btn.png"
                       alt="exit-btn"
-                      className="w-[150px] hover:w-[180px] transition-all duration-300"
+                      className="w-[250px] hover:scale-110 "
                     />
                   </button>
                 </div>
