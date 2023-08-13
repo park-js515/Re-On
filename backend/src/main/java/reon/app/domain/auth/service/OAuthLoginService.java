@@ -35,6 +35,9 @@ public class OAuthLoginService {
         // RT 추가
         member.updateRefreshToken(authTokens.getRefreshToken());
         log.info(authTokens.getAccessToken());
+        authTokens.setEmail(member.getEmail());
+        authTokens.setNickName(member.getMemberInfo().getNickName());
+        authTokens.setEmail(member.getEmail());
         return authTokens;
     }
     private Member newMember(OAuthInfoResponse oAuthInfoResponse) {
@@ -48,9 +51,12 @@ public class OAuthLoginService {
                 .tier(Tier.BRONZE)
                 .build();
 
+        String fullEmail = oAuthInfoResponse.getEmail();
+        String email = fullEmail.substring(0, fullEmail.indexOf("@"));
+
         Member member = Member.builder()
                 .name(oAuthInfoResponse.getName())
-                .email(oAuthInfoResponse.getEmail())
+                .email(email)
                 .birthday(oAuthInfoResponse.getBirthday())
                 .gender(oAuthInfoResponse.getGender())
                 .code(oAuthInfoResponse.getCode())
