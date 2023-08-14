@@ -19,10 +19,9 @@ function deleteMember(success, fail) {
  * @param {function} success [callback]
  * @param {function} fail [callback]
  */
-function searchMypageMemberInfo(email, success, fail) {
+async function searchMypageMemberInfo(email, success, fail) {
   const api = memberInstance();
-
-  api.get(`/member/${email}`).then(success).catch(fail);
+  await api.get(`/member/${email}`).then(success).catch(fail);
 }
 
 // 3. Back stage member 조회
@@ -67,10 +66,6 @@ function registerBattleLog(body, success, fail) {
  * @param {function} success [callback]
  * @param {function} fail [callback]
  */
-async function searchMypageMemberInfo(email, success, fail) {
-  const api = memberInstance();
-  await api.get(`/member/${email}`).then(success).catch(fail);
-}
 
 function searchTop5Member(success, fail) {
   const api = memberInstance();
