@@ -26,7 +26,7 @@ const useInputText = (initialValue, validator) => {
 };
 
 const Comment = ({ comment, deleteComment, changeShow, updateComment }) => {
-  let maxLength = 255; // 255자 제한
+  let maxLength = 150; // 150자 제한
 
   const navigate = useNavigate();
   const [content, setContent] = useInputText(comment.content, (value) => {return value.length < maxLength});

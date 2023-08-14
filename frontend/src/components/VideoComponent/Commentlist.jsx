@@ -32,7 +32,7 @@ const useInputText = (initialValue, validator) => {
 
 const Commentlist = ({ post_id, changeShow, initialData }) => {
   let page = 2;
-  let maxLength = 255;
+  let maxLength = 150;
 
   // 댓글은 게시글 식별자로 조회
   const [comments, setComments] = useState(initialData); // 초기 댓글 (VideoPlayer에서 받아온거)
@@ -41,7 +41,7 @@ const Commentlist = ({ post_id, changeShow, initialData }) => {
     (value) => {
       return value.length < maxLength;
     },
-  ); // 댓글 쓰기 창 (최대 255자: maxLength로 조절)
+  ); // 댓글 쓰기 창 (최대 150자: maxLength로 조절)
   const [more, setMore] = useState(initialData.length > 10 ? true : false); // 댓글 더보기 가능 여부
 
   const onChange = (event) => {
@@ -156,9 +156,9 @@ const Commentlist = ({ post_id, changeShow, initialData }) => {
   return (
     <div className="h-full rounded hover:scroll-auto overflow-y-scroll scrollbar-hide">
       {/* 댓글 입력 창 */}
-      <div className="flex relative">
-        <input
-          className="mx-1 mt-2 mb-1 px-3 py-2 bg-white shadow-md focus:outline-none block w-full rounded-md sm:text-sm focus:ring-2"
+      <div className="flex relative w-full">
+        <textarea
+          className="mx-1 mt-2 mb-1 px-1 py-1 bg-white shadow-md focus:outline-none block w-9/12 rounded-md sm:text-sm focus:ring-2 resize-none scrollbar-hide"
           type="text"
           placeholder="댓글 추가..."
           value={userInput}

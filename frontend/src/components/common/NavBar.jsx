@@ -21,7 +21,6 @@ export default function Navbar() {
   const userIsLogin = useSelector((state) => state.user.isLogin);
   const [profileImg, setProfileImg] = useState(null);
   const location = useLocation();
-  // const id = localStorage.getItem('id');
 
   useEffect(() => {
     if (userIsLogin) {
@@ -29,7 +28,7 @@ export default function Navbar() {
 
       // string 이라 "null"로 받아야 한다.
       const profileImg = localStorage.getItem('profileImg');
-      if (profileImg !== "null" && profileImg !== '') {
+      if (profileImg !== 'null' && profileImg !== '') {
         setProfileImg(profileImg);
       }
     }
@@ -102,7 +101,7 @@ export default function Navbar() {
                           <Menu.Item>
                             {({ active }) => (
                               <Link
-                                to={"/mypage/"+localStorage.getItem("email")}
+                                to={'/mypage/' + localStorage.getItem('email')}
                                 className={classNames(
                                   active ? '' : '',
                                   'block px-4 py-2 text-sm text-gray-700 hover:bg-inss',
