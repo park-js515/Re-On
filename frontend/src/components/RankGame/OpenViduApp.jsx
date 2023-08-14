@@ -60,6 +60,8 @@ export default function OpenViduApp() {
   const [userTwoScore, setUserTwoScore] = useState(0);
   const [resultGame, setResultGame] = useState(0);
 
+  const [myEmail, setMyEmail] = useState();
+
   const joinSession = useCallback(() => {
     const mySession = OV.current.initSession();
     const connections = [];
@@ -95,6 +97,10 @@ export default function OpenViduApp() {
         console.log('유저2 이름 변경');
       }
       // +++++++++++++++++++++++++++++++++++++++++++++++++++++++
+      // ### 자기 닉네임을 마이유저 네임으로
+      // ### 유저 1이면
+      // ### 비디오ID, STT정보 받음.
+      // ### 상대에게 비디오ID, STT정보, 내이메일 정보 전달
 
       // 시그널 보내기
       mySession.signal({
@@ -451,6 +457,7 @@ export default function OpenViduApp() {
   }
 
   // #################       STT   ####################
+  // RESPONSE API
   const script = 'stt_script.txt';
   const [originalText, setOriginalText] = useState('');
   const [userOneText, setUserOneText] = useState('');
@@ -987,9 +994,12 @@ export default function OpenViduApp() {
               </div>
             </div>
 
-            <div className="flex flex-wrap place-content-center ">
+            <div className="flex place-content-center ">
               {publisher !== undefined ? (
-                <div onClick={() => handleMainVideoStream(publisher)}>
+                <div
+                  onClick={() => handleMainVideoStream(publisher)}
+                  className="ml-2"
+                >
                   <UserVideoComponent
                     streamManager={publisher}
                     mySide={mySide}
@@ -1021,9 +1031,11 @@ export default function OpenViduApp() {
                   style={{ width: '500px', height: '500px' }}
                 />
 
-                <dir>스크립트</dir>
+                <div className="mx-4 h-[100px] w-[500px] border mt-4">
+                  {originalText}
+                </div>
 
-                <div className="flex justify-center gap-5 mt-10">
+                <div className="flex justify-center gap-5">
                   {/* 튜토리얼 버튼 */}
                   {toggleTutorialModal && (
                     <TutorialModal
@@ -1069,7 +1081,11 @@ export default function OpenViduApp() {
 
               {subscribers.length > 0 ? (
                 subscribers.map((sub, i) => (
-                  <div key={sub.id} onClick={() => handleMainVideoStream(sub)}>
+                  <div
+                    key={sub.id}
+                    onClick={() => handleMainVideoStream(sub)}
+                    className="mr-2"
+                  >
                     <span>{sub.id}</span>
                     <UserVideoComponent
                       streamManager={sub}
@@ -1080,7 +1096,7 @@ export default function OpenViduApp() {
                   </div>
                 ))
               ) : (
-                <div>
+                <div className="mr-2">
                   <div className="flex text-white">
                     <Matching typingContent="..." />
                   </div>
