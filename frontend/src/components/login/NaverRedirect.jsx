@@ -25,6 +25,7 @@ const NaverRedirect = () => {
             },
           )
           .then((response) => {
+            // 액세스 토큰 설정
             localStorage.setItem('accessToken', response.data.accessToken);
             localStorage.setItem('email', response.data.email);
             localStorage.setItem('profileImg', response.data.profileImg);
