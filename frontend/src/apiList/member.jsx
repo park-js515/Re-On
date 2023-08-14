@@ -48,7 +48,7 @@ function registerBattleLog(success, fail) {
 function deleteMemberImg(success, fail) {
   const api = memberInstance();
 
-  api.delete('/member/images/delete').then(success).catch(fail);
+  api.delete('/member/image/delete').then(success).catch(fail);
 }
 
 // 5. member profile image 수정
@@ -90,9 +90,9 @@ async function searchMypageMemberInfo(email, success, fail) {
  * @param {function} success [callback]
  * @param {function} fail [callback]
  */
-function deleteMember(id, success, fail) {
+function deleteMember(success, fail) {
   const api = memberInstance();
-  api.delete(`/member/${id}`).then(success).catch(fail);
+  api.delete(`/member`).then(success).catch(fail);
 }
 
 // 8. member 배틀 정보 조회
