@@ -3,7 +3,6 @@ import { memberInstance } from './lib/index';
 // 1. 회원 탈퇴
 /**
  *
- * @param {number} email
  * @param {function} success [callback]
  * @param {function} fail [callback]
  */
