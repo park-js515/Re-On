@@ -4,6 +4,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import reon.app.domain.member.entity.Member;
+import reon.app.domain.member.repository.MemberRepository;
+import reon.app.domain.member.service.MemberService;
 import reon.app.domain.post.dto.res.*;
 import reon.app.domain.post.entity.Post;
 import reon.app.domain.post.entity.Scope;
@@ -28,37 +31,45 @@ public class PostQueryServiceImpl implements PostQueryService {
     private final PostQueryRepository postQueryRepository;
     private final PostLikeQueryRepository postLikeQueryRepository;
     private final PostCommentQueryRepository postCommentQueryRepository;
+    private final MemberRepository memberRepository;
     @Override
     public Scope searchScopeById(Long postId) {
         return postQueryRepository.searchScopeById(postId);
     }
 
     @Override
-    public PrivateDetailPostResponse searchPrivateById(Long postId) {
+    public PrivateDetailPostResponse searchPrivateById(Long postId, Long loginId) {
         Post post = postQueryRepository.searchById(postId);
         if(post == null){
             throw new CustomException(ErrorCode.POSTS_NOT_FOUND);
         }
+        if(post.getMember().getId() != loginId){
+            throw new CustomException(ErrorCode.USER_FORBIDDEN_ERROR);
+        }
         return PrivateDetailPostResponse.builder()
                 .id(post.getId())
-                .memberId(post.getMember().getId())
+                .email(post.getMember().getEmail())
                 .title(post.getVideo().getTitle())
                 .actionPath(post.getActionPath())
                 .createdDate(post.getCreateDate())
                 .build();
     }
 
-    @Override
+    @Override // 타 유저의 접근 허용
     public PublicDetailPostResponse searchPublicById(Long postId, Long loginId) {
         Post post = postQueryRepository.searchById(postId);
         if(post == null){
             throw new CustomException(ErrorCode.POSTS_NOT_FOUND);
         }
+        Member loginMember = memberRepository.findById(loginId).orElseThrow(()
+                 -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+        String loginEmail = loginMember.getEmail();
+
         Boolean isLike = postLikeQueryRepository.isLike(postId, loginId);
         Boolean isMyPost = post.getMember().getId().equals(loginId);
         List<PostCommentResponse> commentResponses = postCommentQueryRepository.searchPostCommentResponse(1L, postId);
         commentResponses.forEach(res -> {
-            if(res.getMemberId().equals(loginId)){
+            if(res.getEmail().equals(loginEmail)){
                 res.setIsMyComment(true);
             }else{
                 res.setIsMyComment(false);
@@ -66,7 +77,7 @@ public class PostQueryServiceImpl implements PostQueryService {
         });
         return PublicDetailPostResponse.builder()
                 .id(post.getId())
-                .memberId(post.getMember().getId())
+                .email(post.getMember().getEmail())
                 .nickName(post.getMember().getMemberInfo().getNickName())
                 .profileImg(post.getMember().getMemberInfo().getProfileImg())
                 .actionPath(post.getActionPath())
@@ -81,12 +92,12 @@ public class PostQueryServiceImpl implements PostQueryService {
     }
 
     @Override
-    public List<PrivatePostsResponse> searchPrivatePosts(Long offset, Long memberId) {
-        List<PrivatePostsResponse> responses = postQueryRepository.searchPrivatePosts(offset, memberId);
+    public List<PrivatePostsResponse> searchPrivatePosts(Long offset, Long loginId) {
+        List<PrivatePostsResponse> responses = postQueryRepository.searchPrivatePosts(offset, loginId);
         return responses;
     }
 
-    @Override
+    @Override // 다른 유저의 접근 허용
     public List<PublicPostsResponse> searchPublicPosts(Long offset, Long memberId, Long loginId) {
         List<PublicPostsResponse> responses = postQueryRepository.searchPublicPosts(offset, memberId);
         responses.stream().forEach(res -> res.setIsLike(postLikeQueryRepository.isLike(res.getId(), loginId)));
@@ -94,9 +105,9 @@ public class PostQueryServiceImpl implements PostQueryService {
     }
 
     @Override
-    public List<PostsResponse> searchLikedPosts(Long offset, Long memberId) {
-        List<Long> ids = postLikeQueryRepository.searchLikedPostByMemberId(memberId);
-        List<PostsResponse> responses = postQueryRepository.searchLikedPosts(ids ,offset,memberId);
+    public List<PostsResponse> searchLikedPosts(Long offset, Long loginId) {
+        List<Long> ids = postLikeQueryRepository.searchLikedPostByMemberId(loginId);
+        List<PostsResponse> responses = postQueryRepository.searchLikedPosts(ids, offset, loginId);
         responses.stream().forEach(res -> res.setIsLike(true));
         return responses;
     }
@@ -113,17 +124,5 @@ public class PostQueryServiceImpl implements PostQueryService {
         List<PostsResponse> responses = postQueryRepository.searchFeedRankPosts();
         responses.stream().forEach(res -> res.setIsLike(postLikeQueryRepository.isLike(res.getId(), loginId)));
         return responses;
-    }
-
-    private List<PostCommentResponse> getCommentResponse(Post post){
-        return post.getPostComments().stream().map(postComment -> PostCommentResponse.builder()
-                .id(postComment.getId())
-                .memberId(post.getMember().getId())
-                .postId(post.getId())
-                .nickName(post.getMember().getMemberInfo().getNickName())
-                .profileImg(post.getMember().getMemberInfo().getProfileImg())
-                .content(postComment.getContent())
-                .createDate(postComment.getCreateDate())
-                .build()).collect(Collectors.toList());
     }
 }

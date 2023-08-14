@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class PostCommentResponse {
     private Long id; // 댓글 id
-    private Long memberId;
+    private String email;
     private Long postId;
     private String nickName;
     private String profileImg;
@@ -19,9 +19,9 @@ public class PostCommentResponse {
     private LocalDateTime createDate;
 
     @Builder
-    public PostCommentResponse(Long id, Long memberId, Long postId, String nickName, String profileImg, String content, Boolean isMyComment, LocalDateTime createDate) {
+    public PostCommentResponse(Long id, String email, Long postId, String nickName, String profileImg, String content, Boolean isMyComment, LocalDateTime createDate) {
         this.id = id;
-        this.memberId = memberId;
+        this.email = email;
         this.postId = postId;
         this.nickName = nickName;
         this.profileImg = profileImg;

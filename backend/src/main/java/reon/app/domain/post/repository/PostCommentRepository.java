@@ -16,6 +16,7 @@ public interface PostCommentRepository extends JpaRepository<PostComment, Long> 
 //    List<PostComment> findAllByPost(Post post);
 //    void delete(PostComment comment);
 //    findByPost_IdAndMember_Id
+    void deleteAllByPostId(Long postId);
     void deleteAllByMemberId(Long loginId);
     Optional<PostComment> findByIdAndMember_Id(Long id, Long memberId);
 }

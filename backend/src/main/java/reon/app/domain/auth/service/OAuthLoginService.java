@@ -41,7 +41,7 @@ public class OAuthLoginService {
         log.info(authTokens.getAccessToken());
         authTokens.setEmail(member.getEmail());
         authTokens.setNickName(member.getMemberInfo().getNickName());
-        authTokens.setEmail(member.getEmail());
+        authTokens.setProfileImg(member.getMemberInfo().getProfileImg());
         return authTokens;
     }
     private void reJoin(OAuthInfoResponse oAuthInfoResponse, Member member){
