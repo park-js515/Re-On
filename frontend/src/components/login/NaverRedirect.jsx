@@ -38,13 +38,12 @@ const NaverRedirect = () => {
           .catch((error) => {
             console.error(error);
             alert(
-              '로그인에 문제가 발생했습니다. 로그인페이지로 다시 이동합니다.',
+              '로그인에 문제가 발생했습니다. 로그인 페이지로 다시 이동합니다.',
             );
             localStorage.clear();
             window.location.replace('/login');
           });
       };
-
       NaverLogin();
     }
     

@@ -1,20 +1,38 @@
 import createCustomAxios from "./createCustomAxios";
 
 function authInstance() {
-  const instance = createCustomAxios('/api/auth');
-
+  let accessToken = getAccessToken();
+  const instance = axios.create({
+    baseURL: networktarget + '/api/auth',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
   return instance;
 }
 
 function memberInstance() {
-  const instance = createCustomAxios('/api/member-management');
-
+  let accessToken = getAccessToken();
+  const instance = axios.create({
+    baseURL: networktarget + '/api/member-management',
+    headers: {
+      'Content-Type': 'application/json;charset=utf-8',
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
   return instance;
 }
 
 function openviduInstance() {
-  const instance = createCustomAxios('/api/openvidu-management');
-
+  let accessToken = getAccessToken();
+  const instance = axios.create({
+    baseURL: networktarget + '/api/openvidu-management',
+    headers: {
+      'Content-Type': 'application/json;charset=utf-8',
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
   return instance;
 }
 

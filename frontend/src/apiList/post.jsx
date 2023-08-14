@@ -40,7 +40,7 @@ function updatePost(postId, body, success, fail) {
  * @param {function} success [callback]
  * @param {function} fail [callback]
  */
-function searchPostDetailComment(postId, offset, success, fail) {
+async function searchPostDetailComment(postId, offset, success, fail) {
   const api = postInstance();
 
   api.get(`/post/${postId}/comment?offset=${offset}`).then(success).catch(fail);
@@ -256,5 +256,5 @@ export {
   uploadPrivatePost,
   searchPublicPost,
   searchPublicPostDetail,
-  pullDownPublicPost
-}
+  pullDownPublicPost,
+};

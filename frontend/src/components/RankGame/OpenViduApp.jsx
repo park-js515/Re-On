@@ -11,7 +11,7 @@ import MatchingWaiting from 'components/RankGame/Loading/MatchingWaiting';
 import CountLoading from 'components/RankGame/Loading/CountLoading';
 import Modal from 'components/RankGame/Modal/Modal';
 import TutorialModal from 'components/RankGame/Modal/TutorialModal';
-import EndCurtain from 'components/RankGame/Modal/EndCurtain';
+import NewEnd from 'components/RankGame/Modal/NewEnd';
 import * as faceapi from 'face-api.js';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
@@ -22,17 +22,15 @@ import useSpeechToText from 'hooks/useSpeechToText';
 
 import useLoading from 'hooks/useLoading';
 import useVideoPlayer from 'hooks/useVideoPlayer';
+import { registerBattleLog } from 'apiList/member';
 
 const APPLICATION_SERVER_URL =
   process.env.NODE_ENV === 'production' ? '' : 'https://i9c203.p.ssafy.io';
-// process.env.NODE_ENV === 'production' ? '' : 'https://demos.openvidu.io';
 
 export default function OpenViduApp() {
   const dispatch = useDispatch();
-  // 세션 아이디는 이제 설정해줄 필요가 없어보인다.
-  // 그냥 /api/openvidu-management/sessions/connections에 POST하면 알아서 세션 만들어서 연결해주기 때문
-  const [mySessionId, setMySessionId] = useState('TEST');
-  // myUserName은 리덕스||로컬스토리지에 자기 이름을 보여준다.
+  const [mySessionId, setMySessionId] = useState('TEST'); // 세션아이디 필요없음
+  // 유저 정보 받기
   const [myUserName, setMyUserName] = useState(
     `연기자${Math.floor(Math.random() * 100)}`,
   );
@@ -110,6 +108,7 @@ export default function OpenViduApp() {
       // 시그널을 받으면 비디오 재생을 처리
       if (stage === 'READY') {
         setLog((prevLog) => [...prevLog, `게임을 시작합니다.`]);
+        await startLoading('lizard', 1000);
         await startLoading('count', 5000); // 로딩 5초
         handleLoadVideo(); // 영상 시작
       }
@@ -246,35 +245,6 @@ export default function OpenViduApp() {
    * Visit https://docs.openvidu.io/en/stable/application-server to learn
    * more about the integration of OpenVidu in your application server.
    */
-
-  // 기본 오픈비두 서버 API 요청
-  // const getToken = useCallback(async () => {
-  //   return createSession(mySessionId).then((sessionId) =>
-  //     createToken(sessionId),
-  //   );
-  // }, [mySessionId]);
-
-  // const createSession = async (sessionId) => {
-  //   const response = await axios.post(
-  //     APPLICATION_SERVER_URL + '/api/sessions',
-  //     { customSessionId: sessionId },
-  //     {
-  //       headers: { 'Content-Type': 'application/json' },
-  //     },
-  //   );
-  //   return response.data; // The sessionId
-  // };
-
-  // const createToken = async (sessionId) => {
-  //   const response = await axios.post(
-  //     APPLICATION_SERVER_URL + '/api/sessions/' + sessionId + '/connections',
-  //     {},
-  //     {
-  //       headers: { 'Content-Type': 'application/json' },
-  //     },
-  //   );
-  //   return response.data; // The token
-  // };
 
   const getToken = async () => {
     try {
@@ -506,26 +476,23 @@ export default function OpenViduApp() {
         console.error(error);
       });
   }, []);
+  useEffect(() => {
+    if (mySide === 'USER_ONE' && transcript !== '') {
+      setUserOneText(transcript.replace(/\s/g, ''));
+    } else if (mySide === 'USER_TWO' && transcript !== '') {
+      setUserTwoText(transcript.replace(/\s/g, ''));
+    }
+  }, [transcript, mySide]);
 
   useEffect(() => {
-    console.log('현재 transcript:', transcript);
-    if (mySide === 'USER_ONE') {
-      setUserOneText(transcript);
-    } else if (mySide === 'USER_TWO') {
-      setUserTwoText(transcript);
-    }
-
     let tempScore = 0;
     if (mySide === 'USER_ONE') {
-      console.log('ot', originalText);
-      console.log('uot', userOneText);
       tempScore = Levinshtein.textSimilarity(originalText, userOneText);
+      console.log(userOneText);
     } else if (mySide === 'USER_TWO') {
-      console.log('ot', originalText);
-      console.log('uot', userTwoText);
       tempScore = Levinshtein.textSimilarity(originalText, userTwoText);
+      console.log(userTwoText);
     }
-
     if (mySide === 'USER_ONE') {
       setUserOneSttScore(
         isNaN(tempScore) ? 0 : Math.round(tempScore * 1000) / 10,
@@ -535,25 +502,12 @@ export default function OpenViduApp() {
         isNaN(tempScore) ? 0 : Math.round(tempScore * 1000) / 10,
       );
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-
-    if (stage !== 'READY') {
-      handleCalculateScore();
-    }
-  }, [transcript]);
-
-  // 점수 계산
-  const handleSttScore = () => {
-    stopListening();
-    setTimeout(() => {
-      resetTranscript();
-    }, 1000);
-  };
+  }, [userOneText, userTwoText, mySide]);
 
   // #################       게임 로그 저장      ####################
   const currentTime = new Date();
   const logMessageTime = `${currentTime.getHours()}:${currentTime.getMinutes()}:${currentTime.getSeconds()}`;
-  const [log, setLog] = useState(['반갑습니다. REON입니다.']);
+  const [log, setLog] = useState(['😎반갑습니다. REON입니다.']);
   const logRef = useRef(null);
 
   useEffect(() => {
@@ -601,7 +555,7 @@ export default function OpenViduApp() {
     // setVideoSrc('video/ISawTheDevil.mp4'); // 비디오 URL 업데이트 (유튜브 API 요청해서 영상 소스 받아올 것)
     setLog((prevLog) => [
       ...prevLog,
-      `작품명 : 받아올것 시간 : ${Math.floor(videoRef.current.duration)}초`,
+      `🎥NULL ⏲${Math.floor(videoRef.current.duration)}초`,
     ]);
     handlePlayVideo(); // 비디오 플레이
     setStage('WATCHING_MOVIE');
@@ -609,6 +563,7 @@ export default function OpenViduApp() {
 
   // ############# 유저1 플레이 함수 ##############
   const handleUserOnePlay = async () => {
+    await startLoading('lizard', 1000);
     await startLoading('count', 5000); // 로딩
     if (mySide === 'USER_ONE') {
       setLog((prevLog) => [...prevLog, `연기를 시작하세요!`]);
@@ -631,6 +586,7 @@ export default function OpenViduApp() {
 
   // ############# 유저2 플레이 함수 ##############
   const handleUserTwoPlay = async () => {
+    await startLoading('lizard', 1000);
     await startLoading('count', 5000); // 로딩
     if (mySide === 'USER_TWO') {
       setLog((prevLog) => [...prevLog, `연기를 시작하세요!`]);
@@ -653,84 +609,106 @@ export default function OpenViduApp() {
 
   // ############# 점수 계산 ##############
   const handleCalculateScore = async () => {
-    const onScoreReceived = (e) => {
-      const receivedData = JSON.parse(e.data);
-      let response_userOneName = receivedData.userOneName;
-      let response_userOneScore = receivedData.userOneScore;
-      let response_userTwoName = receivedData.userTwoName;
-      let response_userTwoScore = receivedData.userTwoScore;
-      let response_userOneSttScore = receivedData.userOneSttScore;
-      let response_userTwoSttScore = receivedData.userTwoSttScore;
-      if (response_userOneName !== null) {
-        setUserOneName(response_userOneName);
-      }
-      if (response_userOneScore !== 0) {
-        setUserOneScore(response_userOneScore);
-      }
-      if (response_userTwoName !== null) {
-        setUserTwoName(response_userTwoName);
-      }
-      if (response_userTwoScore !== 0) {
-        setUserTwoScore(response_userTwoScore);
-      }
-      if (response_userOneSttScore !== 0) {
-        setUserOneSttScore(response_userOneSttScore);
-      }
-      if (response_userTwoSttScore !== 0) {
-        setUserTwoSttScore(response_userTwoSttScore);
-      }
-    };
+    try {
+      const onScoreReceived = (e) => {
+        const receivedData = JSON.parse(e.data);
+        let response_userOneName = receivedData.userOneName;
+        let response_userOneScore = receivedData.userOneScore;
+        let response_userTwoName = receivedData.userTwoName;
+        let response_userTwoScore = receivedData.userTwoScore;
+        let response_userOneSttScore = receivedData.userOneSttScore;
+        let response_userTwoSttScore = receivedData.userTwoSttScore;
+        if (response_userOneName !== null) {
+          setUserOneName(response_userOneName);
+        }
+        if (response_userOneScore !== 0) {
+          setUserOneScore(response_userOneScore);
+        }
+        if (response_userTwoName !== null) {
+          setUserTwoName(response_userTwoName);
+        }
+        if (response_userTwoScore !== 0) {
+          setUserTwoScore(response_userTwoScore);
+        }
+        if (response_userOneSttScore !== 0) {
+          setUserOneSttScore(response_userOneSttScore);
+        }
+        if (response_userTwoSttScore !== 0) {
+          setUserTwoSttScore(response_userTwoSttScore);
+        }
+      };
 
-    session.on('signal:score', onScoreReceived);
-    console.log(
-      '함수',
-      '시그널을 받았습니다.',
-      userOneName,
-      userOneScore,
-      userTwoName,
-      userTwoScore,
-      userOneSttScore,
-      userTwoSttScore,
-    );
+      session.on('signal:score', onScoreReceived);
+      console.log(
+        '함수',
+        '시그널을 받았습니다.',
+        userOneName,
+        userOneScore,
+        userTwoName,
+        userTwoScore,
+        userOneSttScore,
+        userTwoSttScore,
+      );
 
-    if (mySide === 'USER_ONE') {
-      if (resultScore !== 0) {
-        setUserOneScore(resultScore);
+      if (mySide === 'USER_ONE') {
+        if (resultScore !== 0) {
+          setUserOneScore(resultScore);
+        }
+        if (resultSttScore !== 0) {
+          setUserOneSttScore(resultSttScore);
+        }
+      } else if (mySide === 'USER_TWO') {
+        if (resultScore !== 0) {
+          setUserTwoScore(resultScore);
+        }
+        if (resultSttScore !== 0) {
+          setUserTwoSttScore(resultSttScore);
+        }
       }
-      if (resultSttScore !== 0) {
-        setUserOneSttScore(resultSttScore);
-      }
-    } else if (mySide === 'USER_TWO') {
-      if (resultScore !== 0) {
-        setUserTwoScore(resultScore);
-      }
-      if (resultSttScore !== 0) {
-        setUserTwoSttScore(resultSttScore);
-      }
+
+      const dataToSend = {
+        userOneName: userOneName,
+        userOneScore: userOneScore,
+        userTwoName: userTwoName,
+        userTwoScore: userTwoScore,
+        userOneSttScore: userOneSttScore,
+        userTwoSttScore: userTwoSttScore,
+      };
+
+      console.log('보내는 시그널 데이터', dataToSend); // 로그
+      await session.signal({
+        type: 'score',
+        data: JSON.stringify(dataToSend),
+        to: [], // 빈 배열은 세션의 모든 클라이언트에게 전송
+      });
+    } catch (error) {
+      console.log('시그널 전송 중 오류 발생', error);
     }
-
-    const dataToSend = {
-      userOneName: userOneName,
-      userOneScore: userOneScore,
-      userTwoName: userTwoName,
-      userTwoScore: userTwoScore,
-      userOneSttScore: userOneSttScore,
-      userTwoSttScore: userTwoSttScore,
-    };
-
-    console.log('보내는 시그널 데이터', dataToSend); // 로그
-    await session.signal({
-      type: 'score',
-      data: JSON.stringify(dataToSend),
-      to: [], // 빈 배열은 세션의 모든 클라이언트에게 전송
-    });
   };
 
   // ############# 결과 보여주기 #############
   const handleViewResult = async () => {
     handleCalculateScore();
-    await startLoading('lizard', 1000); // 왜 넣음?
+    await startLoading('lizard', 1000);
+
     // API 보내는 곳 (결과) if(resultGame !=== 999)
+    if (resultGame !== 999) {
+      const body = {
+        opponentEmail: 'test@test.com',
+        videoId: 1,
+        result: 1,
+      };
+      registerBattleLog(
+        body,
+        (response) => {
+          console.log('기록 전송 완료', response);
+        },
+        (error) => {
+          console.error('기록 전송 에러', error);
+        },
+      );
+    }
+
     setToggleCurtain(true);
     setStage('END');
   };
@@ -792,14 +770,12 @@ export default function OpenViduApp() {
         ...prevLog,
         `수고하셨습니다. 점수를 계산하겠습니다.`,
       ]);
-      startLoading(1000);
       handleCalculateScore();
       setStage('RESULT');
 
       // 결과 보여주기
     } else if (stage === 'RESULT') {
       // 커튼 닫기
-
       setLog((prevLog) => [...prevLog, `결과를 확인하세요!`]);
       handleViewResult();
 
@@ -816,7 +792,7 @@ export default function OpenViduApp() {
 
   useEffect(() => {
     if (videoRef.current) {
-      const handleEnded = () => {
+      const handleEnded = async () => {
         // 영화 미리보기 종료
         if (stage === 'WATCHING_MOVIE') {
           setStage('USER_ONE_TURN');
@@ -825,31 +801,28 @@ export default function OpenViduApp() {
           if (mySide === 'USER_ONE') {
             clearInterval(myInterval);
             const answer = 100 - (sum_diff / frame_cnts) * 100;
-            console.log(`나는 유저 원, 유저 원 점수는 ${answer}`);
-            handleSttScore();
-            console.log('@@턴종료 stt', userOneSttScore);
+            stopListening();
             setResultScore(Math.round(answer));
             setRecordOn(false);
           }
-
           setUserCamLeftBorder(false);
           setUserCamRightBorder(false);
           handleCalculateScore();
+          await startLoading('lizard', 2000);
           setStage('USER_TWO_TURN');
           // 유저2 턴 종료
         } else if (stage === 'USER_TWO_TURN') {
           if (mySide === 'USER_TWO') {
             clearInterval(myInterval);
             const answer = 100 - (sum_diff / frame_cnts) * 100;
-            console.log(`나는 유저 투, 유저 투 점수는 ${answer}`);
-            handleSttScore();
-            console.log('@@턴종료 stt', userTwoSttScore);
+            stopListening();
             setResultScore(Math.round(answer));
             setRecordOn(false);
           }
           setUserCamLeftBorder(false);
           setUserCamRightBorder(false);
           handleCalculateScore();
+          await startLoading('lizard', 3000);
           setStage('CALCULATION');
         }
       };
@@ -869,32 +842,37 @@ export default function OpenViduApp() {
   useEffect(() => {
     if (session) {
       const onScoreReceived = (e) => {
-        const receivedData = JSON.parse(e.data);
-        let response_userOneName = receivedData.userOneName;
-        let response_userOneScore = receivedData.userOneScore;
-        let response_userTwoName = receivedData.userTwoName;
-        let response_userTwoScore = receivedData.userTwoScore;
-        let response_userOneSttScore = receivedData.userOneSttScore;
-        let response_userTwoSttScore = receivedData.userTwoSttScore;
-        if (response_userOneName !== null) {
-          setUserOneName(response_userOneName);
-        }
-        if (response_userOneScore !== 0) {
-          setUserOneScore(response_userOneScore);
-        }
-        if (response_userTwoName !== null) {
-          setUserTwoName(response_userTwoName);
-        }
-        if (response_userTwoScore !== 0) {
-          setUserTwoScore(response_userTwoScore);
-        }
-        if (response_userOneSttScore !== 0) {
-          setUserOneSttScore(response_userOneSttScore);
-        }
-        if (response_userTwoSttScore !== 0) {
-          setUserTwoSttScore(response_userTwoSttScore);
+        try {
+          const receivedData = JSON.parse(e.data);
+          let response_userOneName = receivedData.userOneName;
+          let response_userOneScore = receivedData.userOneScore;
+          let response_userTwoName = receivedData.userTwoName;
+          let response_userTwoScore = receivedData.userTwoScore;
+          let response_userOneSttScore = receivedData.userOneSttScore;
+          let response_userTwoSttScore = receivedData.userTwoSttScore;
+          if (response_userOneName !== null) {
+            setUserOneName(response_userOneName);
+          }
+          if (response_userOneScore !== 0) {
+            setUserOneScore(response_userOneScore);
+          }
+          if (response_userTwoName !== null) {
+            setUserTwoName(response_userTwoName);
+          }
+          if (response_userTwoScore !== 0) {
+            setUserTwoScore(response_userTwoScore);
+          }
+          if (response_userOneSttScore !== 0) {
+            setUserOneSttScore(response_userOneSttScore);
+          }
+          if (response_userTwoSttScore !== 0) {
+            setUserTwoSttScore(response_userTwoSttScore);
+          }
+        } catch (error) {
+          console.error('시그널 수신 중 오류발생', error);
         }
       };
+
       session.on('signal:score', onScoreReceived);
       console.log(
         'UseEffect',
@@ -906,7 +884,6 @@ export default function OpenViduApp() {
         userOneSttScore,
         userTwoSttScore,
       );
-
       return () => session.off('signal:score', onScoreReceived);
     }
   }, [session]);
@@ -962,7 +939,7 @@ export default function OpenViduApp() {
       {session !== undefined ? (
         <div id="session" className="">
           {toggleCurtain && (
-            <EndCurtain
+            <NewEnd
               className="fixed inset-0 flex justify-center items-center z-50"
               resultGame={resultGame}
               userOneName={userOneName}
@@ -1043,6 +1020,8 @@ export default function OpenViduApp() {
                   }`}
                   style={{ width: '500px', height: '500px' }}
                 />
+
+                <dir>스크립트</dir>
 
                 <div className="flex justify-center gap-5 mt-10">
                   {/* 튜토리얼 버튼 */}

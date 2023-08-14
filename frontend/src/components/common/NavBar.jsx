@@ -102,7 +102,7 @@ export default function Navbar() {
                           <Menu.Item>
                             {({ active }) => (
                               <Link
-                                to="/mypage"
+                                to={"/mypage/"+localStorage.getItem("email")}
                                 className={classNames(
                                   active ? '' : '',
                                   'block px-4 py-2 text-sm text-gray-700 hover:bg-inss',

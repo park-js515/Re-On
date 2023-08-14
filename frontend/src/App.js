@@ -43,7 +43,7 @@ function App() {
         <Route path="/feed" element= {<AuthComponent authenticated={isLogin} component={<FeedPage />} />} />
         <Route path="/login" element={<LoginDupPreventComponent authenticated={isLogin} component={<LoginPage/>}/>} />
         <Route path="/" element={<MainPage />} />
-        <Route path="/mypage" element={<AuthComponent authenticated={isLogin} component={<MyPage />}/>} />
+        <Route path="/mypage/:email" element={<AuthComponent authenticated={isLogin} component={<MyPage />}/>} />
         <Route path="/normallist" element={<AuthComponent authenticated={isLogin} component={<NormalListPage />} />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/rank" element={<AuthComponent authenticated={isLogin} component={<RankPage />} />} />

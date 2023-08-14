@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import Commentlist from "./Commentlist";
 
-const Comment = ({comment, deleteComment, changeShow, hierarchy}) => {
+const Comment = ({comment, deleteComment, updateComment, changeShow, hierarchy}) => {
 
     const navigate = useNavigate()
     const [content, setContent] = useState(comment.content)
@@ -15,12 +15,21 @@ const Comment = ({comment, deleteComment, changeShow, hierarchy}) => {
     }
 
     const changeUpdateMode = () => {
-        setUpdateMode((updateMode) => {return !updateMode})
+        setUpdateMode((updateMode) => { return !updateMode });
     }
 
-    const updateComment = () => {
-        // axios 요청 (댓글 수정했다고)
-        // Commentlist에도 알림
+    const changeCancle = () => {
+        setContent(comment.content);
+        changeUpdateMode();
+    }
+
+    const updateCommentContent = () => {
+        if (content.trim().length == 0) {
+            alert("댓글 내용을 입력해주세요");
+        } else {
+            updateComment(comment.id, content);
+            changeUpdateMode();
+        }
     }
 
     const handleChange = (event) =>{
@@ -38,16 +47,23 @@ const Comment = ({comment, deleteComment, changeShow, hierarchy}) => {
                         <textarea cols="30" rows="1" className={`${updateMode ? " border-white border" : ""} text-sm rounded resize-none w-full bg-white focus:outline-none`} disabled={!updateMode} value={content} onChange={handleChange}></textarea>
                     </div>
                 </div>
-                {false &&
+                {comment.isMyComment &&
                     <div className="flex flex-col space-y-1">
-                        {/* 댓글 수정 */}
-                        <button className="w-8 h-8 flex justify-center items-center bg-blue-500 text-info rounded hover:bg-[#c3c5c5] focus:outline-none" onClick={changeUpdateMode}>
+                        {!updateMode && <div>
+                            {/* 댓글 수정 */}
+                            <button className="w-8 h-8 flex justify-center items-center bg-blue-500 text-info rounded hover:bg-[#c3c5c5] focus:outline-none" onClick={changeUpdateMode}>
                             <span>수정</span>
                         </button>
                         {/* 댓글 삭제 */}
-                        <button className="w-8 h-8 flex justify-center items-center bg-red-500 text-danger rounded hover:bg-[#c3c5c5] focus:outline-none" onClick={() => { deleteComment(comment.comment_id) }}>
+                        <button className="w-8 h-8 flex justify-center items-center bg-red-500 text-danger rounded hover:bg-[#c3c5c5] focus:outline-none" onClick={() => { deleteComment(comment.id) }}>
                             <span>삭제</span>
-                        </button>
+                        </button></div>}
+                        {updateMode && <div><button className="w-8 h-8 flex justify-center items-center bg-blue-500 text-info rounded hover:bg-[#c3c5c5] focus:outline-none" onClick={updateCommentContent}>
+                            <span>수정</span>
+                        </button><button className="w-8 h-8 flex justify-center items-center bg-blue-500 text-info rounded hover:bg-[#c3c5c5] focus:outline-none" onClick={changeCancle}>
+                            <span>취소</span>
+                        </button></div>}
+                        
                     </div>
                 }
             </div>
