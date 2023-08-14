@@ -71,7 +71,7 @@ export default function MainPage() {
             <h1 className="absolute top-20 left-1/2 transform -translate-x-1/2 text-black font-semibold text-6xl ">📘about</h1>
             <section className="main__section flex justify-center items-center ml-36 mt-20">
                 <div>
-                  <div className="bg-[#fff] bg-opacity-30 shadow-2xl p-6 py-28 rounded-lg text-center">
+                  <div className="bg-[#fff] bg-opacity-30 shadow-2xl p-10 py-18 rounded-lg text-center">
                       
                       <h1 className="text-4xl font-semibold md:text-5xl lg:text-6xl m-0 mt-1 mb-8 text-black">RE:ON 무엇인가요?</h1>
                       <h3 className="text-2xl font-semibold m-0 mt-2 text-white">AI 기술을 사용하여 사용자의 표정과 연기를 인식합니다.</h3>
@@ -88,7 +88,7 @@ export default function MainPage() {
         </SwiperSlide>
 
         <SwiperSlide className={`bg-gradient-to-t from-begie to-lightBlue ${activeIndex === 2 ? "fade-in" : ""}`}>
-            <div>
+            <div>/
               
             <h1 className="absolute top-20 left-1/2 transform -translate-x-1/2 text-black font-semibold text-6xl ">🔥인기영상</h1>
               <div className="">

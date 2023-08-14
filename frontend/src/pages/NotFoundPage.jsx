@@ -26,7 +26,7 @@ const NotFoundPage = () => {
       background: '#fff url(/image/t0rees.png)',
       button: 'info',
       backdrop: `
-        rgba(199, 102, 201, 0.4)
+        rgba(255, 255, 255, 0.2)
         url("/image/character/cutereon.png")
         center top
         no-repeat
