@@ -1,17 +1,19 @@
 import { useEffect, useRef } from 'react';
-import { searchBackStageMembmerInfo, searchMypageMemberInfo} from './member';
-import { searchAllPublicPost, searchPublicPostDetail } from './post';
-import { postInstance } from './lib/index';
-
+import { searchAllPublicPost, savePost, uploadPrivatePost } from './post';
+import { searchBattleLog } from './member';
 
 const TestPage = () => {
   const check = useRef(false);
+  const formData = new FormData();
+
+
   useEffect(() => {
     if(check.current === false) {
-      searchAllPublicPost(   
+      uploadPrivatePost(
         1,
+        {content: "asdf", title: "aaa"},
         (res) => {
-          console.log(res); 
+          console.log(res);   
         },
         (error) => {
           console.error(error);

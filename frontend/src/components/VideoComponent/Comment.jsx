@@ -9,7 +9,7 @@ const Comment = ({comment, deleteComment, changeShow, updateComment}) => {
     const moveToMyPage = (event) => {
         event.preventDefault();
         changeShow();
-        navigate('/mypage')
+        navigate(`/mypage/${comment.eamil}`)
     }
 
     const changeUpdateMode = () => { // 댓글 수정 상태 textarea 활성/비활성화

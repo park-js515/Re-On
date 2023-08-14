@@ -65,7 +65,7 @@ const Hotlist = ({injectPostId, changeShow}) => {
 
   return (
     <div className="bg-gradient-to-b from-lightBlue to-begie mb-16 py-0 sm:py-4">
-      <div className="bg-white mx-auto max-w-7xl py-14 rounded">
+      <div className="bg-white mx-auto max-w-7xl py-14 rounded-lg">
       <h1 className="my-4 py-6 text-center font-bold text-3xl text-dark ">🎁인기영상</h1>
       <div className="mx-auto max-w-7xl px-6 lg:px-8 ">
           <Slider className="py-4"ref={sliderRef} {...settings}>

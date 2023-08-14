@@ -1,20 +1,43 @@
 import { memberInstance } from './lib/index';
-import axios from 'axios';
-const networktarget = process.env.REACT_APP_API;
-// 1. Back stage member 조회
+
+// 1. 회원 탈퇴
 /**
  *
- * @param {number} id
  * @param {function} success [callback]
  * @param {function} fail [callback]
  */
-function searchBackStageMembmerInfo(id, success, fail) {
+function deleteMember(success, fail) {
   const api = memberInstance();
 
-  api.get(`/back-stage/${id}`).then(success).catch(fail);
+  api.delete(`/member`).then(success).catch(fail);
 }
 
-// 2. Battle 기록 조회
+// 2. mypage member 조회
+/**
+ *
+ * @param {string} email
+ * @param {function} success [callback]
+ * @param {function} fail [callback]
+ */
+function searchMypageMemberInfo(email, success, fail) {
+  const api = memberInstance();
+
+  api.get(`/member/${email}`).then(success).catch(fail);
+}
+
+// 3. Back stage member 조회
+/**
+ *
+ * @param {function} success [callback]
+ * @param {function} fail [callback]
+ */
+function searchBackStageMembmerInfo(success, fail) {
+  const api = memberInstance();
+
+  api.get(`/member/back-stage`).then(success).catch(fail);
+}
+
+// 4. Battle 기록 조회
 /**
  *
  * @param {function} success [callback]
@@ -22,59 +45,25 @@ function searchBackStageMembmerInfo(id, success, fail) {
  */
 function searchBattleLog(success, fail) {
   const api = memberInstance();
-
-  api.get('/battlelog').then(success).catch(fail);
+  api.get('/member/battlelog').then(success).catch(fail);
 }
 
-// 3. Battle 결과 등록
+// 5. Battle 결과 등록
 /**
  *
- * @param {object} body [{result: number, user1Id: number, user2Id: number, videoId: number}]
+ * @param {object} body [{opponentEmail: string, result: number, videoId: number}]
  * @param {function} success [callback]
  * @param {function} fail [callback]
  */
-function registerBattleLog(success, fail) {
+function registerBattleLog(body, success, fail) {
   const api = memberInstance();
 
-  api.post('/battlelog').then(success).then(fail);
+  api.post('/member/battlelog', JSON.stringify(body)).then(success).then(fail);
 }
 
-// 4. member profile image 삭제
+// 6. Battle top 5 조회
 /**
  *
- * @param {function} success [callback]
- * @param {function} fail [callback]
- */
-function deleteMemberImg(success, fail) {
-  const api = memberInstance();
-
-  api.delete('/member/image/delete').then(success).catch(fail);
-}
-
-// 5. member profile image 수정
-/**
- *
- * @param {formData} profileImg
- * @param {function} success [callback]
- * @param {function} fail [callback]
- */
-function updateMemberImg(profileImg, success, fail) {
-  let accessToken = localStorage.getItem("accessToken");
-  const api = axios.create({
-    baseURL: networktarget + '/api/member-management',
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
-  });
-  api.put('/member/image/update', profileImg)
-    .then(success)
-    .catch(fail);
-}
-
-// 6. mypage member 조회
-/**
- *
- * @param {number} id 
  * @param {function} success [callback]
  * @param {function} fail [callback]
  */
@@ -83,48 +72,54 @@ async function searchMypageMemberInfo(email, success, fail) {
   await api.get(`/member/${email}`).then(success).catch(fail);
 }
 
-// 7. 회원탈퇴
-/**
- *
- * @param {number} id
- * @param {function} success [callback]
- * @param {function} fail [callback]
- */
-function deleteMember(success, fail) {
+function searchTop5Member(success, fail) {
   const api = memberInstance();
-  api.delete(`/member`).then(success).catch(fail);
+  api.get(`/member/battlelog/rank`).then(success).catch(fail);
 }
 
-// 8. member 배틀 정보 조회
+// 7. member profile image 삭제
 /**
  *
- * @param {number} id
  * @param {function} success [callback]
  * @param {function} fail [callback]
  */
-function searchMemberBattleInfo(id, success, fail) {
+
+function deleteMemberImg(success, fail) {
   const api = memberInstance();
 
-  api.get(`/member/${id}/battleInfo`).then(success).catch(fail);
+  api.delete('/member/image/delete').then(success).catch(fail);
+}
+
+// 8. member profile image 수정
+/**
+ *
+ * @param {formData} profileImg
+ * @param {function} success [callback]
+ * @param {function} fail [callback]
+ */
+function updateMemberImg(profileImg, success, fail) {
+  const api = memberInstance();
+  api.defaults.headers['Content-Type'] = 'multipart/form-data';
+
+  api.put('/member/image/update', profileImg).then(success).catch(fail);
 }
 
 // 9. 로그아웃
 /**
  *
- * @param {number} id
  * @param {function} success [callback]
  * @param {function} fail [callback]
  */
-function logoutMember(id, success, fail) {
+function logoutMember(success, fail) {
   const api = memberInstance();
 
-  api.get(`/member/logout/${id}`).then(success).catch(fail);
+  api.get(`/member/logout`).then(success).catch(fail);
 }
 
 // 10. member 정보 수정
 /**
  *
- * @param {object} body [{id: number, introduce: string, nickName: string}]
+ * @param {object} body [{introduce: string, nickName: string}]
  * @param {function} success [callback]
  * @param {function} fail [callback]
  */
@@ -133,15 +128,16 @@ function updateMemberInfo(body, success, fail) {
 
   api.put(`/member/update`, JSON.stringify(body)).then(success).catch(fail);
 }
+
 export {
+  deleteMember,
+  searchMypageMemberInfo,
   searchBackStageMembmerInfo,
   searchBattleLog,
   registerBattleLog,
+  searchTop5Member,
   deleteMemberImg,
   updateMemberImg,
-  searchMypageMemberInfo,
-  deleteMember,
-  searchMemberBattleInfo,
   logoutMember,
   updateMemberInfo,
 };

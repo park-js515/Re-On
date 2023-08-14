@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './EndCurtain.css';
 import Click from './Click';
+import { savePost } from 'apiList/post';
 
 const EndCurtain = ({
   className,
@@ -15,17 +16,35 @@ const EndCurtain = ({
   userTwoSttScore,
 }) => {
   const [isChecked, setIsChecked] = useState(true);
-  const [countdown, setCountdown] = useState(10); // 카운트다운을 위한 상태
+  const [countdown, setCountdown] = useState(100); // 카운트다운을 위한 상태
 
-  const handleSaveRecordedFile = () => {
+  const handleSaveRecordedFile = async () => {
     if (recordedFile) {
-      const url = window.URL.createObjectURL(recordedFile);
-      const link = document.createElement('a');
-      link.href = url;
-      link.setAttribute('download', 'recorded-video.mp4');
-      document.body.appendChild(link);
-      link.click();
-      window.URL.revokeObjectURL(url);
+      const videoId = 1;
+      const formData = new FormData();
+
+      // ######### 녹화 업로드 API
+      formData.append('actionVideo', recordedFile);
+      savePost(
+        videoId,
+        formData,
+        (response) => {
+          // console.log(response.data.response);
+          console.log(response);
+        },
+        (error) => {
+          console.log(error);
+        },
+      );
+
+      // ######### 로컬에 파일 저장
+      // const url = window.URL.createObjectURL(recordedFile);
+      // const link = document.createElement('a');
+      // link.href = url;
+      // link.setAttribute('download', 'recorded-video.mp4');
+      // document.body.appendChild(link);
+      // link.click();
+      // window.URL.revokeObjectURL(url);
     } else {
       alert('녹화된 영상이 없습니다.');
     }
@@ -33,7 +52,7 @@ const EndCurtain = ({
 
   useEffect(() => {
     if (countdown <= 0) {
-      leaveSession();
+      // leaveSession();
       return;
     }
 
@@ -90,7 +109,9 @@ const EndCurtain = ({
             <div>음성점수 : {userOneSttScore}</div>
             <div>음성점수 : {userTwoSttScore}</div>
           </div>
+
           <button onClick={handleSaveRecordedFile}>저장</button>
+
           <div className="countdown">
             {countdown}초 후에 대기실로 이동합니다.
           </div>
