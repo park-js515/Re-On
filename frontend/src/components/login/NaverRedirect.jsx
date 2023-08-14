@@ -30,6 +30,7 @@ const NaverRedirect = () => {
             localStorage.setItem('email', response.data.email);
             // localStorage.setItem('expiresIn', response.data.expiresIn);
             // localStorage.setItem('grantType', response.data.grantType);
+            localStorage.setItem('nickName', response.data.nickName);
             localStorage.setItem('profileImg', response.data.profileImg);
             // localStorage.setItem('refreshToken', response.data.refreshToken);
             dispatch(userLogin());
