@@ -57,7 +57,7 @@ function searchBattleLog(success, fail) {
 function registerBattleLog(body, success, fail) {
   const api = memberInstance();
 
-  api.post('/member/battlelog', JSON.stringify(body)).then(success).then(fail);
+  api.post('/member/battlelog', JSON.stringify(body)).then(success).catch(fail);
 }
 
 // 6. Battle top 5 조회
