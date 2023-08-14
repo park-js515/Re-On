@@ -25,7 +25,6 @@ const NaverRedirect = () => {
             },
           )
           .then((response) => {
-            console.log(response)
             // 액세스 토큰 설정
             localStorage.setItem('accessToken', response.data.accessToken);
             localStorage.setItem('email', response.data.email);
