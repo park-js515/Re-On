@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import LikesModal from '../Modal/LikesModal';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 import { searchLikePost, searchPublicPostDetail } from 'apiList/post';
 
@@ -47,9 +47,11 @@ import { searchLikePost, searchPublicPostDetail } from 'apiList/post';
       setShowModal(true);
     };
 
-    const moveMyPage = (email) => {
-      navigate("/mypage/"+email)
-    }
+    // const moveMyPage = (email) => {
+    //   // navigate("/mypage/" + email)
+    //   <Link to={"/mypage/" + email}></Link>
+    //   onClick={() => { moveMyPage(post.email); }}
+    // }
 
     return (
     <div className="bg-white py-24 sm:py-32">
@@ -65,7 +67,7 @@ import { searchLikePost, searchPublicPostDetail } from 'apiList/post';
                   <img src={post.profileImg} alt=""className="h-10 w-10 rounded-full bg-gray-50" />
                   <div className="text-sm leading-6">
                       <p className="font-semibold text-gray-900">
-                      <span className="text-xs hover:underline hover:decoration-solid hover:cursor-pointer" onClick = {()=>{moveMyPage(post.email)}}>{post.nickName}</span>
+                      <Link to={"/mypage/" + post.email}><span className="text-xs hover:underline hover:decoration-solid hover:cursor-pointer" >{post.nickName}</span></Link>
                       </p>
                   </div>
                 </div>

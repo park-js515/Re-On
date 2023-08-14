@@ -21,7 +21,6 @@ export default function Navbar() {
   const userIsLogin = useSelector((state) => state.user.isLogin);
   const [profileImg, setProfileImg] = useState(null);
   const location = useLocation();
-  // const id = localStorage.getItem('id');
 
   useEffect(() => {
     if (userIsLogin) {
@@ -30,10 +29,10 @@ export default function Navbar() {
       // string 이라 "null"로 받아야 한다.
       const profileImg = localStorage.getItem('profileImg');
       if (profileImg !== "null" && profileImg !== '') {
-        setProfileImg(profileImg);
+        setProfileImg("https://storage.googleapis.com/reon-bucket/"+profileImg);
       }
     }
-  }, [userIsLogin]);
+  }, [userIsLogin,localStorage.getItem('profileImg')]);
 
   return (
     <div className="sticky top-0 z-50">
