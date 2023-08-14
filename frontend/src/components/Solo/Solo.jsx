@@ -224,14 +224,14 @@ const SoloApp = () => {
 
   return (
   
-      <div>
+      <div className="overflow-y-scroll scrollbar-hide">
         <img
                 src="image/solo/solo.png"
-                className="mx-auto h-[200px] w-[300px] -mt-5"
+                className="mx-auto h-[200px] w-[300px] mt-2"
               />
       <div className="flex flex-row items-center justify-around">
         {/* 이게문젠가 ? */}
-        <div className="flex flex-row items-center justify-around mt-10">
+        <div className="flex flex-row items-center justify-around mt-9">
           <div id="webCam_container">
               <video id="movie" 
                 autoPlay
@@ -250,7 +250,7 @@ const SoloApp = () => {
                       
                     </div>
                   )}
-                  <img className="h-[200px] w-[300px]" src="/image/character/cutereon2.png" alt="" />
+                  <img className="h-[190px] w-[280px]" src="/image/character/cutereon2.png" alt="" />
 
                 {/* 영화 바꾸기 버튼 */}
                   <button 

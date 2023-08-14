@@ -3,13 +3,14 @@ import { memberInstance } from './lib/index';
 // 1. 회원 탈퇴
 /**
  *
+ * @param {number} email
  * @param {function} success [callback]
  * @param {function} fail [callback]
  */
-function deleteMember(success, fail) {
+function searchBackStageMembmerInfo(email, success, fail) {
   const api = memberInstance();
 
-  api.delete(`/member`).then(success).catch(fail);
+  api.get(`member/back-stage/${email}`).then(success).catch(fail);
 }
 
 // 2. mypage member 조회

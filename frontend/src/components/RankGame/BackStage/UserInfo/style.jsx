@@ -18,7 +18,7 @@ export const SContainer = styled.div`
       #8ccfd5 100%
     );
   background-size: cover;
-  margin-top: 6vw;
+  margin-top: 10vw;
   height: 20.5vw;
   width: 45vw;
   border-radius: 12px;
@@ -68,7 +68,7 @@ export const SContainer = styled.div`
     
     /* 이름 */
     .name {
-     
+      margin-top: 2vw;
       
       &:hover {
         color: #272727;
@@ -77,8 +77,15 @@ export const SContainer = styled.div`
     }
     /* 전적 */
     .recent {
-      margin-left: 4px;
-      font-size: large;
+      margin-left: 8px;
+      margin-top: 2vw;
+      font-size: x-large;
+      color: #3c3c3c;
+    }
+    .recentwdl {
+      margin-left: 8px;
+      margin-top: 0vw;
+      font-size: x-large;
       color: #3c3c3c;
     }
     /* 점수 */
@@ -113,7 +120,7 @@ export const STextContainer = styled.div`
   gap: 0.67vw;
   bottom: 10vw;
   margin: 1.5vw calc(0.5vw + 5px);
-  z-index: 100;
+  z-index: 1;
   
   
 `;
@@ -127,9 +134,10 @@ export const SRank = styled.div`
 
  
  img {
-   width: 16vw;  // 반응형 너비로 설정
+  margin-top: -1vw;
+   width: 25vw;  // 반응형 너비로 설정
    height: 19.75vw; // 반응형 높이로 설정 (200px:250px의 비율 유지)
-   max-width: 200px; // 최대 너비 제한 (선택적)
+   max-width: 250px; // 최대 너비 제한 (선택적)
    max-height: 250px; // 최대 높이 제한 (선택적)
    min-height: 100px;
    min-width: 100px;

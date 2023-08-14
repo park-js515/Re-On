@@ -4,7 +4,7 @@ const NoramalListPage = () => {
 
   return (
 
-    <div className=" bg-gradient-to-l from-begie to-lightBlue h-screen">
+    <div className=" bg-gradient-to-l from-begie to-lightBlue h-screen scrollbar-hide">
       <SoloApp/>
     </div>
 
