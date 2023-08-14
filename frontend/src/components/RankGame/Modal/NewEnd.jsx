@@ -19,13 +19,14 @@ const NewEnd = ({
   useEffect(() => {
     setTimeout(() => {
       setInitial(true);
-    }, 1500);
+    }, 800);
   }, []);
 
   // #########################################
 
   const [isChecked, setIsChecked] = useState(true);
   const [countdown, setCountdown] = useState(12); // 카운트다운을 위한 상태
+  const [isSaved, setIsSaved] = useState(false); // 저장 확인
 
   const handleSaveRecordedFile = async () => {
     if (recordedFile) {
@@ -46,6 +47,8 @@ const NewEnd = ({
         },
       );
 
+      setIsSaved(true);
+
       // ######### 로컬에 파일 저장
       // const url = window.URL.createObjectURL(recordedFile);
       // const link = document.createElement('a');
@@ -61,7 +64,7 @@ const NewEnd = ({
 
   useEffect(() => {
     if (countdown <= 0) {
-      leaveSession();
+      // leaveSession();
       return;
     }
 
@@ -104,14 +107,23 @@ const NewEnd = ({
             <div>
               <div>점수 : {userOneScore}</div>
               <div>음성점수 : {userOneSttScore}</div>
+              <div>총점 : {userOneScore + userOneSttScore}</div>
             </div>
             <div>
               <div>점수 : {userTwoScore}</div>
               <div>음성점수 : {userTwoSttScore}</div>{' '}
+              <div>총점 : {userTwoScore + userTwoSttScore}</div>
             </div>
           </div>
           <div className="app__text-line app__text-line--1">
-            <button onClick={handleSaveRecordedFile}>📥내 연기 저장</button>
+            <button
+              onClick={handleSaveRecordedFile}
+              disabled={isSaved}
+              style={{ color: isSaved ? 'grey' : 'inherit' }}
+            >
+              📥내 연기 저장
+            </button>
+            {isSaved && <p>마이페이지에 저장했습니다!</p>}
             <div className="countdown">
               {countdown}초 후에 대기실로 이동합니다.
             </div>

@@ -26,4 +26,4 @@ function saveVideo(formData, success, fail) {
   api.post(`/video`, formData).then(success).catch(fail);
 }
 
-export {randomVideo, saveVideo}
+export { randomVideo, saveVideo };
