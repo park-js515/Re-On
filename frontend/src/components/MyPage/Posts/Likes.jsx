@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import LikesModal from '../Modal/LikesModal';
+import { useNavigate } from 'react-router-dom';
+
 import { searchLikePost, searchPublicPostDetail } from 'apiList/post';
+
   const Likes = () => {
+    const navigate = useNavigate()
 
     //모달
     const [showModal, setShowModal] = useState(false);
@@ -43,7 +47,10 @@ import { searchLikePost, searchPublicPostDetail } from 'apiList/post';
       setShowModal(true);
     };
 
-    
+    const moveMyPage = (email) => {
+      navigate("/mypage/"+email)
+    }
+
     return (
     <div className="bg-white py-24 sm:py-32">
     <div className="mx-auto max-w-7xl px-6 lg:px-8">
@@ -58,7 +65,7 @@ import { searchLikePost, searchPublicPostDetail } from 'apiList/post';
                   <img src={post.profileImg} alt=""className="h-10 w-10 rounded-full bg-gray-50" />
                   <div className="text-sm leading-6">
                       <p className="font-semibold text-gray-900">
-                      <span className="text-xs hover:underline hover:decoration-solid hover:cursor-pointer">{post.nickName}</span>
+                      <span className="text-xs hover:underline hover:decoration-solid hover:cursor-pointer" onClick = {()=>{moveMyPage(post.email)}}>{post.nickName}</span>
                       </p>
                   </div>
                 </div>
@@ -78,15 +85,13 @@ import { searchLikePost, searchPublicPostDetail } from 'apiList/post';
 
                 {/* 좋아요 */}
                 <div className="flex items-center gap-x-4 text-xs ml-2">
-                <div className="text-gray-500 font-semibold">
-                    <span className="text-lg">💙</span>좋아요 {post.likeCnt}
-                </div>
+                  <div className="text-gray-500 font-semibold">
+                      <span className="text-lg">💙</span>좋아요 {post.likeCnt}
+                  </div>
 
-                <div className="text-gray-500 font-semibold">
-                    <span className="text-lg">💬</span>댓글 {post.commentCnt}
-                </div>
-                  
-                    
+                  <div className="text-gray-500 font-semibold">
+                      <span className="text-lg">💬</span>댓글 {post.commentCnt}
+                  </div>
                 </div>
                 
                 <div className="group relative ml-2">
