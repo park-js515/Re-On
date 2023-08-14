@@ -121,7 +121,7 @@ const PostModal = ({ detailPost, changeShow, getPosts }) => {
                         <button className={`ml-4 px-4 py-2 rounded ${IsLike ? "bg-[#ecebeb] hover:bg-[#aaa6a6] text-[#000]" : "bg-[#8d8d8d] text-black hover:bg-[#8d8d8d]"} transition-all`} onClick={likeVideo}>
                             좋아요 {convertToK(likeCnt)}
                             </button>
-                            {!updateMode &&
+                            {!updateMode && detailPost.isMyPost &&
                                 <div>
                                     <button className={`ml-4 px-4 py-2 rounded bg-[#FAFAD2] hover:bg-[#FFFF00] text-[#000] transition-all`} onClick={changeUpdateMode}>수정</button>
                                     <button className={`ml-4 px-4 py-2 rounded bg-[#DC143C] hover:bg-[#FF0000] text-[#000] transition-all`} onClick={removePost}>삭제</button>
