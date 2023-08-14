@@ -1,4 +1,4 @@
-import createCustomAxios from "./createCustomAxios";
+import createCustomAxios from './createCustomAxios';
 
 function authInstance() {
   const instance = createCustomAxios('/api/auth');
@@ -24,4 +24,16 @@ function postInstance() {
   return instance;
 }
 
-export { authInstance, memberInstance, openviduInstance, postInstance };
+function videoInstance() {
+  const instance = createCustomAxios('/api/video-management');
+
+  return instance;
+}
+
+export {
+  authInstance,
+  memberInstance,
+  openviduInstance,
+  postInstance,
+  videoInstance,
+};

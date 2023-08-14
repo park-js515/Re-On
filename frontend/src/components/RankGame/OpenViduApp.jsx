@@ -23,6 +23,7 @@ import useSpeechToText from 'hooks/useSpeechToText';
 import useLoading from 'hooks/useLoading';
 import useVideoPlayer from 'hooks/useVideoPlayer';
 import { registerBattleLog } from 'apiList/member';
+import { randomVideo } from 'apiList/video';
 
 const APPLICATION_SERVER_URL =
   process.env.NODE_ENV === 'production' ? '' : 'https://i9c203.p.ssafy.io';
@@ -32,7 +33,7 @@ export default function OpenViduApp() {
   const [mySessionId, setMySessionId] = useState('TEST'); // 세션아이디 필요없음
   // 유저 정보 받기
   const [myUserName, setMyUserName] = useState(
-    `연기자${Math.floor(Math.random() * 100)}`,
+    localStorage.getItem('nickName'),
   );
   const [session, setSession] = useState(undefined);
   const [mainStreamManager, setMainStreamManager] = useState(undefined);
@@ -97,6 +98,17 @@ export default function OpenViduApp() {
         console.log('유저2 이름 변경');
       }
       // +++++++++++++++++++++++++++++++++++++++++++++++++++++++
+      // if (mySide === 'USER_ONE') {
+      console.log('iMMMMMMMMMMMMMMONEEEEEEEEE');
+      randomVideo(
+        (response) => {
+          console.log('@@@@@@@@@@@@@@@@', response.data.response);
+        },
+        (error) => {
+          console.log(error);
+        },
+      );
+      // }
       // ### 자기 닉네임을 마이유저 네임으로
       // ### 유저 1이면
       // ### 비디오ID, STT정보 받음.
@@ -501,14 +513,11 @@ export default function OpenViduApp() {
       console.log(userTwoText);
     }
     if (mySide === 'USER_ONE') {
-      setUserOneSttScore(
-        isNaN(tempScore) ? 0 : Math.round(tempScore * 1000) / 10,
-      );
+      setUserOneSttScore(isNaN(tempScore) ? 0 : Math.round(tempScore * 10));
     } else if (mySide === 'USER_TWO') {
-      setUserTwoSttScore(
-        isNaN(tempScore) ? 0 : Math.round(tempScore * 1000) / 10,
-      );
+      setUserTwoSttScore(isNaN(tempScore) ? 0 : Math.round(tempScore * 10));
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userOneText, userTwoText, mySide]);
 
   // #################       게임 로그 저장      ####################
@@ -698,25 +707,7 @@ export default function OpenViduApp() {
     handleCalculateScore();
     await startLoading('lizard', 1000);
 
-    // API 보내는 곳 (결과) if(resultGame !=== 999)
-    if (resultGame !== 999) {
-      const body = {
-        opponentEmail: 'test@test.com',
-        videoId: 1,
-        result: 1,
-      };
-      registerBattleLog(
-        body,
-        (response) => {
-          console.log('기록 전송 완료', response);
-        },
-        (error) => {
-          console.error('기록 전송 에러', error);
-        },
-      );
-    }
-
-    setToggleCurtain(true);
+    setToggleEnd(true);
     setStage('END');
   };
 
@@ -728,15 +719,22 @@ export default function OpenViduApp() {
 
   // ############# 비디오 정지 함수 ##############
   const pauseVideo = () => {
-    const videoElement = videoRef.current;
-    if (stage == 'RESULT' || stage == 'END') {
-      if (videoElement) {
-        videoElement.pause();
+    try {
+      const videoElement = videoRef.current;
+      if (stage == 'RESULT' || stage == 'END') {
+        if (videoElement) {
+          videoElement.pause();
+        }
       }
+    } catch (error) {
+      console.error('An error occurred while pausing the video:', error);
+      // 필요에 따라 추가적인 에러 처리 로직
     }
   };
 
   // ############ 턴 시작 ###############
+  const [isApiCalled, setIsApiCalled] = useState(false); // API 콜 한번만 하도록
+
   useEffect(() => {
     // 영화 미리보기
     if (stage === 'WATCHING_MOVIE') {
@@ -781,10 +779,29 @@ export default function OpenViduApp() {
       setStage('RESULT');
 
       // 결과 보여주기
-    } else if (stage === 'RESULT') {
+    } else if (stage === 'RESULT' && !isApiCalled) {
       // 커튼 닫기
       setLog((prevLog) => [...prevLog, `결과를 확인하세요!`]);
       handleViewResult();
+
+      // API 보내는 곳 (결과) if(resultGame !=== 999)
+      if (resultGame !== 999) {
+        const body = {
+          opponentEmail: 'gyulife7301',
+          videoId: 1,
+          result: -1,
+        };
+        registerBattleLog(
+          body,
+          (response) => {
+            console.log('기록 전송 완료', response);
+            setIsApiCalled(true);
+          },
+          (error) => {
+            console.error('기록 전송 에러', error);
+          },
+        );
+      }
 
       // 게임 종료
     } else if (stage === 'END') {
@@ -807,7 +824,7 @@ export default function OpenViduApp() {
         } else if (stage === 'USER_ONE_TURN') {
           if (mySide === 'USER_ONE') {
             clearInterval(myInterval);
-            const answer = 100 - (sum_diff / frame_cnts) * 100;
+            const answer = 100 - (sum_diff / frame_cnts) * 90;
             stopListening();
             setResultScore(Math.round(answer));
             setRecordOn(false);
@@ -821,7 +838,7 @@ export default function OpenViduApp() {
         } else if (stage === 'USER_TWO_TURN') {
           if (mySide === 'USER_TWO') {
             clearInterval(myInterval);
-            const answer = 100 - (sum_diff / frame_cnts) * 100;
+            const answer = 100 - (sum_diff / frame_cnts) * 90;
             stopListening();
             setResultScore(Math.round(answer));
             setRecordOn(false);
@@ -900,22 +917,43 @@ export default function OpenViduApp() {
     if (mySide === 'USER_ONE') {
       if (userOneScore == null || userTwoScore == null) {
         setResultGame(999);
-      } else if (userOneScore > userTwoScore) {
+      } else if (
+        userOneScore + userOneSttScore >
+        userTwoScore + userTwoSttScore
+      ) {
         setResultGame(1);
-      } else if (userTwoScore > userOneScore) {
+      } else if (
+        userTwoScore + userTwoSttScore >
+        userOneScore + userOneSttScore
+      ) {
         setResultGame(-1);
-      } else if (userOneScore === userTwoScore) {
+      } else if (
+        userOneScore + userOneSttScore ===
+        userTwoScore + userTwoSttScore
+      ) {
         setResultGame(0);
       }
     }
     if (mySide === 'USER_TWO') {
-      if (userOneScore == null || userTwoScore == null) {
+      if (
+        userOneScore + userOneSttScore == null ||
+        userTwoScore + userTwoSttScore == null
+      ) {
         setResultGame(999);
-      } else if (userOneScore < userTwoScore) {
+      } else if (
+        userOneScore + userOneSttScore <
+        userTwoScore + userTwoSttScore
+      ) {
         setResultGame(1);
-      } else if (userTwoScore < userOneScore) {
+      } else if (
+        userTwoScore + userTwoSttScore <
+        userOneScore + userOneSttScore
+      ) {
         setResultGame(-1);
-      } else if (userOneScore === userTwoScore) {
+      } else if (
+        userOneScore + userOneSttScore ===
+        userTwoScore + userTwoSttScore
+      ) {
         setResultGame(0);
       }
     }
@@ -928,7 +966,7 @@ export default function OpenViduApp() {
   // ############# 모달 ##############
   const [toggleExitModal, setToggleExitModal] = useState(false);
   const [toggleTutorialModal, setToggleTutorialModal] = useState(false);
-  const [toggleCurtain, setToggleCurtain] = useState(false);
+  const [toggleEnd, setToggleEnd] = useState(false);
 
   return (
     <div className="">
@@ -945,7 +983,7 @@ export default function OpenViduApp() {
 
       {session !== undefined ? (
         <div id="session" className="">
-          {toggleCurtain && (
+          {toggleEnd && (
             <NewEnd
               className="fixed inset-0 flex justify-center items-center z-50"
               resultGame={resultGame}
