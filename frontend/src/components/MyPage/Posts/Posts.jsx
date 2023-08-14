@@ -11,7 +11,7 @@ import { searchPublicPost, searchPublicPostDetail } from 'apiList/post';
 
     useEffect(() => {
       const getPosts = () => {
-        searchPublicPost(email, 1, (response) => {
+        searchPublicPost(1, email, (response) => {
           console.log(response.data.response);
           setPosts(response.data.response)
         }, (error) => {

@@ -3,14 +3,13 @@ import { memberInstance } from './lib/index';
 // 1. 회원 탈퇴
 /**
  *
- * @param {number} email
  * @param {function} success [callback]
  * @param {function} fail [callback]
  */
-function searchBackStageMembmerInfo(email, success, fail) {
+function searchBackStageMembmerInfo(success, fail) {
   const api = memberInstance();
 
-  api.get(`member/back-stage/${email}`).then(success).catch(fail);
+  api.delete(`/member`).then(success).catch(fail);
 }
 
 // 2. mypage member 조회
@@ -20,10 +19,9 @@ function searchBackStageMembmerInfo(email, success, fail) {
  * @param {function} success [callback]
  * @param {function} fail [callback]
  */
-function searchMypageMemberInfo(email, success, fail) {
+async function searchMypageMemberInfo(email, success, fail) {
   const api = memberInstance();
-
-  api.get(`/member/${email}`).then(success).catch(fail);
+  await api.get(`/member/${email}`).then(success).catch(fail);
 }
 
 // 3. Back stage member 조회
@@ -46,7 +44,6 @@ function deleteMember(success, fail) {
  */
 function searchBattleLog(success, fail) {
   const api = memberInstance();
-
   api.get('/member/battlelog').then(success).catch(fail);
 }
 
@@ -69,14 +66,10 @@ function registerBattleLog(body, success, fail) {
  * @param {function} success [callback]
  * @param {function} fail [callback]
  */
+
 function searchTop5Member(success, fail) {
   const api = memberInstance();
-
-  api.get(`/member/battlelog/rank`, {
-    params: {
-      'authorities[0].authority': 0
-    }
-  }).then(success).catch(fail);
+  api.get(`/member/battlelog/rank`).then(success).catch(fail);
 }
 
 // 7. member profile image 삭제
@@ -85,6 +78,7 @@ function searchTop5Member(success, fail) {
  * @param {function} success [callback]
  * @param {function} fail [callback]
  */
+
 function deleteMemberImg(success, fail) {
   const api = memberInstance();
 
@@ -131,9 +125,9 @@ function updateMemberInfo(body, success, fail) {
 }
 
 export {
-  deleteMember,
-  searchMypageMemberInfo,
   searchBackStageMembmerInfo,
+  searchMypageMemberInfo,
+  deleteMember,
   searchBattleLog,
   registerBattleLog,
   searchTop5Member,
