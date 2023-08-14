@@ -16,4 +16,6 @@ public interface PostService {
     Long updatePublicToPrivate(Long postId, Long loginId);
 
     Long delete(Long postId, Long loginId);
+
+    void deleteByMemberId(Long loginId);
 }

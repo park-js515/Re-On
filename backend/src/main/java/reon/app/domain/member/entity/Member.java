@@ -28,7 +28,7 @@ public class Member extends BaseEntity {
     @Column(nullable = false)
     private String gender;
     @Embedded
-    @Column(name="oauth_provider")
+    @Column(name="oauth_provider") // Eebedded 가아님 enumerate 임 -> 테이블에 적용 안된 상태 / 그치만 현재 필요 x
     private OAuthProvider oAuthProvider;
     @Column(nullable = true, name = "refresh_token") // 초기에는 없음
     private String refreshToken;
@@ -37,12 +37,14 @@ public class Member extends BaseEntity {
     @Embedded
     private MemberInfo memberInfo;
 
-
+    public void reJoinMember(MemberBattleInfo memberBattleInfo, MemberInfo memberInfo){
+        this.memberBattleInfo = memberBattleInfo;
+        this.memberInfo = memberInfo;
+    }
     // 비즈니스 로직
     public void updateRefreshToken(String refreshToken) {
         this.refreshToken = refreshToken;
     }
-
 
     public void deleteRefreshToken() {
         this.refreshToken = null;

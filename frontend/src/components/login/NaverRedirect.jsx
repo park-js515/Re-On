@@ -28,23 +28,20 @@ const NaverRedirect = () => {
             // 액세스 토큰 설정
             localStorage.setItem('accessToken', response.data.accessToken);
             localStorage.setItem('email', response.data.email);
-            // localStorage.setItem('expiresIn', response.data.expiresIn);
-            // localStorage.setItem('grantType', response.data.grantType);
-            localStorage.setItem('nickName', response.data.nickName);
             localStorage.setItem('profileImg', response.data.profileImg);
-            // localStorage.setItem('refreshToken', response.data.refreshToken);
+            localStorage.setItem('nickName', response.data.nickName);
+            // 액세스 토큰 설정
             dispatch(userLogin());
           })
           .catch((error) => {
             console.error(error);
             alert(
-              '로그인에 문제가 발생했습니다. 로그인페이지로 다시 이동합니다.',
+              '로그인에 문제가 발생했습니다. 로그인 페이지로 다시 이동합니다.',
             );
             localStorage.clear();
             window.location.replace('/login');
           });
       };
-
       NaverLogin();
     }
     

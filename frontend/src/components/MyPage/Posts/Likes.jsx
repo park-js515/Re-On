@@ -1,30 +1,48 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import LikesModal from '../Modal/LikesModal';
-
+import { searchLikePost, searchPublicPostDetail } from 'apiList/post';
   const Likes = () => {
-
 
     //모달
     const [showModal, setShowModal] = useState(false);
     const [selectedPostId, setSelectedPostId] = useState(null);
+    const [posts, setPosts] = useState([]);
+    const [detailPost, setDetailPost] = useState();
 
-    //더미
-    const temp = [];
-    for (let i = 1; i <= 10; i++){
-        temp.push({
-            id: i,
-            title: `제목 넘버-${i}`,
-            likes: 169,
-            backgroundImage: `https://source.unsplash.com/random?sig=10${i}`,
-            comment_cnt: 20,
-            profile_img:`https://source.unsplash.com/random?sig=10${i}`,
-            nick_name:`두껍희창${i}`,
-            year:'2023',
-            month:i,
-            date:i,
-        });
+
+    useEffect(() => {
+      const getPosts = () => {
+        searchLikePost(1, (response) => {
+          console.log(response.data.response);
+          setPosts(response.data.response)
+        }, (error) => {
+          console.log(error);
+        })
+      }
+      getPosts();
+    },[]);
+
+    const getPosts = () => {
+      searchLikePost(1, (response) => {
+        console.log(response.data.response);
+        setPosts(response.data.response)
+      }, (error) => {
+        console.log(error);
+      })
     }
-    const posts = temp;
+
+    const OpenModal = async(id) => {
+      setSelectedPostId(id);
+
+       await searchPublicPostDetail(id, (response) => {
+        setDetailPost(response.data.response)
+      }, (error) => {
+        console.log(error);
+      })
+
+      setShowModal(true);
+    };
+
     
     return (
     <div className="bg-white py-24 sm:py-32">
@@ -37,40 +55,38 @@ import LikesModal from '../Modal/LikesModal';
             <div className="relative flex justify-between items-center w-full mt-4 gap-x-4 px-2 mb-1">
                 {/* 프로필  */}
                 <div className="flex items-center gap-x-4">
-                  <img src={post.profile_img} alt=""className="h-10 w-10 rounded-full bg-gray-50" />
+                  <img src={post.profileImg} alt=""className="h-10 w-10 rounded-full bg-gray-50" />
                   <div className="text-sm leading-6">
                       <p className="font-semibold text-gray-900">
-                      <span className="text-xs hover:underline hover:decoration-solid hover:cursor-pointer">{post.nick_name}</span>
+                      <span className="text-xs hover:underline hover:decoration-solid hover:cursor-pointer">{post.nickName}</span>
                       </p>
                   </div>
                 </div>
                 {/* 년원일 */}
                 <div className="text-sm leading-6 text-gray-700 font-semibold">
-                  {post.year}년 {post.month}월 {post.date}일
+                  {post.createDate.substr(0,4)}년 {post.createDate.substr(5,2)}월 {post.createDate.substr(8,2)}일
                 </div>
             </div>
                 
               {/* 썸넬 */}
                 <div 
-                    style={{ backgroundImage: `url(${post.backgroundImage})` }} 
+                    style={{ backgroundImage: `url(${post.thumbnail})` }} 
                     className="w-full h-64 bg-cover bg-center rounded featured-item cursor-pointer" 
-                    onClick={() => {setShowModal(true); setSelectedPostId(post.id);}}
+                    onClick={() => { OpenModal(post.id) }}
                     alt=""
                 ></div>
 
                 {/* 좋아요 */}
                 <div className="flex items-center gap-x-4 text-xs ml-2">
                 <div className="text-gray-500 font-semibold">
-                    <span className="text-lg">💙</span>좋아요 {post.likes}
+                    <span className="text-lg">💙</span>좋아요 {post.likeCnt}
                 </div>
 
                 <div className="text-gray-500 font-semibold">
-                    <span className="text-lg">💬</span>댓글 {post.comment_cnt}
+                    <span className="text-lg">💬</span>댓글 {post.commentCnt}
                 </div>
                   
                     
-                
-                  
                 </div>
                 
                 <div className="group relative ml-2">
@@ -85,8 +101,9 @@ import LikesModal from '../Modal/LikesModal';
             {
                 showModal && (
                     <LikesModal 
-                        post_id={selectedPostId} 
-                        changeShow={() => setShowModal(false)}
+                    detailPost={detailPost} 
+                  changeShow={() => setShowModal(false)}
+                  getPosts = {getPosts}
                     />
                 )
             }

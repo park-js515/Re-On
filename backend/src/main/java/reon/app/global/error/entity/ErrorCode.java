@@ -15,6 +15,12 @@ public enum ErrorCode {
     /*
      * 400 BAD_REQUEST: 잘못된 요청
      */
+    IMG_TYPE_BAD_REQUEST(HttpStatus.BAD_REQUEST, "이미지 파일 확장자가 올바르지 않습니다."),
+
+
+    /*
+     * 400 BAD_REQUEST: 잘못된 요청
+     */
     BAD_REQUEST_SAME_PWD_TWICE(HttpStatus.BAD_REQUEST, "같은 비밀번호를 입력 했습니다."),
 
     /*
