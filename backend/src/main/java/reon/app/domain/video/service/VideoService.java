@@ -40,6 +40,7 @@ public class VideoService {
                 .title(video.getTitle())
                 .script(video.getScript())
                 .sttScript(video.getSttScript())
+                .videoPath(video.getVideoPath())
                 .thumbnail(video.getThumbnail())
                 .build();
         return response;
