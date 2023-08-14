@@ -17,7 +17,7 @@ const getTierImage = (tier) => {
   }
 }
 const UserInfo = () => {
-  const [userData, setUserData] = useState([]);
+  const [userData, setUserData] = useState(true);
   const containerRef = React.useRef(null);
 
   useEffect(() => {
