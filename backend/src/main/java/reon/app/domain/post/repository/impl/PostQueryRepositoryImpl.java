@@ -49,7 +49,7 @@ public class PostQueryRepositoryImpl implements PostQueryRepository {
     }
 
     @Override
-    public List<PrivatePostsResponse> searchPrivatePosts(Long offset, Long memberId) {
+    public List<PrivatePostsResponse> searchPrivatePosts(Long offset, Long loginId) {
         return queryFactory
                 .select(Projections.fields(PrivatePostsResponse.class,
                         post.id,
@@ -60,7 +60,7 @@ public class PostQueryRepositoryImpl implements PostQueryRepository {
                 .from(post)
                 .join(post.member, member)
                 .join(post.video, video)
-                .where(post.member.id.eq(memberId),
+                .where(post.member.id.eq(loginId),
                         post.deleted.eq(0),
                         post.scope.eq(Scope.PRIVATE))
                 .orderBy(post.createDate.desc())
@@ -74,7 +74,7 @@ public class PostQueryRepositoryImpl implements PostQueryRepository {
         return queryFactory
                 .select(Projections.fields(PublicPostsResponse.class,
                         post.id,
-                        post.member.id.as("memberId"),
+                        post.member.email,
                         post.title,
                         post.video.thumbnail,
                         post.postLikes.size().as("likeCnt"),
@@ -94,11 +94,11 @@ public class PostQueryRepositoryImpl implements PostQueryRepository {
     }
 
     @Override
-    public List<PostsResponse> searchLikedPosts(List<Long> ids, Long offset, Long memberId) {
+    public List<PostsResponse> searchLikedPosts(List<Long> ids, Long offset, Long loginId) {
         return queryFactory
                 .select(Projections.fields(PostsResponse.class,
                         post.id,
-                        post.member.id.as("memberId"),
+                        post.member.email,
                         post.title,
                         post.member.memberInfo.nickName,
                         post.member.memberInfo.profileImg,
@@ -113,7 +113,7 @@ public class PostQueryRepositoryImpl implements PostQueryRepository {
                 .where(post.id.in(ids),
                         post.deleted.eq(0),
                         post.scope.eq(Scope.PUBLIC),
-                        post.member.id.ne(memberId))
+                        post.member.id.ne(loginId))
                 .orderBy(post.createDate.desc())
                 .offset((offset-1)* 21L)
                 .limit(21)
@@ -125,7 +125,7 @@ public class PostQueryRepositoryImpl implements PostQueryRepository {
         return queryFactory
                 .select(Projections.fields(PostsResponse.class,
                         post.id,
-                        post.member.id.as("memberId"),
+                        post.member.email,
                         post.title,
                         post.member.memberInfo.nickName,
                         post.member.memberInfo.profileImg,
@@ -151,7 +151,7 @@ public class PostQueryRepositoryImpl implements PostQueryRepository {
         return queryFactory
                 .select(Projections.fields(PostsResponse.class,
                         post.id,
-                        post.member.id.as("memberId"),
+                        post.member.email,
                         post.title,
                         post.member.memberInfo.nickName,
                         post.member.memberInfo.profileImg,
