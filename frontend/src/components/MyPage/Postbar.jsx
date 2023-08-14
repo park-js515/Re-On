@@ -6,7 +6,6 @@ import React, { useState } from "react";
 
 
 const Postbar = ({myPage, email}) => {
-  
 
   const [activeComponent, setActiveComponent] = useState('Posts');
   return (

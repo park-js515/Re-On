@@ -48,7 +48,7 @@ function registerBattleLog(success, fail) {
 function deleteMemberImg(success, fail) {
   const api = memberInstance();
 
-  api.delete('/ member/images/delete').then(success).catch(fail);
+  api.delete('/member/images/delete').then(success).catch(fail);
 }
 
 // 5. member profile image 수정
@@ -78,9 +78,9 @@ function updateMemberImg(profileImg, success, fail) {
  * @param {function} success [callback]
  * @param {function} fail [callback]
  */
-async function searchMypageMemberInfo(id, success, fail) {
+async function searchMypageMemberInfo(email, success, fail) {
   const api = memberInstance();
-  await api.get(`/member/${id}`).then(success).catch(fail);
+  await api.get(`/member/${email}`).then(success).catch(fail);
 }
 
 // 7. 회원탈퇴

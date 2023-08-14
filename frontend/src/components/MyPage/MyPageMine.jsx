@@ -176,7 +176,6 @@ const MyPageMine = ({setMyPage, email}) => {
         </div>
       </div>
     )}
-
       {/* 프로필사진변경 */}
       {showProfileModal && (
               <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50 z-50"> 
@@ -189,7 +188,6 @@ const MyPageMine = ({setMyPage, email}) => {
               </div>
             )
           }
-
     </div>
   );
 }
