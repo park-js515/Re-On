@@ -34,6 +34,15 @@ export default function Navbar() {
     }
   }, [userIsLogin,localStorage.getItem('profileImg')]);
 
+  const moveMyPage = () => {
+    // navigate("/mypage/" + email)
+    // <Link to={"/mypage/" + email}></Link>
+    // onClick={() => { moveMyPage(post.email); }}
+    // return <Navigate to={"/mypage/"} />;
+    // navigate("/mypage/"+email, { replace: true });
+    window.location.assign("/mypage/"+localStorage.getItem("email"));
+  }
+
   return (
     <div className="sticky top-0 z-50">
       <Disclosure as="nav" className="bg-white">
@@ -100,15 +109,15 @@ export default function Navbar() {
                         {userIsLogin ? (
                           <Menu.Item>
                             {({ active }) => (
-                              <Link
-                                to={"/mypage/"+localStorage.getItem("email")}
+                              <span
                                 className={classNames(
                                   active ? '' : '',
-                                  'block px-4 py-2 text-sm text-gray-700 hover:bg-inss',
+                                  'block px-4 py-2 text-sm text-gray-700 hover:bg-inss hover:cursor-pointer',
                                 )}
+                                onClick={()=>{moveMyPage()}}
                               >
                                 마이페이지
-                              </Link>
+                              </span>
                             )}
                           </Menu.Item>
                         ) : null}
