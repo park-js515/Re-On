@@ -24,7 +24,7 @@ const Postbar = ({myPage, email}) => {
             </button>
             </div>
           </div>
-          {myPage &&<div>
+          {myPage &&
           <div className="flex text-gray-700 text-center py-2 m-4 pr-5">
             <div className="flex">
             <button
@@ -35,8 +35,8 @@ const Postbar = ({myPage, email}) => {
               <h3 className="text-sm font-bold">💾비공개</h3>
             </button>
             </div>
-          </div>
-
+          </div>}
+          {myPage &&
           <div className="flex text-gray-700 text-center py-2 m-4 pr-5">
             <div className="flex">
             <button
@@ -47,9 +47,8 @@ const Postbar = ({myPage, email}) => {
               <h3 className="text-sm font-bold">💌내가좋아한</h3>
             </button>
             </div>
-          </div>
           </div>}
-        </div>
+          </div>
       </ul>
       {activeComponent === 'Posts' && <Posts email={email} />}
       {activeComponent === 'Private' && <Private email={email}/>}

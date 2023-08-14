@@ -59,9 +59,9 @@ export default function Navbar() {
                           to={item.to}
                           className={classNames(
                             location.pathname === item.to
-                              ? ' text-success underline'
-                              : 'text-gray-300 hover:bg-gray-700 hover:text-lightBlue hover:border-collapse',
-                            'rounded-md px-3 py-2 text-sm font-bold',
+                              ? ' text-[#45afb8]'
+                              : ' hover:text-lightBlue hover:scale-105',
+                            ' px-3 py-2 text-sm font-semibold',
                           )}
                           aria-current={
                             location.pathname === item.to ? 'page' : undefined
@@ -89,7 +89,7 @@ export default function Navbar() {
                       ) : (
                         <Link
                           to="/login"
-                          className="hover:text-lightBlue cursor-pointer font-bold animate-fade-up animate-once animate-ease-in"
+                          className="hover:text-lightBlue cursor-pointer font-semibold animate-fade-up animate-once animate-ease-in"
                         >
                           로그인
                         </Link>
