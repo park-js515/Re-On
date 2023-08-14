@@ -33,7 +33,7 @@ const Videoplayer = ({post_id, changeShow}) => {
     const navigate = useNavigate();
 
     const moveToMyPage = () => {
-        navigate('/mypage')
+        navigate(`/mypage/#${data.email}`)
     }
 
     const likeVideo = (event) => {
@@ -117,7 +117,7 @@ const Videoplayer = ({post_id, changeShow}) => {
             <div className="w-8/12 pr-4 border-r border-gray-200 overflow-y-auto max-h-[calc(80vh-48px)] scrollbar-hide">
                 
                 {/* 비디오 */}
-                <video className="w-full h-full rounded-md shadow-sm" controls src={"https://storage.googleapis.com/reon-bucket/" + data.actionPath}></video>
+                <video className="w-full h-full rounded-md shadow-sm" controls src={data.actionPath? "https://storage.googleapis.com/reon-bucket/" + data.actionPath : null}></video>
                 
                 {/* 작성자 정보 */}
                 <div className="my-4 p-3 bg-gray-100 rounded-lg">

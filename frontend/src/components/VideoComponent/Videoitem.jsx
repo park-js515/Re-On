@@ -16,7 +16,7 @@ const Videoitem = ({props, changeMode}) => {
     const navigate = useNavigate();
     const moveToMyPage = (event) => {
         event.preventDefault();
-        navigate(`/mypage/${props.memberId}`)
+        navigate(`/mypage/${props.email}`)
     }
     
     const date = new Date(props.createDate);
