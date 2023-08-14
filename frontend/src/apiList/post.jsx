@@ -11,7 +11,6 @@ import { postInstance } from './lib/index';
 function savePost(videoId, actionVideo, success, fail) {
   const api = postInstance();
   api.defaults.headers['Content-Type'] = 'multipart/form-data';
-  api.defaults.headers['Content-Type'] = 'multipart/form-data';
 
   api
     .post(`/post?videoId=${videoId}`, actionVideo)
