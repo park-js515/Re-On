@@ -11,7 +11,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import reon.app.domain.video.dto.req.VideoSaveRequest;
-import reon.app.domain.video.repository.VideoRepository;
+import reon.app.domain.video.dto.res.VideoResponse;
 import reon.app.domain.video.service.VideoService;
 import reon.app.domain.video.service.dto.VideoSaveDto;
 import reon.app.global.api.ApiResponse;
@@ -25,7 +25,6 @@ import reon.app.global.error.entity.ErrorCode;
 @RequestMapping("/api/video-management/video")
 public class VideoApi {
     private final VideoService videoService;
-
     @Operation(summary = "video를 저장", description = "video를 저장합니다.")
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public ApiResponse<String> saveVideo(@RequestPart MultipartFile originalVideo, @RequestPart MultipartFile thumbnail,  @Parameter(hidden = true) @AuthenticationPrincipal User user,
@@ -46,6 +45,13 @@ public class VideoApi {
                 .build();
         videoService.save(videoSaveDto);
         return ApiResponse.OK(videoSaveRequest.getTitle());
+    }
+
+    @Operation(summary = "video중 랜덤 1개를 선택하여 조회", description = "게임에 사용될 원본비디오 1개를 랜덤으로 제공한다")
+    @GetMapping()
+    public ApiResponse<VideoResponse> findRandomVideo(@Parameter(hidden = true) @AuthenticationPrincipal User user){
+        VideoResponse response = videoService.searchRandomVideo();
+        return ApiResponse.OK(response);
     }
 }
 

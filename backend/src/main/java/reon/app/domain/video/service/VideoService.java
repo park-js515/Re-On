@@ -4,6 +4,7 @@ import com.google.cloud.storage.Storage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import reon.app.domain.video.dto.res.VideoResponse;
 import reon.app.domain.video.entity.Video;
 import reon.app.domain.video.repository.VideoRepository;
 import reon.app.domain.video.service.dto.VideoSaveDto;
@@ -30,7 +31,19 @@ public class VideoService {
                 .thumbnail(thumbnail)
                 .build();
         videoRepository.save(video);
-
-
     }
+
+    public VideoResponse searchRandomVideo() {
+        Video video = videoRepository.searchRandomVideo();
+        VideoResponse response = VideoResponse.builder()
+                .id(video.getId())
+                .title(video.getTitle())
+                .script(video.getScript())
+                .sttScript(video.getSttScript())
+                .thumbnail(video.getThumbnail())
+                .build();
+        return response;
+    }
+
+
 }
