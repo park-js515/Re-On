@@ -13,7 +13,7 @@ const MyPage = () => {
 
     <Container >
       <div >
-        <MyPageMine setMyPage={setMyPage}/>
+        <MyPageMine setMyPage={setMyPage} email={email}/>
       </div>
     </Container>
       

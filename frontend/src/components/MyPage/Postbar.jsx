@@ -6,11 +6,9 @@ import React, { useState } from "react";
 
 
 const Postbar = ({myPage, email}) => {
-  
 
   const [activeComponent, setActiveComponent] = useState('Posts');
   return (
-    
     <>
       <ul className="flex items-center justify-around md:justify-center space-x-12 uppercase tracking-widest font-semibold text-xs text-gray-600 z-0">
         <div className="flex flex-row mt-4 justify-center mr-16">

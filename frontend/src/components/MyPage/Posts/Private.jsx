@@ -58,7 +58,7 @@ import { Hidden } from '../../../../node_modules/@mui/material/index';
       setTitle("");
       setContent("");
       setSelectedPost(null);
-      openInput();
+      setInputOpen(false)
     }
 
     //업로드를 위한 title, content 창 열기
