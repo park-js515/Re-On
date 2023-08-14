@@ -21,17 +21,22 @@ public class Video extends BaseEntity {
     private String title; // 유투브 영상 제목
     @Column(nullable = false)
     private String actor;
-    @Column(name = "utube_link", nullable = false)
-    private String utubeLink;
+    private String script;
+    @Column(name = "stt_script")
+    private String sttScript;
+    @Column(name = "video_path", nullable = false)
+    private String videoPath;
     @Column(nullable = false)
     private String thumbnail;
 
     @Builder
-    public Video(Long id, String title, String actor, String utubeLink, String thumbnail) {
+    public Video(Long id, String title, String actor, String script, String sttScript, String videoPath, String thumbnail) {
         this.id = id;
         this.title = title;
         this.actor = actor;
-        this.utubeLink = utubeLink;
+        this.script = script;
+        this.sttScript = sttScript;
+        this.videoPath = videoPath;
         this.thumbnail = thumbnail;
     }
 }

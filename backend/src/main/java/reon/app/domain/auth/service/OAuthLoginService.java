@@ -85,7 +85,12 @@ public class OAuthLoginService {
 
 
     private Member findOrCreateMember(OAuthInfoResponse oAuthInfoResponse) {
-        return memberRepository.findByEmail(oAuthInfoResponse.getEmail())
+
+        String fullEmail = oAuthInfoResponse.getEmail();
+        String email = fullEmail.substring(0, fullEmail.indexOf("@"));
+
+//        return memberRepository.findByEmail(oAuthInfoResponse.getEmail())
+        return memberRepository.findByEmail(email)
                 .orElseGet(() -> newMember(oAuthInfoResponse));
     }
 
