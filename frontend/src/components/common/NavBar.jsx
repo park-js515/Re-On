@@ -6,11 +6,11 @@ import { useEffect } from 'react';
 import { searchMypageMemberInfo } from 'apiList/member';
 
 const navigation = [
-  { name: '같이하기', to: '/rank' },
-  { name: '혼자하기', to: '/normallist' },
-  { name: '투표해줘', to: '/feed' },
-  { name: '고객센터', to: '/faq' },
-  { name: '팀문화', to: '/team' },
+  { name: '같이하기', to: '/rank', current: false },
+  { name: '혼자하기', to: '/normallist', current: false },
+  { name: '투표해줘', to: '/feed', current: false },
+  { name: 'FAQ', to: '/faq', current: false },
+  { name: '팀문화', to: '/team', current: false },
 ];
 
 function classNames(...classes) {
