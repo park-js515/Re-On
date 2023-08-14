@@ -25,7 +25,7 @@ function postInstance() {
 }
 
 function videoInstance() {
-  const instance = createCustomAxios('/api/video-mangement');
+  const instance = createCustomAxios('/api/video-management');
 
   return instance;
 }
