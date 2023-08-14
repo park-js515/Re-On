@@ -32,7 +32,7 @@ function searchMypageMemberInfo(email, success, fail) {
  * @param {function} success [callback]
  * @param {function} fail [callback]
  */
-function searchBackStageMembmerInfo(success, fail) {
+function deleteMember(success, fail) {
   const api = memberInstance();
 
   api.get(`/member/back-stage`).then(success).catch(fail);
@@ -72,7 +72,11 @@ function registerBattleLog(body, success, fail) {
 function searchTop5Member(success, fail) {
   const api = memberInstance();
 
-  api.get(`/member/battlelog/rank`).then(success).catch(fail);
+  api.get(`/member/battlelog/rank`, {
+    params: {
+      'authorities[0].authority': 0
+    }
+  }).then(success).catch(fail);
 }
 
 // 7. member profile image 삭제

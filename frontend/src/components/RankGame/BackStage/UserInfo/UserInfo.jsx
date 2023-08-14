@@ -1,6 +1,5 @@
 import { SContainer, SRank } from "./style";
 import { Link } from 'react-router-dom';
-// import defaultProfile from "/image/character/cuetreon.png";
 import React, { useEffect, useState } from 'react';
 import { searchBackStageMembmerInfo } from 'apiList/member'
 
@@ -29,12 +28,13 @@ const UserInfo = () => {
       (response) => {
         if(response.success) {
           setUserData(response.response);
-        } else {
-          console.error("Error fetching data:", response.error.message);
+        } 
+        else {
+          console.error("에러", response.error.message);
         }
       },
       (error) => {
-        console.error("Network error:", error);
+        console.error("네트워크에러", error);
       }
     );
 
@@ -68,22 +68,30 @@ return (
     <div className="sns__container"></div>
     <div className="profile-container">
       <Link to="/mypage">
-      <img src={userData.profileImg || "/image/character/cutereon.png"} alt="" className="h-10 w-10 rounded-full bg-gray-50" />
+      <img src={userData.profileImg || "/image/login/userdefault.png"} alt="" className="h-10 w-10 rounded-full bg-white" />
       </Link>
       <div>
         <Link to="/mypage">
         <div className="name font-semibold text-6xl">{userData.nickName || "개똥이"}</div>
         </Link>
-        <div className="recent">총전적</div>
-        <div className="recentwdl">{userData.win}승 {userData.gameCnt - userData.win - userData.lose}무 {userData.lose}패</div>
+        <div className="recent">총{userData.gameCnt} 전</div>
+        <div className="recentwdl">{userData.win}승/ {userData.gameCnt - userData.win - userData.lose}무/ {userData.lose}패</div>
+        <div className="tier">티어 {userData.tier}</div>
+        <div class="w-full h-6 bg-gray rounded-full dark:bg-gray ml-1">
+          {/* 티어그래프 여기야 종상아 */}
+          <div class="bg-[#BCD570] h-6 text-lg font-medium text-white text-center p-0.5 leading-none rounded-full" 
+            style={{ width: `${userData.score || 45}%` }}> {userData.score || 45}% </div>
+        </div>
+
       </div>
-    </div>
-    <SRank className="rank">
+      <SRank className="rank">
     
-      <img src={getTierImage(userData.tier)}  />
- 
-     
-    </SRank>
+        <img src={getTierImage(userData.tier)}  />
+
+      
+      </SRank>
+    </div>
+   
   </SContainer>
 );
 };
