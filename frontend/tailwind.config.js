@@ -16,6 +16,8 @@ module.exports = {
       inss: '#FAFFEA',
       green: '#75A94B',
       black: '#000000',
+      indigo : '#4b0082',
+      gray : '#d3d3d3',
     },
     extend: {},
   },

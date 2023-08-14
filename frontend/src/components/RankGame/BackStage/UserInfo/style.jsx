@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const SContainer = styled.div`
   cursor: pointer;
-  position: relative;
+
   background: linear-gradient(
       var(--angle, 0deg),
       #8ccfd5 0%,
@@ -17,9 +17,9 @@ export const SContainer = styled.div`
       #a0d3d8 90%,
       #8ccfd5 100%
     );
-  background-size: cover;
+  
   margin-top: 10vw;
-  height: 20.5vw;
+  height: 25.5vw;
   width: 45vw;
   border-radius: 12px;
   color: #fff;
@@ -48,17 +48,6 @@ export const SContainer = styled.div`
     cursor: default;
   }
  
-  .sns__container {
-    width: 100%;
-    height: 80%;
-    position: absolute;
-    bottom: 0;
-    opacity: 0;
-    z-index: -1;
-    border-radius: 12px;
-   
-    
-  }
 
   /* 프로필 사진과 이름, 점수를 묶는 div */
   .profile-container {
@@ -78,15 +67,25 @@ export const SContainer = styled.div`
     /* 전적 */
     .recent {
       margin-left: 8px;
-      margin-top: 2vw;
+      margin-top: 1vw;
+      font-weight: 500;
       font-size: x-large;
-      color: #3c3c3c;
+      color: black;
     }
     .recentwdl {
       margin-left: 8px;
       margin-top: 0vw;
-      font-size: x-large;
-      color: #3c3c3c;
+      font-size: 18px;
+      font-weight: 600;
+      color: black;
+    }
+    }
+    .tier {
+      margin-left: 8px;
+      margin-top: 0.5vw;
+      font-size: large;
+      font-weight: 600;
+      color: black;
     }
     /* 점수 */
     .wdl {
@@ -110,7 +109,7 @@ export const SContainer = styled.div`
         opacity: 1px;
       }
     }
-  }
+  
 `;
 
 // 텍스트 div
@@ -126,15 +125,14 @@ export const STextContainer = styled.div`
 `;
 
 export const SRank = styled.div`
-  user-select: none;
- 
- position: relative;
- bottom: calc(10vw + 10px);
- right: calc(-30vw + 12px);
+
+
+
+ margin-left: 3vw;
 
  
  img {
-  margin-top: -1vw;
+ 
    width: 25vw;  // 반응형 너비로 설정
    height: 19.75vw; // 반응형 높이로 설정 (200px:250px의 비율 유지)
    max-width: 250px; // 최대 너비 제한 (선택적)
