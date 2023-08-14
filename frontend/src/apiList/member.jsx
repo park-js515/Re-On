@@ -6,7 +6,7 @@ import { memberInstance } from './lib/index';
  * @param {function} success [callback]
  * @param {function} fail [callback]
  */
-function searchBackStageMembmerInfo(success, fail) {
+function deleteMember(success, fail) {
   const api = memberInstance();
 
   api.delete(`/member`).then(success).catch(fail);
@@ -30,7 +30,7 @@ async function searchMypageMemberInfo(email, success, fail) {
  * @param {function} success [callback]
  * @param {function} fail [callback]
  */
-function deleteMember(success, fail) {
+function searchBackStageMembmerInfo(success, fail) {
   const api = memberInstance();
 
   api.get(`/member/back-stage`).then(success).catch(fail);
@@ -88,7 +88,7 @@ function deleteMemberImg(success, fail) {
 // 8. member profile image 수정
 /**
  *
- * @param {formData} profileImg
+ * @param {FormData} profileImg
  * @param {function} success [callback]
  * @param {function} fail [callback]
  */
