@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class PublicPostsResponse {
     private Long id;
-    private Long memberId;
+    private String email;
     private String title;
     private String thumbnail;
     private int likeCnt;
@@ -19,9 +19,9 @@ public class PublicPostsResponse {
     private LocalDateTime createDate;
 
     @Builder
-    public PublicPostsResponse(Long id, Long memberId, String title, String thumbnail, int likeCnt, int commentCnt, LocalDateTime createDate) {
+    public PublicPostsResponse(Long id, String email, String title, String thumbnail, int likeCnt, int commentCnt, LocalDateTime createDate) {
         this.id = id;
-        this.memberId = memberId;
+        this.email = email;
         this.title = title;
         this.thumbnail = thumbnail;
         this.likeCnt = likeCnt;

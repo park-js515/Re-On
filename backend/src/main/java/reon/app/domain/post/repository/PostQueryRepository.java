@@ -11,11 +11,11 @@ public interface PostQueryRepository {
 
     Post searchById(Long postId);
 
-    List<PrivatePostsResponse> searchPrivatePosts(Long offset, Long memberId);
+    List<PrivatePostsResponse> searchPrivatePosts(Long offset, Long loginId);
 
     List<PublicPostsResponse> searchPublicPosts(Long offset, Long memberId);
 
-    List<PostsResponse> searchLikedPosts(List<Long> ids, Long offset, Long memberId);
+    List<PostsResponse> searchLikedPosts(List<Long> ids, Long offset, Long loginId);
 
     List<PostsResponse> searchFeedPosts(Long offset);
     List<PostsResponse> searchFeedRankPosts();

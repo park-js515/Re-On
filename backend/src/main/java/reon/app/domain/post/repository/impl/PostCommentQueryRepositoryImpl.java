@@ -22,7 +22,7 @@ public class PostCommentQueryRepositoryImpl implements PostCommentQueryRepositor
         return queryFactory
                 .select(Projections.fields(PostCommentResponse.class,
                         postComment.id,
-                        postComment.member.id.as("memberId"),
+                        postComment.member.email,
                         postComment.post.id.as("postId"),
                         postComment.member.memberInfo.nickName,
                         postComment.member.memberInfo.profileImg,

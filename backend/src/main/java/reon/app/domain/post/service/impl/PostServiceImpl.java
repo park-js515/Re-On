@@ -76,8 +76,8 @@ public class PostServiceImpl implements PostService {
         if(post.getMember().getId() != loginId){
             throw new CustomException(ErrorCode.USER_FORBIDDEN_ERROR);
         }
-        postCommentRepository.deleteAllByMemberId(loginId);
-        postLikeRepository.deleteAllByMemberId(loginId);
+        postCommentRepository.deleteAllByPostId(postId);
+        postLikeRepository.deleteAllByPostId(postId);
         String title = post.getVideo().getTitle();
         post.updatePublicToPrivate(title);
         return post.getId();
@@ -90,8 +90,8 @@ public class PostServiceImpl implements PostService {
         if(post.getMember().getId() != loginId){
             throw new CustomException(ErrorCode.USER_FORBIDDEN_ERROR);
         }
-        postCommentRepository.deleteAllByMemberId(loginId);
-        postLikeRepository.deleteAllByMemberId(loginId);
+        postCommentRepository.deleteAllByPostId(postId);
+        postLikeRepository.deleteAllByPostId(postId);
         post.delete();
         return post.getId();
     }
