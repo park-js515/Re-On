@@ -56,10 +56,10 @@ function searchBattleLog(success, fail) {
  * @param {function} success [callback]
  * @param {function} fail [callback]
  */
-function registerBattleLog(success, fail) {
+function registerBattleLog(body, success, fail) {
   const api = memberInstance();
 
-  api.post('/member/battlelog').then(success).then(fail);
+  api.post('/member/battlelog', JSON.stringify(body)).then(success).then(fail);
 }
 
 // 6. Battle top 5 조회
