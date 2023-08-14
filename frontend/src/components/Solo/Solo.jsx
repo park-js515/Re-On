@@ -19,7 +19,7 @@ const SoloApp = () => {
   const [reload, setReload] = useState(false);
   const videoRef = useRef();
   const webCamRef = useRef();
-  const [answer, setAnswer] = useState(0);
+  const [answer, setAnswer] = useState(-1);
 
   // API 연결되면 수정해야 될 부분
   const urls = [
@@ -80,7 +80,7 @@ const SoloApp = () => {
         sum_diff = 0;
         frame_cnts = 0;
       };
-      const handlePlay = () => {
+      const handlePlay = () => {setAnswer(-1)
         face_detect();
       }
 
@@ -211,12 +211,15 @@ const SoloApp = () => {
       setReload(!reload)
     }
   }
+  
   function getScoreText(score) {
     if (score >= 90) return `명품 연기! ${answer.toFixed(0)} 점`;
     if (score >= 70) return `인상적인 연기! ${answer.toFixed(0)} 점`;
     if (score >= 50) return `안정적인 연기! ${answer.toFixed(0)} 점`;
     if (score >= 30) return `노력이 필요해! ${answer.toFixed(0)} 점`;
     if (score >= 10) return `더 연습해봐! ${answer.toFixed(0)} 점`;
+    if (score >= 0) return `이게연기야? ${answer.toFixed(0)} 점`;
+    
     return `내가 평가를 진행할게!`;
 }
 
