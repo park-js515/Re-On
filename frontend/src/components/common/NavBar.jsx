@@ -1,44 +1,38 @@
 import { Fragment, useState } from 'react';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import { searchMypageMemberInfo } from 'apiList/member';
 
 const navigation = [
-  { name: '같이하기', to: '/rank', current: false },
-  { name: '혼자하기', to: '/normallist', current: false },
-  { name: '투표해줘', to: '/feed', current: false },
-  { name: '고객센터', to: '/faq', current: false },
-  { name: '팀문화', to: '/team', current: false },
+  { name: '같이하기', to: '/rank' },
+  { name: '혼자하기', to: '/normallist' },
+  { name: '투표해줘', to: '/feed' },
+  { name: '고객센터', to: '/faq' },
+  { name: '팀문화', to: '/team' },
 ];
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
 }
 
-export default function Example() {
+export default function Navbar() {
   const userIsLogin = useSelector((state) => state.user.isLogin);
   const [profileImg, setProfileImg] = useState(null);
+  const location = useLocation();
   // const id = localStorage.getItem('id');
 
   useEffect(() => {
     if (userIsLogin) {
       setProfileImg('/image/login/LoginDefaultImg.png');
 
-      // 프로필 이미지를 받아올 수 있으면 이렇게 하겠슴둥.
-      // searchMypageMemberInfo(
-      //   1,
-      //   (res) => {
-      //     if (res.data.response.profileImg) {
-      //       setProfileImg(res.data.response.profileImg);
-      //     }
-      //   },
-      //   (error) => {
-      //     console.error(error);
-      //   },
-      // );
-    } 
+      // string 이라 "null"로 받아야 한다.
+      const profileImg = localStorage.getItem('profileImg');
+      if (profileImg !== "null" && profileImg !== '') {
+        setProfileImg(profileImg);
+      }
+    }
   }, [userIsLogin]);
 
   return (
@@ -65,12 +59,14 @@ export default function Example() {
                           key={item.name}
                           to={item.to}
                           className={classNames(
-                            item.current
-                              ? 'bg-gray-900 text-lightBlue'
-                              : 'text-gray-300 hover:bg-gray-700 hover:text-lightBlue',
-                            'rounded-md px-3 py-2 text-sm font-medium',
+                            location.pathname === item.to
+                              ? ' text-success underline'
+                              : 'text-gray-300 hover:bg-gray-700 hover:text-lightBlue hover:border-collapse',
+                            'rounded-md px-3 py-2 text-sm font-bold',
                           )}
-                          aria-current={item.current ? 'page' : undefined}
+                          aria-current={
+                            location.pathname === item.to ? 'page' : undefined
+                          }
                         >
                           {item.name}
                         </Link>
@@ -94,8 +90,10 @@ export default function Example() {
                       ) : (
                         <Link
                           to="/login"
-                          className="hover:text-lightBlue cursor-pointer"
-                        >로그인</Link>
+                          className="hover:text-lightBlue cursor-pointer font-bold animate-fade-up animate-once animate-ease-in"
+                        >
+                          로그인
+                        </Link>
                       )}
                     </div>
                     <Transition as={Fragment}>
@@ -106,8 +104,8 @@ export default function Example() {
                               <Link
                                 to={"/mypage/"+localStorage.getItem("email")}
                                 className={classNames(
-                                  active ? 'bg-gray-100' : '',
-                                  'block px-4 py-2 text-sm text-gray-700',
+                                  active ? '' : '',
+                                  'block px-4 py-2 text-sm text-gray-700 hover:bg-inss',
                                 )}
                               >
                                 마이페이지
@@ -122,7 +120,7 @@ export default function Example() {
                                 to="/logout"
                                 className={classNames(
                                   active ? 'bg-gray-100' : '',
-                                  'block px-4 py-2 text-sm text-gray-700',
+                                  'block px-4 py-2 text-sm text-gray-700 hover:bg-inss',
                                 )}
                               >
                                 로그아웃
@@ -143,12 +141,14 @@ export default function Example() {
                       key={item.name}
                       to={item.to}
                       className={classNames(
-                        item.current
+                        location.pathname === item.to
                           ? 'bg-gray-900 text-white'
                           : 'text-gray-300 hover:bg-gray-700 hover:text-white',
                         'block rounded-md px-3 py-2 text-base font-medium',
                       )}
-                      aria-current={item.current ? 'page' : undefined}
+                      aria-current={
+                        location.pathname === item.to ? 'page' : undefined
+                      }
                     >
                       {item.name}
                     </Disclosure.Button>
