@@ -45,7 +45,6 @@ function searchBackStageMembmerInfo(success, fail) {
  */
 function searchBattleLog(success, fail) {
   const api = memberInstance();
-
   api.get('/member/battlelog').then(success).catch(fail);
 }
 
@@ -68,9 +67,13 @@ function registerBattleLog(body, success, fail) {
  * @param {function} success [callback]
  * @param {function} fail [callback]
  */
+async function searchMypageMemberInfo(email, success, fail) {
+  const api = memberInstance();
+  await api.get(`/member/${email}`).then(success).catch(fail);
+}
+
 function searchTop5Member(success, fail) {
   const api = memberInstance();
-
   api.get(`/member/battlelog/rank`).then(success).catch(fail);
 }
 
@@ -80,6 +83,7 @@ function searchTop5Member(success, fail) {
  * @param {function} success [callback]
  * @param {function} fail [callback]
  */
+
 function deleteMemberImg(success, fail) {
   const api = memberInstance();
 

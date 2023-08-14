@@ -205,11 +205,11 @@ function uploadPrivatePost(postId, body, success, fail) {
  * @param {function} success [callback]
  * @param {function} fail [callback]
  */
-function searchPublicPost(offset, memberId, success, fail) {
+function searchPublicPost(offset, email, success, fail) {
   const api = postInstance();
 
   api
-    .get(`/post/public?offset=${offset}&memberId=${memberId}`)
+    .get(`/public?offset=${offset}&email=${email}`)
     .then(success)
     .catch(fail);
 }

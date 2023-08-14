@@ -1,57 +1,59 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { userLogout } from 'redux/userSlice';
 
 import axios from 'axios';
-import { searchMypageMemberInfo, updateMemberInfo, updateMemberImg } from 'apiList/member';
+import { searchMypageMemberInfo, updateMemberInfo, updateMemberImg, deleteMember, deleteMemberImg } from 'apiList/member';
 
 const MyPageMine = ({setMyPage, email}) => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   //페이지 유저 정보
   const [memberInfo, setMemberInfo] = useState({});
   // 자기소개
   const [introduce, setIntroduce] = useState("");
   const [nickName, setNickName] = useState("");
+  const [profileImage, setProfileImage] = useState('/image/login/LoginDefaultImg.png');
+
   // 내 페이지인지
   const [ismyPage, setIsmyPage] = useState(false);
 
-  const [selectedImage, setSelectedImage] = useState(null);
   //새로 업로드할 사진
   const [selectedImageFile, setSelectedImageFile] = useState(null);
-
 
   // 자기소개 수정 모달
   const [showModal, setShowModal] = useState(false);
   // 프로필 사진 수정 모달
   const [showProfileModal, setShowProfileModal] = useState(false);
 
-
-  useEffect(() => {
-    const getmemberInfo = async() => {
-      await searchMypageMemberInfo(email, (response) => {
-        console.log(response.data.response);
-        setMemberInfo(response.data.response)
-        setIntroduce(response.data.response.introduce)
-        setNickName(response.data.response.nickName)
-        setMyPage(response.data.response.isMyPage);
-        setIsmyPage(response.data.response.isMyPage);
-      }, (error) => {
-        console.log(error);
-      })
-    }
-    getmemberInfo();
-  },[]);
-
   const getmemberInfo = async() => {
-    await searchMypageMemberInfo(1, (response) => {
+    await searchMypageMemberInfo(email, (response) => {
       console.log(response.data.response);
       setMemberInfo(response.data.response)
       setIntroduce(response.data.response.introduce)
       setNickName(response.data.response.nickName)
+      setMyPage(response.data.response.isMyPage);
+      if(response.data.response.profileImg!=null){
+        setProfileImage("https://storage.googleapis.com/reon-bucket/"+response.data.response.profileImg);
+      }else{
+        setProfileImage('/image/login/LoginDefaultImg.png');        
+      }
+      setIsmyPage(response.data.response.isMyPage);
     }, (error) => {
       console.log(error);
     })
   }
 
-  // 자기소개 수정함수
+
+  useEffect(() => {
+    getmemberInfo();
+  },[]);
+
+
+
+  // 자기소개 수정하기
   const saveIntroduction = () => {
     updateMemberInfo({ introduce: introduce, nickName: memberInfo.nickName }, () => {
       alert("수정이 완료되었습니다");
@@ -59,10 +61,26 @@ const MyPageMine = ({setMyPage, email}) => {
     }, (error) => {
       console.log(error);
     })
-
-
     toggleModal(); // 모달을 닫습니다.
   };
+  // 회원 탈퇴하기
+  const deleteUser = () => {
+    if(window.confirm("정말 탈퇴하시겠습니까?")){
+      if(window.confirm("탈퇴 후에 모든 정보가 삭제됩니다.")){
+        deleteMember(() => {
+          alert("회원 탈퇴가 완료되었습니다.");
+          localStorage.clear();
+          dispatch(userLogout());
+          navigate("/");
+        }, (error) => {
+          console.log(error);
+        })
+      }
+    }
+    toggleModal(); // 모달을 닫습니다.
+  };
+
+
   //프로필 수정 모달 열기
   const toggleModal = () => {
     if (showModal) {
@@ -94,22 +112,41 @@ const MyPageMine = ({setMyPage, email}) => {
     }
   };
   
-  // profileImg 변경 테스트 임 수정할거
+  // profileImg 변경
   const saveProfileImage = () => {
-    if (!selectedImageFile) return;
-    const formData = new FormData();
-    formData.append('profileImg', selectedImageFile);
-    updateMemberImg(formData,(response) => {
-      if (response.data.success) {
-        alert("수정이 완료되었습니다.")
-        setShowProfileModal(false);
-      } else {
-        alert('안되노.');
-      }
-    },(error) => {
+    
+    console.log(selectedImageFile);
+
+    if (selectedImageFile==null){
+      alert("이미지를 업로드해주세요");
+    }
+    else{
+      const formData = new FormData();
+      formData.append('profileImg', selectedImageFile);
+
+      updateMemberImg(formData,(response) => {
+        if (response.data.success) {
+          getmemberInfo();
+          setShowProfileModal(false);
+        } else {
+          alert('안되노.');
+        }
+      },(error) => {
+        console.log(error);
+      })
+  }
+  };
+
+  const deleteUserImage = ()=>{
+    deleteMemberImg(()=>{
+      getmemberInfo();
+      setShowProfileModal(false);
+    },(error)=>{
       console.log(error);
     })
-  };
+  }
+
+
 
   return (
     <div className="pt-12 flex items-start">
@@ -118,14 +155,14 @@ const MyPageMine = ({setMyPage, email}) => {
       {ismyPage &&
         <img
           className="rounded-full w-[200px] h-[200px] object-cover mr-4 hover:opacity-70 hover:blur-s cursor-pointer"
-          src={memberInfo.profileImg}
+          src={profileImage}
           alt={memberInfo.name}
           onClick={toggleProfileModal}
         />}
       {!ismyPage &&
         <img
           className="rounded-full w-[200px] h-[200px] object-cover mr-4 hover:opacity-70 hover:blur-s cursor-pointer"
-          src={memberInfo.profileImg}
+          src={profileImage}
           alt={memberInfo.name}
         />}
       {/* 프로필수정 */}
@@ -173,10 +210,10 @@ const MyPageMine = ({setMyPage, email}) => {
             className="w-full p-2 mt-2 border rounded"
           />
           <button className="mt-4 px-6 py-2 rounded bg-lightBlue text-black" onClick={saveIntroduction}>저장</button>
+          <button className="mt-4 px-6 py-2 rounded bg-danger text-black" onClick={deleteUser}>탈퇴</button>
         </div>
       </div>
     )}
-
       {/* 프로필사진변경 */}
       {showProfileModal && (
               <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50 z-50"> 
@@ -185,11 +222,11 @@ const MyPageMine = ({setMyPage, email}) => {
                   <h2 className="text-2xl font-bold mb-4">프로필 사진 변경</h2>
                   <input type="file" onChange={handleImageChange} />
                   <button className="mt-4 px-6 py-2 rounded bg-lightBlue text-black" onClick={saveProfileImage}>저장</button>
+                  <button className="mt-4 px-6 py-2 rounded bg-danger text-black" onClick={deleteUserImage}>삭제</button>
                 </div>
               </div>
             )
           }
-
     </div>
   );
 }
