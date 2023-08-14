@@ -32,11 +32,11 @@ const Comment = ({ comment, deleteComment, changeShow, updateComment }) => {
   const [content, setContent] = useInputText(comment.content, (value) => {return value.length < maxLength});
   const [updateMode, setUpdateMode] = useState(false);
 
-  const moveToMyPage = (event) => {
-    event.preventDefault();
-    changeShow();
-    navigate('/mypage');
-  };
+    const moveToMyPage = (event) => {
+        event.preventDefault();
+        changeShow();
+        navigate(`/mypage/${comment.eamil}`)
+    }
 
   const changeUpdateMode = () => {
     // 댓글 수정 상태 textarea 활성/비활성화
