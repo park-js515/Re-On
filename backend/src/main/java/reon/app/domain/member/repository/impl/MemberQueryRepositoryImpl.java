@@ -46,6 +46,7 @@ public class MemberQueryRepositoryImpl implements MemberQueryRepository {
                         member.memberInfo.profileImg,
                         member.memberBattleInfo.tier,
                         member.memberBattleInfo.gameCnt,
+                        member.memberBattleInfo.score,
                         member.memberBattleInfo.win,
                         member.memberBattleInfo.lose
                 ))
