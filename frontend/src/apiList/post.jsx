@@ -153,7 +153,6 @@ function likePost(postId, success, fail) {
  */
 function searchLikePost(offset, success, fail) {
   const api = postInstance();
-
   api.get(`/post/liked?offset=${offset}`).then(success).catch(fail);
 }
 
@@ -193,7 +192,6 @@ function searchPrivatePostDetail(postId, success, fail) {
  */
 function uploadPrivatePost(postId, body, success, fail) {
   const api = postInstance();
-
   api.put(`/post/private/${postId}`, JSON.stringify(body)).then(success).catch(fail);
 }
 
