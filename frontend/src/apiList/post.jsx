@@ -10,6 +10,7 @@ import { postInstance } from './lib/index';
  */
 function savePost(videoId, actionVideo, success, fail) {
   const api = postInstance();
+  api.defaults.headers['Content-Type'] = 'multipart/form-data';
 
   api
     .post(`/post?videoId=${videoId}`, actionVideo)
@@ -196,7 +197,7 @@ function uploadPrivatePost(postId, body, success, fail) {
   api.put(`/post/private/${postId}`, JSON.stringify(body)).then(success).catch(fail);
 }
 
-// 15. mypage public post 목록 조회
+// 15. mypage public post 목록 조회 (아직 업데이트 안된 듯)
 /**
  *
  * @param {number} offset
