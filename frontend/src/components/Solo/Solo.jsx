@@ -224,7 +224,7 @@ const SoloApp = () => {
 
   return (
   
-      <div className="">
+      <div className="overflow-y-scroll scrollbar-hide">
         <img
                 src="image/solo/solo.png"
                 className="mx-auto h-[200px] w-[300px] mt-2"

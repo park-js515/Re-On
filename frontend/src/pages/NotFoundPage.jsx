@@ -23,17 +23,18 @@ const NotFoundPage = () => {
       text: '내가 데려다 줄까?',
       width: 600,
       padding: '3em',
-      background: '#fff url(/images/trees.png)',
+      background: '#fff url(/image/t0rees.png)',
+      button: 'info',
       backdrop: `
-        rgba(102, 201, 143, 0.4)
-        url("/images/nyan-cat.gif")
-        left top
+        rgba(199, 102, 201, 0.4)
+        url("/image/character/cutereon.png")
+        center top
         no-repeat
       `,
       confirmButtonText: '응! ',
       cancelButtonText: '아냐, 괜찮아',
       showCancelButton: true,
-      color: '#a3ddbb',
+      color: 'info',
     }).then((result) => {
       if (result.isConfirmed) {
         navigate('/');
@@ -43,7 +44,7 @@ const NotFoundPage = () => {
 
   return (
     <div className="bg-gradient-to-t from-lightBlue to-begie flex items-center justify-center h-screen">
-      <div className="flex flex-col items-center justify-center max-h-[400px] ">
+      <div className="flex flex-col items-center justify-center max-h-[600px] ">
         {View}
         <div className="mt-4 p-4">
           <button 

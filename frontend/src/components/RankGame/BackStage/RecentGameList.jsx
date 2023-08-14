@@ -20,7 +20,7 @@ const RecentGameList = () => {
   // 현재 유저 => 최근 10개의 게임정보
 
   return (
-    <div className="flex flex-col my-28 pb-16">
+    <div className="flex flex-col my-24 pb-16">
       <div className='text-6xl mb-6 pb-6  font-semibold mx-2'>
         최근전적
       </div>

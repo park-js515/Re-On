@@ -18,7 +18,7 @@ export const SContainer = styled.div`
       #8ccfd5 100%
     );
   background-size: cover;
-  margin-top: 6vw;
+  margin-top: 10vw;
   height: 20.5vw;
   width: 45vw;
   border-radius: 12px;
@@ -137,8 +137,8 @@ export const SRank = styled.div`
   margin-top: -1vw;
    width: 25vw;  // 반응형 너비로 설정
    height: 19.75vw; // 반응형 높이로 설정 (200px:250px의 비율 유지)
-   max-width: 300px; // 최대 너비 제한 (선택적)
-   max-height: 300px; // 최대 높이 제한 (선택적)
+   max-width: 250px; // 최대 너비 제한 (선택적)
+   max-height: 250px; // 최대 높이 제한 (선택적)
    min-height: 100px;
    min-width: 100px;
  }

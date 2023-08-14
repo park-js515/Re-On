@@ -88,7 +88,7 @@ export default function MainPage() {
         </SwiperSlide>
 
         <SwiperSlide className={`bg-gradient-to-t from-begie to-lightBlue ${activeIndex === 2 ? "fade-in" : ""}`}>
-            <div>/
+            <div>
               
             <h1 className="absolute top-20 left-1/2 transform -translate-x-1/2 text-black font-semibold text-6xl ">🔥인기영상</h1>
               <div className="">
