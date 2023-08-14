@@ -32,7 +32,7 @@ export default function OpenViduApp() {
   const [mySessionId, setMySessionId] = useState('TEST'); // 세션아이디 필요없음
   // 유저 정보 받기
   const [myUserName, setMyUserName] = useState(
-    `연기자${Math.floor(Math.random() * 100)}`,
+    localStorage.getItem('nickName'),
   );
   const [session, setSession] = useState(undefined);
   const [mainStreamManager, setMainStreamManager] = useState(undefined);
