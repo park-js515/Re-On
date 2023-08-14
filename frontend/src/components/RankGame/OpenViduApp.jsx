@@ -23,7 +23,7 @@ import useSpeechToText from 'hooks/useSpeechToText';
 import useLoading from 'hooks/useLoading';
 import useVideoPlayer from 'hooks/useVideoPlayer';
 import { registerBattleLog } from 'apiList/member';
-import { searchRandomVideo } from 'apiList/video';
+import { randomVideo } from 'apiList/video';
 
 const APPLICATION_SERVER_URL =
   process.env.NODE_ENV === 'production' ? '' : 'https://i9c203.p.ssafy.io';
@@ -100,7 +100,7 @@ export default function OpenViduApp() {
       // +++++++++++++++++++++++++++++++++++++++++++++++++++++++
       // if (mySide === 'USER_ONE') {
       console.log('iMMMMMMMMMMMMMMONEEEEEEEEE');
-      searchRandomVideo(
+      randomVideo(
         (response) => {
           console.log('@@@@@@@@@@@@@@@@', response.data.response);
         },
