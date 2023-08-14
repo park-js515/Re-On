@@ -18,4 +18,6 @@ public interface PostCommentService {
     Long save(PostCommentSaveDto dto);
 
     Long update(PostCommentUpdateDto dto);
+
+    void deleteByMemberId(Long loginId);
 }

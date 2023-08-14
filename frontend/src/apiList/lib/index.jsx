@@ -1,10 +1,4 @@
-// import axios from "axios"
 import createCustomAxios from "./createCustomAxios";
-// const networktarget = process.env.REACT_APP_API;
-
-// function getAccessToken() {
-//   return localStorage.getItem('accessToken');
-// }
 
 function authInstance() {
   const instance = createCustomAxios('/api/auth');
@@ -25,7 +19,7 @@ function openviduInstance() {
 }
 
 function postInstance() {
-  const instance = createCustomAxios('/api/post-management/post');
+  const instance = createCustomAxios('/api/post-management');
 
   return instance;
 }

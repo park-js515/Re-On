@@ -17,6 +17,7 @@ const SDialog = styled(Dialog)(() => ({
     backgroundImage: 'url(image/rank/rank-modal-bg.png)',
     backgroundSize: 'cover',
     backgroundPosition: 'center',
+    width: '50%',
   },
 }));
 
@@ -93,12 +94,13 @@ export default function TutorialModal({ onConfirm, isOpen, onClose }) {
         PaperComponent={PaperComponent}
         TransitionComponent={Transition}
         aria-labelledby="draggable-dialog-title"
+        maxWidth={false}
       >
         <STitle style={{ cursor: 'move' }} id="draggable-dialog-title">
           튜토리얼
         </STitle>
 
-        <DialogContent>
+        <DialogContent style={{ overflow: 'hidden' }}>
           <img src={`${images[imageIndex]}`} alt="Tutorial" />
         </DialogContent>
 
