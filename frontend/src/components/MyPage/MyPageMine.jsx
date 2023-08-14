@@ -220,9 +220,11 @@ const MyPageMine = ({setMyPage, email}) => {
                 <div className="bg-white w-3/4 md:w-1/2 lg:w-1/3 xl:w-1/4 p-4 rounded-lg shadow-lg relative">
                   <span className="absolute top-2 right-2 cursor-pointer text-xl" onClick={toggleProfileModal}>✖</span>
                   <h2 className="text-2xl font-bold mb-4">프로필 사진 변경</h2>
-                  <input type="file" onChange={handleImageChange} />
-                  <button className="mt-4 px-6 py-2 rounded bg-lightBlue text-black" onClick={saveProfileImage}>저장</button>
-                  <button className="mt-4 px-6 py-2 rounded bg-danger text-black" onClick={deleteUserImage}>삭제</button>
+            <input type="file" onChange={handleImageChange} />
+            <div>
+                <button className="mt-4 px-6 py-2 rounded bg-lightBlue text-black" onClick={saveProfileImage}>저장</button>
+                <button className="mt-4 px-6 py-2 rounded bg-danger text-black" onClick={deleteUserImage}>삭제</button>
+              </div>
                 </div>
               </div>
             )

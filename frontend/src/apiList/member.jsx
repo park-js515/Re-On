@@ -88,7 +88,7 @@ function deleteMemberImg(success, fail) {
 // 8. member profile image 수정
 /**
  *
- * @param {formData} profileImg
+ * @param {FormData} profileImg
  * @param {function} success [callback]
  * @param {function} fail [callback]
  */

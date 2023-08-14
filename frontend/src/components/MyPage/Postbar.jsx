@@ -36,6 +36,7 @@ const Postbar = ({myPage, email}) => {
             </button>
             </div>
           </div>}
+          
           {myPage &&
           <div className="flex text-gray-700 text-center py-2 m-4 pr-5">
             <div className="flex">

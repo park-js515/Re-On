@@ -4,7 +4,7 @@ import { postInstance } from './lib/index';
 /**
  *
  * @param {number} videoId
- * @param {formData} actionVideo
+ * @param {FormData} actionVideo
  * @param {function} success [callback]
  * @param {function} fail [callback]
  */
@@ -93,7 +93,7 @@ function deletePostComment(commentId, success, fail) {
   api.delete(`/post/comment/${commentId}`).then(success).catch(fail);
 }
 
-// 7. post 삭제 (swagger에 put으로 되어있는 듯)
+// 7. post 삭제 (올라온 post를 내린다)
 /**
  *
  * @param {number} postId
@@ -103,7 +103,7 @@ function deletePostComment(commentId, success, fail) {
 function deletePost(postId, success, fail) {
   const api = postInstance();
 
-  api.delete(`/post/delete/${postId}`).then(success).catch(fail);
+  api.put(`/post/delete/${postId}`).then(success).catch(fail);
 }
 
 // 8. 투표해줘 public post 목록 전체 조회
@@ -153,7 +153,6 @@ function likePost(postId, success, fail) {
  */
 function searchLikePost(offset, success, fail) {
   const api = postInstance();
-
   api.get(`/post/liked?offset=${offset}`).then(success).catch(fail);
 }
 
@@ -183,7 +182,7 @@ function searchPrivatePostDetail(postId, success, fail) {
   api.get(`/post/private/${postId}`).then(success).catch(fail);
 }
 
-// 14. private to public post
+// 14. PRIVATE to PUBLIC post
 /**
  *
  * @param {number} postId
@@ -193,7 +192,6 @@ function searchPrivatePostDetail(postId, success, fail) {
  */
 function uploadPrivatePost(postId, body, success, fail) {
   const api = postInstance();
-
   api.put(`/post/private/${postId}`, JSON.stringify(body)).then(success).catch(fail);
 }
 
@@ -226,7 +224,7 @@ async function searchPublicPostDetail(postId, success, fail) {
   await api.get(`/post/public/${postId}`).then(success).catch(fail);
 }
 
-// 17. public to private post
+// 17. PUBLIC to PRIVATE post
 /**
  *
  * @param {number} postId
