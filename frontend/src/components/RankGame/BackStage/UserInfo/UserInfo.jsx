@@ -1,6 +1,5 @@
 import { SContainer, SRank } from './style';
 import { Link } from 'react-router-dom';
-// import defaultProfile from "/image/character/cuetreon.png";
 import React, { useEffect, useState } from 'react';
 import { searchBackStageMembmerInfo } from 'apiList/member';
 
@@ -18,9 +17,8 @@ const getTierImage = (tier) => {
   }
 };
 const UserInfo = () => {
-  const [userData, setUserData] = useState([]);
-
   const containerRef = React.useRef(null);
+  const [userData, setUserData] = useState([]);
 
   useEffect(() => {
     searchBackStageMembmerInfo(
@@ -31,7 +29,6 @@ const UserInfo = () => {
         console.log(error);
       },
     );
-
     // 마우스 위치찾는거 info 포켓몬카드 처럼
 
     const handleMouseMove = (e) => {
@@ -63,9 +60,9 @@ const UserInfo = () => {
       <div className="profile-container">
         <Link to="/mypage">
           <img
-            src={userData.profileImg || '/image/character/cutereon.png'}
+            src={userData.profileImg || '/image/login/userdefault.png'}
             alt=""
-            className="h-10 w-10 rounded-full bg-gray-50"
+            className="h-10 w-10 rounded-full bg-white"
           />
         </Link>
         <div>
@@ -74,16 +71,27 @@ const UserInfo = () => {
               {userData.nickName || '개똥이'}
             </div>
           </Link>
-          <div className="recent">총전적</div>
+          <div className="recent">총{userData.gameCnt} 전</div>
           <div className="recentwdl">
-            {userData.win}승 {userData.gameCnt - userData.win - userData.lose}무{' '}
-            {userData.lose}패
+            {userData.win}승/ {userData.gameCnt - userData.win - userData.lose}
+            무/ {userData.lose}패
+          </div>
+          <div className="tier">티어 {userData.tier}</div>
+          <div class="w-full h-6 bg-gray rounded-full dark:bg-gray ml-1">
+            {/* 티어그래프 여기야 종상아 */}
+            <div
+              class="bg-[#BCD570] h-6 text-lg font-medium text-white text-center p-0.5 leading-none rounded-full"
+              style={{ width: `${userData.score || 45}%` }}
+            >
+              {' '}
+              {userData.score || 45}%{' '}
+            </div>
           </div>
         </div>
+        <SRank className="rank">
+          <img src={getTierImage(userData.tier)} />
+        </SRank>
       </div>
-      <SRank className="rank">
-        <img src={getTierImage(userData.tier)} />
-      </SRank>
     </SContainer>
   );
 };

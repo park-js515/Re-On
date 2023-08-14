@@ -23,6 +23,7 @@ import useSpeechToText from 'hooks/useSpeechToText';
 import useLoading from 'hooks/useLoading';
 import useVideoPlayer from 'hooks/useVideoPlayer';
 import { registerBattleLog } from 'apiList/member';
+import { searchRandomVideo } from 'apiList/video';
 
 const APPLICATION_SERVER_URL =
   process.env.NODE_ENV === 'production' ? '' : 'https://i9c203.p.ssafy.io';
@@ -97,6 +98,17 @@ export default function OpenViduApp() {
         console.log('유저2 이름 변경');
       }
       // +++++++++++++++++++++++++++++++++++++++++++++++++++++++
+      // if (mySide === 'USER_ONE') {
+      console.log('iMMMMMMMMMMMMMMONEEEEEEEEE');
+      searchRandomVideo(
+        (response) => {
+          console.log('@@@@@@@@@@@@@@@@', response.data.response);
+        },
+        (error) => {
+          console.log(error);
+        },
+      );
+      // }
       // ### 자기 닉네임을 마이유저 네임으로
       // ### 유저 1이면
       // ### 비디오ID, STT정보 받음.
@@ -695,24 +707,6 @@ export default function OpenViduApp() {
     handleCalculateScore();
     await startLoading('lizard', 1000);
 
-    // API 보내는 곳 (결과) if(resultGame !=== 999)
-    if (resultGame !== 999) {
-      const body = {
-        opponentEmail: 'test@test.com',
-        videoId: 1,
-        result: 1,
-      };
-      registerBattleLog(
-        body,
-        (response) => {
-          console.log('기록 전송 완료', response);
-        },
-        (error) => {
-          console.error('기록 전송 에러', error);
-        },
-      );
-    }
-
     setToggleEnd(true);
     setStage('END');
   };
@@ -739,6 +733,8 @@ export default function OpenViduApp() {
   };
 
   // ############ 턴 시작 ###############
+  const [isApiCalled, setIsApiCalled] = useState(false); // API 콜 한번만 하도록
+
   useEffect(() => {
     // 영화 미리보기
     if (stage === 'WATCHING_MOVIE') {
@@ -783,10 +779,29 @@ export default function OpenViduApp() {
       setStage('RESULT');
 
       // 결과 보여주기
-    } else if (stage === 'RESULT') {
+    } else if (stage === 'RESULT' && !isApiCalled) {
       // 커튼 닫기
       setLog((prevLog) => [...prevLog, `결과를 확인하세요!`]);
       handleViewResult();
+
+      // API 보내는 곳 (결과) if(resultGame !=== 999)
+      if (resultGame !== 999) {
+        const body = {
+          opponentEmail: 'gyulife7301',
+          videoId: 1,
+          result: -1,
+        };
+        registerBattleLog(
+          body,
+          (response) => {
+            console.log('기록 전송 완료', response);
+            setIsApiCalled(true);
+          },
+          (error) => {
+            console.error('기록 전송 에러', error);
+          },
+        );
+      }
 
       // 게임 종료
     } else if (stage === 'END') {
