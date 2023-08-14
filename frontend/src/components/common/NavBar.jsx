@@ -29,7 +29,7 @@ export default function Navbar() {
       // string 이라 "null"로 받아야 한다.
       const profileImg = localStorage.getItem('profileImg');
       if (profileImg !== 'null' && profileImg !== '') {
-        setProfileImg(profileImg);
+        setProfileImg(`https://storage.googleapis.com/reon-bucket/${profileImg}`);
       }
     }
   }, [userIsLogin]);
