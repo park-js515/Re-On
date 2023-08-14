@@ -207,7 +207,7 @@ function searchPublicPost(offset, email, success, fail) {
   const api = postInstance();
 
   api
-    .get(`/public?offset=${offset}&email=${email}`)
+    .get(`/post/public?offset=${offset}&email=${email}`)
     .then(success)
     .catch(fail);
 }

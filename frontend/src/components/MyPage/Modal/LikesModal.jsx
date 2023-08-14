@@ -13,8 +13,8 @@ const LikesModal = ({detailPost, changeShow, getPosts}) => {
     const [content, setContent] = useState(detailPost.content)
     
     //마이페이지 이동 
-    const moveToMyPage = (event) => {
-        navigate('/mypage')
+    const moveToMyPage = () => {
+        navigate('/mypage/'+detailPost.email)
     }
     
     //게시글 좋아요

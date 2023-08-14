@@ -11,7 +11,7 @@ const Comment = ({comment, deleteComment, updateComment, changeShow, hierarchy})
     const moveToMyPage = (event) => {
         event.preventDefault();
         changeShow();
-        navigate('/mypage')
+        navigate('/mypage/'+comment.email)
     }
 
     const changeUpdateMode = () => {

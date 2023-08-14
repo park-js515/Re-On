@@ -36,9 +36,11 @@ const MyPageMine = ({setMyPage, email}) => {
       setNickName(response.data.response.nickName)
       setMyPage(response.data.response.isMyPage);
       if(response.data.response.profileImg!=null){
-        setProfileImage("https://storage.googleapis.com/reon-bucket/"+response.data.response.profileImg);
+        setProfileImage("https://storage.googleapis.com/reon-bucket/" + response.data.response.profileImg);
+        localStorage.setItem("profileImg",response.data.response.profileImg);
       }else{
-        setProfileImage('/image/login/LoginDefaultImg.png');        
+        setProfileImage('/image/login/LoginDefaultImg.png');
+        localStorage.setItem("profileImg",null);
       }
       setIsmyPage(response.data.response.isMyPage);
     }, (error) => {
