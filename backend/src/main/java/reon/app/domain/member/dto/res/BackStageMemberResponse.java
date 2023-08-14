@@ -12,14 +12,16 @@ public class BackStageMemberResponse {
     private String profileImg;
     private Tier tier;
     private int gameCnt;
+    private int score;
     private int win;
     private int lose;
 
-    public BackStageMemberResponse(String nickName, String profileImg, Tier tier, int gameCnt, int win, int lose) {
+    public BackStageMemberResponse(String nickName, String profileImg, Tier tier, int gameCnt, int score, int win, int lose) {
         this.nickName = nickName;
         this.profileImg = profileImg;
         this.tier = tier;
         this.gameCnt = gameCnt;
+        this.score =score;
         this.win = win;
         this.lose = lose;
     }
