@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import PostModal from '../Modal/PostModal';
 import { searchPublicPost, searchPublicPostDetail } from 'apiList/post';
 
@@ -8,26 +8,33 @@ import { searchPublicPost, searchPublicPostDetail } from 'apiList/post';
     const [selectedPostId, setSelectedPostId] = useState();
     const [posts, setPosts] = useState([]);
     const [detailPost, setDetailPost] = useState();
+    const [rest, setRest] = useState(true) // 더 로드할 영상이 있는지
+    let page = 1;
 
-    useEffect(() => {
-      const getPosts = () => {
-        searchPublicPost(1, email, (response) => {
-          console.log(response.data.response);
-          setPosts(response.data.response)
-        }, (error) => {
-          console.log(error);
-        })
-      }
-      getPosts();
-    },[]);
-    
     const getPosts = () => {
-      searchPublicPost(email, 1, (response) => {
-        console.log(response.data.response);
-        setPosts(response.data.response)
-      }, (error) => {
-        console.log(error);
-      })
+      if (rest){
+        searchPublicPost(
+          page,
+          email,
+          (response) => {
+            const newdata = response.data.response
+            if (newdata.length > 0){
+              console.log(newdata)
+              setPosts((posts) => {return [...posts, ...newdata]})
+              page++;
+              if (newdata.length < 10){
+                setRest(false)
+              }
+            }
+            else {
+              setRest(false);
+            }
+          },
+          (error) => {
+            console.log(error);
+          }
+          )
+      }
     }
 
      const OpenModal = async(id) => {
@@ -42,21 +49,37 @@ import { searchPublicPost, searchPublicPostDetail } from 'apiList/post';
       setShowModal(true);
     };
 
+
+    // 무한 스크롤
+    const target = useRef()
+    const options = {
+        threshold: 1
+    };
+    const observer = new IntersectionObserver(getPosts, options)
+
+    useEffect(()=>{
+        observer.observe(target.current)
+        return ()=>{
+            setPosts([])
+        }
+    }, []);
+
    
     return (
       <div className="bg-white py-24 sm:py-32 ">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="mx-auto rounded grid max-w-2xl grid-cols-1 gap-x-8 gap-y-4 sm:mt-1 sm:pt-1 lg:mx-0 lg:max-w-none lg:grid-cols-3">
+          <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-4 sm:mt-1 sm:pt-1 lg:mx-0 lg:max-w-none lg:grid-cols-3">
+            
             {posts.map((post) => (
               <div key={post.id} className="flex max-w-xl shadow-md rounded flex-col items-start justify-between transform transition-transform duration-300 hover:scale-105 hover:shadow-lg my-4 ">
                 
                 {/* 썸넬 */}
-                <div 
-                    style={{ backgroundImage: `url(${post.thumbnail})` }} 
+                <img 
+                    src={ "https://storage.googleapis.com/reon-bucket/" + post.thumbnail }
                     className="w-full h-64 bg-cover bg-center rounded featured-item cursor-pointer" 
-                  onClick={() => { OpenModal(post.id)}}
+                    onClick={() => { OpenModal(post.id) }}
                     alt=""
-                ></div>
+                ></img>
 
                 {/* 좋아요 */}
                 <div className="flex items-center gap-x-4 text-xs ml-2">
@@ -82,6 +105,7 @@ import { searchPublicPost, searchPublicPostDetail } from 'apiList/post';
                 )
             }
           </div>
+          <div className="text-center" ref={target}>{rest ? "🚝찾는중🚝" : "🛑모든 영상 로딩 완료🛑" }</div>
         </div>
       </div>
     );

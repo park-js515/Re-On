@@ -59,7 +59,7 @@ const LikesModal = ({detailPost, changeShow, getPosts}) => {
             <div className="w-8/12 pr-4 border-r border-gray-200 overflow-y-auto max-h-[calc(80vh-48px)] scrollbar-hide">
                 
                 {/* 비디오 */}
-                <iframe className="w-full h-full rounded-md shadow-sm" title="Youtube"  src={"https://storage.googleapis.com/reon-bucket/" + detailPost.actionPath}></iframe>
+                <video className="w-full h-full rounded-md shadow-sm" controls  src={ detailPost.actionPath ? "https://storage.googleapis.com/reon-bucket/" + detailPost.actionPath : null}></video>
                 
                 {/* 작성자 정보 */}
                     <div className="my-4 p-3 bg-gray-100 rounded-lg">
@@ -69,7 +69,7 @@ const LikesModal = ({detailPost, changeShow, getPosts}) => {
                         
 
                     <div className="flex items-center">
-                        <img className="rounded-full w-16 h-16 mr-4 hover:shadow-lg transition-shadow cursor-pointer" src={detailPost.profileImg} alt="" onClick={() => {changeShow(); moveToMyPage();}} />
+                        <img className="rounded-full w-16 h-16 mr-4 hover:shadow-lg transition-shadow cursor-pointer" src={detailPost.profileImg ? "https://storage.googleapis.com/reon-bucket/"+detailPost.profileImg  :'image/login/LoginDefaultImg.png'} alt="" onClick={() => {changeShow(); moveToMyPage();}} />
                         <p className="flex-grow text-lg truncate cursor-pointer" onClick={()=>{changeShow(); moveToMyPage();}}>{detailPost.nickName}</p>
                         <button className={`ml-4 px-4 py-2 rounded ${IsLike ? "bg-[#ecebeb] hover:bg-[#aaa6a6] text-[#000]" : "bg-[#8d8d8d] text-black hover:bg-[#8d8d8d]"} transition-all`} onClick={likeVideo}>
                             좋아요 {convertToK(likeCnt)}

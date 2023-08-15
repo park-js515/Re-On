@@ -73,6 +73,7 @@ const Hotlist = ({injectPostId, changeShow}) => {
                   <div key={item.id}>
                       <Videoitem
                           props={item}
+                          type="AllPublic"
                           changeMode={() => {
                               injectPostId(item.id);
                               changeShow();

@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { updatePostComment } from 'apiList/post';
 
+const alter_img_url = process.env.REACT_APP_ALTER_IMG_URL
+
 const useInputText = (initialValue, validator) => {
   const [text, setText] = useState(initialValue);
 
@@ -25,18 +27,18 @@ const useInputText = (initialValue, validator) => {
   return [text, handleSetText];
 };
 
-const Comment = ({ comment, deleteComment, changeShow, updateComment }) => {
+const Comment = ({ comment, deleteComment, changeShow }) => {
   let maxLength = 150; // 150자 제한
 
   const navigate = useNavigate();
   const [content, setContent] = useInputText(comment.content, (value) => {return value.length < maxLength});
   const [updateMode, setUpdateMode] = useState(false);
 
-    const moveToMyPage = (event) => {
-        event.preventDefault();
-        changeShow();
-        navigate(`/mypage/${comment.eamil}`)
-    }
+  const moveToMyPage = (event) => {
+      event.preventDefault();
+      changeShow();
+      window.location.assign("/mypage/"+comment.email)
+  }
 
   const changeUpdateMode = () => {
     // 댓글 수정 상태 textarea 활성/비활성화
@@ -72,17 +74,17 @@ const Comment = ({ comment, deleteComment, changeShow, updateComment }) => {
         <div className="flex items-center">
           <img
             className="rounded-full w-12 h-12 hover:cursor-pointer object-cover"
-            src={comment.profileImg}
+            src={comment.profileImg ? "https://storage.googleapis.com/reon-bucket/"+comment.profileImg : alter_img_url}
             alt="User Avatar"
             onClick={moveToMyPage}
           />
           <div className="ml-4">
-            <p
+            <span
               className="text-sm font-semibold mb-1 hover:cursor-pointer"
               onClick={moveToMyPage}
             >
               {comment.nickName}
-            </p>
+            </span>
 
             <textarea
               cols="30"

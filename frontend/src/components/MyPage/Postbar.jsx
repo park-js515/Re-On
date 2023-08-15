@@ -3,11 +3,12 @@ import Private from './Posts/Private';
 import Likes from './Posts/Likes';
 
 import React, { useState } from "react";
+import Videolist from 'components/VideoComponent/Videolist';
 
-
-const Postbar = ({myPage, email}) => {
+const Postbar = ({myPage, email, changeShow, injectPostId, setIsPrivate}) => {
 
   const [activeComponent, setActiveComponent] = useState('Posts');
+
   return (
     <>
       <ul className="flex items-center justify-around md:justify-center space-x-12 uppercase tracking-widest font-semibold text-xs text-gray-600 z-0">
@@ -51,9 +52,9 @@ const Postbar = ({myPage, email}) => {
           </div>}
           </div>
       </ul>
-      {activeComponent === 'Posts' && <Posts email={email} />}
-      {activeComponent === 'Private' && <Private email={email}/>}
-      {activeComponent === 'Likes' && <Likes email={email}/>}
+      {activeComponent === "Posts" && <Videolist type={activeComponent} injectPostId={injectPostId} changeShow={changeShow} setIsPrivate={setIsPrivate}/>}
+      {activeComponent === "Private" && <Videolist type={activeComponent} injectPostId={injectPostId} changeShow={changeShow} setIsPrivate={setIsPrivate}/>}
+      {activeComponent === "Likes" && <Videolist type={activeComponent} injectPostId={injectPostId} changeShow={changeShow} setIsPrivate={setIsPrivate}/>}
     </>
   );
 };
