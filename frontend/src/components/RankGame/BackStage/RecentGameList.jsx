@@ -12,7 +12,6 @@ const RecentGameList = () => {
     if (!check.current) {
       searchBattleLog(
         (response) => {
-          console.log(response.data.response);
           const newData = response.data.response;
           const temp = [];
 
