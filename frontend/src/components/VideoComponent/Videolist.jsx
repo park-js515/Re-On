@@ -128,22 +128,26 @@ const Videolist = ({injectPostId, changeShow, type, setIsPrivate}) => {
 
     return (
         <div className="py-8 sm:py-8 ">
-            <div className="bg-white bg-opacity-50 mx-auto max-w-7xl px-2 lg:px-8 rounded-lg">
-                <h1 className="my-8 py-24 text-center font-bold text-3xl text-dark ">💌투표해줘</h1>           
-                <div className="flex justify-end my-4 rounded"> 
-                    <div className="relative">
-                        <input 
-                            type="text" 
-                            placeholder="Search by title..." 
-                            value={searchTerm} 
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                            className="py-2 px-4 w-64 shadow-xl rounded-md focus:ring focus:ring-opacity-50" 
-                        />
-                        <span className="absolute inset-y-0 right-4 flex items-center text-gray-400">
-                            🔍
-                        </span>
-                    </div>
-                </div>
+            <div className="bg-white mx-auto max-w-7xl px-2 lg:px-8 rounded-lg">
+                {type === "AllPublic" ?
+                    <>
+                        <h1 className="my-8 py-24 text-center font-bold text-3xl text-dark ">💌투표해줘</h1>           
+                        <div className="flex justify-end my-4 rounded"> 
+                            <div className="relative">
+                                <input 
+                                    type="text" 
+                                    placeholder="Search by title..." 
+                                    value={searchTerm} 
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                    className="py-2 px-4 w-64 shadow-xl rounded-md focus:ring focus:ring-opacity-50" 
+                                    />
+                                <span className="absolute inset-y-0 right-4 flex items-center text-gray-400">
+                                    🔍
+                                </span>
+                            </div>
+                        </div> 
+                    </>
+                : null }
     
                 <div className=" mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:mt-8 sm:pt-8 lg:mx-0 lg:max-w-none lg:grid-cols-3">
                     {filteredData.map((item) => {
