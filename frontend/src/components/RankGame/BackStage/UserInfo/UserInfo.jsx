@@ -60,7 +60,10 @@ const UserInfo = () => {
       <div className="profile-container">
         <Link to="/mypage">
           <img
-            src={userData.profileImg || '/image/login/userdefault.png'}
+            src={
+              `https://storage.googleapis.com/reon-bucket/${userData.profileImg}` ||
+              '/image/login/userdefault.png'
+            }
             alt=""
             className="h-10 w-10 rounded-full bg-white"
           />
@@ -77,10 +80,10 @@ const UserInfo = () => {
             무/ {userData.lose}패
           </div>
           <div className="tier">티어 {userData.tier}</div>
-          <div class="w-full h-6 bg-gray rounded-full dark:bg-gray ml-1">
+          <div className="w-full h-6 bg-gray rounded-full dark:bg-gray ml-1">
             {/* 티어그래프 여기야 종상아 */}
             <div
-              class="bg-[#BCD570] h-6 text-lg font-medium text-white text-center p-0.5 leading-none rounded-full"
+              className="bg-[#BCD570] h-6 text-lg font-medium text-white text-center p-0.5 leading-none rounded-full"
               style={{ width: `${userData.score || 45}%` }}
             >
               {' '}
