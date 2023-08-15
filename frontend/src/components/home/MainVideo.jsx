@@ -6,19 +6,19 @@ import 'swiper/css/pagination';
 import { EffectCoverflow, Pagination } from 'swiper/modules';
 
 // MainVideo 컴포넌트는 비디오 컨텐츠
-function MainVideo({ videoId  }) {
-const youtubeEmbedLink = `https://www.youtube.com/embed/${videoId}`;
+function MainVideo({ videoId }) {
+  const youtubeEmbedLink = `https://www.youtube.com/embed/${videoId}`;
   return (
     <div className="video-slide -mt-56">
-
-       <iframe
+      <iframe
         width="100%"
         height="100%"
         src={youtubeEmbedLink}
         title="YouTube video player"
-        frameborder="10"
+        // frameborder="10"
+        style={{ border: '10px solid' }}
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        allowfullscreen
+        allowFullScreen
       ></iframe>
     </div>
   );
@@ -26,7 +26,9 @@ const youtubeEmbedLink = `https://www.youtube.com/embed/${videoId}`;
 
 export default function App() {
   return (
-    <div className="swiper"> {/* 부모 컨테이너 */}
+    <div className="swiper">
+      {' '}
+      {/* 부모 컨테이너 */}
       <Swiper
         effect={'coverflow'}
         grabCursor={true}
@@ -55,7 +57,6 @@ export default function App() {
         <SwiperSlide>
           <MainVideo videoId="nIm-yyATZcI" />
         </SwiperSlide>
-      
       </Swiper>
     </div>
   );
