@@ -2,6 +2,14 @@ import { useEffect, useRef, useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import Swal from "sweetalert2";
 
+const clearLocalStorage = () => {
+  localStorage.clear();
+};
+
+const loginRedirect = () => {
+  window.location.replace('/login');
+}
+
 const AuthComponent = ({ authenticated, component }) => {
   const check = useRef(false);
   const [navigateToLogin, setNavigateToLogin] = useState(false); // 확인 누른 상태
@@ -12,11 +20,11 @@ const AuthComponent = ({ authenticated, component }) => {
         icon: 'error',
         title: '로그인',
         text: '로그인을 먼저 해주세요',
-      }).then((result) => {
-        if (result.isConfirmed) {
-          setNavigateToLogin(true); // 확인 버튼을 눌렀을 때만 상태를 변경
+        willClose: () => {
+          clearLocalStorage();
+          loginRedirect();
         }
-      });
+      })
     }
 
     return () => {

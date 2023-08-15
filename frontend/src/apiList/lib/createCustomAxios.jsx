@@ -1,7 +1,11 @@
 import axios from 'axios';
+import Swal from 'sweetalert2';
+import 'components/login/styles.css';
 // 라우팅은 window.location로 밖에 일단 못하는 거 같음, 훅이라면 axios안에선 사용할 수 없음.
 // import { useNavigate } from 'react-router-dom';
 // import { router } from '@/routes/index';
+
+let isAlertDisplayed = false;
 
 const clearLocalStorage = () => {
   localStorage.clear();
@@ -12,7 +16,6 @@ const logoutRedirect = () => {
 };
 
 const createCustomAxios = (URL) => {
-
   const customAxios = axios.create({
     baseURL: `${process.env.REACT_APP_API}${URL}`,
     headers: {
@@ -37,9 +40,22 @@ const createCustomAxios = (URL) => {
     },
     async (error) => {
       if (error.response.status === 401 || error.response.status === 403) {
-        alert('세션이 만료되었습니다.');
-        clearLocalStorage();
-        logoutRedirect();
+        if (!isAlertDisplayed) {
+          isAlertDisplayed = true;
+
+          Swal.fire({
+            icon: 'error',
+            title: '세션 만료',
+            text: '세션이 만료되어 로그아웃됩니다.',
+            customClass: {
+              container: 'custom-swal-container',
+            },
+            willClose: () => {
+              clearLocalStorage();
+              logoutRedirect();
+            }
+          });
+        }
       } else {
         return error;
       }
@@ -48,6 +64,5 @@ const createCustomAxios = (URL) => {
 
   return customAxios;
 };
-
 
 export default createCustomAxios;
