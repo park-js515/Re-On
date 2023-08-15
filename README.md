@@ -43,11 +43,95 @@
 <!-- 자유 양식 -->
 
 ## 팀 소개
-* 김ㅇㅇ: 팀장, 프론트엔드 개발
-* 이ㅇㅇ: 부팀장, 기획 및 와이어프레임 작성, 프론트엔드 개발
-* 박ㅇㅇ: 백엔드 개발 및 QA 담당
-* 홍ㅇㅇ: 백엔드 개발, Swagger API 문서 관리
-* 전ㅇㅇ: 코드 리뷰 및 인프라 담당, CI/CD, HTTPS, Docker 구성
+# 팀원소개 🤝
+
+<table align="center">
+    <tr align="center">
+        <td>
+            Backend
+        </td>
+        <td>
+            Backend
+        </td>
+        <td>
+            Frontend
+        </td>
+        <td>
+            Frontend
+        </td>
+        <td>
+            Frontend
+        </td>
+        <td>
+            Frontend
+        </td>
+    </tr>
+    <tr align="center">
+        <td style="min-width: 150px;">
+            <a href="https://github.com/marugy">
+              <img src="https://avatars.githubusercontent.com/u/91540464?v=4?s=100" width="200">
+              <br />
+              <b>marugy</b>
+            </a> 
+        </td>
+        <td style="min-width: 150px;">
+            <a href="https://github.com/jinsikhong">
+              <img src="https://avatars.githubusercontent.com/u/28581484?v=4" width="200">
+              <br />
+              <b>jinsikhong</b>
+            </a>
+        </td>
+        <td style="min-width: 150px;">
+            <a href="https://github.com/PARKHEECHANG">
+              <img src="https://avatars.githubusercontent.com/u/122577719?v=4" width="200">
+              <br />
+              <b>PARKHEECHANG</b>
+            </a> 
+        </td>
+        <td style="min-width: 150px;">
+            <a href="https://github.com/non-inss">
+              <img src="https://avatars.githubusercontent.com/u/122503960?v=4" width="200">
+              <br />
+              <b>non-inss</b>
+            </a> 
+        </td>
+        <td style="min-width: 150px;">
+            <a href="https://github.com/skqlck">
+              <img src="https://avatars.githubusercontent.com/u/95553204?v=4" width="200">
+              <br />
+              <b>skqlck</b>
+            </a> 
+        </td>
+
+        <td style="min-width: 150px;">
+            <a href="https://github.com/park-js515">
+              <img src="https://avatars.githubusercontent.com/u/122588631?v=4" width="200">
+              <br />
+              <b>park-js515</b>
+            </a> 
+        </td>
+    </tr>
+    <tr align="center">
+        <td>
+            신규람
+        </td>
+        <td>
+            홍진식
+        </td>
+        <td>
+            박희창
+        </td>
+        <td>
+            안종상
+        </td>
+        <td>
+            이명인
+        </td>
+        <td>
+            박주성
+        </td>
+    </tr>
+</table>
 
 <!-- 자유 양식 -->
 
