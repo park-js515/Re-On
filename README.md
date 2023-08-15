@@ -89,7 +89,7 @@
             <a href="https://github.com/PARKHEECHANG">
               <img src="https://avatars.githubusercontent.com/u/122577719?v=4" width="200">
               <br />
-              <b>PARKHEECHANG</b>
+              <b>parkheechan</b>
             </a> 
         </td>
         <td style="min-width: 150px;">
