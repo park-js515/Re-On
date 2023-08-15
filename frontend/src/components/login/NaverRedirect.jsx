@@ -3,6 +3,8 @@ import { useEffect, useRef } from 'react';
 import { userLogin } from 'redux/userSlice';
 // import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
+import Swal from 'sweetalert2';
+import 'components/login/styles.css';
 
 const NaverRedirect = () => {
   const code = new URL(window.location.href).searchParams.get('code');
@@ -38,13 +40,23 @@ const NaverRedirect = () => {
             alert(
               '로그인에 문제가 발생했습니다. 로그인 페이지로 다시 이동합니다.',
             );
-            localStorage.clear();
-            window.location.replace('/login');
+            Swal.fire({
+              icon: 'error',
+              title: '로그인',
+              text: '로그인 중 문제가 발생했습니다.',
+              customClass: {
+                container: 'custom-swal-container',
+              },
+              willClose: () => {
+                localStorage.clear();
+                window.location.replace('/login');
+              },
+            });
           });
       };
       NaverLogin();
     }
-    
+
     return () => {
       check.current = false;
     };

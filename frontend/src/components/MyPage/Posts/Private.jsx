@@ -1,4 +1,3 @@
-import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { searchPrivatePost, searchPrivatePostDetail, uploadPrivatePost } from 'apiList/post';
@@ -122,11 +121,11 @@ import { Hidden } from '../../../../node_modules/@mui/material/index';
             {/* 사진 */}
             {posts.map((post) => (
               <div key={post.id} className="flex shadow-md rounded max-w-xl flex-col items-start justify-between transform transition-transform duration-300 hover:scale-105 hover:shadow-lg my-2 ">  
-                 <div 
-                    style={{ backgroundImage: `url(${post.thumbnail})` }} 
+                 <img 
+                    src={ "https://storage.googleapis.com/reon-bucket/" + post.thumbnail } 
                     className="w-full h-64 bg-cover bg-center rounded featured-item cursor-pointer"
                     onClick={() => openModal(post)}
-                ></div>
+                ></img>
 
                  <div className="group relative ml-2 pb-4 ">
                     <h3 className="mt-3 text-lg leading-6 text-gray-900 group-hover:text-gray-600">
