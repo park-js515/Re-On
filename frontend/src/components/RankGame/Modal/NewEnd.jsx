@@ -19,7 +19,7 @@ const NewEnd = ({
   useEffect(() => {
     setTimeout(() => {
       setInitial(true);
-    }, 800);
+    }, 100);
   }, []);
 
   // #########################################
