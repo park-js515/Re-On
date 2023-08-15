@@ -213,26 +213,26 @@ const SoloApp = () => {
   }
   
   function getScoreText(score) {
-    if (score >= 90) return `명품 연기! ${answer.toFixed(0)} 점`;
-    if (score >= 70) return `인상적인 연기! ${answer.toFixed(0)} 점`;
-    if (score >= 50) return `안정적인 연기! ${answer.toFixed(0)} 점`;
-    if (score >= 30) return `노력이 필요해! ${answer.toFixed(0)} 점`;
-    if (score >= 10) return `더 연습해봐! ${answer.toFixed(0)} 점`;
-    if (score >= 0) return `이게연기야? ${answer.toFixed(0)} 점`;
+    if (score >= 90) return `배우 할생각없어? ${answer.toFixed(0)}점`;
+    if (score >= 70) return `인상적인 연기! ${answer.toFixed(0)}점`;
+    if (score >= 50) return `안정적인 연기! ${answer.toFixed(0)}점`;
+    if (score >= 30) return `노력이 필요해! ${answer.toFixed(0)}점`;
+    if (score >= 10) return `더욱 연습해봐! ${answer.toFixed(0)}점`;
+    if (score >= 0) return `이게 연기야!? ${answer.toFixed(0)}점`;
     
-    return `내가 평가를 진행할게!`;
+    return `내가 평가해줄게!!`;
 }
 
   
 
   return (
   
-      <div className="overflow-y-scroll scrollbar-hide">
+      <div className="-mt-16 py-16 ">
         <img
                 src="image/solo/solo.png"
                 className="mx-auto h-[200px] w-[300px] mt-2"
               />
-      <div className="flex flex-row items-center justify-around">
+      <div className="flex flex-row items-center justify-around ">
         {/* 이게문젠가 ? */}
         <div className="flex flex-row items-center justify-around mt-9">
           <div id="webCam_container">
@@ -245,7 +245,7 @@ const SoloApp = () => {
               </video>
               
           </div>
-          <div className="flex flex-col justify-center items-center my-4 mx-6 mb-10 space-y-4">
+          <div className="flex flex-col justify-center items-center my-4 mx-16 mb-10 space-y-4">
                   {/* 점수 */}
                   {typeof answer !== 'undefined' && (
                     <div className="score-animation mt-4 text-black font-extrabold text-3xl px-8 py-4 rounded-lg shadow-xl flex items-center justify-center ">

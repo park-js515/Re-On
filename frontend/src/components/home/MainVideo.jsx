@@ -5,11 +5,11 @@ import 'swiper/css/effect-coverflow';
 import 'swiper/css/pagination';
 import { EffectCoverflow, Pagination } from 'swiper/modules';
 
-// MainVideo 컴포넌트는 비디오 컨텐츠를 보여주는 역할을 함
+// MainVideo 컴포넌트는 비디오 컨텐츠
 function MainVideo({ videoId  }) {
 const youtubeEmbedLink = `https://www.youtube.com/embed/${videoId}`;
   return (
-    <div className="video-slide">
+    <div className="video-slide -mt-56">
 
        <iframe
         width="100%"

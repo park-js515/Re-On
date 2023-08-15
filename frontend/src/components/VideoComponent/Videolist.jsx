@@ -52,7 +52,7 @@ const Videolist = ({injectPostId, changeShow}) => {
 
     return (
         <div className="py-8 sm:py-8 ">
-            <div className="bg-white mx-auto max-w-7xl px-2 lg:px-8 rounded-lg">
+            <div className="bg-white bg-opacity-50 mx-auto max-w-7xl px-2 lg:px-8 rounded-lg">
                 <h1 className="my-8 py-24 text-center font-bold text-3xl text-dark ">💌투표해줘</h1>           
                 <div className="flex justify-end my-4 rounded"> 
                     <div className="relative">
@@ -83,7 +83,7 @@ const Videolist = ({injectPostId, changeShow}) => {
                         );
                     })}
                 </div>
-                <div className="text-center" ref={target}>{rest ? "🚝찾는중🚝" : "🛑모든 영상 로딩 완료🛑" }</div>
+                <div className="text-center py-12 font-semibold text-lg" ref={target}>{rest ? "🚝찾는중🚝" : "🛑마지막 게시물🛑" }</div>
             </div>
         </div>
     );
