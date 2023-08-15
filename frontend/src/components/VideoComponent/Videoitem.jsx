@@ -28,6 +28,9 @@ const Videoitem = ({props, changeMode, type}) => {
 
     return (
       <div className="bg-white flex max-w-xl rounded shadow-md flex-col items-start justify-between transform transition-transform duration-300 hover:scale-105 hover:shadow-lg mx-2 my-4 pb-4">
+        {/* 배경 투명으로 하기위해 inset0 포인터이벤트 없음 */}
+        <div className="absolute inset-0 bg-current bg-opacity-50 hover:cursor-pointer pointer-events-none"></div>
+        {/* 상단 프로필, 년월일 닉넴 */}
         <div className="relative mt-2 flex items-center justify-between w-full gap-x-4 mb-1 px-1">
           {/* 상단 프로필, 년월일 닉넴 */}
           {/* 마이페이지 공개 조회는 프로필 X */}
@@ -47,7 +50,7 @@ const Videoitem = ({props, changeMode, type}) => {
           </div>
         </div>
         {/* 썸넬 */}
-        <img className="w-full h-64 bg-cover bg-center featured-item cursor-pointer " src={ "https://storage.googleapis.com/reon-bucket/" + props.thumbnail } alt="" onClick={changeMode}></img>
+        <div className="w-full h-64 bg-cover bg-center featured-item cursor-pointer " src={props.thumbnail} alt="" onClick={changeMode}></div>
     
         {/* 좋아요 */}
         {type !== "Private" ?

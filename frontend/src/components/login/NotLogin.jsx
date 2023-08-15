@@ -6,8 +6,8 @@ export default function NotLoggedInYet() {
       <ul className="w-3/5 ">
         <div className=" flex w-full  items-center pb-4">
           <div className="flex-grow h-px bg-gray-400"></div>
-          <span className="flex-shrink  text-gray-500 px-4 italic font-light text-sm">
-            Login
+          <span className="flex-shrink  text-gray px-4 italic font-light text-lg">
+            로그인
           </span>
           <div className="flex-grow h-px bg-gray-400"></div>
         </div>

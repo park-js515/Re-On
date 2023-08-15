@@ -11,10 +11,10 @@ const Postbar = ({myPage, email, changeShow, injectPostId, setIsPrivate}) => {
 
   return (
     <>
-      <ul className="flex items-center justify-around md:justify-center space-x-12 uppercase tracking-widest font-semibold text-xs text-gray-600 z-0">
-        <div className="flex flex-row mt-4 justify-center mr-16">
+      <ul className="flex items-center justify-around md:justify-center space-x-12 uppercase tracking-widest font-semibold text-md z-0">
+        <div className="flex flex-row mt-4 justify-center">
 
-          <div className="flex text-gray-700 text-center py-2 m-4 pr-5">
+          <div className="flex text-center py-2 m-4 pr-5">
             <div className="flex">
             <button
               className={`px-4 py-2 rounded-full 
@@ -26,7 +26,7 @@ const Postbar = ({myPage, email, changeShow, injectPostId, setIsPrivate}) => {
             </div>
           </div>
           {myPage &&
-          <div className="flex text-gray-700 text-center py-2 m-4 pr-5">
+          <div className="flex text-center py-2 m-4 pr-5">
             <div className="flex">
             <button
               className={`px-4 py-2 rounded-full 
@@ -39,7 +39,7 @@ const Postbar = ({myPage, email, changeShow, injectPostId, setIsPrivate}) => {
           </div>}
           
           {myPage &&
-          <div className="flex text-gray-700 text-center py-2 m-4 pr-5">
+          <div className="flex text-center py-2 m-4 pr-5">
             <div className="flex">
             <button
               className={`px-4 py-2 rounded-full 

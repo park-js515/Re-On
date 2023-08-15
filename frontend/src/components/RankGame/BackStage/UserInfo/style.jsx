@@ -48,6 +48,17 @@ export const SContainer = styled.div`
     cursor: default;
   }
  
+  .sns__container {
+    width: 100%;
+    height: 80%;
+    position: absolute;
+    bottom: 0;
+    opacity: 0;
+    z-index: -1;
+    border-radius: 12px;
+   
+    
+  }
 
   /* 프로필 사진과 이름, 점수를 묶는 div */
   .profile-container {
