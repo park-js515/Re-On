@@ -24,11 +24,11 @@ const Commentlist = ({post_id, commentList, changeShow, hierarchy}) => {
         setUserInput(event.target.value)
     }
     
-    const checkModal = () => {
-        if (comments.length >= 10) {
-            setMore(true)
-        }
-    }
+    // const checkModal = () => {
+    //     if (comments.length >= 10) {
+    //         setMore(true)
+    //     }
+    // }
 
     // 댓글 더보기
     const getComment = async() => {

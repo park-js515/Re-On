@@ -2,10 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { userLogout } from 'redux/userSlice';
-
-import axios from 'axios';
 import { searchMypageMemberInfo, updateMemberInfo, updateMemberImg, deleteMember, deleteMemberImg } from 'apiList/member';
 
+const alter_img_url = process.env.REACT_APP_ALTER_IMG_URL
 const MyPageMine = ({setMyPage, email}) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -30,17 +29,17 @@ const MyPageMine = ({setMyPage, email}) => {
 
   const getmemberInfo = async() => {
     await searchMypageMemberInfo(email, (response) => {
-      console.log(response.data.response);
+      console.log(response.data)
       setMemberInfo(response.data.response)
       setIntroduce(response.data.response.introduce)
       setNickName(response.data.response.nickName)
       setMyPage(response.data.response.isMyPage);
       if(response.data.response.profileImg!=null){
-        setProfileImage("https://storage.googleapis.com/reon-bucket/" + response.data.response.profileImg);
-        localStorage.setItem("profileImg",response.data.response.profileImg);
+        setProfileImage(response.data.response.profileImg ? "https://storage.googleapis.com/reon-bucket/" + response.data.response.profileImg : alter_img_url);
+        // localStorage.setItem("profileImg",response.data.response.profileImg);
       }else{
-        setProfileImage('/image/login/LoginDefaultImg.png');
-        localStorage.setItem("profileImg",null);
+        setProfileImage(alter_img_url);
+        // localStorage.setItem("profileImg",null);
       }
       setIsmyPage(response.data.response.isMyPage);
     }, (error) => {
@@ -57,7 +56,7 @@ const MyPageMine = ({setMyPage, email}) => {
 
   // 자기소개 수정하기
   const saveIntroduction = () => {
-    updateMemberInfo({ introduce: introduce, nickName: memberInfo.nickName }, () => {
+    updateMemberInfo({ introduce: introduce, nickName: nickName }, () => {
       alert("수정이 완료되었습니다");
       getmemberInfo();
     }, (error) => {
@@ -105,7 +104,6 @@ const MyPageMine = ({setMyPage, email}) => {
     if (e.target.files) {
       // const reader = new FileReader();
       const file = e.target.files[0];
-      console.log(file);
       // reader.onload = function(event) {
       //   setSelectedImage(event.target.result);
       // };
@@ -116,8 +114,6 @@ const MyPageMine = ({setMyPage, email}) => {
   
   // profileImg 변경
   const saveProfileImage = () => {
-    
-    console.log(selectedImageFile);
 
     if (selectedImageFile==null){
       alert("이미지를 업로드해주세요");
@@ -128,6 +124,21 @@ const MyPageMine = ({setMyPage, email}) => {
 
       updateMemberImg(formData,(response) => {
         if (response.data.success) {
+          searchMypageMemberInfo(
+            email,
+            (response)=>{
+              const url = response.data.response.profileImg
+              if (url){
+                localStorage.setItem("profileImg", url)
+              }
+              else {
+                localStorage.setItem("profileImg",alter_img_url)
+              }
+            },
+            (error)=>{
+              console.log(error)
+            }
+          )
           getmemberInfo();
           setShowProfileModal(false);
         } else {

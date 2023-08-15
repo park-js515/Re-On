@@ -86,7 +86,7 @@ const Videoplayer = ({post_id, changeShow}) => {
                 <div className="my-4 p-3 bg-gray-100 rounded-lg">
                     <span className="block font-bold text-2xl mb-2">{data.title}</span>
                     <div className="flex items-center">
-                        <img className="rounded-full w-16 h-16 mr-4 hover:shadow-lg transition-shadow cursor-pointer" src={data.profile_img} alt="" onClick={() => {changeShow(); moveToMyPage();}} />
+                        <img className="rounded-full w-16 h-16 mr-4 hover:shadow-lg transition-shadow cursor-pointer" src={data.profile_img ? "https://storage.googleapis.com/reon-bucket/" + data.profile_img : 'image/login/LoginDefaultImg.png'} alt="" onClick={() => {changeShow(); moveToMyPage();}} />
                         <p className="flex-grow text-lg truncate cursor-pointer" onClick={()=>{changeShow(); moveToMyPage();}}>{data.nick_name}</p>
                         <button className={`ml-4 px-4 py-2 rounded ${IsLike ? "bg-[#ecebeb] hover:bg-[#aaa6a6] text-[#000]" : "bg-[#8d8d8d] text-black hover:bg-inss"} transition-all`} onClick={likeVideo}>
                             영상 좋아요 {convertToK(data.like_cnt)}

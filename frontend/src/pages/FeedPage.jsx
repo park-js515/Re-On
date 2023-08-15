@@ -7,6 +7,7 @@ import { useState, useEffect } from "react";
 const FeedPage = () => {
   const [show, setShow] = useState(false);
   const [post_id, setPostId] = useState(null);
+  const [isPrivate, setIsPrivate] = useState(false);
 
   const changeShow = () => {
     if (show) {
@@ -53,19 +54,20 @@ const FeedPage = () => {
    
     <div className="bg-gradient-to-t from-lightBlue via-begie to-begie" >
        
-        <Hotlist 
-          injectPostId={injectPostId}
-          changeShow={changeShow}
-          />
-      
-        <Videolist
-          injectPostId={injectPostId}
-          changeShow={changeShow}
-          />
+      <Hotlist 
+        injectPostId={injectPostId}
+        changeShow={changeShow}
+      />
+    
+      <Videolist
+        injectPostId={injectPostId}
+        changeShow={changeShow}
+        setIsPrivate={setIsPrivate}
+        type={"AllPublic"}
+        />
    
-      {show ? <Videoplayer changeShow={changeShow} post_id={post_id}/> : null}
+      {show ? <Videoplayer changeShow={changeShow} post_id={post_id} isPrivate={isPrivate}/> : null}
       
-
     </div>
   );
 };
