@@ -84,8 +84,7 @@ export default function OpenViduApp() {
   const [resultGame, setResultGame] = useState(0);
 
   const [videoData, setVideoData] = useState([]);
-
-  const [myEmail, setMyEmail] = useState();
+  const [opponentEmail, setOpponentEmail] = useState();
 
   const joinSession = useCallback(() => {
     const mySession = OV.current.initSession();
@@ -141,6 +140,7 @@ export default function OpenViduApp() {
   }, []);
 
   useEffect(() => {
+    const myEmail = localStorage.getItem('email');
     // 한명만 영상 데이터 전달받음
     if (mySide === 'USER_ONE') {
       randomVideo(
@@ -151,6 +151,7 @@ export default function OpenViduApp() {
             data: JSON.stringify({
               playVideo: true,
               apiData: response.data.response,
+              email: myEmail,
             }),
             type: 'playVideo',
           });
@@ -169,8 +170,8 @@ export default function OpenViduApp() {
       const data = JSON.parse(event.data); // 받은 시그널 데이터 파싱
       console.log('받은 시그널', data);
       if (data.playVideo && stage === 'READY') {
-        setLog((prevLog) => [...prevLog, `▶게임을 시작합니다.`]);
         setVideoData(data.apiData);
+        setOpponentEmail(data.email);
         // 비디오 데이터 호출 성공시
         if (videoData) {
           await startLoading('count', 5000); // 로딩 5초
@@ -592,7 +593,6 @@ export default function OpenViduApp() {
   const { videoRef, isPlaying, handlePlayVideo } = useVideoPlayer();
 
   // ############# 비디오 불러오기 함수 #############
-  console.log('제목', videoData.title);
   const handleLoadVideo = async () => {
     handlePlayVideo(); // 비디오 플레이
     setStage('WATCHING_MOVIE');
@@ -817,7 +817,7 @@ export default function OpenViduApp() {
       // API 보내는 곳 (결과) if(resultGame !=== 999)
       if (resultGame !== 999) {
         const body = {
-          opponentEmail: 'gyulife7301',
+          opponentEmail: opponentEmail,
           videoId: videoData.id,
           result: resultGame,
         };
@@ -944,53 +944,35 @@ export default function OpenViduApp() {
 
   // 승패결정
   useEffect(() => {
+    let userOneTotal = userOneScore + userOneSttScore;
+    let userTwoTotal = userTwoScore + userTwoSttScore;
     if (mySide === 'USER_ONE') {
       if (
         userOneScore == null ||
         userTwoScore == null ||
-        (userOneScore === 0 &&
-          userOneSttScore === 0 &&
-          userTwoScore === 0 &&
-          userTwoSttScore === 0)
+        (userOneTotal == 0 && userTwoTotal == 0)
       ) {
         setResultGame(999);
-      } else if (
-        userOneScore + userOneSttScore >
-        userTwoScore + userTwoSttScore
-      ) {
+      } else if (userOneTotal > userTwoTotal) {
         setResultGame(1);
-      } else if (
-        userTwoScore + userTwoSttScore >
-        userOneScore + userOneSttScore
-      ) {
+      } else if (userTwoTotal > userOneTotal) {
         setResultGame(-1);
-      } else if (
-        userOneScore + userOneSttScore ===
-        userTwoScore + userTwoSttScore
-      ) {
+      } else if (userOneTotal === userTwoTotal) {
         setResultGame(0);
       }
     }
     if (mySide === 'USER_TWO') {
       if (
-        userOneScore + userOneSttScore == null ||
-        userTwoScore + userTwoSttScore == null
+        userOneScore == null ||
+        userTwoScore == null ||
+        (userOneTotal == 0 && userTwoTotal == 0)
       ) {
         setResultGame(999);
-      } else if (
-        userOneScore + userOneSttScore <
-        userTwoScore + userTwoSttScore
-      ) {
+      } else if (userOneTotal < userTwoTotal) {
         setResultGame(1);
-      } else if (
-        userTwoScore + userTwoSttScore <
-        userOneScore + userOneSttScore
-      ) {
+      } else if (userTwoTotal < userOneTotal) {
         setResultGame(-1);
-      } else if (
-        userOneScore + userOneSttScore ===
-        userTwoScore + userTwoSttScore
-      ) {
+      } else if (userOneTotal === userTwoTotal) {
         setResultGame(0);
       }
     }
@@ -1098,22 +1080,37 @@ export default function OpenViduApp() {
                 <video
                   id="origin"
                   ref={videoRef}
-                  src={`https://storage.googleapis.com/reon-bucket/${videoData.videoPath}`}
+                  src={
+                    videoData.videoPath
+                      ? `https://storage.googleapis.com/reon-bucket/${videoData.videoPath}`
+                      : null
+                  }
                   poster={
                     videoData.thumbnail
                       ? `https://storage.googleapis.com/reon-bucket/${videoData.thumbnail}`
                       : 'image/rank/rank-reon.png'
                   }
-                  className={`h-[450px] mx-4 rounded-lg ${
+                  className={`h-[450px] mx-4 ${
                     isPlaying ? 'border-4 border-danger' : ''
                   }`}
                   style={{ width: '500px', height: '500px' }}
                   crossorigin="anonymous"
                 />
 
-                <div className="mx-4 h-[100px] w-[500px] border mt-4">
-                  {videoData.script}
+                <div className="prompter">
+                  <div className="prompterBar">
+                    <div className="prompterBtn"></div>
+                  </div>
+
+                  <div className="prompterBody">
+                    <pre>
+                      <div className="prompt">
+                        📜{videoData.script} <span className="pulse">_</span>
+                      </div>
+                    </pre>
+                  </div>
                 </div>
+
                 <div className="flex justify-center gap-5">
                   {/* 튜토리얼 버튼 */}
                   {toggleTutorialModal && (
@@ -1179,7 +1176,7 @@ export default function OpenViduApp() {
                   <div className="flex text-white">
                     <Matching typingContent="..." />
                   </div>
-                  <div className="relative flex items-center justify-center w-[500px] h-[500px]">
+                  <div className="waitingBox relative flex items-center justify-center w-[500px] h-[500px]">
                     <img
                       src="image/rank/rank-basic-bg.png"
                       alt="waiting"
