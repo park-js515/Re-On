@@ -1,33 +1,109 @@
 import React from "react";
 import Videoitem from "./Videoitem";
 import { useState, useRef, useEffect } from "react";
-import { searchAllPublicPost } from "apiList/post";
+import { useParams } from 'react-router-dom';
+import { searchAllPublicPost, searchPublicPost, searchLikePost, searchPrivatePost } from "apiList/post";
 
-const Videolist = ({injectPostId, changeShow}) => {
+// type은 AllPublic, Posts, Private, Likes => 투표해줘 전체 조회, 마이페이지 공개 조회, 마이페이지 비공개, 마이페이지 좋아한 영상 조회
+const Videolist = ({injectPostId, changeShow, type, setIsPrivate}) => {
     const [data, setData] = useState([])
     const [rest, setRest] = useState(true)
+    const { email } = useParams();
     let page = 1;
 
     function addData () {
         if (rest){
-            searchAllPublicPost(
-                page,
-                (response)=>{
-                    const newdata = response.data.response
-                    if (newdata.length > 0){
+            if (type === "AllPublic"){
+                searchAllPublicPost(
+                    page,
+                    (response)=>{
+                        const newdata = response.data.response
+                        console.log(newdata)
+                        if (newdata.length > 0){
+                            page++;
+                            setData((data)=>{return [...data,...newdata]})
+                        }
+                        else{
+                            setRest(false)
+                        }
+                    },
+                    (error)=>{
+                        console.log(error)
+                    }
+                )
+            }
+            else if (type === "Posts") {
+                searchPublicPost(
+                    page,
+                    email,
+                    (response) => {
+                      const newdata = response.data.response
+                      console.log(newdata)
+                      if (newdata.length > 0){
+                        setData((data) => {return [...data, ...newdata]})
                         page++;
-                        setData((data)=>{return [...data,...newdata]})
+                        if (newdata.length < 10){
+                          setRest(false)
+                        }
+                      }
+                      else {
+                        setRest(false);
+                      }
+                    },
+                    (error) => {
+                      console.log(error);
                     }
-                    else{
-                        setRest(false)
+                )
+            }
+            else if (type === "Likes"){
+                searchLikePost(
+                    page,
+                    (response)=>{
+                      const newdata = response.data.response
+                      console.log(newdata)
+                      if (newdata.length > 0){
+                        page++;
+                        setData((data)=>{return [...data, ...newdata]})
+                        if (newdata.length < 10){
+                          setRest(false);
+                        }
+                      }
+                      else {
+                        setRest(false);
+                      }
+                    },
+                    (error)=>{
+                      console.log(error)
                     }
-                },
-                (error)=>{
-                    console.log(error)
-                })
+                  )
+            }
+            else if (type === "Private"){
+                searchPrivatePost(
+                    page,
+                    (response)=>{
+                      const newdata = response.data.response
+                      console.log(newdata)
+                      if (newdata.length > 0){
+                        page++;
+                        setData((data)=>{return [...data, ...newdata]})
+                        if (newdata.length < 10){
+                          setRest(false);
+                        }
+                      }
+                      else {
+                        setRest(false);
+                      }
+                    },
+                    (error)=>{
+                      console.log(error)
+                    }
+                )
+            }
         }
     }
     
+
+    // 무한스크롤
     const target = useRef()
     const options = {
         threshold: 0.5
@@ -53,36 +129,43 @@ const Videolist = ({injectPostId, changeShow}) => {
     return (
         <div className="py-8 sm:py-8 ">
             <div className="bg-white mx-auto max-w-7xl px-2 lg:px-8 rounded-lg">
-                <h1 className="my-8 py-24 text-center font-bold text-3xl text-dark ">💌투표해줘</h1>           
-                <div className="flex justify-end my-4 rounded"> 
-                    <div className="relative">
-                        <input 
-                            type="text" 
-                            placeholder="Search by title..." 
-                            value={searchTerm} 
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                            className="py-2 px-4 w-64 shadow-xl rounded-md focus:ring focus:ring-opacity-50" 
-                        />
-                        <span className="absolute inset-y-0 right-4 flex items-center text-gray-400">
-                            🔍
-                        </span>
-                    </div>
-                </div>
+                {type === "AllPublic" ?
+                    <>
+                        <h1 className="my-8 py-24 text-center font-bold text-3xl text-dark ">💌투표해줘</h1>           
+                        <div className="flex justify-end my-4 rounded"> 
+                            <div className="relative">
+                                <input 
+                                    type="text" 
+                                    placeholder="Search by title..." 
+                                    value={searchTerm} 
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                    className="py-2 px-4 w-64 shadow-xl rounded-md focus:ring focus:ring-opacity-50" 
+                                    />
+                                <span className="absolute inset-y-0 right-4 flex items-center text-gray-400">
+                                    🔍
+                                </span>
+                            </div>
+                        </div> 
+                    </>
+                : null }
     
                 <div className=" mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:mt-8 sm:pt-8 lg:mx-0 lg:max-w-none lg:grid-cols-3">
-                    {filteredData.map((item, idx) => {
+                    {filteredData.map((item) => {
                         return (
                             <Videoitem
+                                type={type}
                                 key={item.id}
                                 props={item}
                                 changeMode={() => {
                                     injectPostId(item.id);
                                     changeShow();
+                                    setIsPrivate(type==="Private")
                                 }}
                             />
                         );
                     })}
                 </div>
+                <hr />
                 <div className="text-center" ref={target}>{rest ? "🚝찾는중🚝" : "🛑모든 영상 로딩 완료🛑" }</div>
             </div>
         </div>
