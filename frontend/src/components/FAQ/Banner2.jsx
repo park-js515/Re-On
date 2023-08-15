@@ -57,18 +57,18 @@ function Banner2() {
     slidesToScroll: 1,
     autoplay: true,
     autoplaySpeed: 2000,
-    nextArrow: (
-      <NextTo>
-        <img src="/image/face/next-arrow.png" 
-        alt='이전'/>
-      </NextTo>
-    ),
-    prevArrow: (
-      <Pre>
-        <img src="/image/face/pre-arrow.png"
-        alt="이전" />
-      </Pre>
-    ),
+    // nextArrow: (
+    //   <NextTo>
+    //     <img src="/image/face/next-arrow.png" 
+    //     alt='이전'/>
+    //   </NextTo>
+    // ),
+    // prevArrow: (
+    //   <Pre>
+    //     <img src="/image/face/pre-arrow.png"
+    //     alt="이전" />
+    //   </Pre>
+    // ),
   };
   return (
     <div>
@@ -76,21 +76,21 @@ function Banner2() {
         <div className={styles.margin}>
           <img
             className={styles.img}
-            src="/image/team/4.png"
+            src="/image/team/배너2.png"
             alt="배너1"
           />
         </div>
         <div className={styles.margin}>
           <img
             className={styles.img}
-            src="/image/team/5.png"
+            src="/image/team/배너2.png"
             alt="배너2"
           />
         </div>
         <div className={styles.margin}>
           <img
             className={styles.img}
-            src="/image/team/6.png"
+            src="/image/team/배너2.png"
             alt="배너3"
           />
         </div>
