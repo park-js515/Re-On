@@ -102,7 +102,6 @@
               <b>skqlck</b>
             </a> 
         </td>
-
         <td style="min-width: 150px;">
             <a href="https://github.com/park-js515">
               <img src="https://avatars.githubusercontent.com/u/122588631?v=4" width="200">
