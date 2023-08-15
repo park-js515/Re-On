@@ -18,8 +18,8 @@ const FAQ = () => {
       {/* <Banner /> */}
       <Container>
       
-        <Banner2/>
       </Container>
+        <Banner2/>
       <FAQLayout>
         <TabMenu />
       </FAQLayout>

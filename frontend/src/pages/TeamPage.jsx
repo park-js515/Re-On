@@ -30,13 +30,13 @@ export default function TeamPage() {
                 onSlideChange={handleSlideChange}
             >
                 <SwiperSlide>
-                    <img className="fade-in" src="/image/team/4.png" alt="" />
+                    <img className="fade-in" src="/image/team/6.png" alt="" />
                 </SwiperSlide>
                 <SwiperSlide>
                     <img className={activeIndex === 1 ? "fade-in" : ""} src="/image/team/5.png" alt="" />
                 </SwiperSlide>
                 <SwiperSlide>
-                    <img className={activeIndex === 2 ? "fade-in" : ""} src="/image/team/6.png" alt="" />
+                    <img className={activeIndex === 2 ? "fade-in" : ""} src="/image/team/4.png" alt="" />
                 </SwiperSlide>
             </Swiper>
         </>
