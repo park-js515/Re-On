@@ -168,7 +168,7 @@ const Videolist = ({ injectPostId, changeShow, type, setIsPrivate }) => {
                     );
                 })}
             </div>
-            <div className="text-center py-12 font-semibold text-lg" ref={target}>{rest ? "🚝찾는중🚝" : "🛑마지막 게시물🛑" }</div>
+            <div className="text-center py-12 font-semibold text-lg" ref={target}>{rest ? "🚝" : "" }</div>
         </div>
     </div>
 );
