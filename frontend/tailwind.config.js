@@ -31,6 +31,10 @@ module.exports = {
         '11/12': '91.666667%',
         '10/12': '83.333333%',
       },
+      animation: {
+        slideInFromLeft: 'slideInFromLeft 1.5s forwards',
+        slideInFromRight: 'slideInFromRight 1.5s forwards'
+      }
     },
   },
   plugins: [

@@ -60,7 +60,7 @@ const RankerList = () => {
   };
 
   return (
-    <div className="card flex flex-col justify-center items-center mt-4 py-2 mx-2 text-white">
+    <div className="card flex flex-col justify-center items-center mt-10 py-2 mx-2 text-white">
        <div className="absolute inset-0 bg-current bg-opacity-50 hover:cursor-pointer pointer-events-none"></div>
       <h1 className="text-5xl mb-6 font-semibold">🏆 랭크TOP5</h1>
       {rankers.map((ranker, index) => (
