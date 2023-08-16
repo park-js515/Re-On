@@ -38,40 +38,37 @@ function BackStage({ myUserName, mySessionId, joinSession, leaveSession }) {
               <RightSide />
 
               {/* 선수입장 */}
-              <div className="flex flex-row justify-center items-center my-12 mb-6 space-y-4">
+              <div className="flex flex-row justify-center items-center my-12 mb-6 space-x-4">
                 <button
-                  onClick={handleGameStart}
-                  className="bg-[#BCD570] text-white font-extrabold text-4xl mt-6 px-20 py-6 rounded-full transform transition-transform duration-300 hover:scale-105 hover:bg-[#C3E166] shadow-2xl hover:shadow-3xl focus:outline-none"
+                    onClick={handleGameStart}
+                    className="bg-[#e17389] text-white font-extrabold text-2xl mt-6 px-12 py-6 rounded-full transform transition-transform duration-300 hover:scale-105 hover:bg-[#ba5368] shadow-2xl hover:shadow-3xl focus:outline-none flex items-center space-x-2"
                 >
-                  게임시작
+                    🎮게임시작
                 </button>
-                <div>
-                  {/* 튜토리얼 버튼 */}
-                  {toggleTutorialModal && (
+
+                {/* 튜토리얼 버튼 */}
+                {toggleTutorialModal && (
                     <TutorialModal
-                      type="tutorial"
-                      onConfirm={leaveSession}
-                      isOpen={toggleTutorialModal}
-                      onClose={() => setToggleTutorialModal(false)}
+                        type="tutorial"
+                        onConfirm={leaveSession}
+                        isOpen={toggleTutorialModal}
+                        onClose={() => setToggleTutorialModal(false)}
                     />
-                  )}
-                  <button
-                    className="m-0 flex items-center justify-center"
+                )}
+                <button
+                    className="bg-[#8ccfd5] text-white font-extrabold text-2xl mt-6 px-12 py-6 rounded-full transform transition-transform duration-300 hover:scale-105 hover:bg-[#67b5bc] shadow-2xl hover:shadow-3xl focus:outline-none flex items-center space-x-2"
                     onClick={() => setToggleTutorialModal(true)}
-                  >
-                    <img
-                      src="image/rank/rank-tutorial-btn.png"
-                      alt="tutorial-btn"
-                      className="w-[250px] hover:scale-110 "
-                    />
-                  </button>
-                </div>
+                >
+                    📖튜토리얼
+                </button>
+            </div>
+
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+   
   );
 }
 
