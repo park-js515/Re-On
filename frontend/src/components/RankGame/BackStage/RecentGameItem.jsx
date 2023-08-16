@@ -7,18 +7,18 @@ const RecentGameItem = ({ game }) => {
   let hoverColor;
 
   if (game.point > 0) {
-    backgroundColor = '#2196F3';
-    hoverColor = '#1976d2';
+    backgroundColor = '#8ccfd5';
+    hoverColor = '#31becb';
     
     
   } else if (game.point < 0) {
-    backgroundColor = '#ef5350';
-    hoverColor = '#d32f2f';
+    backgroundColor = '#e17389';
+    hoverColor = '#d03755';
   } else if (game.point === 0) {
-    backgroundColor = '#4caf50';
-    hoverColor = '#2e7d32';
+    backgroundColor = '#89cc78';
+    hoverColor = '#58c33e';
   } else {
-    backgroundColor = '#E9E9E9';
+    backgroundColor = '#dcdcdc';
     hoverColor = '#DEDEDE';
   }
 

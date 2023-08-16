@@ -254,22 +254,24 @@ const SoloApp = () => {
                     </div>
                   )}
                   <img className="h-[190px] w-[280px]" src="/image/character/cutereon2.png" alt="" />
-
+                  
+                    
                 {/* 영화 바꾸기 버튼 */}
                   <button 
                       onClick={getURL}
                       disabled={reload ? true : false}
-                      className="bg-[#BCD570] text-white font-extrabold text-3xl px-20 py-6 rounded-full transform transition-transform duration-300 hover:scale-105 hover:bg-[#C3E166] shadow-2xl hover:shadow-3xl focus:outline-none ">
-                      영화변경
+                      className="bg-[#9ac8cc] text-white font-extrabold text-3xl px-20 py-6 rounded-full transform transition-transform duration-300 hover:scale-105 hover:bg-[#8ccfd5] shadow-2xl hover:shadow-3xl focus:outline-none ">
+                      🎲영화변경
                      
                   </button>
                {/* 재시작 버튼 */}
                <button 
                   onClick={startActing}
                   disabled={ortSession ? false : true}
-                  className={`text-white font-extrabold text-3xl px-20 py-6 rounded-full transform transition-transform duration-300 hover:scale-105 shadow-2xl hover:shadow-3xl focus:outline-none ${reload ? 'bg-[#9ac8cc] hover:bg-[#8ccfd5]' : 'bg-[#BCD570] hover:bg-[#C3E166]'}`}
+                  className={`text-white font-extrabold text-3xl px-20 py-6 rounded-full transform transition-transform duration-300 hover:scale-105 shadow-2xl hover:shadow-3xl focus:outline-none ${reload ? 'bg-[#f2a475] hover:bg-[#e99364]' : 'bg-[#e17389] hover:bg-[#ba5368]'}`}
+
               >
-                  {reload ? "다시하기" : "게임시작"}
+                  {reload ? "🎬다시하기" : "🎮게임시작"}
               </button>
 
           </div>
