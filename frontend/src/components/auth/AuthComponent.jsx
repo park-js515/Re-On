@@ -12,8 +12,7 @@ const loginRedirect = () => {
 
 const AuthComponent = ({ authenticated, component }) => {
   const check = useRef(false);
-  const [navigateToLogin, setNavigateToLogin] = useState(false); // 확인 누른 상태
-
+  
   useEffect(() => {
     if (!authenticated && check.current === false) {
       Swal.fire({
@@ -26,15 +25,10 @@ const AuthComponent = ({ authenticated, component }) => {
         }
       })
     }
-
     return () => {
       check.current = true;
     };
   }, []);
-
-  if (navigateToLogin) {
-    return <Navigate to="/login"></Navigate>;
-  }
 
   return authenticated ? component : null;
 };

@@ -3,7 +3,6 @@ import { Disclosure, Menu, Transition } from '@headlessui/react';
 import { Link, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { useEffect } from 'react';
-import { searchMypageMemberInfo } from 'apiList/member';
 
 const navigation = [
   { name: '같이하기', to: '/rank', current: false },
@@ -24,15 +23,17 @@ export default function Navbar() {
 
   useEffect(() => {
     if (userIsLogin) {
-      setProfileImg('/image/login/LoginDefaultImg.png');
+      setProfileImg(process.env.REACT_APP_ALTER_IMG_URL);
 
       // string 이라 "null"로 받아야 한다.
       const profileImg = localStorage.getItem('profileImg');
-      if (profileImg !== "null" && profileImg !== '') {
-        setProfileImg("https://storage.googleapis.com/reon-bucket/"+profileImg);
+      if (profileImg !== 'null' && profileImg) {
+        setProfileImg(
+          'https://storage.googleapis.com/reon-bucket/' + profileImg,
+        );
       }
     }
-  }, [userIsLogin,localStorage.getItem('profileImg')]);
+  }, [userIsLogin]);
 
   const moveMyPage = () => {
     // navigate("/mypage/" + email)
@@ -40,8 +41,8 @@ export default function Navbar() {
     // onClick={() => { moveMyPage(post.email); }}
     // return <Navigate to={"/mypage/"} />;
     // navigate("/mypage/"+email, { replace: true });
-    window.location.assign("/mypage/"+localStorage.getItem("email"));
-  }
+    window.location.assign('/mypage/' + localStorage.getItem('email'));
+  };
 
   return (
     <div className="sticky top-0 z-50">
@@ -114,7 +115,9 @@ export default function Navbar() {
                                   active ? '' : '',
                                   'block px-4 py-2 text-sm text-gray-700 hover:bg-inss hover:cursor-pointer',
                                 )}
-                                onClick={()=>{moveMyPage()}}
+                                onClick={() => {
+                                  moveMyPage();
+                                }}
                               >
                                 마이페이지
                               </span>
