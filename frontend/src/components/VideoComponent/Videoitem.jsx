@@ -57,7 +57,7 @@ const Videoitem = ({props, changeMode, type}) => {
         {type !== "Private" ?
             <div className="flex items-center gap-x-4 text-xs ml-2 ">
               <div className="">
-                <span className="text-xl">{props.isLike ? "💙" : "🖤"}</span> {convertToK(props.likeCnt)}
+                <span className="text-xl">{props.isLike ? "❤️" : "🖤"}</span> {convertToK(props.likeCnt)}
               </div>
               <div className="relative z-10 rounded-full bg-gray-50 px-3 py-3 font-medium text-gray-600 hover:bg-gray-100">
                 <span className="text-xl">💬</span> {convertToK(props.commentCnt)}   

@@ -56,7 +56,7 @@ const MyPage = () => {
   }, [])
   
   return(
-    <div className=' bg-white'>
+    <div className=' bg-white2 pt-8'>
       <div className=''>
 
       <Container>
