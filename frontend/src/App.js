@@ -24,7 +24,7 @@ import LogoutDupPreventComponent from 'components/auth/LogoutDupPreventComponent
 function App() {
   const { isJoinSession } = useSelector((state) => state.session);
 	const isLogin = useSelector((state) => state.user.isLogin);
-
+  const [prevLocation, setPrevLocation] = useState("");
 
   // 뒤로가기 방지
   const location = useLocation();
@@ -33,6 +33,13 @@ function App() {
       window.location.reload();
     }
   }, [location, isJoinSession]);
+
+  useEffect(()=>{
+    if (location.pathname !== '/normallist' && prevLocation === '/normallist'){
+      window.location.reload();
+    }
+    setPrevLocation(location.pathname)
+  }, [location])
 
   return (
     <>
