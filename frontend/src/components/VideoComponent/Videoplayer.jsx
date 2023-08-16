@@ -26,11 +26,17 @@ const Videoplayer = ({ post_id, changeShow, isPrivate }) => {
   useEffect(() => {
     if (!ignore) {
       if (isPrivate) {
-        searchPrivatePostDetail(post_id, (response) => {
-          const newdata = response.data.response;
-          setData(newdata);
-          console.log(newdata);
-        });
+        searchPrivatePostDetail(
+          post_id,
+          (response) => {
+            const newdata = response.data.response;
+            setData(newdata);
+            console.log(newdata);
+          },
+          (error) => {
+            console.log(error);
+          },
+        );
       } else {
         searchPublicPostDetail(
           post_id,
@@ -172,6 +178,7 @@ const Videoplayer = ({ post_id, changeShow, isPrivate }) => {
           <video
             className="w-full h-5/6 rounded-md shadow-sm"
             controls
+            controlsList={isPrivate ? 'download' : 'nodownload'}
             src={
               data.actionPath
                 ? 'https://storage.googleapis.com/reon-bucket/' +
