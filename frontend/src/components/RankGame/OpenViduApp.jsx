@@ -10,7 +10,6 @@ import LizardLoading from 'components/RankGame/Loading/LizardLoading';
 import MatchingWaiting from 'components/RankGame/Loading/MatchingWaiting';
 import CountLoading from 'components/RankGame/Loading/CountLoading';
 import Modal from 'components/RankGame/Modal/Modal';
-import TutorialModal from 'components/RankGame/Modal/TutorialModal';
 import NewEnd from 'components/RankGame/Modal/NewEnd';
 import * as faceapi from 'face-api.js';
 import { useSelector } from 'react-redux';
@@ -81,10 +80,11 @@ export default function OpenViduApp() {
   const [userOneScore, setUserOneScore] = useState(0);
   const [userTwoName, setUserTwoName] = useState(null);
   const [userTwoScore, setUserTwoScore] = useState(0);
-  const [resultGame, setResultGame] = useState(0);
+  const [resultGame, setResultGame] = useState(999);
 
   const [videoData, setVideoData] = useState([]);
-  const [opponentEmail, setOpponentEmail] = useState();
+  const [userOneEmail, setUserOneEmail] = useState(null);
+  const [userTwoEmail, setUserTwoEmail] = useState(null);
 
   const joinSession = useCallback(() => {
     const mySession = OV.current.initSession();
@@ -140,18 +140,54 @@ export default function OpenViduApp() {
   }, []);
 
   useEffect(() => {
-    const myEmail = localStorage.getItem('email');
+    if (mySide === 'USER_ONE') {
+      setUserOneEmail(localStorage.getItem('email'));
+    } else if (mySide === 'USER_TWO') {
+      setUserTwoEmail(localStorage.getItem('email'));
+    }
+
+    if (session) {
+      console.log('보냄 :현재 이메일 데이터');
+      session.signal({
+        data: JSON.stringify({
+          userOneEmail: userOneEmail,
+          userTwoEmail: userTwoEmail,
+        }),
+        type: 'email',
+      });
+
+      const recieveEmail = (e) => {
+        try {
+          const receivedData = JSON.parse(e.data);
+          console.log('받음 : (useEffect) 유저 이메일 정보', receivedData);
+          let response_userOneEmail = receivedData.userOneEmail;
+          let response_userTwoEmail = receivedData.userTwoEmail;
+          if (response_userOneEmail !== null) {
+            setUserOneEmail(response_userOneEmail);
+          }
+          if (response_userTwoEmail !== null) {
+            setUserTwoEmail(response_userTwoEmail);
+          }
+        } catch (error) {
+          console.error('이메일 정보 수신 중 오류 발생', error);
+        }
+      };
+
+      session.on('signal:email', recieveEmail);
+    }
+  }, [mySide, userOneEmail, userTwoEmail]);
+
+  useEffect(() => {
     // 한명만 영상 데이터 전달받음
     if (mySide === 'USER_ONE') {
       randomVideo(
         (response) => {
-          console.log('랜덤비디오 응답', response.data.response);
+          console.log('API : 랜덤 비디오', response.data.response);
           // 시그널 보내기 (API 정보와 플레이 요청 같이 보냄)
           session.signal({
             data: JSON.stringify({
               playVideo: true,
               apiData: response.data.response,
-              email: myEmail,
             }),
             type: 'playVideo',
           });
@@ -168,10 +204,9 @@ export default function OpenViduApp() {
   if (session) {
     session.on('signal:playVideo', async (event) => {
       const data = JSON.parse(event.data); // 받은 시그널 데이터 파싱
-      console.log('받은 시그널', data);
+      console.log('받음 : 게임 정보, 상대 정보 데이터', data);
       if (data.playVideo && stage === 'READY') {
         setVideoData(data.apiData);
-        setOpponentEmail(data.email);
         // 비디오 데이터 호출 성공시
         if (videoData) {
           await startLoading('count', 5000); // 로딩 5초
@@ -186,7 +221,7 @@ export default function OpenViduApp() {
       // Get a token from the OpenVidu deployment
       getToken().then(async (token) => {
         try {
-          console.log('토큰', token);
+          console.log('오픈비두 토큰', token);
           await session.connect(token.response, { clientData: myUserName });
 
           let publisher = await OV.current.initPublisherAsync(undefined, {
@@ -310,10 +345,10 @@ export default function OpenViduApp() {
           },
         },
       );
-      console.log('응답', response);
+      console.log('오픈비두 응답', response);
       return response.data;
     } catch (error) {
-      console.error('에러', error); // 오류 로깅
+      console.error('오픈비두 토큰 받기 에러', error); // 오류 로깅
     }
   };
 
@@ -502,7 +537,6 @@ export default function OpenViduApp() {
   }
 
   // #################       STT   ####################
-  // RESPONSE API
 
   const [userOneText, setUserOneText] = useState('');
   const [userTwoText, setUserTwoText] = useState('');
@@ -655,6 +689,9 @@ export default function OpenViduApp() {
         let response_userTwoScore = receivedData.userTwoScore;
         let response_userOneSttScore = receivedData.userOneSttScore;
         let response_userTwoSttScore = receivedData.userTwoSttScore;
+        let response_userOneEmail = receivedData.userOneEmail;
+        let response_userTwoEmail = receivedData.userTwoEmail;
+
         if (response_userOneName !== null) {
           setUserOneName(response_userOneName);
         }
@@ -673,17 +710,25 @@ export default function OpenViduApp() {
         if (response_userTwoSttScore !== 0) {
           setUserTwoSttScore(response_userTwoSttScore);
         }
+        if (response_userOneEmail !== null) {
+          setUserOneEmail(response_userOneEmail);
+        }
+        if (response_userTwoEmail !== null) {
+          setUserTwoEmail(response_userTwoEmail);
+        }
       };
 
       session.on('signal:score', onScoreReceived);
       console.log(
-        '점수 시그널을 받았습니다.',
+        '받음 : (함수)현재 점수 데이터 시그널',
         userOneName,
         userOneScore,
         userOneSttScore,
         userTwoName,
         userTwoScore,
         userTwoSttScore,
+        userOneEmail,
+        userTwoEmail,
       );
 
       if (mySide === 'USER_ONE') {
@@ -709,9 +754,11 @@ export default function OpenViduApp() {
         userTwoScore: userTwoScore,
         userOneSttScore: userOneSttScore,
         userTwoSttScore: userTwoSttScore,
+        userOneEmail: userOneEmail,
+        userTwoEmail: userTwoEmail,
       };
 
-      console.log('보내는 시그널 데이터', dataToSend); // 로그
+      console.log('보냄 : (함수)현재 점수 시그널 데이터', dataToSend); // 로그
       await session.signal({
         type: 'score',
         data: JSON.stringify(dataToSend),
@@ -814,13 +861,25 @@ export default function OpenViduApp() {
       setLog((prevLog) => [...prevLog, `🤝결과를 확인하세요!`]);
       handleViewResult();
 
+      let opponentEmail = null;
+      if (mySide === 'USER_ONE') {
+        opponentEmail = userTwoEmail;
+      } else if (mySide === 'USER_TWO') {
+        opponentEmail = userOneEmail;
+      }
+
+      console.log(userOneEmail);
+      console.log(userTwoEmail);
+      console.log(opponentEmail);
+
       // API 보내는 곳 (결과) if(resultGame !=== 999)
-      if (resultGame !== 999) {
+      if (resultGame !== 999 && userOneEmail && userTwoEmail && videoData) {
         const body = {
           opponentEmail: opponentEmail,
           videoId: videoData.id,
           result: resultGame,
         };
+        console.log('API 게임 결과 보냄', body);
         registerBattleLog(
           body,
           (response) => {
@@ -923,14 +982,13 @@ export default function OpenViduApp() {
             setUserTwoSttScore(response_userTwoSttScore);
           }
         } catch (error) {
-          console.error('시그널 수신 중 오류발생', error);
+          console.error('점수 시그널 수신 중 오류발생', error);
         }
       };
 
       session.on('signal:score', onScoreReceived);
       console.log(
-        'UseEffect',
-        '시그널을 받았습니다.',
+        '받음 : (useEffect)현재 점수 데이터 시그널',
         userOneName,
         userOneScore,
         userTwoName,
@@ -950,7 +1008,7 @@ export default function OpenViduApp() {
       if (
         userOneScore == null ||
         userTwoScore == null ||
-        (userOneTotal == 0 && userTwoTotal == 0)
+        (userOneTotal === 0 && userTwoTotal === 0)
       ) {
         setResultGame(999);
       } else if (userOneTotal > userTwoTotal) {
@@ -965,7 +1023,7 @@ export default function OpenViduApp() {
       if (
         userOneScore == null ||
         userTwoScore == null ||
-        (userOneTotal == 0 && userTwoTotal == 0)
+        (userOneTotal === 0 && userTwoTotal === 0)
       ) {
         setResultGame(999);
       } else if (userOneTotal < userTwoTotal) {
@@ -984,7 +1042,6 @@ export default function OpenViduApp() {
 
   // ############# 모달 ##############
   const [toggleExitModal, setToggleExitModal] = useState(false);
-  const [toggleTutorialModal, setToggleTutorialModal] = useState(false);
   const [toggleEnd, setToggleEnd] = useState(false);
 
   return (
@@ -995,6 +1052,7 @@ export default function OpenViduApp() {
             myUserName={myUserName}
             mySessionId={mySessionId}
             joinSession={joinSession}
+            leaveSession={leaveSession}
           />
         </div>
       ) : null}
@@ -1014,6 +1072,7 @@ export default function OpenViduApp() {
               recordedFile={recordedFile}
               userOneSttScore={userOneSttScore}
               userTwoSttScore={userTwoSttScore}
+              videoId={videoData.id}
             />
           )}
 
@@ -1112,26 +1171,6 @@ export default function OpenViduApp() {
                 </div>
 
                 <div className="flex justify-center gap-5">
-                  {/* 튜토리얼 버튼 */}
-                  {toggleTutorialModal && (
-                    <TutorialModal
-                      type="tutorial"
-                      onConfirm={leaveSession}
-                      isOpen={toggleTutorialModal}
-                      onClose={() => setToggleTutorialModal(false)}
-                    />
-                  )}
-                  <button
-                    className="m-0 flex items-center justify-center"
-                    onClick={() => setToggleTutorialModal(true)}
-                  >
-                    <img
-                      src="image/rank/rank-tutorial-btn.png"
-                      alt="tutorial-btn"
-                      className="w-[250px] hover:scale-110 "
-                    />
-                  </button>
-
                   {/* 나가기 버튼 */}
                   {toggleExitModal && (
                     <Modal

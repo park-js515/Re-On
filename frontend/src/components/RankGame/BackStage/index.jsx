@@ -1,9 +1,13 @@
 import LeftSide from './LeftSide';
 import RightSide from './RightSide';
-import './UserInfo/UserInfo.css'
+import TutorialModal from 'components/RankGame/Modal/TutorialModal';
 
+import { useState } from 'react';
+import './UserInfo/UserInfo.css';
 
-function BackStage({ myUserName, mySessionId, joinSession }) {
+function BackStage({ myUserName, mySessionId, joinSession, leaveSession }) {
+  const [toggleTutorialModal, setToggleTutorialModal] = useState(false);
+
   const handleGameStart = async () => {
     try {
       // 마이크와 카메라에 대한 권한 요청
@@ -18,7 +22,6 @@ function BackStage({ myUserName, mySessionId, joinSession }) {
   };
 
   return (
- 
     <div id="join">
       <div id="img-div"></div>
       <div id="join-dialog">
@@ -35,21 +38,40 @@ function BackStage({ myUserName, mySessionId, joinSession }) {
               <RightSide />
 
               {/* 선수입장 */}
-              <div className="flex flex-col justify-center items-center my-12 mb-6 space-y-4">
+              <div className="flex flex-row justify-center items-center my-12 mb-6 space-y-4">
                 <button
                   onClick={handleGameStart}
                   className="bg-[#BCD570] text-white font-extrabold text-4xl mt-6 px-20 py-6 rounded-full transform transition-transform duration-300 hover:scale-105 hover:bg-[#C3E166] shadow-2xl hover:shadow-3xl focus:outline-none"
                 >
                   게임시작
                 </button>
+                <div>
+                  {/* 튜토리얼 버튼 */}
+                  {toggleTutorialModal && (
+                    <TutorialModal
+                      type="tutorial"
+                      onConfirm={leaveSession}
+                      isOpen={toggleTutorialModal}
+                      onClose={() => setToggleTutorialModal(false)}
+                    />
+                  )}
+                  <button
+                    className="m-0 flex items-center justify-center"
+                    onClick={() => setToggleTutorialModal(true)}
+                  >
+                    <img
+                      src="image/rank/rank-tutorial-btn.png"
+                      alt="tutorial-btn"
+                      className="w-[250px] hover:scale-110 "
+                    />
+                  </button>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-
     </div>
-
   );
 }
 
