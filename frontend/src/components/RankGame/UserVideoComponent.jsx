@@ -8,6 +8,7 @@ export default function UserVideoComponent({
   userCamBorder,
   type,
   handleSaveblob,
+  isMuted,
 }) {
   const getNicknameTag = () => {
     // Gets the nickName of the user
@@ -32,6 +33,7 @@ export default function UserVideoComponent({
             userCamBorder={userCamBorder}
             type={type}
             handleSaveblob={handleSaveblob}
+            isMuted={isMuted}
           />
         </div>
       ) : null}
