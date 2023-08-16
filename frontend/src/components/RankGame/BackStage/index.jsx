@@ -16,10 +16,11 @@ function BackStage({ myUserName, mySessionId, joinSession }) {
   };
 
   return (
+ 
     <div id="join">
       <div id="img-div"></div>
       <div id="join-dialog">
-        <div className="flex justify-around h-screen">
+        <div className="flex justify-around h-screen ">
           {/* Container */}
           <div className="flex w-4/5 justify-between">
             {/* Left Side */}
@@ -28,7 +29,7 @@ function BackStage({ myUserName, mySessionId, joinSession }) {
             </div>
 
             {/* Right Side */}
-            <div className="w-2/5 h-[90%] flex flex-col justify-center z-10">
+            <div className="w-2/5 h-[90%] flex flex-col justify-center z-1 ml-8">
               <RightSide />
 
               {/* 선수입장 */}
@@ -44,7 +45,9 @@ function BackStage({ myUserName, mySessionId, joinSession }) {
           </div>
         </div>
       </div>
+
     </div>
+
   );
 }
 

@@ -18,6 +18,9 @@ module.exports = {
       black: '#000000',
       indigo : '#4b0082',
       gray : '#d3d3d3',
+      gold: '#FFD700',
+      silver: '#C0C0C0',
+      bronze: '#CD7F32'
     },
     extend: {
       width: {
