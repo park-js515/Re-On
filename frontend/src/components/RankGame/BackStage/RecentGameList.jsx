@@ -32,7 +32,7 @@ const RecentGameList = () => {
   }, []);
 
   return (
-    <div className="flex flex-col my-24 pb-16">
+    <div className="flex flex-col my-14 pb-20">
       <div className="text-6xl mb-6 pb-6  font-semibold mx-2">최근전적</div>
       <div className="flex rounded text-white pb-12">
         {gameListData.map((game, index) => (

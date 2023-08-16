@@ -1,0 +1,96 @@
+.userbox{
+ 
+
+    background: linear-gradient(
+        var(--angle, 0deg),
+        #867eb1 0%, 
+        #7a9bb8 20%, 
+        #7fa8c2 30%, 
+        #7dc7ce 40%, 
+        #8ccfd5 50%, 
+        #7dc7ce 60%, 
+        #7fa8c2 70%, 
+        #7a9bb8 80%, 
+        #867eb1 100%
+    );
+    
+
+    
+    
+  
+ 
+
+  border-radius: 12px;
+  color: #fff;
+  box-shadow: 5px 5px 15px #c5c5c5;
+  transition: all 300ms linear;
+  box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.5);
+  
+  &:hover {
+    background: linear-gradient(
+        var(--angle, 0deg),
+        #867eb1 0%, 
+        #7a9bb8 20%, 
+        #7fa8c2 30%, 
+        #7dc7ce 40%, 
+        #8ccfd5 50%, 
+        #7dc7ce 60%, 
+        #7fa8c2 70%, 
+        #7a9bb8 80%, 
+        #867eb1 100%
+    );
+    /* background-size: 300% 100%;
+    animation: holographicShimmer 2s infinite; */
+    cursor: default;
+  }
+}
+
+
+
+.tierimg {
+ 
+   
+    max-width: 250px;
+    max-height: 250px; 
+  
+  }
+
+
+
+
+  .card {
+    background: linear-gradient(
+        var(--angle, 30deg),
+        #8ccfd5 0%, 
+        #7fa8c2 10%, 
+        #8ccfd5 20%, 
+        #7a9bb8 30%, 
+        #7090ae 40%, 
+        #867eb1 50%, 
+        #7090ae 60%, 
+        #7a9bb8 70%, 
+        #8ccfd5 80%, 
+        #7fa8c2 90%, 
+        #8ccfd5 100%
+    );
+    
+    border-radius: 12px;
+  }
+
+@keyframes slideInFromLeft {
+0% {
+    transform: translateX(-100%);
+}
+100% {
+    transform: translateX(0);
+}
+}
+
+@keyframes slideInFromRight {
+    0% {
+      transform: translateX(100%);
+    }
+    100% {
+      transform: translateX(0);
+    }
+  }

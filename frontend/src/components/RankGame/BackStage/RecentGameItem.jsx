@@ -9,6 +9,8 @@ const RecentGameItem = ({ game }) => {
   if (game.point > 0) {
     backgroundColor = '#2196F3';
     hoverColor = '#1976d2';
+    
+    
   } else if (game.point < 0) {
     backgroundColor = '#ef5350';
     hoverColor = '#d32f2f';
@@ -42,17 +44,16 @@ const RecentGameItem = ({ game }) => {
         variant="contained"
         size="large" // 큰 크기의 버튼을 사용
         sx={{
-          padding: '1vw 1.5vw', // 좀 더 큰 패딩으로 버튼 크기 조정
-          fontSize: '1.1rem', // 폰트 크기 조절
+          padding: '1.3vw 1.8vw', // 좀 더 큰 패딩으로 버튼 크기 조정
+          fontSize: '1.0rem', // 폰트 크기 조절
           borderRadius: '20px', // 버튼 모서리 둥글게
-          margin: '0vw 0.1vw',
           backgroundColor,
           '&:hover': {
             backgroundColor: hoverColor,
           },
         }}
       >
-        {game.category}
+        {game.category} {game.point > 0 ? '승' : game.point < 0 ? '패' : game.point === 0 ? '무' : '-'} 
       </MUIButton>
     </MUITooltip>
   );

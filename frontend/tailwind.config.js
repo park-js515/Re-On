@@ -18,6 +18,9 @@ module.exports = {
       black: '#000000',
       indigo : '#4b0082',
       gray : '#d3d3d3',
+      gold: '#FFD700',
+      silver: '#C0C0C0',
+      bronze: '#CD7F32'
     },
     extend: {
       width: {
@@ -28,6 +31,10 @@ module.exports = {
         '11/12': '91.666667%',
         '10/12': '83.333333%',
       },
+      animation: {
+        slideInFromLeft: 'slideInFromLeft 1.5s forwards',
+        slideInFromRight: 'slideInFromRight 1.5s forwards'
+      }
     },
   },
   plugins: [
