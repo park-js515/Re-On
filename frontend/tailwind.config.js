@@ -2,7 +2,7 @@
 module.exports = {
   content: ['./src/**/*.{js,jsx,ts,tsx}', './public/index.html'],
   theme: {
-    colors: {
+    colors: { 
       mainBlue: '#4094bf',
       lightBlue: '#8ccfd5',
       begie: '#f2ecda',
@@ -40,6 +40,12 @@ module.exports = {
       },
       backgroundImage: theme => ({
         'custom-gradient': 'linear-gradient(var(--angle, 0deg), #8ccfd5 0%, #a2d2d8 20%, #b8d5dc 40%, #ced8df 60%, #e4dbe2 80%, #f2ecda 100%)',
+        'custom-g': 'linear-gradient(var(--angle, 0deg), #8ccfd5 0%, #9dcbd8 20%, #aec7db 40%, #cfd3de 60%, #e2dfd9 80%, #f2ecda 100%)',
+      zIndex: {
+        '-1': '-1',
+        '-2': '-2',
+    
+      },
      })
     },
   },
