@@ -42,8 +42,6 @@ const MyPageMine = ({ setMyPage, email }) => {
   //페이지 유저 정보
   const [memberInfo, setMemberInfo] = useState({});
   // 자기소개
-  // const [introduce, setIntroduce] = useInputText("", (value) => {return value <= 255});
-  // const [nickName, setNickName] = useState('', (value) => {return value < 16});
   const [introduce, setIntroduce, resetIntroduce] = useInputText(
     '',
     (value) => {
@@ -65,6 +63,7 @@ const MyPageMine = ({ setMyPage, email }) => {
 
   // 자기소개 수정 모달
   const [showModal, setShowModal] = useState(false);
+
   // 프로필 사진 수정 모달
   const [showProfileModal, setShowProfileModal] = useState(false);
 
@@ -110,6 +109,7 @@ const MyPageMine = ({ setMyPage, email }) => {
         text: '닉네임은 반드시 한 글자 이상이어야 합니다!.',
       });
     } else {
+      localStorage.setItem('nickName', nickName);
       updateMemberInfo(
         { introduce: introduce, nickName: nickName },
         () => {
