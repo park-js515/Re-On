@@ -65,7 +65,7 @@ const FeedPage = () => {
         setIsPrivate={setIsPrivate}
         type={"AllPublic"}
         />
-   
+
       {show ? <Videoplayer changeShow={changeShow} post_id={post_id} isPrivate={isPrivate}/> : null}
       
     </div>

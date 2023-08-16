@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { updatePostComment } from 'apiList/post';
+import Swal from 'sweetalert2';
 
 const alter_img_url = process.env.REACT_APP_ALTER_IMG_URL
 
@@ -24,14 +25,14 @@ const useInputText = (initialValue, validator) => {
     }
   };
 
-  return [text, handleSetText];
+  return [text, handleSetText, setText];
 };
 
 const Comment = ({ comment, deleteComment, changeShow }) => {
-  let maxLength = 150; // 150자 제한
+  let maxLength = 100; // 100자 제한
 
   const navigate = useNavigate();
-  const [content, setContent] = useInputText(comment.content, (value) => {return value.length < maxLength});
+  const [content, setContent, resetContent] = useInputText(comment.content, (value) => {return value.length <= maxLength});
   const [updateMode, setUpdateMode] = useState(false);
 
   const moveToMyPage = (event) => {
@@ -45,8 +46,12 @@ const Comment = ({ comment, deleteComment, changeShow }) => {
     if (updateMode) {
       // 댓글 수정 비활성화 하려고 누른 상태 == 댓글 수정 후 클릭한 상태
       if (content.trim() === '') {
-        setContent(comment.content);
-        alert('댓글 작성 후 수정해주세요.');
+        resetContent(comment.content);
+        Swal.fire({
+          icon: "info",
+          text: "댓글 작성 후 수정해주세요",
+          backdrop: false
+        })
       } else {
         updatePostComment(
           comment.id,

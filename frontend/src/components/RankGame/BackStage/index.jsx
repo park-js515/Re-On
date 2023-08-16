@@ -4,6 +4,7 @@ import TutorialModal from 'components/RankGame/Modal/TutorialModal';
 
 import { useState } from 'react';
 import './UserInfo/UserInfo.css';
+import Swal from 'sweetalert2';
 
 function BackStage({ myUserName, mySessionId, joinSession, leaveSession }) {
   const [toggleTutorialModal, setToggleTutorialModal] = useState(false);
@@ -17,7 +18,11 @@ function BackStage({ myUserName, mySessionId, joinSession, leaveSession }) {
       joinSession();
     } catch (error) {
       // 권한 거부 또는 다른 오류 처리
-      alert('카메라와 마이크 권한이 필요합니다. 설정에서 허용해주세요.');
+      Swal.fire({
+        icon: "warning",
+        html: "카메라와 마이크 권한이 필요합니다. <br/>설정에서 허용해주세요.",
+        backdrop: false,
+      })
     }
   };
 
