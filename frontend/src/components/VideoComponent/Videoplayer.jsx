@@ -187,8 +187,11 @@ const Videoplayer = ({ post_id, changeShow, isPrivate }) => {
               icon: 'success',
               html: '업로드가 완료되었습니다. <br /> 게시글에 가면 시청 가능합니다.',
               backdrop: false,
+              willClose: () => {
+                changeShow();
+                window.location.reload();
+              }
             });
-            changeShow();
           },
           (error) => {
             console.log(error);
