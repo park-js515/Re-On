@@ -870,10 +870,6 @@ export default function OpenViduApp() {
         opponentEmail = userOneEmail;
       }
 
-      console.log(userOneEmail);
-      console.log(userTwoEmail);
-      console.log(opponentEmail);
-
       // API 보내는 곳 (결과) if(resultGame !=== 999)
       if (resultGame !== 999 && userOneEmail && userTwoEmail && videoData) {
         const body = {
@@ -899,7 +895,7 @@ export default function OpenViduApp() {
       setLog((prevLog) => [...prevLog, `🖐안녕히 가세요!`]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [stage]);
+  }, [stage, session]);
 
   // ############ 턴 종료 ###############
   const [resultScore, setResultScore] = useState(0);
