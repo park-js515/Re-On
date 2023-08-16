@@ -7,6 +7,8 @@ import {
   deletePostComment,
 } from 'apiList/post';
 
+import Swal from 'sweetalert2';
+
 const useInputText = (initialValue, validator) => {
   const [text, setText] = useState(initialValue);
 
@@ -32,14 +34,14 @@ const useInputText = (initialValue, validator) => {
 
 const Commentlist = ({ post_id, changeShow, initialData }) => {
   let page = 2;
-  let maxLength = 150;
+  let maxLength = 100;
 
   // 댓글은 게시글 식별자로 조회
   const [comments, setComments] = useState(initialData); // 초기 댓글 (VideoPlayer에서 받아온거)
   const [userInput, setUserInput, resetUserInput] = useInputText(
     '',
     (value) => {
-      return value.length < maxLength;
+      return value.length <= maxLength;
     },
   ); // 댓글 쓰기 창 (최대 150자: maxLength로 조절)
   const [more, setMore] = useState(initialData.length > 10 ? true : false); // 댓글 더보기 가능 여부
@@ -72,7 +74,11 @@ const Commentlist = ({ post_id, changeShow, initialData }) => {
 
   const addComment = () => {
     if (userInput.trim().length < 1) {
-      alert('댓글 작성 후 눌러주세요');
+      Swal.fire({
+        icon: 'info',
+        text: '댓글 작성 후 눌러주세요.',
+        backdrop: false,
+      });
       return;
     } else {
       // axios로 API 서버에 댓글 생성 보내기
