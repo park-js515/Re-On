@@ -11,51 +11,43 @@ const Postbar = ({myPage, email, changeShow, injectPostId, setIsPrivate}) => {
 
   return (
     <>
-    <div className='mt-24 h-screen min-h-screen bg-gradient-to-b from-begie  to-[#a4dbe0] border-t-2'>
-      <ul className="flex items-center justify-around md:justify-center space-x-12 uppercase tracking-widest font-semibold text-md ">
-        <div className="flex flex-row mt-4 justify-center ">
-
-          <div className="flex text-center py-2 m-4 pr-5">
-            <div className="flex">
-            <button
-              className={`px-4 py-2 rounded-full 
-              ${activeComponent === 'Posts' ? ' text-lightBlue' : 'text-black hover:text-lightBlue'}`}
-              onClick={() => setActiveComponent('Posts')}
-            >
-              <h3 className="text-xl font-bold">🌻게시물</h3>
-            </button>
-            </div>
-          </div>
+      <div className='mt-16 h-screen min-h-screen bg-gradient-to-t from-begie to-lightBlue '>
+        <div className="flex items-center bg-inss justify-center space-x-4 border-b-2 mb-12 border-gray md:space-x-12  uppercase tracking-widest font-semibold text-md ">
+  
+          <button
+            className={`flex items-center space-x-2 px-5 py-2 font-semibold transition text-2xl
+              ${activeComponent === 'Posts' ? 'text-lightBlue border-b-2 border-black' : 'text-black hover:text-lightBlue '}`}
+            onClick={() => setActiveComponent('Posts')}
+          >
+            <span></span>
+            <span>게시물</span>
+          </button>
+  
           {myPage &&
-          <div className="flex text-center py-2 m-4 pr-5">
-            <div className="flex">
             <button
-              className={`px-4 py-2 rounded-full 
-              ${activeComponent === 'Private' ? 'text-lightBlue' : 'text-black hover:text-lightBlue'}`}
+              className={`flex items-center space-x-2 px-5 py-2  font-semibold transition text-2xl
+                ${activeComponent === 'Private' ? 'text-lightBlue border-b-2 border-black' : 'text-black hover:text-lightBlue '}`}
               onClick={() => setActiveComponent('Private')}
             >
-              <h3 className="text-xl font-bold">💾비공개</h3>
-            </button>
-            </div>
-          </div>}
-          
+              <span></span>
+              <span>비공개</span>
+            </button>}
+  
           {myPage &&
-          <div className="flex text-center py-2 m-4 pr-5">
-            <div className="flex">
             <button
-              className={`px-4 py-2 rounded-full 
-              ${activeComponent === 'Likes' ? 'text-lightBlue border-t-black' : 'text-black hover:text-lightBlue'}`}
+              className={`flex items-center space-x-2 px-5 py-2  font-semibold transition text-2xl
+                ${activeComponent === 'Likes' ? 'text-lightBlue border-b-2 border-black' : 'text-black hover:text-lightBlue '}`}
               onClick={() => setActiveComponent('Likes')}
             >
-              <h3 className="text-xl font-bold">💌내가좋아한</h3>
-            </button>
-            </div>
-          </div>}
-          </div>
-      </ul>
-      {activeComponent === "Posts" && <Videolist type={activeComponent} injectPostId={injectPostId} changeShow={changeShow} setIsPrivate={setIsPrivate}/>}
-      {activeComponent === "Private" && <Videolist type={activeComponent} injectPostId={injectPostId} changeShow={changeShow} setIsPrivate={setIsPrivate}/>}
-      {activeComponent === "Likes" && <Videolist type={activeComponent} injectPostId={injectPostId} changeShow={changeShow} setIsPrivate={setIsPrivate}/>}
+              <span></span>
+              <span>좋아한</span>
+            </button>}
+  
+        </div>
+  
+        {activeComponent === "Posts" && <Videolist type={activeComponent} injectPostId={injectPostId} changeShow={changeShow} setIsPrivate={setIsPrivate} />}
+        {activeComponent === "Private" && <Videolist type={activeComponent} injectPostId={injectPostId} changeShow={changeShow} setIsPrivate={setIsPrivate} />}
+        {activeComponent === "Likes" && <Videolist type={activeComponent} injectPostId={injectPostId} changeShow={changeShow} setIsPrivate={setIsPrivate} />}
       </div>
     </>
   );

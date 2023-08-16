@@ -1,0 +1,11 @@
+@keyframes slideInFromTop {
+    0% {
+        transform: translateY(-100%);
+    }
+    50% {
+        transform: translateY(10%);
+    }
+    100% {
+        transform: translateY(0);
+    }
+}
