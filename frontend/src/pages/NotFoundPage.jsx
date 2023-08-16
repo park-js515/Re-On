@@ -23,10 +23,10 @@ const NotFoundPage = () => {
       text: '내가 데려다 줄까?',
       width: 600,
       padding: '3em',
-      background: '#fff url(/image/t0rees.png)',
+      background: '#ffffff url(/image/t0rees.png)',
       button: 'info',
       backdrop: `
-        rgba(255, 255, 255, 0.2)
+        rgba(255, 255, 255, 0.1)
         url("/image/character/cutereon.png")
         center top
         no-repeat

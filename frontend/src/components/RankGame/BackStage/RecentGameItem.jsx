@@ -44,8 +44,8 @@ const RecentGameItem = ({ game }) => {
         variant="contained"
         size="large" // 큰 크기의 버튼을 사용
         sx={{
-          padding: '1.3vw 2vw', // 좀 더 큰 패딩으로 버튼 크기 조정
-          fontSize: '1.1rem', // 폰트 크기 조절
+          padding: '1.3vw 1.8vw', // 좀 더 큰 패딩으로 버튼 크기 조정
+          fontSize: '1.0rem', // 폰트 크기 조절
           borderRadius: '20px', // 버튼 모서리 둥글게
           backgroundColor,
           '&:hover': {
