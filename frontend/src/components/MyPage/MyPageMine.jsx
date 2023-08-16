@@ -63,6 +63,7 @@ const MyPageMine = ({ setMyPage, email }) => {
 
   // 자기소개 수정 모달
   const [showModal, setShowModal] = useState(false);
+
   // 프로필 사진 수정 모달
   const [showProfileModal, setShowProfileModal] = useState(false);
 
@@ -109,6 +110,7 @@ const MyPageMine = ({ setMyPage, email }) => {
         backdrop: false,
       });
     } else {
+      localStorage.setItem('nickName', nickName);
       updateMemberInfo(
         { introduce: introduce, nickName: nickName },
         () => {
