@@ -13,6 +13,7 @@ const NewEnd = ({
   recordedFile,
   userOneSttScore,
   userTwoSttScore,
+  videoId,
 }) => {
   const [initial, setInitial] = useState(false);
   // 초기 애니메이션 설정
@@ -25,12 +26,11 @@ const NewEnd = ({
   // #########################################
 
   const [isChecked, setIsChecked] = useState(true);
-  const [countdown, setCountdown] = useState(12); // 카운트다운을 위한 상태
+  const [countdown, setCountdown] = useState(15); // 카운트다운을 위한 상태
   const [isSaved, setIsSaved] = useState(false); // 저장 확인
 
   const handleSaveRecordedFile = async () => {
     if (recordedFile) {
-      const videoId = 1;
       const formData = new FormData();
 
       // ######### 녹화 업로드 API
@@ -64,7 +64,7 @@ const NewEnd = ({
 
   useEffect(() => {
     if (countdown <= 0) {
-      // leaveSession();
+      leaveSession();
       return;
     }
 
