@@ -56,7 +56,7 @@ const MyPage = () => {
   }, [])
   
   return(
-    <div className=' bg-gradient-to-t from-begie via-begie to-lightBlue'>
+    <div className=' bg-white'>
       <div className=''>
 
       <Container>

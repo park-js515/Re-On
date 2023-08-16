@@ -409,19 +409,9 @@ export default function OpenViduApp() {
   function face_detect() {
     const video = document.getElementById(mySide);
     const origin = document.getElementById('origin');
-    // const canvas = faceapi.createCanvasFromMedia(video);
 
-    // origin.addEventListener('loadeddata', () => {
-    //   const origin_canvas = faceapi.createCanvasFromMedia(origin);
-    //   faceapi.matchDimensions(origin_canvas, originSize);
-    // });
-
-    const originSize = { width: 224, height: 224 };
-    const videoSize = { width: 224, height: 224 };
-    // faceapi.matchDimensions(canvas, videoSize);
     const FPS = 5;
     myInterval = setInterval(async () => {
-      const start = new Date();
       const video_detections = await faceapi.detectAllFaces(
         video,
         new faceapi.TinyFaceDetectorOptions(),
@@ -430,25 +420,11 @@ export default function OpenViduApp() {
         origin,
         new faceapi.TinyFaceDetectorOptions(),
       );
-
-      const resizedDetections_video = faceapi.resizeResults(
-        video_detections,
-        videoSize,
-      );
-      const resizedDetections_origin = faceapi.resizeResults(
-        origin_detections,
-        originSize,
-      );
-      // canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
-      // faceapi.draw.drawDetections(canvas, resizedDetections);
-      if (
-        resizedDetections_video.length > 0 &&
-        resizedDetections_origin.length > 0
-      ) {
+      if (video_detections.length > 0 && origin_detections.length > 0) {
         try {
           await image_classification(
-            resizedDetections_video[0].box,
-            resizedDetections_origin[0].box,
+            video_detections[0].box,
+            origin_detections[0].box,
           );
         } catch {
           console.log('오류 발생');
@@ -458,12 +434,14 @@ export default function OpenViduApp() {
     }, 1000 / FPS);
   }
   async function image_classification(box1, box2) {
+    const video = document.getElementById(mySide);
+    const origin = document.getElementById('origin');
     const [x1, y1, w1, h1] = [box1.x, box1.y, box1.width, box1.height];
     const [x2, y2, w2, h2] = [box2.x, box2.y, box2.width, box2.height];
     const mean = [0.485, 0.456, 0.406];
     const std = [0.229, 0.224, 0.225];
-    const imageData1 = resizeImage(x1, y1, w1, h1);
-    const imageData2 = resizeImage(x2, y2, w2, h2);
+    const imageData1 = resizeImage(x1, y1, w1, h1, video);
+    const imageData2 = resizeImage(x2, y2, w2, h2, origin);
 
     // Create a new Float32Array for the input tensor
     const inputData1 = new Float32Array(1 * 3 * 224 * 224);
@@ -517,8 +495,7 @@ export default function OpenViduApp() {
     frame_cnts++;
   }
 
-  function resizeImage(x, y, w, h) {
-    const video = document.getElementById(mySide);
+  function resizeImage(x, y, w, h, video) {
     const cropCanvas = document.createElement('canvas');
     cropCanvas.width = w;
     cropCanvas.height = h;
@@ -579,6 +556,29 @@ export default function OpenViduApp() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userOneText, userTwoText, mySide]);
+
+  // ################# 상대 음소거 함수 ####################
+  const [isMuted, setIsMuted] = useState(false);
+
+  const handleSubMute = () => {
+    setIsMuted(true);
+  };
+
+  const handleSubUnmute = () => {
+    setIsMuted(false);
+  };
+
+  // const muteAllSubscribers = () => {
+  //   subscribers.forEach((subscriber) => {
+  //     subscriber.properties.subscribeToAudio(false);
+  //   });
+  // };
+
+  // const unmuteAllSubscribers = () => {
+  //   subscribers.forEach((subscriber) => {
+  //     subscriber.properties.subscribeToAudio(true);
+  //   });
+  // };
 
   // #################       게임 로그 저장      ####################
   const currentTime = new Date();
@@ -649,6 +649,7 @@ export default function OpenViduApp() {
       setRecordOn(true);
       face_detect();
       startListening();
+      handleSubMute();
     }
     mySide === 'USER_ONE'
       ? setUserCamLeftBorder(true)
@@ -672,6 +673,7 @@ export default function OpenViduApp() {
       setRecordOn(true);
       face_detect();
       startListening();
+      handleSubMute();
     }
     mySide === 'USER_TWO'
       ? setUserCamLeftBorder(true)
@@ -868,10 +870,6 @@ export default function OpenViduApp() {
         opponentEmail = userOneEmail;
       }
 
-      console.log(userOneEmail);
-      console.log(userTwoEmail);
-      console.log(opponentEmail);
-
       // API 보내는 곳 (결과) if(resultGame !=== 999)
       if (resultGame !== 999 && userOneEmail && userTwoEmail && videoData) {
         const body = {
@@ -897,7 +895,7 @@ export default function OpenViduApp() {
       setLog((prevLog) => [...prevLog, `🖐안녕히 가세요!`]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [stage]);
+  }, [stage, session]);
 
   // ############ 턴 종료 ###############
   const [resultScore, setResultScore] = useState(0);
@@ -917,6 +915,7 @@ export default function OpenViduApp() {
             stopListening();
             setResultScore(Math.round(answer));
             setRecordOn(false);
+            handleSubUnmute();
           }
           setUserCamLeftBorder(false);
           setUserCamRightBorder(false);
@@ -931,6 +930,7 @@ export default function OpenViduApp() {
             stopListening();
             setResultScore(Math.round(answer));
             setRecordOn(false);
+            handleSubUnmute();
           }
           setUserCamLeftBorder(false);
           setUserCamRightBorder(false);
@@ -1207,6 +1207,7 @@ export default function OpenViduApp() {
                       mySide={null}
                       userCamBorder={userCamRightBorder}
                       type="subscriber"
+                      isMuted={isMuted}
                     />
                   </div>
                 ))

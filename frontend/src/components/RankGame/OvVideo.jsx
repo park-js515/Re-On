@@ -8,6 +8,7 @@ export default function OpenViduVideoComponent({
   userCamBorder,
   type,
   handleSaveblob,
+  isMuted,
 }) {
   const videoRef = useRef();
 
@@ -59,6 +60,13 @@ export default function OpenViduVideoComponent({
     }
   }, [recordOn, mediaRecorder, recording]);
 
+  useEffect(() => {
+    if (videoRef.current && type === 'subscriber') {
+      videoRef.current.muted = isMuted;
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isMuted]);
+
   return (
     <video
       id={mySide}
@@ -67,6 +75,7 @@ export default function OpenViduVideoComponent({
       className={` ${
         userCamBorder ? 'border-4 border-danger' : ''
       } w-[500px] h-[500px]`}
+      isMuted={isMuted}
     />
   );
 }

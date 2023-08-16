@@ -11,7 +11,7 @@ const Postbar = ({myPage, email, changeShow, injectPostId, setIsPrivate}) => {
 
   return (
     <>
-    <div className='mt-24 h-screen min-h-screen bg-gradient-to-b from-begie  to-lightBlue'>
+    <div className='mt-24 h-screen min-h-screen bg-gradient-to-b from-begie  to-[#a4dbe0] border-t-2'>
       <ul className="flex items-center justify-around md:justify-center space-x-12 uppercase tracking-widest font-semibold text-md ">
         <div className="flex flex-row mt-4 justify-center ">
 
@@ -19,10 +19,10 @@ const Postbar = ({myPage, email, changeShow, injectPostId, setIsPrivate}) => {
             <div className="flex">
             <button
               className={`px-4 py-2 rounded-full 
-              ${activeComponent === 'Posts' ? 'bg-begie text-black' : 'text-black hover:text-lightBlue'}`}
+              ${activeComponent === 'Posts' ? ' text-lightBlue' : 'text-black hover:text-lightBlue'}`}
               onClick={() => setActiveComponent('Posts')}
             >
-              <h3 className="text-sm font-bold">🌻게시물</h3>
+              <h3 className="text-xl font-bold">🌻게시물</h3>
             </button>
             </div>
           </div>
@@ -31,10 +31,10 @@ const Postbar = ({myPage, email, changeShow, injectPostId, setIsPrivate}) => {
             <div className="flex">
             <button
               className={`px-4 py-2 rounded-full 
-              ${activeComponent === 'Private' ? 'bg-begie text-black' : 'text-black hover:text-lightBlue'}`}
+              ${activeComponent === 'Private' ? 'text-lightBlue' : 'text-black hover:text-lightBlue'}`}
               onClick={() => setActiveComponent('Private')}
             >
-              <h3 className="text-sm font-bold">💾비공개</h3>
+              <h3 className="text-xl font-bold">💾비공개</h3>
             </button>
             </div>
           </div>}
@@ -44,10 +44,10 @@ const Postbar = ({myPage, email, changeShow, injectPostId, setIsPrivate}) => {
             <div className="flex">
             <button
               className={`px-4 py-2 rounded-full 
-              ${activeComponent === 'Likes' ? 'bg-begie text-black' : 'text-black hover:text-lightBlue'}`}
+              ${activeComponent === 'Likes' ? 'text-lightBlue border-t-black' : 'text-black hover:text-lightBlue'}`}
               onClick={() => setActiveComponent('Likes')}
             >
-              <h3 className="text-sm font-bold">💌내가좋아한</h3>
+              <h3 className="text-xl font-bold">💌내가좋아한</h3>
             </button>
             </div>
           </div>}
