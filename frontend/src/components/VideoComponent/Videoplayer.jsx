@@ -10,6 +10,7 @@ import {
   searchPrivatePostDetail,
   uploadPrivatePost,
 } from 'apiList/post';
+import Swal from 'sweetalert2';
 
 const alter_img_url = process.env.REACT_APP_ALTER_IMG_URL;
 
@@ -92,23 +93,35 @@ const Videoplayer = ({ post_id, changeShow, isPrivate }) => {
     }
   };
   const deletePost = () => {
-    if (window.confirm('게시글을 비공개로 전환하시겠습니까?')) {
-      pullDownPublicPost(
-        post_id,
-        (response) => {
-          changeShow();
-        },
-        (error) => {
-          console.log(error);
-        },
-      );
-    }
+    Swal.fire({
+      showCancelButton: true,
+      text: '게시글을 비공개로 전환하시겠습니까?',
+      confirmButtonText: '예',
+      cancelButtonText: '취소',
+      backdrop: false,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        pullDownPublicPost(
+          post_id,
+          (response) => {
+            changeShow();
+          },
+          (error) => {
+            console.log(error);
+          },
+        );
+      }
+    });
   };
 
   const editPost = () => {
     if (edit) {
       if (title.trim() === '' || content.trim() === '') {
-        alert('입력 후에 수정해주세요.');
+        Swal.fire({
+          icon: 'info',
+          text: '입력 후에 수정해주세요.',
+          backdrop: false,
+        });
         setTitle(data.title);
         setContent(data.content);
       } else {
@@ -128,44 +141,70 @@ const Videoplayer = ({ post_id, changeShow, isPrivate }) => {
   };
   const changeContent = (event) => {
     if (event.target.value.length > 255) {
-      alert('255자 이내로 작성해주세요.');
+      Swal.fire({
+        icon: 'info',
+        text: '255자 이내로 작성해주세요.',
+        backdrop: false,
+      });
     } else {
       setContent(event.target.value);
     }
   };
   const changeTitle = (event) => {
-    if (event.target.value.length > 255) {
-      alert('255자 이내로 작성해주세요.');
+    if (event.target.value.length > 30) {
+      Swal.fire({
+        icon: 'info',
+        text: '30자 이내로 작성해주세요.',
+        backdrop: false,
+      });
     } else {
       setTitle(event.target.value);
     }
   };
   const postPost = () => {
     if (title.trim() === '' || content.trim() === '') {
-      alert('1자 이상 작성해주세요');
+      Swal.fire({
+        icon: 'info',
+        text: '1자 이상 작성해주세요.',
+        backdrop: false,
+      });
       return;
     }
 
-    if (window.confirm('업로드 하시겠습니까?')) {
-      uploadPrivatePost(
-        post_id,
-        { title: title, content: content },
-        (response) => {
-          console.log(response.data);
-          alert('업로드가 완료되었습니다. \n게시글에 가시면 시청 가능합니다.');
-          changeShow();
-        },
-        (error) => {
-          console.log(error);
-        },
-      );
-    }
+    Swal.fire({
+      showCancelButton: true,
+      text: '업로드 하시겠습니까?',
+      confirmButtonText: '예',
+      cancelButtonText: '취소',
+      backdrop: false,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        uploadPrivatePost(
+          post_id,
+          { title: title, content: content },
+          (response) => {
+            Swal.fire({
+              icon: 'success',
+              html: '업로드가 완료되었습니다. <br /> 게시글에 가면 시청 가능합니다.',
+              backdrop: false,
+            });
+            changeShow();
+          },
+          (error) => {
+            console.log(error);
+          },
+        );
+      }
+    });
   };
   return (
     // 모달 외부클릭시 꺼짐
     <div
       className="fixed top-6 z-40 w-full h-full flex justify-center items-center bg-black bg-opacity-50"
-      onClick={changeShow}
+      onClick={() => {
+        changeShow();
+        window.location.reload();
+      }}
     >
       {/*모달 내부는 이상없게  */}
       <div

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import Commentlist from "./Commentlist";
+import Swal from "sweetalert2";
 
 const Comment = ({comment, deleteComment, updateComment, changeShow, hierarchy}) => {
     console.log("comment")
@@ -25,8 +26,12 @@ const Comment = ({comment, deleteComment, updateComment, changeShow, hierarchy})
     }
 
     const updateCommentContent = () => {
-        if (content.trim().length == 0) {
-            alert("댓글 내용을 입력해주세요");
+        if (content.trim().length === 0) {
+            Swal.fire({
+                icon: "info",
+                text: "댓글 내용을 입력하세요.",
+                backdrop:false
+            })
         } else {
             updateComment(comment.id, content);
             changeUpdateMode();

@@ -37,13 +37,10 @@ const NaverRedirect = () => {
           })
           .catch((error) => {
             console.error(error);
-            alert(
-              '로그인에 문제가 발생했습니다. 로그인 페이지로 다시 이동합니다.',
-            );
             Swal.fire({
               icon: 'error',
               title: '로그인',
-              text: '로그인 중 문제가 발생했습니다.',
+              html: '로그인 중 문제가 발생했습니다. <br/>로그인 페이지로 다시 이동합니다.',
               customClass: {
                 container: 'custom-swal-container',
               },
