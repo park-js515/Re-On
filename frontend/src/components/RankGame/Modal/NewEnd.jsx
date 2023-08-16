@@ -64,7 +64,7 @@ const NewEnd = ({
 
   useEffect(() => {
     if (countdown <= 0) {
-      leaveSession();
+      // leaveSession();
       return;
     }
 
