@@ -11,8 +11,9 @@ const Postbar = ({myPage, email, changeShow, injectPostId, setIsPrivate}) => {
 
   return (
     <>
-      <ul className="flex items-center justify-around md:justify-center space-x-12 uppercase tracking-widest font-semibold text-md z-0">
-        <div className="flex flex-row mt-4 justify-center">
+    <div className='mt-24 h-screen min-h-screen bg-gradient-to-b from-begie  to-lightBlue'>
+      <ul className="flex items-center justify-around md:justify-center space-x-12 uppercase tracking-widest font-semibold text-md ">
+        <div className="flex flex-row mt-4 justify-center ">
 
           <div className="flex text-center py-2 m-4 pr-5">
             <div className="flex">
@@ -55,6 +56,7 @@ const Postbar = ({myPage, email, changeShow, injectPostId, setIsPrivate}) => {
       {activeComponent === "Posts" && <Videolist type={activeComponent} injectPostId={injectPostId} changeShow={changeShow} setIsPrivate={setIsPrivate}/>}
       {activeComponent === "Private" && <Videolist type={activeComponent} injectPostId={injectPostId} changeShow={changeShow} setIsPrivate={setIsPrivate}/>}
       {activeComponent === "Likes" && <Videolist type={activeComponent} injectPostId={injectPostId} changeShow={changeShow} setIsPrivate={setIsPrivate}/>}
+      </div>
     </>
   );
 };

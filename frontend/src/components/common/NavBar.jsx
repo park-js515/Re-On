@@ -112,7 +112,7 @@ export default function Navbar() {
                               <span
                                 className={classNames(
                                   active ? '' : '',
-                                  'block px-4 py-2 text-sm text-gray-700 hover:bg-inss hover:cursor-pointer',
+                                  'block px-4 py-2 text-sm text-gray-700 hover:bg-lightBlue hover:cursor-pointer',
                                 )}
                                 onClick={()=>{moveMyPage()}}
                               >
@@ -128,7 +128,7 @@ export default function Navbar() {
                                 to="/logout"
                                 className={classNames(
                                   active ? 'bg-gray-100' : '',
-                                  'block px-4 py-2 text-sm text-gray-700 hover:bg-inss',
+                                  'block px-4 py-2 text-sm text-gray-700 hover:bg-lightBlue',
                                 )}
                               >
                                 로그아웃

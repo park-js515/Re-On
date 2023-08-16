@@ -56,18 +56,22 @@ const MyPage = () => {
   }, [])
   
   return(
-    <div className="bg-gradient-to-t from-lightBlue to-begie">
+    <div className=' bg-gradient-to-t from-begie via-begie to-lightBlue'>
+      <div className=''>
 
-      <Container >
-        <div >
+      <Container>
+        <div className=''>
           <MyPageMine setMyPage={setMyPage} email={email}/>
         </div>
       </Container>
+      </div>
+      <div>
         
       <Postbar myPage={myPage} email={email} changeShow={changeShow} injectPostId={injectPostId} setIsPrivate={setIsPrivate}/>
 
       {show ? <Videoplayer changeShow={changeShow} post_id={post_id} isPrivate={isPrivate}/> : null}
      
+      </div>
     </div>
   )
 

@@ -158,11 +158,22 @@ const MyPageMine = ({setMyPage, email}) => {
       console.log(error);
     })
   }
-
+  const getRankColorValue = (tier) => {
+    switch (tier) {
+      case 'GOLD':
+        return '#ffd700'; 
+      case 'SILVER':
+        return '#c0c0c0'; 
+      case 'BRONZE':
+        return '#cd7f32'; 
+      default:
+        return 'inherit'; 
+    }
+  };
 
 
   return (
-    <div className="pt-12 flex items-start">
+    <div className="pt-16 flex items-start">
       
       {/* 프로필사진 */}
       {ismyPage &&
@@ -183,7 +194,8 @@ const MyPageMine = ({setMyPage, email}) => {
         <div className="flex items-center justify-between w-full ml-12">
           <h1 className="text-2xl font-bold">{memberInfo.nickName}</h1>
           {/* 티어 */}
-          <div className="flex flex-col justify-start flex-grow">{memberInfo.tier}</div>
+          <div className="ml-4 flex  flex-grow text-2xl font-bold" style={{color: getRankColorValue(memberInfo.tier)}}>{memberInfo.tier}</div>
+      
           {ismyPage &&<button className="rounded bg-[#dfe0e2] text-lg hover:bg-[#9fa3a3] font-semibold px-6 py-2"
             onClick={toggleModal}>
             수정
@@ -222,8 +234,11 @@ const MyPageMine = ({setMyPage, email}) => {
             rows="4"
             className="w-full p-2 mt-2 border rounded"
           />
-          <button className="mt-4 px-6 py-2 rounded bg-lightBlue text-black" onClick={saveIntroduction}>저장</button>
-          <button className="mt-4 px-6 py-2 rounded bg-danger text-black" onClick={deleteUser}>탈퇴</button>
+          <div className='flex flex-grow justify-end'>
+          <button className="mt-4 mr-4 px-6 py-2 rounded bg-lightBlue hover:scale-105 font-semibold text-black" onClick={saveIntroduction}>저장</button>
+          <button className="mt-4  px-6 py-2 rounded bg-danger hover:scale-105 font-semibold text-black" onClick={deleteUser}>탈퇴</button>
+
+          </div>
         </div>
       </div>
     )}
@@ -234,9 +249,9 @@ const MyPageMine = ({setMyPage, email}) => {
                   <span className="absolute top-2 right-2 cursor-pointer text-xl" onClick={toggleProfileModal}>✖</span>
                   <h2 className="text-2xl font-bold mb-4">프로필 사진 변경</h2>
             <input type="file" onChange={handleImageChange} />
-            <div>
-                <button className="mt-4 px-6 py-2 rounded bg-lightBlue text-black" onClick={saveProfileImage}>저장</button>
-                <button className="mt-4 px-6 py-2 rounded bg-danger text-black" onClick={deleteUserImage}>삭제</button>
+            <div className='flex flex-grow justify-end'>
+                <button className="mt-4 mr-4 px-6 py-2 rounded bg-lightBlue hover:scale-105 font-semibold text-black" onClick={saveProfileImage}>저장</button>
+                <button className="mt-4 px-6 py-2 rounded bg-danger hover:scale-105 font-semibold text-black" onClick={deleteUserImage}>삭제</button>
               </div>
                 </div>
               </div>

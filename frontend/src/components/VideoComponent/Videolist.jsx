@@ -128,7 +128,7 @@ const Videolist = ({injectPostId, changeShow, type, setIsPrivate}) => {
 
     return (
         <div className="py-8 sm:py-8 ">
-            <div className="bg-white mx-auto max-w-7xl px-2 lg:px-8 rounded-lg">
+            <div className="bg-white bg-opacity-50 mx-auto max-w-7xl px-2 lg:px-8 rounded-lg">
                 {type === "AllPublic" ?
                     <>
                         <h1 className="my-8 py-24 text-center font-bold text-3xl text-dark ">💌투표해줘</h1>           

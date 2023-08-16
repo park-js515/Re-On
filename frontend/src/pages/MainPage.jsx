@@ -90,7 +90,7 @@ export default function MainPage() {
                   </div>
 
                   {/* 오른쪽 {View} 부분 */}
-                  <div className="lottie-container flex-1 flex justify-center items-center ">
+                  <div className="lottie-container flex-1 flex justify-center items-center">
                       {View}
                   </div>
               </div>
