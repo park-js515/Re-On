@@ -7,7 +7,7 @@ module.exports = {
       lightBlue: '#8ccfd5',
       begie: '#f2ecda',
       white: '#ffffff',
-      danger: '#ff4d4d',
+      danger: '#e17389',
       warning: '#fde047',
       success: '#3b82f6',
       info: '#34d399',
@@ -34,7 +34,10 @@ module.exports = {
       animation: {
         slideInFromLeft: 'slideInFromLeft 1.5s forwards',
         slideInFromRight: 'slideInFromRight 1.5s forwards'
-      }
+      },
+      backgroundImage: theme => ({
+        'custom-gradient': 'linear-gradient(var(--angle, 0deg), #8ccfd5 0%, #a2d2d8 20%, #b8d5dc 40%, #ced8df 60%, #e4dbe2 80%, #f2ecda 100%)',
+     })
     },
   },
   plugins: [

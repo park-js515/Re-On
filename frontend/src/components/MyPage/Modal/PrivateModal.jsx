@@ -94,14 +94,14 @@ const Videoplayer = ({post_id, changeShow}) => {
                     </div>
                 </div>
                 
-                <div className="h-1/5 overflow-y-scroll mt-4 p-2 border-t border-gray-200 text-lg scrollbar-hide">{data.content}</div>
+                <div className="h-5/5 overflow-y-scroll mt-4 p-2 border-t border-gray-200 text-lg scrollbar-hide">{data.content}</div>
             </div>
             
             {/* 오른쪽 */}
-            <div className="w-4/12 pl-4 overflow-y-auto max-h-[calc(80vh-48px)] scrollbar-hide">
+            {/* <div className="w-4/12 pl-4 overflow-y-auto max-h-[calc(80vh-48px)] scrollbar-hide">
                 <Commentlist post_id={data.post_id} changeShow={changeShow} hierarchy={0} />
                
-            </div>
+            </div> */}
         </div>
         <OutBox />
     </div>
