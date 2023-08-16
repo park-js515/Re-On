@@ -1,7 +1,7 @@
 import { React, useState, useEffect, useRef } from "react";
 import * as faceapi from 'face-api.js'
 import './Solo.css'
-
+import { randomVideo } from "apiList/video";
 
 const SoloApp = () => {
  
@@ -15,21 +15,25 @@ const SoloApp = () => {
   const video_width = 500; //
   const video_height = 500;//
   ///////////////////////////
-  
+  const base_url = "https://storage.googleapis.com/reon-bucket/"
   const [reload, setReload] = useState(false);
   const videoRef = useRef();
   const webCamRef = useRef();
   const [answer, setAnswer] = useState(-1);
-
-  // API 연결되면 수정해야 될 부분
-  const urls = [
-    'video/ISawTheDevil.mp4',
-    'video/아저씨-원빈-금니빨.mp4',
-  ]
-  const [url, setUrl] = useState(urls[Math.round(Math.random())])
-
+  const [url, setUrl] = useState("")
+  const [script, setScript] = useState("")
   const getURL = () => {
-    setUrl(urls[Math.round(Math.random())])
+    randomVideo(
+      (response)=>{
+        const newdata = response.data.response
+        console.log(newdata)
+        setUrl(base_url + newdata.videoPath)
+        setScript(newdata.script)
+      },
+      (error)=>{
+        console.log(error)
+      }
+    )
   }
 
   const [ortSession, setOrtSession] = useState(null);
@@ -58,14 +62,15 @@ const SoloApp = () => {
       catch (e) {
         document.write(`failed to inference ONNX model: ${e}.`)
       }
-      
-   
     };
-  
-    createSession();
 
-    return ()=>{setOrtSession(null);faceapi.tf.dispose();console.log("전부 삭제")}
-  },[videoRef])
+    getURL();
+    createSession();
+    return ()=>{
+      setOrtSession(null);
+      faceapi.tf.dispose();
+      console.log("전부 삭제")}
+  },[])
   
   useEffect(() => {
     if (videoRef.current) {
@@ -80,13 +85,14 @@ const SoloApp = () => {
         sum_diff = 0;
         frame_cnts = 0;
       };
-      const handlePlay = () => {setAnswer(-1)
+      const handlePlay = () => {
+        setAnswer(-1);
         face_detect();
       }
 
       videoRef.current.addEventListener('ended', handleEnded);
       videoRef.current.addEventListener('play', handlePlay);
-
+      
       return () => {
         clearInterval(detectInterval)
         while (document.getElementsByTagName('canvas').length > 0){
@@ -125,9 +131,9 @@ const SoloApp = () => {
       canvas2.getContext('2d').clearRect(0, 0, canvas2.width, canvas2.height);
       faceapi.draw.drawDetections(canvas1, resizedDetections1);
       faceapi.draw.drawDetections(canvas2, resizedDetections2);
-      if (resizedDetections1.length > 0 && resizedDetections2.length > 0) {
+      if (detections1.length > 0 && detections2.length > 0) {
         try{
-          await image_classification(resizedDetections1[0].box, resizedDetections2[0].box);
+          await image_classification(detections1[0].box, detections2[0].box);
         }
         catch(err){
           console.log(err)
@@ -156,17 +162,17 @@ const SoloApp = () => {
 
     // 데이터 정규화
     for (let i = 0; i < pixels; i++) {
-      inputData1[i * 3] = (imageData1.data[i * 4] / 255.0 - mean[0]) / std[0]; // R
-      inputData1[i * 3 + 1] = (imageData1.data[i * 4 + 1] / 255.0 - mean[1]) / std[1]; // G
-      inputData1[i * 3 + 2] = (imageData1.data[i * 4 + 2] / 255.0 - mean[2]) / std[2]; // B
-      inputData2[i * 3] = (imageData2.data[i * 4] / 255.0 - mean[0]) / std[0]; // R
-      inputData2[i * 3 + 1] = (imageData2.data[i * 4 + 1] / 255.0 - mean[1]) / std[1]; // G
-      inputData2[i * 3 + 2] = (imageData2.data[i * 4 + 2] / 255.0 - mean[2]) / std[2]; // B
-      // 투명도는 건너뛰기
+      inputData1[i * 3] = (imageData1.data[i * 4] / 255 - mean[0]) / std[0]; // R
+      inputData1[i * 3 + 1] = (imageData1.data[i * 4 + 1] / 255 - mean[1]) / std[1]; // G
+      inputData1[i * 3 + 2] = (imageData1.data[i * 4 + 2] / 255 - mean[2]) / std[2]; // B
+      inputData2[i * 3] = (imageData2.data[i * 4] / 255 - mean[0]) / std[0]; // R
+      inputData2[i * 3 + 1] = (imageData2.data[i * 4 + 1] / 255 - mean[1]) / std[1]; // G
+      inputData2[i * 3 + 2] = (imageData2.data[i * 4 + 2] / 255 - mean[2]) / std[2]; // B
     }
 
     // Create ONNX tensor from the input array
     const inputTensor1 = new ort.Tensor('float32', inputData1, [1, 3, 224, 224]);
+    console.log(inputTensor1)
     const inputTensor2 = new ort.Tensor('float32', inputData2, [1, 3, 224, 224]);
     const inputName = ortSession.inputNames[0];
     const outputName = ortSession.outputNames[0];
@@ -220,76 +226,83 @@ const SoloApp = () => {
     if (score >= 10) return `더욱 연습해봐! ${answer.toFixed(0)}점`;
     if (score >= 0) return `이게 연기야!? ${answer.toFixed(0)}점`;
     
-    return `내가 평가를 해줄게!`;
+    return `내가 평가해줄게!`;
 }
 
   
 
   return (
   
-      <div className="-mt-16 py-8">
-        <img
-                src="image/solo/solo.png"
-                className="mx-auto h-[200px] w-[300px] mt-2"
-              />
+    <div className="-mt-16 py-8">
+      <img
+        src="image/solo/solo.png"
+        className="mx-auto h-[200px] w-[300px] mt-2"
+        alt="Solo"
+      />
       <div className="flex flex-row items-center justify-around ">
-        {/* 이게문젠가 ? */}
         <div className="flex flex-row items-center justify-around mt-9">
+          
           <div id="webCam_container">
-              <video id="movie" 
-                autoPlay
-                style={{ width: '500px', height: '500px' }}
-                className="rounded-lg"
-                ref={webCamRef}
-              >
-              </video>
-              
+            <video id="movie" 
+              autoPlay
+              style={{ width: '500px', height: '500px' }}
+              className="rounded-lg"
+              ref={webCamRef}
+            >
+            </video>
           </div>
+
           <div className="flex flex-col justify-center items-center my-4 mx-16 mb-10 space-y-4">
-                  {/* 점수 */}
-                  {typeof answer !== 'undefined' && (
-                    <div className="score-animation mt-4 text-black font-extrabold text-3xl px-8 py-4 rounded-lg shadow-xl flex items-center justify-center ">
-                      <span>{getScoreText(answer.toFixed(0))} </span>
-                      
-                    </div>
-                  )}
-                  <img className="h-[190px] w-[280px]" src="/image/character/cutereon2.png" alt="" />
+            {/* 점수 */}
+            {typeof answer !== 'undefined' && (
+              <div className="score-animation mt-4 text-black font-extrabold text-xl px-8 py-4 rounded-lg shadow-xl flex items-center justify-center ">
+                <span>{getScoreText(answer.toFixed(0))} </span>
+                
+              </div>
+            )}
+            <img className="h-[190px] w-[280px]" src="/image/character/cutereon2.png" alt="" />
                   
-                    
-                {/* 영화 바꾸기 버튼 */}
-                  <button 
-                      onClick={getURL}
-                      disabled={reload ? true : false}
-                      className="bg-[#9ac8cc] text-white font-extrabold text-3xl px-20 py-6 rounded-full transform transition-transform duration-300 hover:scale-105 hover:bg-[#8ccfd5] shadow-2xl hover:shadow-3xl focus:outline-none ">
-                      🎲영화변경
-                     
-                  </button>
-               {/* 재시작 버튼 */}
-               <button 
+            <div className="flex">
+            {/* 영화 바꾸기 버튼 */}
+              <button 
+                  onClick={getURL}
+                  disabled={reload ? true : false}
+                  className="bg-[#9ac8cc] text-white font-extrabold text-md px-5 py-3 rounded-full transform transition-transform duration-300 hover:scale-105 hover:bg-[#8ccfd5] shadow-2xl hover:shadow-3xl focus:outline-none ">
+                  🎲영화변경
+                
+              </button>
+
+              {/* 재시작 버튼 */}
+              <button 
                   onClick={startActing}
                   disabled={ortSession ? false : true}
-                  className={`text-white font-extrabold text-3xl px-20 py-6 rounded-full transform transition-transform duration-300 hover:scale-105 shadow-2xl hover:shadow-3xl focus:outline-none ${reload ? 'bg-[#f2a475] hover:bg-[#e99364]' : 'bg-[#e17389] hover:bg-[#ba5368]'}`}
+                  className={`ml-2 text-white font-extrabold text-md px-5 py-3 rounded-full transform transition-transform duration-300 hover:scale-105 shadow-2xl hover:shadow-3xl focus:outline-none ${reload ? 'bg-[#f2a475] hover:bg-[#e99364]' : 'bg-[#e17389] hover:bg-[#ba5368]'}`}
 
               >
                   {reload ? "🎬다시하기" : "🎮게임시작"}
               </button>
-
+            </div>
+            {/* 대사 자막 */}
+            <div className="w-[280px] h-[150px] rounded bg-white text-center">
+              <span className="w-[280px]">📜대사</span><br />
+              <div className="w-[280px] whitespace-normal">{script ? script : "표정에만 집중해요!"}</div>
+            </div>
           </div>
         
 
           <div id="movie_container">
-
-              <video id="movie"
-                src={url}
-                style={{ width: '500px', height: '500px' }}
-                className="rounded-lg"
-                ref={videoRef}
-              >
-              </video>
+            <video id="movie"
+              src={url ? url : null}
+              style={{ width: '500px', height: '500px' }}
+              className="rounded-lg"
+              ref={videoRef}
+              crossOrigin="annoymous"
+            >
+            </video>
           </div>
+          
         </div>
       </div>
-
   </div>
   )
 }
