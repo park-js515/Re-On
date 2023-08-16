@@ -9,8 +9,6 @@ const RecentGameItem = ({ game }) => {
   if (game.point > 0) {
     backgroundColor = '#8ccfd5';
     hoverColor = '#31becb';
-    
-    
   } else if (game.point < 0) {
     backgroundColor = '#e17389';
     hoverColor = '#d03755';
@@ -30,7 +28,7 @@ const RecentGameItem = ({ game }) => {
             <>
               상대 : {game.opponentNickName}
               <br />
-              점수 : {game.point > 0 ? '승리' : game.point < 0 ? '패배' : '무'}
+              점수 : {game.point}
             </>
           ) : (
             '없음'
@@ -53,7 +51,14 @@ const RecentGameItem = ({ game }) => {
           },
         }}
       >
-        {game.category} {game.point > 0 ? '승' : game.point < 0 ? '패' : game.point === 0 ? '무' : '-'} 
+        {game.category}{' '}
+        {game.point > 0
+          ? '승'
+          : game.point < 0
+          ? '패'
+          : game.point === 0
+          ? '무'
+          : '-'}
       </MUIButton>
     </MUITooltip>
   );
