@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './NewEnd.css';
 import { savePost } from 'apiList/post';
+import Swal from 'sweetalert2';
 
 const NewEnd = ({
   className,
@@ -58,7 +59,11 @@ const NewEnd = ({
       // link.click();
       // window.URL.revokeObjectURL(url);
     } else {
-      alert('녹화된 영상이 없습니다.');
+      Swal.fire({
+        icon: 'error',
+        text: '녹화된 영상이 없습니다',
+        backdrop: false,
+      });
     }
   };
 

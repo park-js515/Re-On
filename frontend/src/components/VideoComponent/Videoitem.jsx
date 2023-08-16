@@ -21,10 +21,9 @@ const Videoitem = ({props, changeMode, type}) => {
         window.location.assign("/mypage/"+props.email)
     }
     
-    const date = new Date(props.createDate);
-    const year = date.getFullYear();
-    const month = date.getMonth();
-    const day = date.getDate();
+    const year = props.createDate.substr(0,4);
+    const month = props.createDate.substr(5, 2);
+    const day = props.createDate.substr(8,2);
 
     return (
       <div className="bg-white flex max-w-xl rounded shadow-md flex-col items-start justify-between transform transition-transform duration-300 hover:scale-105 hover:shadow-lg mx-2 my-4 pb-4">
@@ -65,9 +64,9 @@ const Videoitem = ({props, changeMode, type}) => {
               </div>
             </div>
         : null }
-            <div className="group relative ml-2">
-              <h3 className="mt-3 text-lg font-semibold leading-6 text-gray-900 group-hover:text-gray-600">
-                <span className="text-2xl hover:underline hover:decoration-solid hover:cursor-pointer" onClick={changeMode}>{props.title}</span>
+            <div className="group relative ml-2 w-full">
+              <h3 className="p-1 mt-3 text-lg font-semibold leading-6 text-gray-900 group-hover:text-gray-600 truncate">  
+                <span className="w-full text-2xl hover:underline hover:decoration-solid hover:cursor-pointer" onClick={changeMode}>{props.title}</span>
               </h3>
             </div>
       </div>

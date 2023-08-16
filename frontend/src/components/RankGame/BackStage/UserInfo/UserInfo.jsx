@@ -13,13 +13,14 @@ const getTierImage = (tier) => {
     case 'BRONZE':
       return '/image/tier/bronze.png';
     default:
-      return '/image/tier/bronze.png'; // 기본 이미지
+      return null; // 기본 이미지
   }
 };
 
 const UserInfo = () => {
   const containerRef = React.useRef(null);
   const [userData, setUserData] = useState([]);
+  const [userEmail, setUserEmail] = useState();
 
   const getProgressBarWidth = () => {
     // GOLD
@@ -28,11 +29,11 @@ const UserInfo = () => {
     }
     // SILVER
     if (userData.tier === 'SILVER') {
-      return `${((userData.score - 100) / (999 - 100)) * 100}%`;
+      return `${Math.min(((userData.score - 100) / 900) * 100, 100)}%`;
     }
     // BRONZE
     if (userData.tier === 'BRONZE') {
-      return `${Math.min(userData.score, 100)}%`;
+      return `${Math.min((userData.score / 100) * 100, 100)}%`;
     }
     return '0%';
   };
@@ -44,11 +45,11 @@ const UserInfo = () => {
     }
     // SILVER
     if (userData.tier === 'SILVER') {
-      return Math.floor(((userData.score - 100) / (999 - 100)) * 100);
+      return Math.min(Math.floor(((userData.score - 100) / 900) * 100), 99);
     }
     // BRONZE
     if (userData.tier === 'BRONZE') {
-      return Math.floor(Math.min(userData.score, 99));
+      return Math.min(Math.floor(userData.score), 99);
     }
     return 0;
   };
@@ -57,12 +58,12 @@ const UserInfo = () => {
     searchBackStageMembmerInfo(
       (response) => {
         setUserData(response.data.response);
+        setUserEmail(localStorage.getItem('email'));
       },
       (error) => {
         console.log(error);
       },
     );
-    // 마우스 위치찾는거 info 포켓몬카드 처럼
 
     const handleMouseMove = (e) => {
       const { clientX, clientY } = e;
@@ -87,50 +88,6 @@ const UserInfo = () => {
     };
   }, []);
 
-  // return (
-  //     <SContainer ref={containerRef}>
-  //       <div className="sns__container"></div>
-  //       <div className="profile-container">
-  //         <Link to="/mypage">
-  //           <img
-  //             src={
-  //               `https://storage.googleapis.com/reon-bucket/${userData.profileImg}` ||
-  //               '/image/login/userdefault.png'
-  //             }
-  //             alt=""
-  //             className="h-10 w-10 rounded-full bg-white"
-  //           />
-  //         </Link>
-  //         <div>
-  //           <Link to="/mypage">
-  //             <div className="name font-semibold text-6xl">
-  //               {userData.nickName || '개똥이'}
-  //             </div>
-  //           </Link>
-  //           <div className="recent">총{userData.gameCnt} 전</div>
-  //           <div className="recentwdl">
-  //             {userData.win}승/ {userData.gameCnt - userData.win - userData.lose}
-  //             무/ {userData.lose}패
-  //           </div>
-  //           <div className="tier">티어 {userData.tier}</div>
-  //           <div className="w-full h-6 bg-gray rounded-full dark:bg-gray ml-1">
-  //             {/* 티어그래프 여기야 종상아 */}
-  //             <div
-  //               className="bg-[#BCD570] h-6 text-lg font-medium text-white text-center p-0.5 leading-none rounded-full"
-  //               style={{ width: `${userData.score || 45}%` }}
-  //             >
-  //               {' '}
-  //               {userData.score || 45}%{' '}
-  //             </div>
-  //           </div>
-  //         </div>
-  //         <SRank className="rank">
-  //           <img src={getTierImage(userData.tier)} />
-  //         </SRank>
-  //       </div>
-  //     </SContainer>
-  //   );
-  // };
   return (
     <div
       className="userbox relative bg-gray my-8 mt-28 py-12 sm:py-22"
@@ -153,7 +110,7 @@ const UserInfo = () => {
             </Link>
             {/* 유저이름 */}
             <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-white">
-              <Link to="/mypage" className="hover:text-black">
+              <Link to={`/mypage/${userEmail}`} className="hover:text-black">
                 <div className="name font-semibold text-6xl">
                   {userData.nickName || '불러오는 중'}
                 </div>
@@ -175,14 +132,12 @@ const UserInfo = () => {
               <p className="mt-1 text-sm sm:text-lg leading-8 text-black">
                 {userData.tier}
               </p>
-              <div className="mt-1 w-full h-6 bg-white rounded-xl dark:bg-white">
-                {/* 티어그래프 */}
+              <div className="mt-1 w-full h-6 bg-white rounded-xl dark:bg-white flex items-center justify-center relative text-black">
                 <div
-                  className="mt-1 flex items-center justify-center bg-[#BCD570] h-6 text-sm sm:text-lg font-medium text-white rounded-xl"
+                  className="absolute left-0 top-0 bg-[#BCD570] h-6 rounded-xl animate-width"
                   style={{ width: getProgressBarWidth() }}
-                >
-                  {userData.score ? `${getScorePercentage()}%` : '불러오는 중'}
-                </div>
+                ></div>
+                <div className="z-[1]">{`${getScorePercentage()}%`}</div>
               </div>
             </div>
           </div>

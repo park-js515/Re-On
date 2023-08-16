@@ -42,8 +42,6 @@ const MyPageMine = ({ setMyPage, email }) => {
   //페이지 유저 정보
   const [memberInfo, setMemberInfo] = useState({});
   // 자기소개
-  // const [introduce, setIntroduce] = useInputText("", (value) => {return value <= 255});
-  // const [nickName, setNickName] = useState('', (value) => {return value < 16});
   const [introduce, setIntroduce, resetIntroduce] = useInputText(
     '',
     (value) => {
@@ -65,6 +63,7 @@ const MyPageMine = ({ setMyPage, email }) => {
 
   // 자기소개 수정 모달
   const [showModal, setShowModal] = useState(false);
+
   // 프로필 사진 수정 모달
   const [showProfileModal, setShowProfileModal] = useState(false);
 
@@ -108,17 +107,17 @@ const MyPageMine = ({ setMyPage, email }) => {
         icon: 'info',
         title: '닉네임',
         text: '닉네임은 반드시 한 글자 이상이어야 합니다!.',
-        backdrop: false 
-        
+        backdrop: false,
       });
     } else {
+      localStorage.setItem('nickName', nickName);
       updateMemberInfo(
         { introduce: introduce, nickName: nickName },
         () => {
           Swal.fire({
             icon: 'success',
-            title: '저장완료',
-            backdrop: false 
+            title: 'update',
+            backdrop: false,
           });
           getmemberInfo();
         },
@@ -136,6 +135,7 @@ const MyPageMine = ({ setMyPage, email }) => {
       title: '회원탈퇴',
       text: '정말로 탈퇴하시겠습니까?',
       backdrop: false,
+
       showCancelButton: true,
       cancelButtonText: '취소',
       confirmButtonText: '예',
@@ -146,6 +146,7 @@ const MyPageMine = ({ setMyPage, email }) => {
           title: '회원탈퇴',
           text: '탈퇴 후 모든 정보가 삭제됩니다.',
           backdrop: false,
+
           showCancelButton: true,
           cancelButtonText: '취소',
           confirmButtonText: '예',
@@ -241,6 +242,7 @@ const MyPageMine = ({ setMyPage, email }) => {
               icon: 'warning',
               title: '업데이트 실패',
               text: '유저 업데이트가 실패했습니다. 다시 시도해주세요.',
+              backdrop: false,
             });
           }
         },

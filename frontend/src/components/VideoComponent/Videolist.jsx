@@ -1,130 +1,133 @@
-import React from "react";
-import Videoitem from "./Videoitem";
-import { useState, useRef, useEffect } from "react";
+import React from 'react';
+import Videoitem from './Videoitem';
+import { useState, useRef, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { searchAllPublicPost, searchPublicPost, searchLikePost, searchPrivatePost } from "apiList/post";
+import {
+  searchAllPublicPost,
+  searchPublicPost,
+  searchLikePost,
+  searchPrivatePost,
+} from 'apiList/post';
 
 // type은 AllPublic, Posts, Private, Likes => 투표해줘 전체 조회, 마이페이지 공개 조회, 마이페이지 비공개, 마이페이지 좋아한 영상 조회
-const Videolist = ({injectPostId, changeShow, type, setIsPrivate}) => {
-    const [data, setData] = useState([])
-    const [rest, setRest] = useState(true)
-    const { email } = useParams();
-    let page = 1;
+const Videolist = ({ injectPostId, changeShow, type, setIsPrivate }) => {
+  const [data, setData] = useState([]);
+  const [rest, setRest] = useState(true);
+  const { email } = useParams();
+  let page = 1;
 
-    function addData () {
-        if (rest){
-            if (type === "AllPublic"){
-                searchAllPublicPost(
-                    page,
-                    (response)=>{
-                        const newdata = response.data.response
-                        console.log(newdata)
-                        if (newdata.length > 0){
-                            page++;
-                            setData((data)=>{return [...data,...newdata]})
-                        }
-                        else{
-                            setRest(false)
-                        }
-                    },
-                    (error)=>{
-                        console.log(error)
-                    }
-                )
+  function addData() {
+    if (rest) {
+      if (type === 'AllPublic') {
+        searchAllPublicPost(
+          page,
+          (response) => {
+            const newdata = response.data.response;
+            console.log(newdata);
+            if (newdata.length > 0) {
+              page++;
+              setData((data) => {
+                return [...data, ...newdata];
+              });
+            } else {
+              setRest(false);
             }
-            else if (type === "Posts") {
-                searchPublicPost(
-                    page,
-                    email,
-                    (response) => {
-                      const newdata = response.data.response
-                      console.log(newdata)
-                      if (newdata.length > 0){
-                        setData((data) => {return [...data, ...newdata]})
-                        page++;
-                        if (newdata.length < 10){
-                          setRest(false)
-                        }
-                      }
-                      else {
-                        setRest(false);
-                      }
-                    },
-                    (error) => {
-                      console.log(error);
-                    }
-                )
+          },
+          (error) => {
+            console.log(error);
+          },
+        );
+      } else if (type === 'Posts') {
+        searchPublicPost(
+          page,
+          email,
+          (response) => {
+            const newdata = response.data.response;
+            console.log(newdata);
+            if (newdata.length > 0) {
+              setData((data) => {
+                return [...data, ...newdata];
+              });
+              page++;
+              if (newdata.length < 10) {
+                setRest(false);
+              }
+            } else {
+              setRest(false);
             }
-            else if (type === "Likes"){
-                searchLikePost(
-                    page,
-                    (response)=>{
-                      const newdata = response.data.response
-                      console.log(newdata)
-                      if (newdata.length > 0){
-                        page++;
-                        setData((data)=>{return [...data, ...newdata]})
-                        if (newdata.length < 10){
-                          setRest(false);
-                        }
-                      }
-                      else {
-                        setRest(false);
-                      }
-                    },
-                    (error)=>{
-                      console.log(error)
-                    }
-                  )
+          },
+          (error) => {
+            console.log(error);
+          },
+        );
+      } else if (type === 'Likes') {
+        searchLikePost(
+          page,
+          (response) => {
+            const newdata = response.data.response;
+            console.log(newdata);
+            if (newdata.length > 0) {
+              page++;
+              setData((data) => {
+                return [...data, ...newdata];
+              });
+              if (newdata.length < 10) {
+                setRest(false);
+              }
+            } else {
+              setRest(false);
             }
-            else if (type === "Private"){
-                searchPrivatePost(
-                    page,
-                    (response)=>{
-                      const newdata = response.data.response
-                      console.log(newdata)
-                      if (newdata.length > 0){
-                        page++;
-                        setData((data)=>{return [...data, ...newdata]})
-                        if (newdata.length < 10){
-                          setRest(false);
-                        }
-                      }
-                      else {
-                        setRest(false);
-                      }
-                    },
-                    (error)=>{
-                      console.log(error)
-                    }
-                )
+          },
+          (error) => {
+            console.log(error);
+          },
+        );
+      } else if (type === 'Private') {
+        searchPrivatePost(
+          page,
+          (response) => {
+            const newdata = response.data.response;
+            console.log(newdata);
+            if (newdata.length > 0) {
+              page++;
+              setData((data) => {
+                return [...data, ...newdata];
+              });
+              if (newdata.length < 10) {
+                setRest(false);
+              }
+            } else {
+              setRest(false);
             }
-        }
+          },
+          (error) => {
+            console.log(error);
+          },
+        );
+      }
     }
-    
+  }
 
-    // 무한스크롤
-    const target = useRef()
-    const options = {
-        threshold: 0.5
+  // 무한스크롤
+  const target = useRef();
+  const options = {
+    threshold: 0.5,
+  };
+  const observer = new IntersectionObserver(addData, options);
+
+  useEffect(() => {
+    observer.observe(target.current);
+    return () => {
+      setData([]);
     };
-    const observer = new IntersectionObserver(addData, options)
+  }, []);
 
-    useEffect(()=>{
-        observer.observe(target.current)
-        return ()=>{
-            setData([])
-        }
-    }, []);
+  // 검색
+  const [searchTerm, setSearchTerm] = useState(''); // 검색어를 저장하는 상태
 
-    // 검색
-    const [searchTerm, setSearchTerm] = useState(""); // 검색어를 저장하는 상태
-  
-
-    const filteredData = data.filter(item => 
-        item.title.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-
+  const filteredData = data.filter((item) =>
+    item.title.toLowerCase().includes(searchTerm.toLowerCase()),
+  );
 
     return (
         <div className="py-8 sm:py-8 ">
@@ -167,9 +170,31 @@ const Videolist = ({injectPostId, changeShow, type, setIsPrivate}) => {
                 </div>
                 <div className="text-center py-12 font-semibold text-lg" ref={target}>{rest ? "🚝찾는중🚝" : "🛑마지막 게시물🛑" }</div>
             </div>
-        </div>
-    );
-    }
-    
+          </>
+        ) : null}
 
-export default Videolist
+        <div className=" mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:mt-8 sm:pt-8 lg:mx-0 lg:max-w-none lg:grid-cols-3">
+          {filteredData.map((item) => {
+            return (
+              <Videoitem
+                type={type}
+                key={item.id}
+                props={item}
+                changeMode={() => {
+                  injectPostId(item.id);
+                  changeShow();
+                  setIsPrivate(type === 'Private');
+                }}
+              />
+            );
+          })}
+        </div>
+        <div className="text-center py-12 font-semibold text-lg" ref={target}>
+          {rest ? '🚝찾는중🚝' : '🛑마지막 게시물🛑'}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Videolist;

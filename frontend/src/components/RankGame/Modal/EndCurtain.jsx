@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './EndCurtain.css';
 import Click from './Click';
 import { savePost } from 'apiList/post';
+import Swal from 'sweetalert2';
 
 const EndCurtain = ({
   className,
@@ -46,7 +47,11 @@ const EndCurtain = ({
       // link.click();
       // window.URL.revokeObjectURL(url);
     } else {
-      alert('녹화된 영상이 없습니다.');
+      Swal.fire({
+        icon: 'error',
+        text: '녹화된 영상이 없습니다.',
+        backdrop: false,
+      });
     }
   };
 

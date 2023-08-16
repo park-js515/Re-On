@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { searchPrivatePost, searchPrivatePostDetail, uploadPrivatePost } from 'apiList/post';
 import { Hidden } from '../../../../node_modules/@mui/material/index';
+import Swal from 'sweetalert2';
 
   const Private = ({email}) => {
     //모달
@@ -29,10 +30,18 @@ import { Hidden } from '../../../../node_modules/@mui/material/index';
 
     //private 영상을 public에 게시하는 api
     const uploadPost = () => {
-      if (title.trim().length == 0) {
-        alert("제목을 입력해주세요")
-      } else if (content.trim().length == 0) {
-        alert("내용을 입력해주세요")
+      if (title.trim().length === 0) {
+        Swal.fire({
+          icon: "info",
+          text: "제목을 입력해주세요",
+          backdrop: false,
+        })
+      } else if (content.trim().length === 0) {
+        Swal.fire({
+          icon: "info",
+          text: "내용을 입력해주세요",
+          backdrop: false
+        })
       } else {
         uploadPrivatePost(selectedPost.id, { title: title, content: content }, ((response) => {
           closeModal();

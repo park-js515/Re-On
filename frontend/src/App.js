@@ -21,12 +21,10 @@ import AuthComponent from 'components/auth/AuthComponent'; // 사용자가 로�
 import LoginDupPreventComponent from 'components/auth/LoginDupPreventComponent'; // 중복 로그인 방지
 import LogoutDupPreventComponent from 'components/auth/LogoutDupPreventComponent'; // 로그인되어 있지 않는데 로그아웃 방지
 
-import TestPage from 'apiList/TestPage';
-
 function App() {
   const { isJoinSession } = useSelector((state) => state.session);
 	const isLogin = useSelector((state) => state.user.isLogin);
-
+  const [prevLocation, setPrevLocation] = useState("");
 
   // 뒤로가기 방지
   const location = useLocation();
@@ -35,6 +33,13 @@ function App() {
       window.location.reload();
     }
   }, [location, isJoinSession]);
+
+  useEffect(()=>{
+    if (location.pathname !== '/normallist' && prevLocation === '/normallist'){
+      window.location.reload();
+    }
+    setPrevLocation(location.pathname)
+  }, [location])
 
   return (
     <>
@@ -55,8 +60,6 @@ function App() {
         <Route path="/logout" element={<LogoutDupPreventComponent authenticated={isLogin} component={<LogoutRedirectPage />} />} />
        
         {/* 예외처리: 없는 페이지 -> MainPage로 보냄 */}
-				
-				<Route path="/test" element={<TestPage />}></Route>
 				<Route path="*" element={<Navigate to="/NotFoundPage" />}></Route>
       </Routes>
     </>

@@ -12,7 +12,7 @@ const RecentGameList = () => {
     if (!check.current) {
       searchBattleLog(
         (response) => {
-          const newData = response.data.response;
+          const newData = response.data.response.reverse();
           const temp = [];
 
           for (let i = 0; i < 10 - newData.length; i++) {
