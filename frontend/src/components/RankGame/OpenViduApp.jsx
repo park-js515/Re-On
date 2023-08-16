@@ -558,6 +558,16 @@ export default function OpenViduApp() {
   }, [userOneText, userTwoText, mySide]);
 
   // ################# 상대 음소거 함수 ####################
+  const [isMuted, setIsMuted] = useState(false);
+
+  const handleSubMute = () => {
+    setIsMuted(true);
+  };
+
+  const handleSubUnmute = () => {
+    setIsMuted(false);
+  };
+
   // const muteAllSubscribers = () => {
   //   subscribers.forEach((subscriber) => {
   //     subscriber.properties.subscribeToAudio(false);
@@ -639,6 +649,7 @@ export default function OpenViduApp() {
       setRecordOn(true);
       face_detect();
       startListening();
+      handleSubMute();
     }
     mySide === 'USER_ONE'
       ? setUserCamLeftBorder(true)
@@ -662,6 +673,7 @@ export default function OpenViduApp() {
       setRecordOn(true);
       face_detect();
       startListening();
+      handleSubMute();
     }
     mySide === 'USER_TWO'
       ? setUserCamLeftBorder(true)
@@ -907,6 +919,7 @@ export default function OpenViduApp() {
             stopListening();
             setResultScore(Math.round(answer));
             setRecordOn(false);
+            handleSubUnmute();
           }
           setUserCamLeftBorder(false);
           setUserCamRightBorder(false);
@@ -921,6 +934,7 @@ export default function OpenViduApp() {
             stopListening();
             setResultScore(Math.round(answer));
             setRecordOn(false);
+            handleSubUnmute();
           }
           setUserCamLeftBorder(false);
           setUserCamRightBorder(false);
@@ -1197,6 +1211,7 @@ export default function OpenViduApp() {
                       mySide={null}
                       userCamBorder={userCamRightBorder}
                       type="subscriber"
+                      isMuted={isMuted}
                     />
                   </div>
                 ))
