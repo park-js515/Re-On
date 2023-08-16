@@ -266,9 +266,23 @@ const MyPageMine = ({ setMyPage, email }) => {
       },
     );
   };
+  const getRankColorValue = (tier) => {
+    switch (tier) {
+      case 'GOLD':
+        return '#ffd700'; 
+      case 'SILVER':
+        return '#c0c0c0'; 
+      case 'BRONZE':
+        return '#cd7f32'; 
+      default:
+        return 'inherit'; 
+    }
+  };
+
 
   return (
     <div className="pt-12 flex items-start">
+      
       {/* 프로필사진 */}
       {ismyPage && (
         <img
@@ -290,9 +304,8 @@ const MyPageMine = ({ setMyPage, email }) => {
         <div className="flex items-center justify-between w-full ml-12">
           <h1 className="text-2xl font-bold">{memberInfo.nickName}</h1>
           {/* 티어 */}
-          <div className="flex flex-col justify-start flex-grow">
-            {memberInfo.tier}
-          </div>
+          <h1  className="ml-4 flex flex-grow text-2xl font-bold" style={{color: getRankColorValue(memberInfo.tier)}}>{memberInfo.tier} </h1>
+
           {ismyPage && (
             <button
               className="rounded bg-[#dfe0e2] text-lg hover:bg-[#9fa3a3] font-semibold px-6 py-2"
@@ -306,10 +319,10 @@ const MyPageMine = ({ setMyPage, email }) => {
 
         {/* 게시물수 및 내용 */}
         <div className="mt-2 ml-12">
-          <div className="flex flex-col justify-start flex-grow">
+          <div className="mt-1 flex flex-col text-xl font-md justify-start flex-grow">
             {memberInfo.email}
           </div>
-          <h3 className="text-lg text-gray-500">{memberInfo.introduce}</h3>
+          <h3 className="mt-4 text-xl font-md">{memberInfo.introduce}</h3>
         </div>
       </div>
 
@@ -340,18 +353,11 @@ const MyPageMine = ({ setMyPage, email }) => {
               rows="4"
               className="w-full p-2 mt-2 border rounded"
             />
-            <button
-              className="mt-4 px-6 py-2 rounded bg-lightBlue text-black"
-              onClick={saveIntroduction}
-            >
-              저장
-            </button>
-            <button
-              className="mt-4 px-6 py-2 rounded bg-danger text-black"
-              onClick={deleteUser}
-            >
-              탈퇴
-            </button>
+          
+          <div className='flex flex-grow-0 justify-end'>
+              <button className="mt-4 mr-4 px-6 py-2 rounded bg-lightBlue hover:scale-105 font-semibold text-black" onClick={saveIntroduction}>저장</button>
+              <button className="mt-4 px-6 py-2 rounded bg-danger hover:scale-105 font-semibold text-black" onClick={deleteUser}>탈퇴</button>
+            </div>
           </div>
         </div>
       )}
@@ -367,15 +373,15 @@ const MyPageMine = ({ setMyPage, email }) => {
             </span>
             <h2 className="text-2xl font-bold mb-4">프로필 사진 변경</h2>
             <input type="file" onChange={handleImageChange} />
-            <div>
+            <div className='flex flex-grow-0 justify-end'>
               <button
-                className="mt-4 px-6 py-2 rounded bg-lightBlue text-black"
+                className="mt-4 mr-4 px-6 py-2 rounded bg-lightBlue hover:scale-105 font-semibold text-black"
                 onClick={saveProfileImage}
               >
                 저장
               </button>
               <button
-                className="mt-4 px-6 py-2 rounded bg-danger text-black"
+                className="mt-4 px-6 py-2 rounded bg-danger hover:scale-105 font-semibold text-black"
                 onClick={deleteUserImage}
               >
                 삭제
