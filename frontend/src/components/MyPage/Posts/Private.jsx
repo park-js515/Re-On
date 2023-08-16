@@ -102,28 +102,28 @@ import Swal from 'sweetalert2';
       <div className="bg-white py-24 sm:py-32">
         {/* 모달창 */}
         {isModalOpen && (
-                <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50 z-50">
-                    <div className="bg-white p-4 rounded-md">
-                        <video controls style={{ 'width': "500px" }} autoPlay src={"https://storage.googleapis.com/reon-bucket/" + selectedPost.actionPath} />
-              <h3>{selectedPost.title}</h3>
-              <h3>{selectedPost.createdDate}</h3>
-              {isInputOpen && (<div className='uploadInput'>
-                <div>
-                제목
-                    <textarea cols="30" rows="1" className="border-white border text-sm rounded resize-none w-full bg-white focus:outline-none" disabled={!isInputOpen} value={title} onChange={titleHandleChange}></textarea>
-</div>
-                <div>
-                  내용
-                  <textarea cols="30" rows="1" className="border-white bordertext-sm rounded resize-none w-full bg-white focus:outline-none" disabled={!isInputOpen} value={content} onChange={contentHandleChange}></textarea>
-</div>
+        <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div className="bg-white p-4 rounded-md">
+            <video controls style={{ 'width': "500px" }} autoPlay src={"https://storage.googleapis.com/reon-bucket/" + selectedPost.actionPath} />
+            <h3>{selectedPost.title}</h3>
+            <h3>{selectedPost.createdDate}</h3>
+            {isInputOpen && (<div className='uploadInput'>
+              <div>
+              제목
+                  <textarea cols="30" rows="1" className="border-white border text-sm rounded resize-none w-full bg-white focus:outline-none" disabled={!isInputOpen} value={title} onChange={titleHandleChange}></textarea>
               </div>
-          )}
-              {isInputOpen && (<button onClick={uploadPost}>영상 게시</button>)}
-              {!isInputOpen && (<button onClick={openInput} className="mt-4 px-4 py-2 bg-red-500 text-black rounded-md">업로드</button>)}
-              <button onClick={closeModal} className="mt-4 px-4 py-2 bg-red-500 text-black rounded-md">닫기</button>
-                    </div>
-                </div>
-        )}
+              <div>
+                내용
+                <textarea cols="30" rows="1" className="border-white bordertext-sm rounded resize-none w-full bg-white focus:outline-none" disabled={!isInputOpen} value={content} onChange={contentHandleChange}></textarea>
+              </div>
+            </div>
+              )}
+            {isInputOpen && (<button onClick={uploadPost}>영상 게시</button>)}
+            {!isInputOpen && (<button onClick={openInput} className="mt-4 px-4 py-2 bg-red-500 text-black rounded-md">업로드</button>)}
+            <button onClick={closeModal} className="mt-4 px-4 py-2 bg-red-500 text-black rounded-md">닫기</button>
+            </div>
+        </div>
+      )}
         
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="mx-auto  grid max-w-2xl grid-cols-1 gap-x-8 gap-y-4 sm:mt-1 sm:pt-1 lg:mx-0 lg:max-w-none lg:grid-cols-3">

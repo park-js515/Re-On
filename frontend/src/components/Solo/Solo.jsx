@@ -282,11 +282,15 @@ const SoloApp = () => {
                   {reload ? "🎬다시하기" : "🎮게임시작"}
               </button>
             </div>
+
             {/* 대사 자막 */}
             <div className="w-[280px] h-[150px] rounded bg-white text-center">
               <span className="w-[280px]">📜대사</span><br />
-              <div className="w-[280px] whitespace-normal">{script ? script : "표정에만 집중해요!"}</div>
+              <div className="break-words">
+                {script ? script : "표정에만 집중해요!"}
+              </div>
             </div>
+
           </div>
         
 

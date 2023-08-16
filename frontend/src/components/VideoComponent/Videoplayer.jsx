@@ -96,8 +96,8 @@ const Videoplayer = ({ post_id, changeShow, isPrivate }) => {
     Swal.fire({
       showCancelButton: true,
       text: '게시글을 비공개로 전환하시겠습니까?',
-      confirmButtonText: '예',
-      cancelButtonText: '취소',
+      confirmButtonText: 'YES',
+      cancelButtonText: 'NO',
       backdrop: false,
     }).then((result) => {
       if (result.isConfirmed) {
@@ -200,138 +200,115 @@ const Videoplayer = ({ post_id, changeShow, isPrivate }) => {
       }
     });
   };
+  
   return (
-    // 모달 외부클릭시 꺼짐
     <div
       className="fixed top-6 z-40 w-full h-full flex justify-center items-center bg-black bg-opacity-50"
       onClick={() => {
         changeShow();
-        window.location.reload();
       }}
     >
-      {/*모달 내부는 이상없게  */}
       <div
-        className="flex w-10/12 h-[80vh] max-h-[80vh]  bg-white p-4 rounded-lg shadow-lg overflow-hidden"
+        className="flex w-8/12 h-[80vh] max-h-[80vh] bg-white p-6 rounded-xl shadow-2xl overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Left Section */}
-        <div className="w-8/12 pr-4 border-r border-gray-200 overflow-y-auto max-h-[calc(80vh-48px)] scrollbar-hide">
+        {/* 왼쪽 섹션 */}
+        <div className={`${isPrivate ? "w-full" : "w-8/12"} pr-4 border-r border-gray overflow-y-auto max-h-[calc(80vh-48px)] scrollbar-hide`}>
           {/* 비디오 */}
           <video
-            className="w-full h-5/6 rounded-md shadow-sm"
+            className="w-full h-5/6 rounded-md shadow-sm mb-4"
             controls
             controlsList={isPrivate ? 'download' : 'nodownload'}
-            src={
-              data.actionPath
-                ? 'https://storage.googleapis.com/reon-bucket/' +
-                  data.actionPath
-                : null
-            }
+            src={data.actionPath ? 'https://storage.googleapis.com/reon-bucket/' + data.actionPath : null}
           ></video>
-
+  
           {/* 작성자 정보 */}
-          <div className="my-4 p-3 bg-gray-100 rounded-lg">
+          <div className="my-4 rounded-xl ">
             {/* 제목 */}
+          
             <textarea
               rows="2"
               value={title}
-              className={`resize-none text-2xl block font-bold mb-2 w-11/12 rounded ${
-                edit ? 'outline' : null
+              className={`resize-none text-3xl font-bold my-3 border-b w-full bg-white ${
+                edit ? 'outline-none border-blue shadow-lg' : ''
               }`}
               onChange={changeTitle}
               disabled={!edit}
               placeholder={isPrivate ? '제목을 입력해주세요 (1자 이상)' : null}
             ></textarea>
-            <div className="flex items-center">
+       
+            {/* 프로필, 이름 및 버튼들 */}
+            <div className="flex items-center space-x-4">
               {!isPrivate ? (
                 <>
                   <img
-                    className="rounded-full w-16 h-16 mr-4 hover:shadow-lg transition-shadow cursor-pointer"
-                    src={
-                      data.profileImg
-                        ? 'https://storage.googleapis.com/reon-bucket/' +
-                          data.profileImg
-                        : alter_img_url
-                    }
+                    className="rounded-full w-[80px] h-[80px] shadow-md cursor-pointer"
+                    src={data.profileImg ? 'https://storage.googleapis.com/reon-bucket/' + data.profileImg : alter_img_url}
                     alt=""
                     onClick={() => {
                       changeShow();
                       moveToMyPage();
                     }}
                   />
-                  <p
-                    className="flex-grow text-lg truncate cursor-pointer"
-                    onClick={() => {
-                      changeShow();
-                      moveToMyPage();
-                    }}
-                  >
+                  <h2 className="flex-grow text-xl font-semibold truncate cursor-pointer" onClick={moveToMyPage}>
                     {data.nickName}
-                  </p>
+                  </h2>
                   <button
-                    className={`ml-4 px-4 py-2 rounded ${
-                      data.isLike
-                        ? 'bg-[#ecebeb] hover:bg-[#aaa6a6] text-[#000]'
-                        : 'bg-[#8d8d8d] text-black hover:bg-inss'
-                    } transition-all`}
+                    className={`px-4 py-2 rounded-md font-semibold text-xl ${
+                      data.isLike ? 'hover:scale-110' : 'hover:scale-110'
+                    }`}
                     onClick={likeVideo}
                   >
-                    {data.isLike ? '👍️' : '🤜'} {convertToK(data.likeCnt)}
+                    {data.isLike ? '❤️' : '🖤'} {convertToK(data.likeCnt)}
                   </button>
                 </>
               ) : (
-                <button
-                  className="px-4 py-1 rounded transition-all outline outline-info outline-1 text-black hover:bg-info"
-                  onClick={postPost}
-                >
+                <>
+                <div className="flex-grow"></div> 
+                <button className="px-4 py-2 rounded-md bg-blue hover:bg-[#649dcc] text-white" onClick={postPost}>
                   업로드
                 </button>
+                </>
               )}
-              {/* 내 게시글이면 수정 삭제 버튼 */}
-              {data.isMyPost ? (
-                <div>
-                  <button
-                    className="bg-warning rounded px-3 py-2 ml-4 text-md"
-                    onClick={editPost}
-                  >
-                    ✍️
+              
+              {data.isMyPost && (
+                <div className="flex space-x-4 ">
+                  <button className="hover:scale-110 text-black font-semibold  px-4 py-2 rounded-md" onClick={editPost}>
+                    🔨수정
                   </button>
-
-                  <button
-                    className="bg-danger rounded px-3 py-2 ml-4 text-md"
-                    onClick={deletePost}
-                  >
-                    🗑️
+                  <button className="hover:scale-110 text-black font-semibold  px-4 py-2 rounded-md" onClick={deletePost}>
+                    🗑️삭제
                   </button>
                 </div>
-              ) : null}
+              )}
             </div>
           </div>
+  
           {/* 내용 */}
           <textarea
             value={content}
-            className={`ml-3 p-3 resize-none rounded w-11/12 ${
-              edit ? 'outline' : null
-            }`}
+            className={`w-full p-3 resize-none rounded-md bg-white border ${edit ? 'border-blue rounded-md border shadow-lg' : ''}`}
             disabled={!edit}
             onChange={changeContent}
             placeholder={isPrivate ? '설명을 입력해주세요 (1자 이상)' : null}
           ></textarea>
         </div>
-
-        {/* 오른쪽 */}
-        <div className="w-4/12 pl-4 overflow-y-auto max-h-[calc(80vh-48px)] scrollbar-hide">
-          {data.postCommentResponses ? (
-            <Commentlist
-              post_id={data.id}
-              changeShow={changeShow}
-              initialData={[...data.postCommentResponses]}
-            />
-          ) : null}
-        </div>
+  
+        {/* 오른쪽 섹션 */}
+        
+        {!isPrivate && (
+          
+          <div className="w-4/12 pl-4 overflow-y-auto max-h-[calc(80vh-48px)] scrollbar-hide">
+            {data.postCommentResponses && (
+              <Commentlist post_id={data.id} changeShow={changeShow} initialData={data.postCommentResponses} />
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
+  
+  
 };
 
 export default Videoplayer;

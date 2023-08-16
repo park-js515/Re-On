@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { userLogout } from 'redux/userSlice';
+import './MyPage.css'
 import {
   searchMypageMemberInfo,
   updateMemberInfo,
@@ -281,115 +282,131 @@ const MyPageMine = ({ setMyPage, email }) => {
 
 
   return (
-    <div className="pt-12 flex items-start">
+    <div className="animate-slideInFromTop pt-12 flex items-start py-16 px-16 shadow-2xl rounded-xl bg-gradient-to-tl from-begie to-lightBlue ">
       
-      {/* 프로필사진 */}
-      {ismyPage && (
-        <img
-          className="rounded-full w-[200px] h-[200px] object-cover mr-4 hover:opacity-70 hover:blur-s cursor-pointer"
-          src={profileImage}
-          alt={memberInfo.name}
-          onClick={toggleProfileModal}
-        />
-      )}
-      {!ismyPage && (
-        <img
-          className="rounded-full w-[200px] h-[200px] object-cover mr-4 hover:opacity-70 hover:blur-s cursor-pointer"
-          src={profileImage}
-          alt={memberInfo.name}
-        />
-      )}
-      {/* 프로필수정 */}
+      <img
+        className="rounded-full w-[200px] h-[200px] object-cover mr-4 shadow-lg transition-all duration-300 ease-in-out hover:opacity-50 hover:blur-s cursor-pointer"
+        src={profileImage}
+        alt={memberInfo.name}
+        onClick={ismyPage ? toggleProfileModal : undefined}
+      />
+
+      <div className="border-r-2 border-[#666] self-stretch ml-6"></div>
+
+      {/* 프로필 정보 */}
       <div className="flex flex-col justify-start flex-grow">
         <div className="flex items-center justify-between w-full ml-12">
-          <h1 className="text-2xl font-bold">{memberInfo.nickName}</h1>
-          {/* 티어 */}
-          <h1  className="ml-4 flex flex-grow text-2xl font-bold" style={{color: getRankColorValue(memberInfo.tier)}}>{memberInfo.tier} </h1>
-
+          <h1 className="text-2xl font-bold text-dark">{memberInfo.nickName}</h1>
+          <h1 className="ml-4 flex flex-grow text-2xl font-bold" style={{color: getRankColorValue(memberInfo.tier)}}>{memberInfo.tier}</h1>
           {ismyPage && (
             <button
-              className="rounded bg-[#dfe0e2] text-lg hover:bg-[#9fa3a3] font-semibold px-6 py-2"
+              className="rounded bg-[#f3f0e4] text-lg hover:scale-105 font-semibold px-6 py-2 transition-all duration-300 ease-in-out"
               onClick={toggleModal}
             >
               수정
             </button>
           )}
         </div>
-        {/* 이메일 */}
 
-        {/* 게시물수 및 내용 */}
-        <div className="mt-2 ml-12">
-          <div className="mt-1 flex flex-col text-xl font-md justify-start flex-grow">
+        {/* 닉,소개 */}
+        <div className="mt-2 ml-12 text-dark">
+          <div className="mt-1 flex flex-col text-xl font-lg justify-start flex-grow">
             {memberInfo.email}
           </div>
-          <h3 className="mt-4 text-xl font-md">{memberInfo.introduce}</h3>
+          <h3 className="mt-4 text-xl font-lg">{memberInfo.introduce}</h3>
         </div>
       </div>
 
       {/* 여기 아래 부터 모달들 */}
 
       {/* 자기소개, 닉네임 수정*/}
-      {showModal && (
-        <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className="bg-white w-3/4 md:w-1/2 lg:w-1/3 xl:w-1/4 p-4 rounded-lg shadow-lg relative">
-            <span
-              className="absolute top-2 right-2 cursor-pointer text-xl"
-              onClick={toggleModal}
-            >
-              ✖
-            </span>
-            <h2 className="text-2xl font-bold mb-4">프로필 수정</h2>
-            <label>닉네임:</label>
-            <input
-              value={nickName}
-              onChange={setNickName}
-              rows="4"
-              className="w-full p-2 mt-2 border rounded"
-            />
-            <label>자기소개:</label>
-            <textarea
-              value={introduce ? introduce : ' '}
-              onChange={setIntroduce}
-              rows="4"
-              className="w-full p-2 mt-2 border rounded"
-            />
-          
-          <div className='flex flex-grow-0 justify-end'>
-              <button className="mt-4 mr-4 px-6 py-2 rounded bg-lightBlue hover:scale-105 font-semibold text-black" onClick={saveIntroduction}>저장</button>
-              <button className="mt-4 px-6 py-2 rounded bg-danger hover:scale-105 font-semibold text-black" onClick={deleteUser}>탈퇴</button>
+        {showModal && (
+        <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-60 z-50 transition-opacity">
+            <div className="bg-white w-3/4 md:w-1/2 lg:w-1/3 xl:w-1/4 p-6 rounded-lg shadow-2xl relative">
+                {/* 닫기 버튼 */}
+                <span className="absolute top-4 right-4 cursor-pointer text-2xl hover:text-gray" onClick={toggleModal}>
+                    ✖
+                </span>
+
+                <h2 className="text-2xl font-bold mb-6 border-b pb-2">프로필 수정</h2>
+                
+                <div className="mt-4">
+                    <label className="block text-lg font-medium mb-2">닉네임</label>
+                    <input
+                        value={nickName}
+                        onChange={setNickName}
+                        className="w-full p-3 border-2 rounded-lg focus:border-lightBlue focus:outline-none transition-colors"
+                    />
+                </div>
+
+                <div className="mt-6">
+                    <label className="block text-lg font-medium mb-2">자기소개</label>
+                    <textarea
+                        value={introduce ? introduce : ' '}
+                        onChange={setIntroduce}
+                        rows="4"
+                        className="w-full p-3 border-2 rounded-lg focus:border-lightBlue focus:outline-none transition-colors"
+                    />
+                </div>
+
+                <div className="flex justify-end mt-6">
+                    <button
+                        className="mr-2 px-6 py-2 rounded-full bg-lightBlue hover:scale-105 font-semibold text-white transition-colors"
+                        onClick={saveIntroduction}
+                    >
+                        저장
+                    </button>
+                    <button
+                        className="px-6 py-2 rounded-full bg-danger hover:scale-105 font-semibold text-white transition-colors"
+                        onClick={deleteUser}
+                    >
+                        탈퇴
+                    </button>
+                </div>
             </div>
-          </div>
         </div>
       )}
       {/* 프로필사진변경 */}
       {showProfileModal && (
-        <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className="bg-white w-3/4 md:w-1/2 lg:w-1/3 xl:w-1/4 p-4 rounded-lg shadow-lg relative">
-            <span
-              className="absolute top-2 right-2 cursor-pointer text-xl"
-              onClick={toggleProfileModal}
-            >
-              ✖
-            </span>
-            <h2 className="text-2xl font-bold mb-4">프로필 사진 변경</h2>
-            <input type="file" onChange={handleImageChange} />
-            <div className='flex flex-grow-0 justify-end'>
-              <button
-                className="mt-4 mr-4 px-6 py-2 rounded bg-lightBlue hover:scale-105 font-semibold text-black"
-                onClick={saveProfileImage}
-              >
-                저장
-              </button>
-              <button
-                className="mt-4 px-6 py-2 rounded bg-danger hover:scale-105 font-semibold text-black"
-                onClick={deleteUserImage}
-              >
-                삭제
-              </button>
+        <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-60 z-50 transition-opacity">
+            <div className="bg-white w-3/4 md:w-1/2 lg:w-1/3 xl:w-1/4 p-6 rounded-lg shadow-2xl relative">
+                {/* 닫기 버튼 위치와 디자인 개선 */}
+                <span className="absolute top-4 right-4 cursor-pointer text-2xl hover:text-gray-600" onClick={toggleProfileModal}>
+                    ✖
+                </span>
+
+                <h2 className="text-2xl font-bold mb-6 border-b pb-2">프로필 사진 변경</h2>
+                
+                <div className="mt-4 relative">
+                    <input 
+                        type="file" 
+                        onChange={handleImageChange} 
+                        className="w-full p-3 border-2 rounded-lg focus:border-lightBlue focus:outline-none transition-colors opacity-0 absolute inset-0 cursor-pointer"
+                        id="fileInput"
+                    />
+                    <div className="w-full p-3 border-2 rounded-lg border-dashed text-center">
+                        {document.getElementById("fileInput") && document.getElementById("fileInput").files[0] ? document.getElementById("fileInput").files[0].name : "파일을 선택하거나 드래그 앤 드롭하세요"}
+                    </div>
+                </div>
+
+                <div className="flex justify-end mt-6">
+                    <button
+                        className="mr-2 px-6 py-2 rounded-full bg-lightBlue hover:scale-105 font-semibold text-white transition-colors"
+                        onClick={saveProfileImage}
+                    >
+                        저장
+                    </button>
+                    <button
+                        className="px-6 py-2 rounded-full bg-danger hover:scale-105 font-semibold text-white transition-colors"
+                        onClick={deleteUserImage}
+                    >
+                        삭제
+                    </button>
+                </div>
             </div>
-          </div>
         </div>
-      )}
+       )}
+
     </div>
   );
 };

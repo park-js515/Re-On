@@ -2,7 +2,7 @@
 module.exports = {
   content: ['./src/**/*.{js,jsx,ts,tsx}', './public/index.html'],
   theme: {
-    colors: {
+    colors: { 
       mainBlue: '#4094bf',
       lightBlue: '#8ccfd5',
       begie: '#f2ecda',
@@ -20,7 +20,9 @@ module.exports = {
       gray : '#d3d3d3',
       gold: '#FFD700',
       silver: '#C0C0C0',
-      bronze: '#CD7F32'
+      bronze: '#CD7F32',
+      white2:'f8f8f8',
+      blue:'#8ccfd5',
     },
     extend: {
       width: {
@@ -33,10 +35,17 @@ module.exports = {
       },
       animation: {
         slideInFromLeft: 'slideInFromLeft 1.5s forwards',
-        slideInFromRight: 'slideInFromRight 1.5s forwards'
+        slideInFromRight: 'slideInFromRight 1.5s forwards',
+        'slideInFromTop': 'slideInFromTop 1s ease-in-out'
       },
       backgroundImage: theme => ({
         'custom-gradient': 'linear-gradient(var(--angle, 0deg), #8ccfd5 0%, #a2d2d8 20%, #b8d5dc 40%, #ced8df 60%, #e4dbe2 80%, #f2ecda 100%)',
+        'custom-g': 'linear-gradient(var(--angle, 0deg), #8ccfd5 0%, #9dcbd8 20%, #aec7db 40%, #cfd3de 60%, #e2dfd9 80%, #f2ecda 100%)',
+      zIndex: {
+        '-1': '-1',
+        '-2': '-2',
+    
+      },
      })
     },
   },
