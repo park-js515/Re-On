@@ -220,14 +220,14 @@ const SoloApp = () => {
     if (score >= 10) return `더욱 연습해봐! ${answer.toFixed(0)}점`;
     if (score >= 0) return `이게 연기야!? ${answer.toFixed(0)}점`;
     
-    return `내가 평가해줄게!!`;
+    return `내가 평가를 해줄게!`;
 }
 
   
 
   return (
   
-      <div className="-mt-16 py-16 ">
+      <div className="-mt-16 py-8">
         <img
                 src="image/solo/solo.png"
                 className="mx-auto h-[200px] w-[300px] mt-2"
