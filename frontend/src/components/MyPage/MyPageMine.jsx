@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { userLogout } from 'redux/userSlice';
 import './MyPage.css'
 import {
   searchMypageMemberInfo,
@@ -37,8 +36,6 @@ const useInputText = (initialValue, validator) => {
 
 const alter_img_url = process.env.REACT_APP_ALTER_IMG_URL;
 const MyPageMine = ({ setMyPage, email }) => {
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
 
   //페이지 유저 정보
   const [memberInfo, setMemberInfo] = useState({});
@@ -72,7 +69,6 @@ const MyPageMine = ({ setMyPage, email }) => {
     await searchMypageMemberInfo(
       email,
       (response) => {
-        console.log(response.data);
         setMemberInfo(response.data.response);
         resetIntroduce(response.data.response.introduce);
         resetNickName(response.data.response.nickName);
@@ -92,7 +88,6 @@ const MyPageMine = ({ setMyPage, email }) => {
         setIsmyPage(response.data.response.isMyPage);
       },
       (error) => {
-        console.log(error);
       },
     );
   };
@@ -123,7 +118,6 @@ const MyPageMine = ({ setMyPage, email }) => {
           getmemberInfo();
         },
         (error) => {
-          console.log(error);
         },
       );
       toggleModal(); // 모달을 닫습니다.
@@ -165,7 +159,6 @@ const MyPageMine = ({ setMyPage, email }) => {
                 });
               },
               (error) => {
-                console.log(error);
               },
             );
           }
@@ -233,7 +226,6 @@ const MyPageMine = ({ setMyPage, email }) => {
                 window.location.reload();
               },
               (error) => {
-                console.log(error);
               },
             );
             getmemberInfo();
@@ -248,7 +240,6 @@ const MyPageMine = ({ setMyPage, email }) => {
           }
         },
         (error) => {
-          console.log(error);
         },
       );
     }
@@ -263,7 +254,6 @@ const MyPageMine = ({ setMyPage, email }) => {
         window.location.reload();
       },
       (error) => {
-        console.log(error);
       },
     );
   };

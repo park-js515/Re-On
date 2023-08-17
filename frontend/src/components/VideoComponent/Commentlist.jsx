@@ -66,7 +66,7 @@ const Commentlist = ({ post_id, changeShow, initialData }) => {
           }
         },
         (error) => {
-          console.log(error);
+          
         },
       );
     }
@@ -102,12 +102,10 @@ const Commentlist = ({ post_id, changeShow, initialData }) => {
               }
             },
             (error) => {
-              console.log(error);
             },
           );
         },
         (error) => {
-          console.log(error);
         },
       );
       resetUserInput('');
@@ -130,12 +128,11 @@ const Commentlist = ({ post_id, changeShow, initialData }) => {
             }
           },
           (error) => {
-            console.log(error);
+
           },
         );
       },
       (error) => {
-        console.log(error);
       },
     );
   };

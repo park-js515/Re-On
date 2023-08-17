@@ -5,7 +5,7 @@ import Likes from './Posts/Likes';
 import React, { useState } from "react";
 import Videolist from 'components/VideoComponent/Videolist';
 
-const Postbar = ({myPage, email, changeShow, injectPostId, setIsPrivate}) => {
+const Postbar = ({myPage}) => {
 
   const [activeComponent, setActiveComponent] = useState('Posts');
 
@@ -45,9 +45,9 @@ const Postbar = ({myPage, email, changeShow, injectPostId, setIsPrivate}) => {
   
         </div>
   
-        {activeComponent === "Posts" && <Videolist type={activeComponent} injectPostId={injectPostId} changeShow={changeShow} setIsPrivate={setIsPrivate} />}
-        {activeComponent === "Private" && <Videolist type={activeComponent} injectPostId={injectPostId} changeShow={changeShow} setIsPrivate={setIsPrivate} />}
-        {activeComponent === "Likes" && <Videolist type={activeComponent} injectPostId={injectPostId} changeShow={changeShow} setIsPrivate={setIsPrivate} />}
+        {activeComponent === "Posts" && <Videolist type={activeComponent} />}
+        {activeComponent === "Private" && <Videolist type={activeComponent} />}
+        {activeComponent === "Likes" && <Videolist type={activeComponent} />}
       </div>
     </>
   );

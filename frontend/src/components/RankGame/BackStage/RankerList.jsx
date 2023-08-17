@@ -3,7 +3,7 @@ import RankerItem from './RankerItem';
 import { Container } from '@mui/system';
 import { searchTop5Member } from 'apiList/member';
 import { Link } from 'react-router-dom';
-import './UserInfo/UserInfo.css'
+import './UserInfo/UserInfo.css';
 const RankerList = () => {
   const [rankers, setRankers] = useState([]);
 
@@ -13,7 +13,7 @@ const RankerList = () => {
         setRankers(response.data.response);
       },
       (error) => {
-        console.log(error);
+        // console.log(error);
       },
     );
   }, []);

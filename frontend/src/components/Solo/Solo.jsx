@@ -26,12 +26,10 @@ const SoloApp = () => {
     randomVideo(
       (response)=>{
         const newdata = response.data.response
-        console.log(newdata)
         setUrl(base_url + newdata.videoPath)
         setScript(newdata.script)
       },
       (error)=>{
-        console.log(error)
       }
     )
   }
@@ -46,14 +44,12 @@ const SoloApp = () => {
         
         await setOrtSession(await ort.InferenceSession.create('reon_model-2.onnx', {executionProviders: ['webgl']}));
         await faceapi.nets.tinyFaceDetector.loadFromUri('models');
-        console.log('ONNX, Face-API 로딩 완료')
         if (navigator.mediaDevices.getUserMedia){
           navigator.mediaDevices.getUserMedia({video:true})
           .then((stream)=>{
             webCamRef.current.srcObject = stream;
           })
           .catch((error)=>{
-            console.log(error)
           })
         }
  
@@ -69,7 +65,7 @@ const SoloApp = () => {
     return ()=>{
       setOrtSession(null);
       faceapi.tf.dispose();
-      console.log("전부 삭제")}
+    }
   },[])
   
   useEffect(() => {
@@ -136,7 +132,6 @@ const SoloApp = () => {
           await image_classification(detections1[0].box, detections2[0].box);
         }
         catch(err){
-          console.log(err)
         }
       }
     }, 1000 / FPS)
@@ -144,7 +139,6 @@ const SoloApp = () => {
   
   async function image_classification(box1, box2) {
     if (!ortSession==null) {
-      console.log('널.');
       return;
     }
     
@@ -172,7 +166,6 @@ const SoloApp = () => {
 
     // Create ONNX tensor from the input array
     const inputTensor1 = new ort.Tensor('float32', inputData1, [1, 3, 224, 224]);
-    console.log(inputTensor1)
     const inputTensor2 = new ort.Tensor('float32', inputData2, [1, 3, 224, 224]);
     const inputName = ortSession.inputNames[0];
     const outputName = ortSession.outputNames[0];
