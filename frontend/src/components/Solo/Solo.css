@@ -1,7 +1,5 @@
 #webCam_container {
   position: relative;
-  
- 
 }
 #movie_container {
   position: relative;
@@ -11,26 +9,28 @@ canvas {
   position: absolute;
   left: 0;
   top: 0;
-  
 }
 video {
   object-fit: fill;
-  
 }
 
-
-
-
-
+.overflow-auto::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+.overflow-auto {
+  -ms-overflow-style: none; /* IE, Edge */
+  scrollbar-width: none; /* Firefox */
+  scroll-behavior: smooth; /* 부드러운 스크롤 */
+}
 
 @keyframes fadeInScale {
   from {
-      opacity: 0;
-      transform: scale(0.95);
+    opacity: 0;
+    transform: scale(0.95);
   }
   to {
-      opacity: 1;
-      transform: scale(1);
+    opacity: 1;
+    transform: scale(1);
   }
 }
 
@@ -38,11 +38,9 @@ video {
   animation: fadeInScale 0.5s forwards;
 }
 
-
 .score-animation {
-  background-color: #FFFFFF;
+  background-color: #ffffff;
   position: relative;
- 
 }
 /* 말풍선꼬ㅓ리 */
 .score-animation::after {
@@ -51,9 +49,9 @@ video {
   height: 0;
   border-left: 15px solid transparent;
   border-right: 15px solid transparent;
-  border-top: 15px solid #FFFFFF; 
+  border-top: 15px solid #ffffff;
   position: absolute;
-  bottom: -6px; 
+  bottom: -6px;
   right: 16px;
-  z-index: -1; 
+  z-index: -1;
 }
