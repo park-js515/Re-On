@@ -42,7 +42,7 @@ export default function OpenViduApp() {
   const [currentVideoDevice, setCurrentVideoDevice] = useState(null);
 
   const OV = useRef(new OpenVidu());
-  OV.current.enableProdMode(); // 로그제거
+  // OV.current.enableProdMode(); // 로그제거
   // ######### sendRequest 오버라이딩 예외처리
   OV.current.sendRequest = function (method, params, callback) {
     try {
@@ -139,6 +139,7 @@ export default function OpenViduApp() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // 오픈비두 시그널 : 이메일
   useEffect(() => {
     if (mySide === 'USER_ONE') {
       setUserOneEmail(localStorage.getItem('email'));
@@ -147,7 +148,6 @@ export default function OpenViduApp() {
     }
 
     if (session) {
-      console.log('보냄 :현재 이메일 데이터');
       session.signal({
         data: JSON.stringify({
           userOneEmail: userOneEmail,
@@ -159,7 +159,6 @@ export default function OpenViduApp() {
       const recieveEmail = (e) => {
         try {
           const receivedData = JSON.parse(e.data);
-          console.log('받음 : (useEffect) 유저 이메일 정보', receivedData);
           let response_userOneEmail = receivedData.userOneEmail;
           let response_userTwoEmail = receivedData.userTwoEmail;
           if (response_userOneEmail !== null) {
@@ -175,8 +174,9 @@ export default function OpenViduApp() {
 
       session.on('signal:email', recieveEmail);
     }
-  }, [mySide, userOneEmail, userTwoEmail]);
+  }, [mySide]);
 
+  // 오픈비두 시그널 : 영상 불러오기
   useEffect(() => {
     // 한명만 영상 데이터 전달받음
     if (mySide === 'USER_ONE') {
@@ -628,7 +628,6 @@ export default function OpenViduApp() {
 
   // ############# 비디오 불러오기 함수 #############
   const handleLoadVideo = async () => {
-    handlePlayVideo(); // 비디오 플레이
     setStage('WATCHING_MOVIE');
   };
 
@@ -691,8 +690,6 @@ export default function OpenViduApp() {
         let response_userTwoScore = receivedData.userTwoScore;
         let response_userOneSttScore = receivedData.userOneSttScore;
         let response_userTwoSttScore = receivedData.userTwoSttScore;
-        let response_userOneEmail = receivedData.userOneEmail;
-        let response_userTwoEmail = receivedData.userTwoEmail;
 
         if (response_userOneName !== null) {
           setUserOneName(response_userOneName);
@@ -712,12 +709,6 @@ export default function OpenViduApp() {
         if (response_userTwoSttScore !== 0) {
           setUserTwoSttScore(response_userTwoSttScore);
         }
-        if (response_userOneEmail !== null) {
-          setUserOneEmail(response_userOneEmail);
-        }
-        if (response_userTwoEmail !== null) {
-          setUserTwoEmail(response_userTwoEmail);
-        }
       };
 
       session.on('signal:score', onScoreReceived);
@@ -729,8 +720,6 @@ export default function OpenViduApp() {
         userTwoName,
         userTwoScore,
         userTwoSttScore,
-        userOneEmail,
-        userTwoEmail,
       );
 
       if (mySide === 'USER_ONE') {
@@ -756,8 +745,6 @@ export default function OpenViduApp() {
         userTwoScore: userTwoScore,
         userOneSttScore: userOneSttScore,
         userTwoSttScore: userTwoSttScore,
-        userOneEmail: userOneEmail,
-        userTwoEmail: userTwoEmail,
       };
 
       console.log('보냄 : (함수)현재 점수 시그널 데이터', dataToSend); // 로그
@@ -807,12 +794,12 @@ export default function OpenViduApp() {
   useEffect(() => {
     // 영화 미리보기
     if (stage === 'WATCHING_MOVIE') {
+      handlePlayVideo(); // 비디오 플레이
       setLog((prevLog) => [...prevLog, `🍿연기를 감상해보세요!`]);
       setLog((prevLog) => [
         ...prevLog,
         `🎥${videoData.title} ⏲${Math.floor(videoRef.current.duration)}초`,
       ]);
-      handleCalculateScore();
 
       // 내가 유저 1이면서 첫번째 차례
     } else if (mySide === 'USER_ONE' && stage === 'USER_ONE_TURN') {
@@ -900,6 +887,42 @@ export default function OpenViduApp() {
   // ############ 턴 종료 ###############
   const [resultScore, setResultScore] = useState(0);
   const [resultSttScore, setResultSttScore] = useState(0);
+  const [readyTwoTurnUserOne, setReadyTwoTurnUserOne] = useState(false);
+  const [readyTwoTurnUserTwo, setReadyTwoTurnUserTwo] = useState(false);
+
+  const handleTwoTurnSend = () => {
+    if (session) {
+      if (mySide === 'USER_ONE') {
+        setReadyTwoTurnUserOne(true);
+        session.signal({ type: 'readyTwoTurnUserOne' });
+      } else if (mySide === 'USER_TWO') {
+        setReadyTwoTurnUserTwo(true);
+        session.signal({ type: 'readyTwoTurnUserTwo' });
+      }
+    }
+  };
+
+  const handleTwoTurnReceived = (event) => {
+    if (mySide === 'USER_ONE' && event.type === 'readyTwoTurnUserTwo') {
+      console.log('User Two is ready!');
+      setReadyTwoTurnUserTwo(true);
+    } else if (mySide === 'USER_TWO' && event.type === 'readyTwoTurnUserOne') {
+      console.log('User One is ready!');
+      setReadyTwoTurnUserOne(true);
+    }
+  };
+
+  if (session) {
+    session.on('signal:readyTwoTurnUserOne', handleTwoTurnReceived);
+    session.on('signal:readyTwoTurnUserTwo', handleTwoTurnReceived);
+  }
+
+  useEffect(() => {
+    if (readyTwoTurnUserOne && readyTwoTurnUserTwo) {
+      console.log('USER_TWO_TURN 모두 준비 완료');
+      setStage('USER_TWO_TURN');
+    }
+  }, [readyTwoTurnUserOne, readyTwoTurnUserTwo]);
 
   useEffect(() => {
     if (videoRef.current) {
@@ -916,12 +939,14 @@ export default function OpenViduApp() {
             setResultScore(Math.round(answer));
             setRecordOn(false);
             handleSubUnmute();
+            handleTwoTurnSend();
+          } else {
+            handleTwoTurnSend();
           }
           setUserCamLeftBorder(false);
           setUserCamRightBorder(false);
           handleCalculateScore();
-          await startLoading('lizard', 2000);
-          setStage('USER_TWO_TURN');
+
           // 유저2 턴 종료
         } else if (stage === 'USER_TWO_TURN') {
           if (mySide === 'USER_TWO') {
