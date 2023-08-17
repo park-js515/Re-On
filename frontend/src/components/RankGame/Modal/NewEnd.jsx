@@ -91,8 +91,12 @@ const NewEnd = ({
         </div>
 
         <div className="app__text app__text--1">
-          <div className="app__text-line app__text-line--4">
-            <img src="Logo.ico" alt="" style={{ width: 50 }} />
+          <div
+            className={`app__text-line app__text-line--4 text-${
+              resultGame === 1 ? 'lightBlue' : resultGame === -1 ? 'danger' : ''
+            }`}
+          >
+            <img src="Logo.ico" alt="" style={{ width: 60 }} />
             {resultGame === 999
               ? '통신 오류'
               : resultGame === 1
@@ -125,7 +129,7 @@ const NewEnd = ({
                 padding: '0.25rem',
                 color: isSaved ? 'grey' : 'inherit',
               }}
-              className="border border-2 solid rounded-lg "
+              className="border border-2 solid rounded-lg mb-2"
             >
               📥내 연기 저장
             </button>
