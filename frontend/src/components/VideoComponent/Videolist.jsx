@@ -25,6 +25,9 @@ const Videolist = ({type}) => {
             const newdata = response.data.response;
             if (newdata.length > 0) {
               page++;
+              if (newdata.length < 21) {
+                setRest(false);
+              }
               setData((data) => {
                 return [...data, ...newdata];
               });
@@ -46,7 +49,7 @@ const Videolist = ({type}) => {
                 return [...data, ...newdata];
               });
               page++;
-              if (newdata.length < 10) {
+              if (newdata.length < 21) {
                 setRest(false);
               }
             } else {
@@ -66,7 +69,7 @@ const Videolist = ({type}) => {
               setData((data) => {
                 return [...data, ...newdata];
               });
-              if (newdata.length < 10) {
+              if (newdata.length < 21) {
                 setRest(false);
               }
             } else {
@@ -86,7 +89,7 @@ const Videolist = ({type}) => {
               setData((data) => {
                 return [...data, ...newdata];
               });
-              if (newdata.length < 10) {
+              if (newdata.length < 21) {
                 setRest(false);
               }
             } else {
