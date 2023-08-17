@@ -42,7 +42,7 @@ export default function OpenViduApp() {
   const [currentVideoDevice, setCurrentVideoDevice] = useState(null);
 
   const OV = useRef(new OpenVidu());
-  // OV.current.enableProdMode(); // 로그제거
+  OV.current.enableProdMode(); // 로그제거
   // ######### sendRequest 오버라이딩 예외처리
   OV.current.sendRequest = function (method, params, callback) {
     try {
@@ -887,42 +887,6 @@ export default function OpenViduApp() {
   // ############ 턴 종료 ###############
   const [resultScore, setResultScore] = useState(0);
   const [resultSttScore, setResultSttScore] = useState(0);
-  const [readyTwoTurnUserOne, setReadyTwoTurnUserOne] = useState(false);
-  const [readyTwoTurnUserTwo, setReadyTwoTurnUserTwo] = useState(false);
-
-  const handleTwoTurnSend = () => {
-    if (session) {
-      if (mySide === 'USER_ONE') {
-        setReadyTwoTurnUserOne(true);
-        session.signal({ type: 'readyTwoTurnUserOne' });
-      } else if (mySide === 'USER_TWO') {
-        setReadyTwoTurnUserTwo(true);
-        session.signal({ type: 'readyTwoTurnUserTwo' });
-      }
-    }
-  };
-
-  const handleTwoTurnReceived = (event) => {
-    if (mySide === 'USER_ONE' && event.type === 'readyTwoTurnUserTwo') {
-      console.log('User Two is ready!');
-      setReadyTwoTurnUserTwo(true);
-    } else if (mySide === 'USER_TWO' && event.type === 'readyTwoTurnUserOne') {
-      console.log('User One is ready!');
-      setReadyTwoTurnUserOne(true);
-    }
-  };
-
-  if (session) {
-    session.on('signal:readyTwoTurnUserOne', handleTwoTurnReceived);
-    session.on('signal:readyTwoTurnUserTwo', handleTwoTurnReceived);
-  }
-
-  useEffect(() => {
-    if (readyTwoTurnUserOne && readyTwoTurnUserTwo) {
-      console.log('USER_TWO_TURN 모두 준비 완료');
-      setStage('USER_TWO_TURN');
-    }
-  }, [readyTwoTurnUserOne, readyTwoTurnUserTwo]);
 
   useEffect(() => {
     if (videoRef.current) {
@@ -939,13 +903,12 @@ export default function OpenViduApp() {
             setResultScore(Math.round(answer));
             setRecordOn(false);
             handleSubUnmute();
-            handleTwoTurnSend();
-          } else {
-            handleTwoTurnSend();
           }
           setUserCamLeftBorder(false);
           setUserCamRightBorder(false);
           handleCalculateScore();
+          await startLoading('lizard', 2000);
+          setStage('USER_TWO_TURN');
 
           // 유저2 턴 종료
         } else if (stage === 'USER_TWO_TURN') {
