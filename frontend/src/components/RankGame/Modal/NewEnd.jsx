@@ -87,10 +87,7 @@ const NewEnd = ({
           <div className="app__bgimg-image app__bgimg-image--1"></div>
         </div>
         <div className="app__img">
-          <img
-            src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/537051/whiteTest4.png"
-            alt="city"
-          />
+          <img src="/image/rank/end-white.png" alt="city" />
         </div>
 
         <div className="app__text app__text--1">
@@ -105,7 +102,7 @@ const NewEnd = ({
               : '무승부'}
           </div>
           <div className="app__text-line app__text-line--3 flex">
-            <div>{userOneName}</div>
+            <div className="mr-20">{userOneName}</div>
             <div>{userTwoName}</div>
           </div>
           <div className="app__text-line app__text-line--2 flex">
@@ -114,7 +111,7 @@ const NewEnd = ({
               <div>음성점수 : {userOneSttScore}</div>
               <div>총점 : {userOneScore + userOneSttScore}</div>
             </div>
-            <div>
+            <div className="mr-10">
               <div>점수 : {userTwoScore}</div>
               <div>음성점수 : {userTwoSttScore}</div>{' '}
               <div>총점 : {userTwoScore + userTwoSttScore}</div>
@@ -124,7 +121,11 @@ const NewEnd = ({
             <button
               onClick={handleSaveRecordedFile}
               disabled={isSaved}
-              style={{ color: isSaved ? 'grey' : 'inherit' }}
+              style={{
+                padding: '0.25rem',
+                color: isSaved ? 'grey' : 'inherit',
+              }}
+              className="border border-2 solid rounded-lg "
             >
               📥내 연기 저장
             </button>
