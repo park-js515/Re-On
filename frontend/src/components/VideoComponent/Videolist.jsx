@@ -10,7 +10,7 @@ import {
 } from 'apiList/post';
 
 // type은 AllPublic, Posts, Private, Likes => 투표해줘 전체 조회, 마이페이지 공개 조회, 마이페이지 비공개, 마이페이지 좋아한 영상 조회
-const Videolist = ({ injectPostId, changeShow, type, setIsPrivate }) => {
+const Videolist = ({type}) => {
   const [data, setData] = useState([]);
   const [rest, setRest] = useState(true);
   const { email } = useParams();
@@ -23,7 +23,6 @@ const Videolist = ({ injectPostId, changeShow, type, setIsPrivate }) => {
           page,
           (response) => {
             const newdata = response.data.response;
-            console.log(newdata);
             if (newdata.length > 0) {
               page++;
               setData((data) => {
@@ -34,7 +33,6 @@ const Videolist = ({ injectPostId, changeShow, type, setIsPrivate }) => {
             }
           },
           (error) => {
-            console.log(error);
           },
         );
       } else if (type === 'Posts') {
@@ -43,7 +41,6 @@ const Videolist = ({ injectPostId, changeShow, type, setIsPrivate }) => {
           email,
           (response) => {
             const newdata = response.data.response;
-            console.log(newdata);
             if (newdata.length > 0) {
               setData((data) => {
                 return [...data, ...newdata];
@@ -57,7 +54,6 @@ const Videolist = ({ injectPostId, changeShow, type, setIsPrivate }) => {
             }
           },
           (error) => {
-            console.log(error);
           },
         );
       } else if (type === 'Likes') {
@@ -65,7 +61,6 @@ const Videolist = ({ injectPostId, changeShow, type, setIsPrivate }) => {
           page,
           (response) => {
             const newdata = response.data.response;
-            console.log(newdata);
             if (newdata.length > 0) {
               page++;
               setData((data) => {
@@ -79,7 +74,6 @@ const Videolist = ({ injectPostId, changeShow, type, setIsPrivate }) => {
             }
           },
           (error) => {
-            console.log(error);
           },
         );
       } else if (type === 'Private') {
@@ -87,7 +81,6 @@ const Videolist = ({ injectPostId, changeShow, type, setIsPrivate }) => {
           page,
           (response) => {
             const newdata = response.data.response;
-            console.log(newdata);
             if (newdata.length > 0) {
               page++;
               setData((data) => {
@@ -101,13 +94,14 @@ const Videolist = ({ injectPostId, changeShow, type, setIsPrivate }) => {
             }
           },
           (error) => {
-            console.log(error);
+
           },
         );
       }
     }
   }
 
+  
   // 무한스크롤
   const target = useRef();
   const options = {
@@ -128,7 +122,7 @@ const Videolist = ({ injectPostId, changeShow, type, setIsPrivate }) => {
   const filteredData = data.filter((item) =>
     item.title.toLowerCase().includes(searchTerm.toLowerCase()),
   );
-
+  
   return (
     <div className="py-8 sm:py-8 ">
         <div className="bg-white bg-opacity-50 mx-auto max-w-7xl px-2 lg:px-8 rounded-lg">
@@ -156,14 +150,9 @@ const Videolist = ({ injectPostId, changeShow, type, setIsPrivate }) => {
                 {filteredData.map((item) => {
                     return (
                         <Videoitem
-                            type={type}
                             key={item.id}
                             props={item}
-                            changeMode={() => {
-                                injectPostId(item.id);
-                                changeShow();
-                                setIsPrivate(type==="Private")
-                            }}
+                            type={type}
                         />
                     );
                 })}

@@ -66,7 +66,7 @@ const Commentlist = ({ post_id, changeShow, initialData }) => {
           }
         },
         (error) => {
-          console.log(error);
+          
         },
       );
     }
@@ -102,12 +102,10 @@ const Commentlist = ({ post_id, changeShow, initialData }) => {
               }
             },
             (error) => {
-              console.log(error);
             },
           );
         },
         (error) => {
-          console.log(error);
         },
       );
       resetUserInput('');
@@ -130,12 +128,11 @@ const Commentlist = ({ post_id, changeShow, initialData }) => {
             }
           },
           (error) => {
-            console.log(error);
+
           },
         );
       },
       (error) => {
-        console.log(error);
       },
     );
   };
@@ -153,7 +150,7 @@ const Commentlist = ({ post_id, changeShow, initialData }) => {
     } else {
       return (
         <div className="rounded text-center ring-2 p-2 transition">
-          댓글이 없어요...
+          댓글이 없어요
         </div>
       );
     }
@@ -164,7 +161,7 @@ const Commentlist = ({ post_id, changeShow, initialData }) => {
       {/* 댓글 입력 창 */}
       <div className="flex relative w-full">
         <textarea
-          className="mx-1 mt-2 mb-1 px-1 py-1 bg-white shadow-md focus:outline-none block w-9/12 rounded-md sm:text-sm focus:ring-2 resize-none scrollbar-hide"
+          className="mx-1 mt-1 mb-1 px-1 py-1 bg-white shadow-md focus:outline-none block w-9/12 rounded-md sm:text-sm focus:ring-2 resize-none scrollbar-hide"
           type="text"
           placeholder="댓글 추가..."
           value={userInput}

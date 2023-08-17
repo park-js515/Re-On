@@ -60,9 +60,9 @@ const RankerList = () => {
   };
 
   return (
-    <div className="card flex flex-col justify-center items-center mt-8 py-2 mx-2 text-white shadow-2xl">
-      <div className="absolute inset-0 bg-current bg-opacity-50 hover:cursor-pointer pointer-events-none"></div>
-      <h1 className="text-5xl mb-6 font-semibold">🏆 랭크TOP5</h1>
+    <div className="card flex flex-col justify-center items-center mt-12 py-4 mx-2 text-white shadow-2xl">
+       <div className="absolute inset-0 bg-current bg-opacity-50 hover:cursor-pointer pointer-events-none"></div>
+      <h1 className="text-5xl mb-6">🏆 랭크TOP5</h1>
       {rankers.map((ranker, index) => (
         <div
           key={index}
@@ -71,16 +71,11 @@ const RankerList = () => {
           )}-200 rounded-lg shadow-lg`}
         >
           <Link to={`/mypage/${ranker.email}`} className="hover:text-black">
-            <div className="text-2xl font-semibold">
+            <div className="text-2xl ">
               {getRankIcon(index)} {ranker.nickName}
             </div>
           </Link>
-          <div
-            className="text-xl font-semibold"
-            style={{ color: getRankColorValue(ranker.tier) }}
-          >
-            {ranker.tier}
-          </div>
+          <div className="text-xl" style={{color: getRankColorValue(ranker.tier)}}>{ranker.tier}</div>
         </div>
       ))}
     </div>
