@@ -42,7 +42,7 @@ export default function OpenViduApp() {
   const [currentVideoDevice, setCurrentVideoDevice] = useState(null);
 
   const OV = useRef(new OpenVidu());
-  // OV.current.enableProdMode(); // 로그제거
+  OV.current.enableProdMode(); // 로그제거
   // ######### sendRequest 오버라이딩 예외처리
   OV.current.sendRequest = function (method, params, callback) {
     try {
@@ -141,13 +141,13 @@ export default function OpenViduApp() {
 
   // 오픈비두 시그널 : 이메일
   useEffect(() => {
-    if (mySide === 'USER_ONE') {
-      setUserOneEmail(localStorage.getItem('email'));
-    } else if (mySide === 'USER_TWO') {
-      setUserTwoEmail(localStorage.getItem('email'));
-    }
-
     if (session) {
+      if (mySide === 'USER_ONE') {
+        setUserOneEmail(localStorage.getItem('email'));
+      } else if (mySide === 'USER_TWO') {
+        setUserTwoEmail(localStorage.getItem('email'));
+      }
+
       session.signal({
         data: JSON.stringify({
           userOneEmail: userOneEmail,
@@ -173,6 +173,7 @@ export default function OpenViduApp() {
       };
 
       session.on('signal:email', recieveEmail);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }
   }, [mySide]);
 
@@ -182,7 +183,7 @@ export default function OpenViduApp() {
     if (mySide === 'USER_ONE') {
       randomVideo(
         (response) => {
-          console.log('API : 랜덤 비디오', response.data.response);
+          // console.log('API : 랜덤 비디오', response.data.response);
           // 시그널 보내기 (API 정보와 플레이 요청 같이 보냄)
           session.signal({
             data: JSON.stringify({
@@ -193,7 +194,7 @@ export default function OpenViduApp() {
           });
         },
         (error) => {
-          console.log(error);
+          // console.log(error);
         },
       );
     }
@@ -204,7 +205,7 @@ export default function OpenViduApp() {
   if (session) {
     session.on('signal:playVideo', async (event) => {
       const data = JSON.parse(event.data); // 받은 시그널 데이터 파싱
-      console.log('받음 : 게임 정보, 상대 정보 데이터', data);
+      // console.log('받음 : 게임 정보, 상대 정보 데이터', data);
       if (data.playVideo && stage === 'READY') {
         setVideoData(data.apiData);
         // 비디오 데이터 호출 성공시
@@ -221,7 +222,7 @@ export default function OpenViduApp() {
       // Get a token from the OpenVidu deployment
       getToken().then(async (token) => {
         try {
-          console.log('오픈비두 토큰', token);
+          // console.log('오픈비두 토큰', token);
           await session.connect(token.response, { clientData: myUserName });
 
           let publisher = await OV.current.initPublisherAsync(undefined, {
@@ -253,11 +254,11 @@ export default function OpenViduApp() {
           setPublisher(publisher);
           setCurrentVideoDevice(currentVideoDevice);
         } catch (error) {
-          console.log(
-            'There was an error connecting to the session:',
-            error.code,
-            error.message,
-          );
+          // console.log(
+          //   'There was an error connecting to the session:',
+          //   error.code,
+          //   error.message,
+          // );
         }
       });
     }
@@ -345,10 +346,10 @@ export default function OpenViduApp() {
           },
         },
       );
-      console.log('오픈비두 응답', response);
+      // console.log('오픈비두 응답', response);
       return response.data;
     } catch (error) {
-      console.error('오픈비두 토큰 받기 에러', error); // 오류 로깅
+      // console.error('오픈비두 토큰 받기 에러', error); // 오류 로깅
     }
   };
 
@@ -365,10 +366,10 @@ export default function OpenViduApp() {
           },
         },
       );
-      console.log('응답', response);
+      // console.log('응답', response);
       return response.data;
     } catch (error) {
-      console.error('에러', error); // 오류 로깅
+      // console.error('에러', error); // 오류 로깅
     }
   };
 
@@ -427,7 +428,7 @@ export default function OpenViduApp() {
             origin_detections[0].box,
           );
         } catch {
-          console.log('오류 발생');
+          // console.log('오류 발생');
         }
       }
       // console.log(new Date() - start);
@@ -539,14 +540,14 @@ export default function OpenViduApp() {
   useEffect(() => {
     if (videoData.sttScript) {
       const sttScript = videoData.sttScript.replace(/\s/g, '');
-      console.log(sttScript);
+      // console.log(sttScript);
       let tempScore = 0;
       if (mySide === 'USER_ONE') {
         tempScore = Levinshtein.textSimilarity(sttScript, userOneText);
-        console.log(userOneText);
+        // console.log(userOneText);
       } else if (mySide === 'USER_TWO') {
         tempScore = Levinshtein.textSimilarity(sttScript, userTwoText);
-        console.log(userTwoText);
+        // console.log(userTwoText);
       }
       if (mySide === 'USER_ONE') {
         setUserOneSttScore(isNaN(tempScore) ? 0 : Math.round(tempScore * 10));
@@ -690,7 +691,8 @@ export default function OpenViduApp() {
         let response_userTwoScore = receivedData.userTwoScore;
         let response_userOneSttScore = receivedData.userOneSttScore;
         let response_userTwoSttScore = receivedData.userTwoSttScore;
-
+        let response_userOneEmail = receivedData.userOneEmail;
+        let response_userTwoEmail = receivedData.userTwoEmail;
         if (response_userOneName !== null) {
           setUserOneName(response_userOneName);
         }
@@ -709,18 +711,26 @@ export default function OpenViduApp() {
         if (response_userTwoSttScore !== 0) {
           setUserTwoSttScore(response_userTwoSttScore);
         }
+        if (response_userOneEmail !== null) {
+          setUserOneEmail(response_userOneEmail);
+        }
+        if (response_userTwoEmail !== null) {
+          setUserTwoEmail(response_userTwoEmail);
+        }
       };
 
       session.on('signal:score', onScoreReceived);
-      console.log(
-        '받음 : (함수)현재 점수 데이터 시그널',
-        userOneName,
-        userOneScore,
-        userOneSttScore,
-        userTwoName,
-        userTwoScore,
-        userTwoSttScore,
-      );
+      // console.log(
+      //   '받음 : (함수)현재 점수 데이터 시그널',
+      //   userOneName,
+      //   userOneScore,
+      //   userOneSttScore,
+      //   userTwoName,
+      //   userTwoScore,
+      //   userTwoSttScore,
+      //   userOneEmail,
+      //   userTwoEmail,
+      // );
 
       if (mySide === 'USER_ONE') {
         if (resultScore !== 0) {
@@ -745,16 +755,18 @@ export default function OpenViduApp() {
         userTwoScore: userTwoScore,
         userOneSttScore: userOneSttScore,
         userTwoSttScore: userTwoSttScore,
+        userOneEmail: userOneEmail,
+        userTwoEmail: userTwoEmail,
       };
 
-      console.log('보냄 : (함수)현재 점수 시그널 데이터', dataToSend); // 로그
+      // console.log('보냄 : (함수)현재 점수 시그널 데이터', dataToSend); // 로그
       await session.signal({
         type: 'score',
         data: JSON.stringify(dataToSend),
         to: [], // 빈 배열은 세션의 모든 클라이언트에게 전송
       });
     } catch (error) {
-      console.log('시그널 전송 중 오류 발생', error);
+      // console.log('시그널 전송 중 오류 발생', error);
     }
   };
 
@@ -858,21 +870,22 @@ export default function OpenViduApp() {
       }
 
       // API 보내는 곳 (결과) if(resultGame !=== 999)
+
       if (resultGame !== 999 && userOneEmail && userTwoEmail && videoData) {
         const body = {
           opponentEmail: opponentEmail,
           videoId: videoData.id,
           result: resultGame,
         };
-        console.log('API 게임 결과 보냄', body);
+        // console.log('API 게임 결과 보냄', body);
         registerBattleLog(
           body,
           (response) => {
-            console.log('기록 전송 완료', response);
+            // console.log('기록 전송 완료', response);
             setIsApiCalled(true);
           },
           (error) => {
-            console.error('기록 전송 에러', error);
+            // console.error('기록 전송 에러', error);
           },
         );
       }
@@ -887,42 +900,6 @@ export default function OpenViduApp() {
   // ############ 턴 종료 ###############
   const [resultScore, setResultScore] = useState(0);
   const [resultSttScore, setResultSttScore] = useState(0);
-  const [readyTwoTurnUserOne, setReadyTwoTurnUserOne] = useState(false);
-  const [readyTwoTurnUserTwo, setReadyTwoTurnUserTwo] = useState(false);
-
-  const handleTwoTurnSend = () => {
-    if (session) {
-      if (mySide === 'USER_ONE') {
-        setReadyTwoTurnUserOne(true);
-        session.signal({ type: 'readyTwoTurnUserOne' });
-      } else if (mySide === 'USER_TWO') {
-        setReadyTwoTurnUserTwo(true);
-        session.signal({ type: 'readyTwoTurnUserTwo' });
-      }
-    }
-  };
-
-  const handleTwoTurnReceived = (event) => {
-    if (mySide === 'USER_ONE' && event.type === 'readyTwoTurnUserTwo') {
-      console.log('User Two is ready!');
-      setReadyTwoTurnUserTwo(true);
-    } else if (mySide === 'USER_TWO' && event.type === 'readyTwoTurnUserOne') {
-      console.log('User One is ready!');
-      setReadyTwoTurnUserOne(true);
-    }
-  };
-
-  if (session) {
-    session.on('signal:readyTwoTurnUserOne', handleTwoTurnReceived);
-    session.on('signal:readyTwoTurnUserTwo', handleTwoTurnReceived);
-  }
-
-  useEffect(() => {
-    if (readyTwoTurnUserOne && readyTwoTurnUserTwo) {
-      console.log('USER_TWO_TURN 모두 준비 완료');
-      setStage('USER_TWO_TURN');
-    }
-  }, [readyTwoTurnUserOne, readyTwoTurnUserTwo]);
 
   useEffect(() => {
     if (videoRef.current) {
@@ -939,13 +916,12 @@ export default function OpenViduApp() {
             setResultScore(Math.round(answer));
             setRecordOn(false);
             handleSubUnmute();
-            handleTwoTurnSend();
-          } else {
-            handleTwoTurnSend();
           }
           setUserCamLeftBorder(false);
           setUserCamRightBorder(false);
           handleCalculateScore();
+          await startLoading('lizard', 2000);
+          setStage('USER_TWO_TURN');
 
           // 유저2 턴 종료
         } else if (stage === 'USER_TWO_TURN') {
@@ -1012,15 +988,15 @@ export default function OpenViduApp() {
       };
 
       session.on('signal:score', onScoreReceived);
-      console.log(
-        '받음 : (useEffect)현재 점수 데이터 시그널',
-        userOneName,
-        userOneScore,
-        userTwoName,
-        userTwoScore,
-        userOneSttScore,
-        userTwoSttScore,
-      );
+      // console.log(
+      //   '받음 : (useEffect)현재 점수 데이터 시그널',
+      //   userOneName,
+      //   userOneScore,
+      //   userTwoName,
+      //   userTwoScore,
+      //   userOneSttScore,
+      //   userTwoSttScore,
+      // );
       return () => session.off('signal:score', onScoreReceived);
     }
   }, [session]);
@@ -1059,7 +1035,7 @@ export default function OpenViduApp() {
         setResultGame(0);
       }
     }
-  }, [userOneScore, userTwoScore, mySide]);
+  }, [userOneScore, userTwoScore, mySide, stage]);
 
   useEffect(() => {
     pauseVideo();

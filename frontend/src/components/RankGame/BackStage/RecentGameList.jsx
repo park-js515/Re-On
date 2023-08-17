@@ -22,7 +22,7 @@ const RecentGameList = () => {
           setGameListData([...newData, ...temp]);
         },
         (error) => {
-          console.log(error);
+          // console.log(error);
         },
       );
     }
