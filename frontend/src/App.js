@@ -7,7 +7,7 @@ import LoginPage from './pages/LoginPage';
 import MainPage from './pages/MainPage';
 import MyPage from './pages/MyPage';
 import NotFoundPage from './pages/NotFoundPage';
-
+import './App.css'
 import NormalListPage from './pages/NormalListPage';
 import RankPage from './pages/RankPage';
 import RegisterPage from './pages/RegisterPage';
