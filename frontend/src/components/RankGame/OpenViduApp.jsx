@@ -194,7 +194,7 @@ export default function OpenViduApp() {
           });
         },
         (error) => {
-          console.log(error);
+          // console.log(error);
         },
       );
     }
@@ -254,11 +254,11 @@ export default function OpenViduApp() {
           setPublisher(publisher);
           setCurrentVideoDevice(currentVideoDevice);
         } catch (error) {
-          console.log(
-            'There was an error connecting to the session:',
-            error.code,
-            error.message,
-          );
+          // console.log(
+          //   'There was an error connecting to the session:',
+          //   error.code,
+          //   error.message,
+          // );
         }
       });
     }
@@ -349,7 +349,7 @@ export default function OpenViduApp() {
       // console.log('오픈비두 응답', response);
       return response.data;
     } catch (error) {
-      console.error('오픈비두 토큰 받기 에러', error); // 오류 로깅
+      // console.error('오픈비두 토큰 받기 에러', error); // 오류 로깅
     }
   };
 
@@ -369,7 +369,7 @@ export default function OpenViduApp() {
       // console.log('응답', response);
       return response.data;
     } catch (error) {
-      console.error('에러', error); // 오류 로깅
+      // console.error('에러', error); // 오류 로깅
     }
   };
 
@@ -428,7 +428,7 @@ export default function OpenViduApp() {
             origin_detections[0].box,
           );
         } catch {
-          console.log('오류 발생');
+          // console.log('오류 발생');
         }
       }
       // console.log(new Date() - start);
@@ -540,14 +540,14 @@ export default function OpenViduApp() {
   useEffect(() => {
     if (videoData.sttScript) {
       const sttScript = videoData.sttScript.replace(/\s/g, '');
-      console.log(sttScript);
+      // console.log(sttScript);
       let tempScore = 0;
       if (mySide === 'USER_ONE') {
         tempScore = Levinshtein.textSimilarity(sttScript, userOneText);
-        console.log(userOneText);
+        // console.log(userOneText);
       } else if (mySide === 'USER_TWO') {
         tempScore = Levinshtein.textSimilarity(sttScript, userTwoText);
-        console.log(userTwoText);
+        // console.log(userTwoText);
       }
       if (mySide === 'USER_ONE') {
         setUserOneSttScore(isNaN(tempScore) ? 0 : Math.round(tempScore * 10));
@@ -766,7 +766,7 @@ export default function OpenViduApp() {
         to: [], // 빈 배열은 세션의 모든 클라이언트에게 전송
       });
     } catch (error) {
-      console.log('시그널 전송 중 오류 발생', error);
+      // console.log('시그널 전송 중 오류 발생', error);
     }
   };
 
@@ -881,11 +881,11 @@ export default function OpenViduApp() {
         registerBattleLog(
           body,
           (response) => {
-            console.log('기록 전송 완료', response);
+            // console.log('기록 전송 완료', response);
             setIsApiCalled(true);
           },
           (error) => {
-            console.error('기록 전송 에러', error);
+            // console.error('기록 전송 에러', error);
           },
         );
       }
