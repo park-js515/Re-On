@@ -18,6 +18,7 @@ const Hotlist = () => {
       searchTop10Post(
         (response) => {
           const newdata = response.data.response;
+          console.log(newdata)
           setData(prevData => [...prevData, ...newdata]);
         },
         (error) => {
@@ -68,11 +69,12 @@ const Hotlist = () => {
     <div className="bg-gradient-to-b from-lightBlue to-begie mb-12 py-16">
       <div className="bg-white bg-opacity-50 mx-auto max-w-7xl py-14 rounded-lg">
       <h1 className="my-4 py-6 text-center font-bold text-3xl text-dark ">🎁인기영상</h1>
-      <div className="mx-auto max-w-7xl px-6 lg:px-8 ">
-          <Slider className="py-4"ref={sliderRef} {...settings}>
+      <div className="mx-auto max-w-7xl px-6 lg:px-8">
+          <Slider className="py-4 "ref={sliderRef} {...settings}>
               {data.map((item) => (
                   <div key={item.id}>
                       <Videoitem
+                      
                           props={item}
                           type={type}
                       />

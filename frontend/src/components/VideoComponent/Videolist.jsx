@@ -104,14 +104,7 @@ const Videolist = ({type}) => {
     }
   }
 
-  function delItem(id) {
-    setData((current) => {
-      const ret = current.filter((item) => item.id !== id);
-      return ret;
-    })
-  }
-
-
+  
   // 무한스크롤
   const target = useRef();
   const options = {
@@ -163,7 +156,6 @@ const Videolist = ({type}) => {
                             key={item.id}
                             props={item}
                             type={type}
-                            delItem={delItem}
                         />
                     );
                 })}
