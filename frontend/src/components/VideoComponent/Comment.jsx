@@ -58,7 +58,6 @@ const Comment = ({ comment, deleteComment, changeShow }) => {
           { content: content },
           (response) => {},
           (error) => {
-            console.log(error);
           },
         );
       }
