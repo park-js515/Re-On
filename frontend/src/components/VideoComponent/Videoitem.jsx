@@ -14,7 +14,7 @@ const convertToK = (number) => {
     }
 }
 
-const Videoitem = ({props, type}) => {
+const Videoitem = ({props, type, delItem}) => {
     const moveToMyPage = (event) => {
         event.preventDefault();
         window.location.assign("/mypage/"+props.email)
@@ -38,7 +38,7 @@ const Videoitem = ({props, type}) => {
     }
     return (
       <>
-      {show && <Videoplayer post_id={data.id} changeShow={changeShow} type={type} changeLike={changeLike}/>}
+      {show && <Videoplayer post_id={data.id} changeShow={changeShow} type={type} changeLike={changeLike} delItem={delItem}/>}
       <div className="bg-white flex max-w-xl rounded shadow-md flex-col items-start justify-between transform transition-transform duration-300 hover:scale-105 hover:shadow-lg mx-2 my-4 pb-4">
         {/* 배경 투명으로 하기위해 inset0 포인터이벤트 없음 */}
         <div className="absolute inset-0 bg-current bg-opacity-50 hover:cursor-pointer pointer-events-none"></div>
