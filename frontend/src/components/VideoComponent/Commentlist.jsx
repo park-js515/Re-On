@@ -33,7 +33,7 @@ const useInputText = (initialValue, validator) => {
 };
 
 const Commentlist = ({ post_id, changeShow, initialData }) => {
-  let page = 2;
+  const [page, setPage] = useState(2)
   let maxLength = 100;
 
   // 댓글은 게시글 식별자로 조회
@@ -44,7 +44,7 @@ const Commentlist = ({ post_id, changeShow, initialData }) => {
       return value.length <= maxLength;
     },
   ); // 댓글 쓰기 창 (최대 150자: maxLength로 조절)
-  const [more, setMore] = useState(initialData.length > 10 ? true : false); // 댓글 더보기 가능 여부
+  const [more, setMore] = useState(initialData.length < 10 ? false : true); // 댓글 더보기 가능 여부
 
   const onChange = (event) => {
     setUserInput(event);
@@ -52,6 +52,7 @@ const Commentlist = ({ post_id, changeShow, initialData }) => {
 
   const getComment = () => {
     if (more) {
+      console.log(page)
       searchPostDetailComment(
         post_id,
         page,
@@ -60,7 +61,7 @@ const Commentlist = ({ post_id, changeShow, initialData }) => {
           setComments((comments) => {
             return [...comments, ...newData];
           });
-          page++;
+          setPage((page)=>{return page+1})
           if (newData.length < 10) {
             setMore(false);
           }
@@ -95,7 +96,7 @@ const Commentlist = ({ post_id, changeShow, initialData }) => {
             1,
             (response) => {
               const newdata = response.data.response;
-              page = 2;
+              setPage(2)
               setComments(newdata);
               if (newdata.length === 10) {
                 setMore(true);
@@ -121,7 +122,7 @@ const Commentlist = ({ post_id, changeShow, initialData }) => {
           1,
           (response) => {
             const newdata = response.data.response;
-            page = 2;
+            setPage(2);
             setComments(newdata);
             if (newdata.length === 10) {
               setMore(true);

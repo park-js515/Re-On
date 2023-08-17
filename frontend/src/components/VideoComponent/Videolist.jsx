@@ -46,7 +46,7 @@ const Videolist = ({type}) => {
                 return [...data, ...newdata];
               });
               page++;
-              if (newdata.length < 10) {
+              if (newdata.length < 21) {
                 setRest(false);
               }
             } else {

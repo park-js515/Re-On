@@ -41,6 +41,12 @@ function App() {
     setPrevLocation(location.pathname)
   }, [location])
 
+  useEffect(()=>{
+    window.onbeforeunload = function pushRefresh() {
+      window.scrollTo(0,0);
+    }
+  },[])
+  
   return (
     <>
       {!isJoinSession && <ResponsiveAppBar />}
