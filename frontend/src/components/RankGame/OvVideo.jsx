@@ -51,11 +51,11 @@ export default function OpenViduVideoComponent({
       if (recordOn && !recording) {
         mediaRecorder.start();
         setRecording(true);
-        console.log('녹화 시작');
+        // console.log('녹화 시작');
       } else if (!recordOn && recording) {
         mediaRecorder.stop();
         setRecording(false);
-        console.log('녹화 중지');
+        // console.log('녹화 중지');
       }
     }
   }, [recordOn, mediaRecorder, recording]);

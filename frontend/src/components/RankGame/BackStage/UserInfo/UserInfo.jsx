@@ -61,7 +61,7 @@ const UserInfo = () => {
         setUserEmail(localStorage.getItem('email'));
       },
       (error) => {
-        console.log(error);
+        // console.log(error);
       },
     );
 

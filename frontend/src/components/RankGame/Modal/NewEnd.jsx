@@ -40,11 +40,11 @@ const NewEnd = ({
         videoId,
         formData,
         (response) => {
-          console.log(response.data.response);
-          console.log(response);
+          // console.log(response.data.response);
+          // console.log(response);
         },
         (error) => {
-          console.log(error);
+          // console.log(error);
         },
       );
 
