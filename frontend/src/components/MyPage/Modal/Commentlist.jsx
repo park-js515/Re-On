@@ -51,7 +51,7 @@ const Commentlist = ({ post_id, commentList, changeShow, hierarchy }) => {
         }
       },
       (error) => {
-        console.log(error);
+        // console.log(error);
       },
     );
   };
@@ -74,19 +74,18 @@ const Commentlist = ({ post_id, commentList, changeShow, hierarchy }) => {
             post_id,
             1,
             (response) => {
-              console.log(response.data.response);
               setComments(response.data.response);
               if (response.data.response === 10) {
                 setMore(true);
               }
             },
             (error) => {
-              console.log(error);
+              // console.log(error);
             },
           );
         },
         (error) => {
-          console.log(error);
+          // console.log(error);
         },
       );
       setUserInput('');
@@ -101,17 +100,16 @@ const Commentlist = ({ post_id, commentList, changeShow, hierarchy }) => {
         post_id,
         1,
         (response) => {
-          console.log(response.data.response);
           setComments(response.data.response);
           if (response.data.response === 10) {
             setMore(true);
           }
         },
         (error) => {
-          console.log(error);
+          // console.log(error);
         },
         (error) => {
-          console.log(error);
+          // console.log(error);
         },
       );
     });
@@ -123,7 +121,7 @@ const Commentlist = ({ post_id, commentList, changeShow, hierarchy }) => {
       { content: content },
       () => {},
       (error) => {
-        console.log(error);
+        // console.log(error);
       },
     );
   };

@@ -31,7 +31,7 @@ const LikesModal = ({detailPost, changeShow, getPosts}) => {
             setIsLike(!IsLike)
             
         }, (error) => {
-            console.log(error);
+            // console.log(error);
             
         })
     }

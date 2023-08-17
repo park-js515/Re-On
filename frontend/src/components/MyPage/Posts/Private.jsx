@@ -18,11 +18,10 @@ import Swal from 'sweetalert2';
 
     const openModal = (post) => {
       searchPrivatePostDetail(post.id,(response) => {
-        console.log(response.data.response);
         setSelectedPost(response.data.response);
         setIsModalOpen(true) },
         (error) => {
-          console.log(error)
+          // console.log(error)
           navigate('/login');
         }
       )
@@ -47,15 +46,14 @@ import Swal from 'sweetalert2';
           closeModal();
           openInput();
           searchPrivatePost(1, (response) => {
-            console.log(response.data.response);
             setPosts(response.data.response)
           },
             (error) => {
-              console.log(error)
+              // console.log(error)
             }
           )
         }), ((error) => {
-          console.log(error);
+          // console.log(error);
         }));
       }
     }
@@ -77,11 +75,10 @@ import Swal from 'sweetalert2';
     useEffect(() => {
       const test = () => {
         searchPrivatePost(1, (response) => {
-          console.log(response.data.response);
           setPosts(response.data.response)
         },
           (error) => {
-            console.log(error)
+            // console.log(error)
           }
         )
       };

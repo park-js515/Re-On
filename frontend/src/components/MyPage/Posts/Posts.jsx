@@ -19,7 +19,6 @@ import { searchPublicPost, searchPublicPostDetail } from 'apiList/post';
           (response) => {
             const newdata = response.data.response
             if (newdata.length > 0){
-              console.log(newdata)
               setPosts((posts) => {return [...posts, ...newdata]})
               page++;
               if (newdata.length < 10){
@@ -31,7 +30,7 @@ import { searchPublicPost, searchPublicPostDetail } from 'apiList/post';
             }
           },
           (error) => {
-            console.log(error);
+            // console.log(error);
           }
           )
       }
@@ -43,7 +42,7 @@ import { searchPublicPost, searchPublicPostDetail } from 'apiList/post';
        await searchPublicPostDetail(id, (response) => {
         setDetailPost(response.data.response)
       }, (error) => {
-        console.log(error);
+        // console.log(error);
       })
 
       setShowModal(true);
