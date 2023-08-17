@@ -38,7 +38,7 @@ const PostModal = ({ detailPost, changeShow, getPosts }) => {
         setIsLike(!IsLike);
       },
       (error) => {
-        console.log(error);
+        // console.log(error);
       },
     );
   };
@@ -74,7 +74,7 @@ const PostModal = ({ detailPost, changeShow, getPosts }) => {
           });
         },
         (error) => {
-          console.log(error);
+          // console.log(error);
         },
       );
     }
@@ -103,7 +103,7 @@ const PostModal = ({ detailPost, changeShow, getPosts }) => {
             changeShow();
           },
           (error) => {
-            console.log(error);
+            // console.log(error);
           },
         );
       }

@@ -4,8 +4,6 @@ import Commentlist from "./Commentlist";
 import Swal from "sweetalert2";
 
 const Comment = ({comment, deleteComment, updateComment, changeShow, hierarchy}) => {
-    console.log("comment")
-    console.log(comment)
     const navigate = useNavigate()
     const [content, setContent] = useState(comment.content)
     const [updateMode, setUpdateMode] = useState(false)
