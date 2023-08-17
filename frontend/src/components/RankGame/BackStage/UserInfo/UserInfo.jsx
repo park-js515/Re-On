@@ -98,11 +98,14 @@ const UserInfo = () => {
         <div className="flex flex-col">
           {/* 프로필 및 유저이름 */}
           <div className="flex items-center mb-4 sm:mb-0 sm:flex-none">
-            <Link to="/mypage">
+            <Link to={`/mypage/${userEmail}`}>
               <img
                 src={
-                  `https://storage.googleapis.com/reon-bucket/${userData.profileImg}` ||
-                  '/image/login/userdefault.png'
+                  userData.profileImg !== 'null' &&
+                  userData.profileImg !== null &&
+                  userData.profileImg !== ''
+                    ? `https://storage.googleapis.com/reon-bucket/${userData.profileImg}`
+                    : '/image/login/LoginDefaultImg.png'
                 }
                 alt=""
                 className="w-[8vw] h-[8vw] rounded-full bg-white mr-4" // Added margin-right to create some spacing between the image and the name
