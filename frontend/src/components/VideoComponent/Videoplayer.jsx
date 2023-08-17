@@ -226,7 +226,7 @@ const Videoplayer = ({ post_id, changeShow, isPrivate }) => {
             <textarea
               rows="2"
               value={title}
-              className={`resize-none text-3xl font-bold my-3 border-b w-full bg-white ${
+              className={`resize-none text-3xl my-3 rounded-md w-full bg-white ${
                 edit ? 'outline-none border-blue shadow-lg' : ''
               }`}
               onChange={changeTitle}
@@ -247,11 +247,11 @@ const Videoplayer = ({ post_id, changeShow, isPrivate }) => {
                       moveToMyPage();
                     }}
                   />
-                  <h2 className="flex-grow text-xl font-semibold truncate cursor-pointer" onClick={moveToMyPage}>
+                  <h2 className="flex-grow text-xl truncate cursor-pointer" onClick={moveToMyPage}>
                     {data.nickName}
                   </h2>
                   <button
-                    className={`px-4 py-2 rounded-md font-semibold text-xl ${
+                    className={`px-4 py-2 rounded-md text-xl ${
                       data.isLike ? 'hover:scale-110' : 'hover:scale-110'
                     }`}
                     onClick={likeVideo}
@@ -262,7 +262,7 @@ const Videoplayer = ({ post_id, changeShow, isPrivate }) => {
               ) : (
                 <>
                 <div className="flex-grow"></div> 
-                <button className="px-4 py-2 rounded-md bg-blue hover:bg-[#649dcc] text-white" onClick={postPost}>
+                <button className="px-8 py-2 rounded-md bg-blue hover:bg-[#649dcc] text-white" onClick={postPost}>
                   업로드
                 </button>
                 </>
@@ -270,10 +270,10 @@ const Videoplayer = ({ post_id, changeShow, isPrivate }) => {
               
               {data.isMyPost && (
                 <div className="flex space-x-4 ">
-                  <button className="hover:scale-110 text-black font-semibold  px-4 py-2 rounded-md" onClick={editPost}>
+                  <button className="hover:scale-110 text-black px-4 py-2 rounded-md" onClick={editPost}>
                     🔨수정
                   </button>
-                  <button className="hover:scale-110 text-black font-semibold  px-4 py-2 rounded-md" onClick={deletePost}>
+                  <button className="hover:scale-110 text-black px-4 py-2 rounded-md" onClick={deletePost}>
                     🗑️삭제
                   </button>
                 </div>
@@ -284,7 +284,7 @@ const Videoplayer = ({ post_id, changeShow, isPrivate }) => {
           {/* 내용 */}
           <textarea
             value={content}
-            className={`w-full p-3 resize-none rounded-md bg-white border ${edit ? 'border-blue rounded-md border shadow-lg' : ''}`}
+            className={`w-full p-3 resize-none rounded-md bg-white border ${edit ? 'border-blue outline-none rounded-md shadow-lg' : ''}`}
             disabled={!edit}
             onChange={changeContent}
             placeholder={isPrivate ? '설명을 입력해주세요 (1자 이상)' : null}

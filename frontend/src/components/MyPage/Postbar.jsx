@@ -11,8 +11,8 @@ const Postbar = ({myPage, email, changeShow, injectPostId, setIsPrivate}) => {
 
   return (
     <>
-      <div className='mt-16 h-screen min-h-screen bg-gradient-to-t from-begie to-lightBlue '>
-        <div className="flex items-center bg-inss justify-center space-x-4 border-b-2 mb-12 border-gray md:space-x-12  uppercase tracking-widest font-semibold text-md ">
+      <div className='mt-16 h-full min-h-full bg-gradient-to-t from-begie to-lightBlue '>
+        <div className="flex items-center bg-white justify-center space-x-4 border-b-2 mb-12 border-gray md:space-x-12  uppercase tracking-widest font-semibold text-md ">
   
           <button
             className={`flex items-center space-x-2 px-5 py-2 font-semibold transition text-2xl
@@ -40,7 +40,7 @@ const Postbar = ({myPage, email, changeShow, injectPostId, setIsPrivate}) => {
               onClick={() => setActiveComponent('Likes')}
             >
               <span></span>
-              <span>좋아한</span>
+              <span>좋아요</span>
             </button>}
   
         </div>

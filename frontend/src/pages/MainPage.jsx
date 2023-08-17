@@ -71,10 +71,10 @@ export default function MainPage() {
           <SwiperSlide className="bg-gradient-to-t from-lightBlue to-begie" >
             <h1 className="absolute top-20 left-1/2 transform -translate-x-1/2 text-black font-semibold text-6xl ">📘about</h1>
             <section className="main__section flex justify-center items-center">
-              <div className="bg-[#fff] bg-opacity-30 shadow-2xl py-0 rounded-lg text-center flex w-full h-1/2 max-w-screen-2xl mt-32">
+              <div className="bg-[#fff] bg-opacity-30 shadow-2xl py-0 rounded-lg text-center flex w-full h-[500px] max-w-screen-2xl mt-32">
                   
                   {/* 왼쪽 텍스트 부분 */}
-                  <div className="flex-1 py-24 my-22 ml-12 mt-28">
+                  <div className="flex-1 py-24 my-22 ml-12 mt-4">
                       <h1 className="text-4xl font-semibold md:text-5xl lg:text-6xl m-0 mt-1 mb-8 text-black">RE:ON 무엇인가요?</h1>
                       <h3 className="text-2xl font-semibold m-0 mt-2 text-white">AI 학습을 통하여 사용자의 표정과 연기를 인식합니다.</h3>
                       <h3 className="text-2xl font-semibold m-0 mt-2 text-white">표정의 미묘한 변화, 감정의 진실성까지 분석하여 </h3>
@@ -90,7 +90,7 @@ export default function MainPage() {
                   </div>
 
                   {/* 오른쪽 {View} 부분 */}
-                  <div className="lottie-container flex-1 flex justify-center items-center">
+                  <div className="lottie-container h-[550px] w-[500px] flex flex-col justify-center items-center">
                       {View}
                   </div>
               </div>
@@ -98,7 +98,7 @@ export default function MainPage() {
 
         </SwiperSlide>
 
-        <SwiperSlide className={`bg-gradient-to-t from-begie to-lightBlue ${activeIndex === 2 ? "fade-in" : ""}`}>
+        {/* <SwiperSlide className={`bg-gradient-to-t from-begie to-lightBlue ${activeIndex === 2 ? "fade-in" : ""}`}>
       
         <h1 className="absolute top-20 left-1/2 transform -translate-x-1/2 text-black font-semibold text-6xl ">🔥인기영상</h1>
         <section className="main__section flex justify-center items-center ">
@@ -108,7 +108,7 @@ export default function MainPage() {
             </div>
         </section>
         
-        </SwiperSlide>
+        </SwiperSlide> */}
 
      
        

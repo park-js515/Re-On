@@ -300,7 +300,7 @@ const MyPageMine = ({ setMyPage, email }) => {
           <h1 className="ml-4 flex flex-grow text-2xl font-bold" style={{color: getRankColorValue(memberInfo.tier)}}>{memberInfo.tier}</h1>
           {ismyPage && (
             <button
-              className="rounded bg-[#f3f0e4] text-lg hover:scale-105 font-semibold px-6 py-2 transition-all duration-300 ease-in-out"
+              className="rounded bg-[#f3f0e4] text-lg hover:scale-105 px-6 py-2 transition-all duration-300 ease-in-out"
               onClick={toggleModal}
             >
               수정
@@ -310,10 +310,10 @@ const MyPageMine = ({ setMyPage, email }) => {
 
         {/* 닉,소개 */}
         <div className="mt-2 ml-12 text-dark">
-          <div className="mt-1 flex flex-col text-xl font-lg justify-start flex-grow">
+          <div className="mt-1 flex flex-col font-mono text-md text-[#3c2c2c] justify-start flex-grow">
             {memberInfo.email}
           </div>
-          <h3 className="mt-4 text-xl font-lg">{memberInfo.introduce}</h3>
+          <h3 className="mt-4 text-xl text-[#2a2424]">{memberInfo.introduce}</h3>
         </div>
       </div>
 
@@ -328,10 +328,10 @@ const MyPageMine = ({ setMyPage, email }) => {
                     ✖
                 </span>
 
-                <h2 className="text-2xl font-bold mb-6 border-b pb-2">프로필 수정</h2>
+                <h2 className="text-2xl mb-6 border-b pb-2">프로필 수정</h2>
                 
                 <div className="mt-4">
-                    <label className="block text-lg font-medium mb-2">닉네임</label>
+                    <label className="block text-lg mb-2">닉네임</label>
                     <input
                         value={nickName}
                         onChange={setNickName}
@@ -340,7 +340,7 @@ const MyPageMine = ({ setMyPage, email }) => {
                 </div>
 
                 <div className="mt-6">
-                    <label className="block text-lg font-medium mb-2">자기소개</label>
+                    <label className="block text-lg mb-2">자기소개</label>
                     <textarea
                         value={introduce ? introduce : ' '}
                         onChange={setIntroduce}
@@ -351,13 +351,13 @@ const MyPageMine = ({ setMyPage, email }) => {
 
                 <div className="flex justify-end mt-6">
                     <button
-                        className="mr-2 px-6 py-2 rounded-full bg-lightBlue hover:scale-105 font-semibold text-white transition-colors"
+                        className="mr-2 px-6 py-2 rounded-full bg-lightBlue hover:scale-105 text-white transition-colors"
                         onClick={saveIntroduction}
                     >
                         저장
                     </button>
                     <button
-                        className="px-6 py-2 rounded-full bg-danger hover:scale-105 font-semibold text-white transition-colors"
+                        className="px-6 py-2 rounded-full bg-danger hover:scale-105  text-white transition-colors"
                         onClick={deleteUser}
                     >
                         탈퇴
@@ -391,13 +391,13 @@ const MyPageMine = ({ setMyPage, email }) => {
 
                 <div className="flex justify-end mt-6">
                     <button
-                        className="mr-2 px-6 py-2 rounded-full bg-lightBlue hover:scale-105 font-semibold text-white transition-colors"
+                        className="mr-2 px-6 py-2 rounded-full bg-lightBlue hover:scale-105  text-white transition-colors"
                         onClick={saveProfileImage}
                     >
                         저장
                     </button>
                     <button
-                        className="px-6 py-2 rounded-full bg-danger hover:scale-105 font-semibold text-white transition-colors"
+                        className="px-6 py-2 rounded-full bg-danger hover:scale-105  text-white transition-colors"
                         onClick={deleteUserImage}
                     >
                         삭제

@@ -7,11 +7,11 @@ import { searchBackStageMembmerInfo } from 'apiList/member';
 const getTierImage = (tier) => {
   switch (tier) {
     case 'GOLD':
-      return '/image/tier/gold.png';
+      return '/image/tier/1.png';
     case 'SILVER':
-      return '/image/tier/silver.png';
+      return '/image/tier/3.png';
     case 'BRONZE':
-      return '/image/tier/bronze.png';
+      return '/image/tier/2.png';
     default:
       return null; // 기본 이미지
   }
