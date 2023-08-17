@@ -13,7 +13,7 @@ import Swal from 'sweetalert2';
 
 const alter_img_url = process.env.REACT_APP_ALTER_IMG_URL;
 
-const Videoplayer = ({ post_id, changeShow, type, changeLike }) => {
+const Videoplayer = ({ post_id, changeShow, type, changeLike, delItem }) => {
   let ignore = false;
 
   const [data, setData] = useState([]);
@@ -71,7 +71,7 @@ const Videoplayer = ({ post_id, changeShow, type, changeLike }) => {
           temp.likeCnt++;
         }
         temp.isLike = !temp.isLike;
-        setData({ ...temp });
+        setData({ ...temp }); 
         changeLike();
       },
       (error) => {
@@ -102,6 +102,7 @@ const Videoplayer = ({ post_id, changeShow, type, changeLike }) => {
           post_id,
           (response) => {
             changeShow();
+            delItem(post_id);
           },
           (error) => {
             
@@ -184,8 +185,11 @@ const Videoplayer = ({ post_id, changeShow, type, changeLike }) => {
               icon: 'success',
               html: '업로드가 완료되었습니다. <br /> 게시글에 가면 시청 가능합니다.',
               backdrop: false,
+              willClose: () => {
+                changeShow();
+                delItem(post_id);
+              }
             });
-            changeShow();
           },
           (error) => {
 
@@ -200,6 +204,9 @@ const Videoplayer = ({ post_id, changeShow, type, changeLike }) => {
       className="fixed top-0 left-0 z-40 w-screen h-full flex justify-center items-center bg-black bg-opacity-50"
       onClick={() => {
         changeShow();
+        if (type === "Likes" && !data.isLike) {
+          delItem(post_id);
+        }
       }}
     >
       <div
