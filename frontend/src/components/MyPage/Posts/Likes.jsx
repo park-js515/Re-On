@@ -33,7 +33,7 @@ import { searchLikePost, searchPublicPostDetail } from 'apiList/post';
             }
           },
           (error)=>{
-            console.log(error)
+            // console.log(error)
           }
         )
       }
@@ -45,7 +45,7 @@ import { searchLikePost, searchPublicPostDetail } from 'apiList/post';
        await searchPublicPostDetail(id, (response) => {
         setDetailPost(response.data.response)
       }, (error) => {
-        console.log(error);
+        // console.log(error);
       })
 
       setShowModal(true);
