@@ -964,6 +964,9 @@ export default function OpenViduApp() {
           let response_userTwoScore = receivedData.userTwoScore;
           let response_userOneSttScore = receivedData.userOneSttScore;
           let response_userTwoSttScore = receivedData.userTwoSttScore;
+          let response_userOneEmail = receivedData.userOneEmail;
+          let response_userTwoEmail = receivedData.userTwoEmail;
+
           if (response_userOneName !== null) {
             setUserOneName(response_userOneName);
           }
@@ -981,6 +984,12 @@ export default function OpenViduApp() {
           }
           if (response_userTwoSttScore !== 0) {
             setUserTwoSttScore(response_userTwoSttScore);
+          }
+          if (response_userOneEmail !== null) {
+            setUserOneEmail(response_userOneEmail);
+          }
+          if (response_userTwoEmail !== null) {
+            setUserTwoEmail(response_userTwoEmail);
           }
         } catch (error) {
           console.error('점수 시그널 수신 중 오류발생', error);
@@ -1158,16 +1167,12 @@ export default function OpenViduApp() {
                 />
 
                 <div className="prompter">
-                  <div className="prompterBar">
-                    <div className="prompterBtn"></div>
-                  </div>
-
-                  <div className="prompterBody">
-                    <pre>
-                      <div className="prompt">
-                        📜{videoData.script} <span className="pulse">_</span>
-                      </div>
-                    </pre>
+                  <div className="prompterBody ">
+                    <div className="prompt overflow-auto">
+                      <p>📜</p>
+                      {videoData.script}
+                      <span className="pulse">_</span>
+                    </div>
                   </div>
                 </div>
 
@@ -1188,7 +1193,7 @@ export default function OpenViduApp() {
                     <img
                       src="image/rank/rank-exit-btn.png"
                       alt="exit-btn"
-                      className="w-[250px] hover:scale-110 "
+                      className="w-[70px] hover:scale-110 "
                     />
                   </button>
                 </div>
