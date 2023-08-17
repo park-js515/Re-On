@@ -5,7 +5,9 @@ import "slick-carousel/slick/slick-theme.css";
 import Videoitem from "./Videoitem";
 import { searchTop10Post } from "apiList/post";
 
-const Hotlist = ({injectPostId, changeShow}) => {
+const Hotlist = () => {
+
+  const type = "AllPublic"
   const sliderRef = useRef(null);
   let ignore = false;
   const [data, setData] = useState([]);
@@ -19,7 +21,6 @@ const Hotlist = ({injectPostId, changeShow}) => {
           setData(prevData => [...prevData, ...newdata]);
         },
         (error) => {
-          console.log(error);
         }
       );
     }
@@ -73,11 +74,7 @@ const Hotlist = ({injectPostId, changeShow}) => {
                   <div key={item.id}>
                       <Videoitem
                           props={item}
-                          type="AllPublic"
-                          changeMode={() => {
-                              injectPostId(item.id);
-                              changeShow();
-                          }}
+                          type={type}
                       />
                   </div>
               ))}
