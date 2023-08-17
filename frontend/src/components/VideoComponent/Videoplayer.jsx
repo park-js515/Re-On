@@ -71,7 +71,7 @@ const Videoplayer = ({ post_id, changeShow, type, changeLike }) => {
           temp.likeCnt++;
         }
         temp.isLike = !temp.isLike;
-        setData({ ...temp });
+        setData({ ...temp }); 
         changeLike();
       },
       (error) => {
