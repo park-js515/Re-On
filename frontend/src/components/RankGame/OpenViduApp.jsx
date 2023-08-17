@@ -141,13 +141,13 @@ export default function OpenViduApp() {
 
   // 오픈비두 시그널 : 이메일
   useEffect(() => {
-    if (mySide === 'USER_ONE') {
-      setUserOneEmail(localStorage.getItem('email'));
-    } else if (mySide === 'USER_TWO') {
-      setUserTwoEmail(localStorage.getItem('email'));
-    }
-
     if (session) {
+      if (mySide === 'USER_ONE') {
+        setUserOneEmail(localStorage.getItem('email'));
+      } else if (mySide === 'USER_TWO') {
+        setUserTwoEmail(localStorage.getItem('email'));
+      }
+
       session.signal({
         data: JSON.stringify({
           userOneEmail: userOneEmail,
@@ -173,6 +173,7 @@ export default function OpenViduApp() {
       };
 
       session.on('signal:email', recieveEmail);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }
   }, [mySide]);
 
@@ -690,7 +691,8 @@ export default function OpenViduApp() {
         let response_userTwoScore = receivedData.userTwoScore;
         let response_userOneSttScore = receivedData.userOneSttScore;
         let response_userTwoSttScore = receivedData.userTwoSttScore;
-
+        let response_userOneEmail = receivedData.userOneEmail;
+        let response_userTwoEmail = receivedData.userTwoEmail;
         if (response_userOneName !== null) {
           setUserOneName(response_userOneName);
         }
@@ -709,6 +711,12 @@ export default function OpenViduApp() {
         if (response_userTwoSttScore !== 0) {
           setUserTwoSttScore(response_userTwoSttScore);
         }
+        if (response_userOneEmail !== null) {
+          setUserOneEmail(response_userOneEmail);
+        }
+        if (response_userTwoEmail !== null) {
+          setUserTwoEmail(response_userTwoEmail);
+        }
       };
 
       session.on('signal:score', onScoreReceived);
@@ -720,6 +728,8 @@ export default function OpenViduApp() {
         userTwoName,
         userTwoScore,
         userTwoSttScore,
+        userOneEmail,
+        userTwoEmail,
       );
 
       if (mySide === 'USER_ONE') {
@@ -745,6 +755,8 @@ export default function OpenViduApp() {
         userTwoScore: userTwoScore,
         userOneSttScore: userOneSttScore,
         userTwoSttScore: userTwoSttScore,
+        userOneEmail: userOneEmail,
+        userTwoEmail: userTwoEmail,
       };
 
       console.log('보냄 : (함수)현재 점수 시그널 데이터', dataToSend); // 로그
@@ -858,6 +870,15 @@ export default function OpenViduApp() {
       }
 
       // API 보내는 곳 (결과) if(resultGame !=== 999)
+      console.log(
+        resultGame,
+        '1',
+        userOneEmail,
+        '2',
+        userTwoEmail,
+        '3',
+        videoData,
+      );
       if (resultGame !== 999 && userOneEmail && userTwoEmail && videoData) {
         const body = {
           opponentEmail: opponentEmail,
@@ -1022,7 +1043,7 @@ export default function OpenViduApp() {
         setResultGame(0);
       }
     }
-  }, [userOneScore, userTwoScore, mySide]);
+  }, [userOneScore, userTwoScore, mySide, stage]);
 
   useEffect(() => {
     pauseVideo();
