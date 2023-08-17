@@ -168,6 +168,7 @@ public class PostQueryRepositoryImpl implements PostQueryRepository {
                         isCurrentMonth()
                         )
                 .orderBy(post.postLikes.size().desc())
+                .limit(10)
                 .fetch();
     }
 
