@@ -3,7 +3,7 @@ import RankerItem from './RankerItem';
 import { Container } from '@mui/system';
 import { searchTop5Member } from 'apiList/member';
 import { Link } from 'react-router-dom';
-import './UserInfo/UserInfo.css'
+import './UserInfo/UserInfo.css';
 const RankerList = () => {
   const [rankers, setRankers] = useState([]);
 
@@ -13,7 +13,7 @@ const RankerList = () => {
         setRankers(response.data.response);
       },
       (error) => {
-        console.log(error);
+        // console.log(error);
       },
     );
   }, []);
@@ -61,7 +61,7 @@ const RankerList = () => {
 
   return (
     <div className="card flex flex-col justify-center items-center mt-8 py-2 mx-2 text-white shadow-2xl">
-       <div className="absolute inset-0 bg-current bg-opacity-50 hover:cursor-pointer pointer-events-none"></div>
+      <div className="absolute inset-0 bg-current bg-opacity-50 hover:cursor-pointer pointer-events-none"></div>
       <h1 className="text-5xl mb-6 font-semibold">🏆 랭크TOP5</h1>
       {rankers.map((ranker, index) => (
         <div
@@ -75,7 +75,12 @@ const RankerList = () => {
               {getRankIcon(index)} {ranker.nickName}
             </div>
           </Link>
-          <div className="text-xl font-semibold" style={{color: getRankColorValue(ranker.tier)}}>{ranker.tier}</div>
+          <div
+            className="text-xl font-semibold"
+            style={{ color: getRankColorValue(ranker.tier) }}
+          >
+            {ranker.tier}
+          </div>
         </div>
       ))}
     </div>

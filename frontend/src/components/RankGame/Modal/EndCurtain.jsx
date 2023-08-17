@@ -33,7 +33,7 @@ const EndCurtain = ({
           // console.log(response);
         },
         (error) => {
-          console.log(error);
+          // console.log(error);
         },
       );
 
