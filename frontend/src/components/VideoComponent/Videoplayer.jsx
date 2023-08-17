@@ -13,7 +13,7 @@ import Swal from 'sweetalert2';
 
 const alter_img_url = process.env.REACT_APP_ALTER_IMG_URL;
 
-const Videoplayer = ({ post_id, changeShow, type, changeLike, delItem }) => {
+const Videoplayer = ({ post_id, changeShow, type, changeLike }) => {
   let ignore = false;
 
   const [data, setData] = useState([]);
@@ -71,7 +71,7 @@ const Videoplayer = ({ post_id, changeShow, type, changeLike, delItem }) => {
           temp.likeCnt++;
         }
         temp.isLike = !temp.isLike;
-        setData({ ...temp }); 
+        setData({ ...temp });
         changeLike();
       },
       (error) => {
@@ -102,7 +102,6 @@ const Videoplayer = ({ post_id, changeShow, type, changeLike, delItem }) => {
           post_id,
           (response) => {
             changeShow();
-            delItem(post_id);
           },
           (error) => {
             
@@ -185,11 +184,8 @@ const Videoplayer = ({ post_id, changeShow, type, changeLike, delItem }) => {
               icon: 'success',
               html: '업로드가 완료되었습니다. <br /> 게시글에 가면 시청 가능합니다.',
               backdrop: false,
-              willClose: () => {
-                changeShow();
-                delItem(post_id);
-              }
             });
+            changeShow();
           },
           (error) => {
 
@@ -200,17 +196,15 @@ const Videoplayer = ({ post_id, changeShow, type, changeLike, delItem }) => {
   };
   
   return (
+    
     <div
       className="fixed top-0 left-0 z-40 w-screen h-full flex justify-center items-center bg-black bg-opacity-50"
       onClick={() => {
         changeShow();
-        if (type === "Likes" && !data.isLike) {
-          delItem(post_id);
-        }
       }}
     >
       <div
-        className="flex w-8/12 h-[80vh] max-h-[80vh] bg-white p-6 rounded-xl shadow-2xl overflow-hidden"
+        className="flex w-8/12 h-[80vh] max-h-[80vh] bg-white p-6 rounded-xl shadow-2xl "
         onClick={(e) => e.stopPropagation()}
       >
         {/* 왼쪽 섹션 */}
