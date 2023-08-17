@@ -183,7 +183,7 @@ export default function OpenViduApp() {
     if (mySide === 'USER_ONE') {
       randomVideo(
         (response) => {
-          console.log('API : 랜덤 비디오', response.data.response);
+          // console.log('API : 랜덤 비디오', response.data.response);
           // 시그널 보내기 (API 정보와 플레이 요청 같이 보냄)
           session.signal({
             data: JSON.stringify({
@@ -205,7 +205,7 @@ export default function OpenViduApp() {
   if (session) {
     session.on('signal:playVideo', async (event) => {
       const data = JSON.parse(event.data); // 받은 시그널 데이터 파싱
-      console.log('받음 : 게임 정보, 상대 정보 데이터', data);
+      // console.log('받음 : 게임 정보, 상대 정보 데이터', data);
       if (data.playVideo && stage === 'READY') {
         setVideoData(data.apiData);
         // 비디오 데이터 호출 성공시
@@ -222,7 +222,7 @@ export default function OpenViduApp() {
       // Get a token from the OpenVidu deployment
       getToken().then(async (token) => {
         try {
-          console.log('오픈비두 토큰', token);
+          // console.log('오픈비두 토큰', token);
           await session.connect(token.response, { clientData: myUserName });
 
           let publisher = await OV.current.initPublisherAsync(undefined, {
@@ -346,7 +346,7 @@ export default function OpenViduApp() {
           },
         },
       );
-      console.log('오픈비두 응답', response);
+      // console.log('오픈비두 응답', response);
       return response.data;
     } catch (error) {
       console.error('오픈비두 토큰 받기 에러', error); // 오류 로깅
@@ -366,7 +366,7 @@ export default function OpenViduApp() {
           },
         },
       );
-      console.log('응답', response);
+      // console.log('응답', response);
       return response.data;
     } catch (error) {
       console.error('에러', error); // 오류 로깅
@@ -720,17 +720,17 @@ export default function OpenViduApp() {
       };
 
       session.on('signal:score', onScoreReceived);
-      console.log(
-        '받음 : (함수)현재 점수 데이터 시그널',
-        userOneName,
-        userOneScore,
-        userOneSttScore,
-        userTwoName,
-        userTwoScore,
-        userTwoSttScore,
-        userOneEmail,
-        userTwoEmail,
-      );
+      // console.log(
+      //   '받음 : (함수)현재 점수 데이터 시그널',
+      //   userOneName,
+      //   userOneScore,
+      //   userOneSttScore,
+      //   userTwoName,
+      //   userTwoScore,
+      //   userTwoSttScore,
+      //   userOneEmail,
+      //   userTwoEmail,
+      // );
 
       if (mySide === 'USER_ONE') {
         if (resultScore !== 0) {
@@ -759,7 +759,7 @@ export default function OpenViduApp() {
         userTwoEmail: userTwoEmail,
       };
 
-      console.log('보냄 : (함수)현재 점수 시그널 데이터', dataToSend); // 로그
+      // console.log('보냄 : (함수)현재 점수 시그널 데이터', dataToSend); // 로그
       await session.signal({
         type: 'score',
         data: JSON.stringify(dataToSend),
@@ -870,22 +870,14 @@ export default function OpenViduApp() {
       }
 
       // API 보내는 곳 (결과) if(resultGame !=== 999)
-      console.log(
-        resultGame,
-        '1',
-        userOneEmail,
-        '2',
-        userTwoEmail,
-        '3',
-        videoData,
-      );
+
       if (resultGame !== 999 && userOneEmail && userTwoEmail && videoData) {
         const body = {
           opponentEmail: opponentEmail,
           videoId: videoData.id,
           result: resultGame,
         };
-        console.log('API 게임 결과 보냄', body);
+        // console.log('API 게임 결과 보냄', body);
         registerBattleLog(
           body,
           (response) => {
@@ -996,15 +988,15 @@ export default function OpenViduApp() {
       };
 
       session.on('signal:score', onScoreReceived);
-      console.log(
-        '받음 : (useEffect)현재 점수 데이터 시그널',
-        userOneName,
-        userOneScore,
-        userTwoName,
-        userTwoScore,
-        userOneSttScore,
-        userTwoSttScore,
-      );
+      // console.log(
+      //   '받음 : (useEffect)현재 점수 데이터 시그널',
+      //   userOneName,
+      //   userOneScore,
+      //   userTwoName,
+      //   userTwoScore,
+      //   userOneSttScore,
+      //   userTwoSttScore,
+      // );
       return () => session.off('signal:score', onScoreReceived);
     }
   }, [session]);

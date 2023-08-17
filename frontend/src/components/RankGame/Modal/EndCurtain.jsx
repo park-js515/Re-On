@@ -30,8 +30,7 @@ const EndCurtain = ({
         videoId,
         formData,
         (response) => {
-          // console.log(response.data.response);
-          console.log(response);
+          // console.log(response);
         },
         (error) => {
           console.log(error);
@@ -57,7 +56,7 @@ const EndCurtain = ({
 
   useEffect(() => {
     if (countdown <= 0) {
-      // leaveSession();
+      leaveSession();
       return;
     }
 
