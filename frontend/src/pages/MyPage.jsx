@@ -10,9 +10,9 @@ const MyPage = () => {
   const [myPage, setMyPage] = useState(false);
   const { email } = useParams();
   return (
-    <div className='bg-[#fff] pt-8'>
+    <div className='pt-8'>
       
-        <div className="absolute top-0 left-0 w-full z--1 h-full z-0 grid-carousel bg-inss">
+        <div className="absolute top-0 left-0 w-full z--1 h-full z-0 grid-carousel bg-white">
             <ImageCarousel/>
         </div>
         
