@@ -1,6 +1,8 @@
 import React from "react";
 import { useState } from "react";
 import Videoplayer from "./Videoplayer";
+import ReactDOM from 'react-dom';
+
 const alter_img_url = process.env.REACT_APP_ALTER_IMG_URL
 
 const convertToK = (number) => {
@@ -14,7 +16,7 @@ const convertToK = (number) => {
     }
 }
 
-const Videoitem = ({props, type, delItem}) => {
+const Videoitem = ({props, type}) => {
     const moveToMyPage = (event) => {
         event.preventDefault();
         window.location.assign("/mypage/"+props.email)
@@ -36,9 +38,14 @@ const Videoitem = ({props, type, delItem}) => {
       }
       setIsLike((isLike)=>{return !isLike})
     }
+    
     return (
       <>
-      {show && <Videoplayer post_id={data.id} changeShow={changeShow} type={type} changeLike={changeLike} delItem={delItem}/>}
+      {/* react 가상돔 무적권 최상단에 위치시킴 앞에뜨게 ㄹ허ㅏㅜㄴㅇㄹ허ㅏㄴ */}
+      {show && ReactDOM.createPortal(
+      <Videoplayer post_id={data.id} changeShow={changeShow} type={type} changeLike={changeLike}/>,
+      document.getElementById('portal-root')
+    )}
       <div className="bg-white flex max-w-xl rounded shadow-md flex-col items-start justify-between transform transition-transform duration-300 hover:scale-105 hover:shadow-lg mx-2 my-4 pb-4">
         {/* 배경 투명으로 하기위해 inset0 포인터이벤트 없음 */}
         <div className="absolute inset-0 bg-current bg-opacity-50 hover:cursor-pointer pointer-events-none"></div>

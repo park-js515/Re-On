@@ -269,8 +269,8 @@ const SoloApp = () => {
               </div>
             )}
             <img
-              className="h-[190px] w-[280px]"
-              src="/image/character/cutereon2.png"
+              className="h-[190px] w-[200px] animate-slideInFromTop"
+              src="/image/character/cutesolo.png"
               alt=""
             />
 

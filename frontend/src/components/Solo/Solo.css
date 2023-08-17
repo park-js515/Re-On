@@ -55,3 +55,15 @@ video {
   right: 16px;
   z-index: -1;
 }
+
+@keyframes slideInFromTop {
+  0% {
+      transform: translateY(-100%);
+  }
+  50% {
+      transform: translateY(10%);
+  }
+  100% {
+      transform: translateY(0);
+  }
+}
