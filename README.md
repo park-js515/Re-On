@@ -97,14 +97,14 @@
             <a href="https://github.com/non-inss">
               <img src="https://avatars.githubusercontent.com/u/122503960?v=4" width="200">
               <br />
-              <b>skqlck</b>
+              <b>non-inss</b>
             </a> 
         </td>
         <td style="min-width: 150px;">
             <a href="https://github.com/skqlck">
               <img src="https://avatars.githubusercontent.com/u/95553204?v=4" width="200">
               <br />
-              <b>non-inss</b>
+              <b>skqlck</b>
             </a> 
         </td>
         <td style="min-width: 150px;">
