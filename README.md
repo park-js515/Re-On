@@ -170,15 +170,6 @@
 # RE:ON 📸
 
 # 링크
-
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/2eb8896b-3571-49d7-82c3-019a089961d7/Untitled.png)
-
-# REON
-
----
-
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/8c1f854a-2156-4721-9a9e-fcdc172128c5/Untitled.png)
-
 ---
 
 [RE:ON](https://i9c203.p.ssafy.io/)
