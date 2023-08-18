@@ -6,7 +6,7 @@
 
 | Application | Domain | Language | Framework |
 | ---- | ---- | ---- | ---- |
-| :white_check_mark: Desktop Web | :white_check_mark: AI | :white_check_mark: JavaScript | :white_check_mark: Vue.js |
+| :white_check_mark: Desktop Web | :white_check_mark: AI | :white_check_mark: JavaScript | :black_square_button: Vue.js |
 | :white_check_mark: Mobile Web | :white_check_mark: Big Data | :black_square_button: TypeScript | :white_check_mark: React |
 | :white_check_mark: Responsive Web | :black_square_button: Blockchain | :black_square_button: C/C++ | :black_square_button: Angular |
 | :black_square_button: Android App | :black_square_button: IoT | :black_square_button: C# | :white_check_mark: Node.js |
@@ -107,14 +107,14 @@
             <a href="https://github.com/non-inss">
               <img src="https://avatars.githubusercontent.com/u/122503960?v=4" width="200">
               <br />
-              <b>non-inss</b>
+              <b>skqlck</b>
             </a> 
         </td>
         <td style="min-width: 150px;">
             <a href="https://github.com/skqlck">
               <img src="https://avatars.githubusercontent.com/u/95553204?v=4" width="200">
               <br />
-              <b>skqlck</b>
+              <b>non-inss</b>
             </a> 
         </td>
         <td style="min-width: 150px;">
