@@ -169,7 +169,6 @@
 # 프로젝트 상세 설명📄
 <!-- 프로젝트 로고 -->
 # RE:ON 📸
-https://lab.ssafy.com/s09-webmobile1-sub2/S09P12C203/uploads/bb081bf8dd08ab7b6cf65f68b2c9928d/Untitled__1_.png
 
 # 링크
 
