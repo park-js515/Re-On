@@ -46,16 +46,17 @@
   - URL: https://i9c203.p.ssafy.io
 
 <!-- 자유 양식 -->
-![2](/uploads/7305028b253dfc4f9211a4729b2bf659/2.png) ![3](/uploads/763998e222bd88cf0869bb11fc25b1eb/3.png)
-![4](/uploads/59e5e7112ceb210981f5c1dfa8e66ce9/4.png) ![5](/uploads/470b4f175d95017528c2e3fb46547686/5.png)
-![6](/uploads/0db12990bd0b9f212b10d158e8662a9e/6.png) ![7](/uploads/76bf49d9dedefb6a283aaf3c175143f0/7.png)
-![8](/uploads/e289445cbeee48f786248f09313824a9/8.png) ![9](/uploads/caabb60bdd761e55e34d5ff390fefa14/9.png)
-![10](/uploads/6b647d30f570c06195863dfd1c268642/10.png) ![11](/uploads/be3e006189d19603bedb5df330a57410/11.png)
-![12](/uploads/f7c63301b2ba85dfa8d8f4612833187c/12.png) ![13](/uploads/3535a92e890f2966a6df9a2daadf5c8d/13.png)
-![14](/uploads/f012dd5c3da7b9cc9c0f0a0b31db4ea0/14.png) ![15](/uploads/c22668b502a050028fdfa183861fcd4e/15.png)
-![16](/uploads/18deb878354fda959eb5a229d58fd076/16.png) ![17](/uploads/17531abdedd9adfb1e9fbdd46f628eaa/17.png)
-![18](/uploads/8c09289401cdbcb1e501c743eda7f95d/18.png) ![19](/uploads/da9a720d7235dcd7cdd9d06ccb422496/19.png)
-![20](/uploads/57e1d88ced60884f3fccdf2d2023e3a1/20.png)
+| ![2](/uploads/7305028b253dfc4f9211a4729b2bf659/2.png) | ![3](/uploads/763998e222bd88cf0869bb11fc25b1eb/3.png) |
+|------------------------------------------------------|------------------------------------------------------|
+| ![4](/uploads/59e5e7112ceb210981f5c1dfa8e66ce9/4.png) | ![5](/uploads/470b4f175d95017528c2e3fb46547686/5.png) |
+| ![6](/uploads/0db12990bd0b9f212b10d158e8662a9e/6.png) | ![7](/uploads/76bf49d9dedefb6a283aaf3c175143f0/7.png) |
+| ![8](/uploads/e289445cbeee48f786248f09313824a9/8.png) | ![9](/uploads/caabb60bdd761e55e34d5ff390fefa14/9.png) |
+| ![10](/uploads/6b647d30f570c06195863dfd1c268642/10.png) | ![11](/uploads/be3e006189d19603bedb5df330a57410/11.png) |
+| ![12](/uploads/f7c63301b2ba85dfa8d8f4612833187c/12.png) | ![13](/uploads/3535a92e890f2966a6df9a2daadf5c8d/13.png) |
+| ![14](/uploads/f012dd5c3da7b9cc9c0f0a0b31db4ea0/14.png) | ![15](/uploads/c22668b502a050028fdfa183861fcd4e/15.png) |
+| ![16](/uploads/18deb878354fda959eb5a229d58fd076/16.png) | ![17](/uploads/17531abdedd9adfb1e9fbdd46f628eaa/17.png) |
+| ![18](/uploads/8c09289401cdbcb1e501c743eda7f95d/18.png) | ![19](/uploads/da9a720d7235dcd7cdd9d06ccb422496/19.png) |
+| ![20](/uploads/57e1d88ced60884f3fccdf2d2023e3a1/20.png) | |
 
 # 팀원소개 🤝
 
