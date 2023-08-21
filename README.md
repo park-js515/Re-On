@@ -1,5 +1,5 @@
 # 웹/모바일(웹 기술) WebRTC 프로젝트
-![Untitled__1_](/uploads/bb081bf8dd08ab7b6cf65f68b2c9928d/Untitled__1_.png)
+
 <!-- 필수 항목 -->
 
 ## 카테고리
@@ -47,6 +47,11 @@
 
 <!-- 자유 양식 -->
 
+# RE:ON 연기 연습 플랫폼
+
+![Untitled__1_](/uploads/bb081bf8dd08ab7b6cf65f68b2c9928d/Untitled__1_.png)
+
+  - site URL: https://i9c203.p.ssafy.io
 
 # 팀원소개 🤝
 
