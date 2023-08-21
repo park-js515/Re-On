@@ -223,7 +223,7 @@ REON은 다양한 작품의 명대사를 따라하며 즐기는 서비스입니�
 
 # 개발 스택🔧
 - Java, Spring, MySQL, Spring Security, JWT, Redis
-- React, HTML, CSS, OpenVidu, JavaScript
+- React, HTML, CSS, OpenVidu, JavaScript, TailwindCSS
 - Pytorch, ONNX
 
 
