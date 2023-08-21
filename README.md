@@ -51,7 +51,10 @@
 # RE:ON 연기 연습 플랫폼📸
 
 <div align=center>
-![Untitled__1_](/uploads/bb081bf8dd08ab7b6cf65f68b2c9928d/Untitled__1_.png)
+
+
+![Untitled__1_](/uploads/bb081bf8dd08ab7b6cf65f68b2c9928d/Untitled__1_.png){: width="700" height=""}
+
 
 ## [RE:ON](https://i9c203.p.ssafy.io/) 
 프로젝트 기간 :alarm_clock:<br/>
