@@ -31,7 +31,7 @@
 
   - Springboot, Spring Security, JPA, JWT Authentication, OAuth, REST API, Swagger
   
-  - React.js, Node.js, Tailwind, MUI
+  - React.js, Tailwind, Node.js, Tailwind, MUI
 
   - Face API, ONNX, axios
 
@@ -143,9 +143,11 @@ SNS와 유튜브 등에서 밈과 성대모사가 활발하게 퍼져나가고 �
 
 
 # AI 소개🛴
-## 종상
+예시
+![캡처](/uploads/e881beaad267ed3bb739d0050a17715c/캡처.PNG)
 
-
+# API 연동 규격서 
+https://i9c203.p.ssafy.io/swagger-ui/index.html#/
 
 # 시스템 구조도🏗️
 
