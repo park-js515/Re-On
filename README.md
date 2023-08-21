@@ -53,7 +53,7 @@
 <div align=center>
 
 
-![Untitled__1_](/uploads/bb081bf8dd08ab7b6cf65f68b2c9928d/Untitled__1_.png){: width="700" height=""}
+![Untitled__1_](/uploads/bb081bf8dd08ab7b6cf65f68b2c9928d/Untitled__1_.png){: width="850" height=""}
 
 :alarm_clock: 프로젝트 기간  : 2023-07-04 ~ 2023-08-18
 
