@@ -47,11 +47,78 @@
 
 <!-- 자유 양식 -->
 
-# RE:ON 연기 연습 플랫폼
+<!-- 프로젝트 로고 -->
+# RE:ON 연기 연습 플랫폼📸
 
 ![Untitled__1_](/uploads/bb081bf8dd08ab7b6cf65f68b2c9928d/Untitled__1_.png)
 
   - site URL: https://i9c203.p.ssafy.io
+
+# 링크
+[RE:ON](https://i9c203.p.ssafy.io/)
+
+
+
+
+
+<!-- 자유 양식 -->
+
+# 프로젝트 상세 설명📄
+
+
+# 프로젝트 기간
+
+2023-07-04 ~ 2023-08-18
+
+# REON 기획
+
+SNS와 유튜브 등에서 밈과 성대모사가 활발하게 퍼져나가고 있습니다. 이러한 트렌드를 반영하여, **사용자들이 연기를 손쉽게 연습하고, 공유하고 즐기는 플랫폼**의 필요성을 인지하게 되었습니다.
+
+# REON 소개
+
+
+# 기능 소개💡
+
+REON은 다양한 작품의 명대사를 따라하며 즐기는 서비스입니다. REON은 다음 기능을 통해 사용자들에게 **재미**를 선사하고자 합니다.
+| ![2](/uploads/7305028b253dfc4f9211a4729b2bf659/2.png) | ![3](/uploads/763998e222bd88cf0869bb11fc25b1eb/3.png) |
+|------------------------------------------------------|------------------------------------------------------|
+| ![4](/uploads/59e5e7112ceb210981f5c1dfa8e66ce9/4.png) | ![5](/uploads/470b4f175d95017528c2e3fb46547686/5.png) |
+| ![6](/uploads/0db12990bd0b9f212b10d158e8662a9e/6.png) | ![7](/uploads/76bf49d9dedefb6a283aaf3c175143f0/7.png) |
+| ![8](/uploads/e289445cbeee48f786248f09313824a9/8.png) | ![9](/uploads/caabb60bdd761e55e34d5ff390fefa14/9.png) |
+| ![10](/uploads/6b647d30f570c06195863dfd1c268642/10.png) | ![11](/uploads/be3e006189d19603bedb5df330a57410/11.png) |
+| ![12](/uploads/f7c63301b2ba85dfa8d8f4612833187c/12.png) | ![13](/uploads/3535a92e890f2966a6df9a2daadf5c8d/13.png) |
+| ![14](/uploads/f012dd5c3da7b9cc9c0f0a0b31db4ea0/14.png) | ![15](/uploads/c22668b502a050028fdfa183861fcd4e/15.png) |
+| ![16](/uploads/18deb878354fda959eb5a229d58fd076/16.png) | ![17](/uploads/17531abdedd9adfb1e9fbdd46f628eaa/17.png) |
+| ![18](/uploads/8c09289401cdbcb1e501c743eda7f95d/18.png) | ![19](/uploads/da9a720d7235dcd7cdd9d06ccb422496/19.png) |
+| ![20](/uploads/57e1d88ced60884f3fccdf2d2023e3a1/20.png) | |
+### 같이하기
+
+- 1:1 화상으로 연기 배틀을 진행하세요!
+- 한국인 감정을 학습한 AI모델이 연기를 채점합니다!
+- 여러분의 음성을 텍스트로 변환하여 점수에 반영해요!
+- 상대와 경쟁하여 높은 등급을 달성하세요!
+
+### 혼자하기
+
+- 사람들과 같이 하기 부담스러우신가요? 혼자 연습하고 싶으신가요?
+- 혼자하기 기능을 통해 원하는 작품을 선택하여 연기 점수를 확인할 수 있어요!
+
+### 투표해줘
+
+- 연기가 마음에 드셨나요?!
+- 연기 배틀을 종료하고, 여러분의 연기를 저장할 수 있어요!
+- 저장한 연기 영상을 다른 사람과 공유해요!
+- 많은 사랑을 받은 연기는 REON 인기 영상으로 진입합니다!
+
+# 시스템 구조도🏗️
+
+![캡처](/uploads/e881beaad267ed3bb739d0050a17715c/캡처.PNG)
+
+# 개발 스택🔧
+- Java, Spring, MySQL, Spring Security, JWT, Redis
+- React, HTML, CSS, OpenVidu, JavaScript
+- Pytorch, ONNX
+
 
 # 팀원소개 🤝
 
@@ -141,71 +208,6 @@
         </td>
     </tr>
 </table>
-
-
-
-<!-- 자유 양식 -->
-
-# 프로젝트 상세 설명📄
-<!-- 프로젝트 로고 -->
-# RE:ON 📸
-
-# 링크
-
-[RE:ON](https://i9c203.p.ssafy.io/)
-
-# 프로젝트 기간
-
-2023-07-04 ~ 2023-08-18
-
-# REON 기획
-
-SNS와 유튜브 등에서 밈과 성대모사가 활발하게 퍼져나가고 있습니다. 이러한 트렌드를 반영하여, **사용자들이 연기를 손쉽게 연습하고, 공유하고 즐기는 플랫폼**의 필요성을 인지하게 되었습니다.
-
-# REON 소개
-
-
-# 기능 소개💡
-
-REON은 다양한 작품의 명대사를 따라하며 즐기는 서비스입니다. REON은 다음 기능을 통해 사용자들에게 **재미**를 선사하고자 합니다.
-| ![2](/uploads/7305028b253dfc4f9211a4729b2bf659/2.png) | ![3](/uploads/763998e222bd88cf0869bb11fc25b1eb/3.png) |
-|------------------------------------------------------|------------------------------------------------------|
-| ![4](/uploads/59e5e7112ceb210981f5c1dfa8e66ce9/4.png) | ![5](/uploads/470b4f175d95017528c2e3fb46547686/5.png) |
-| ![6](/uploads/0db12990bd0b9f212b10d158e8662a9e/6.png) | ![7](/uploads/76bf49d9dedefb6a283aaf3c175143f0/7.png) |
-| ![8](/uploads/e289445cbeee48f786248f09313824a9/8.png) | ![9](/uploads/caabb60bdd761e55e34d5ff390fefa14/9.png) |
-| ![10](/uploads/6b647d30f570c06195863dfd1c268642/10.png) | ![11](/uploads/be3e006189d19603bedb5df330a57410/11.png) |
-| ![12](/uploads/f7c63301b2ba85dfa8d8f4612833187c/12.png) | ![13](/uploads/3535a92e890f2966a6df9a2daadf5c8d/13.png) |
-| ![14](/uploads/f012dd5c3da7b9cc9c0f0a0b31db4ea0/14.png) | ![15](/uploads/c22668b502a050028fdfa183861fcd4e/15.png) |
-| ![16](/uploads/18deb878354fda959eb5a229d58fd076/16.png) | ![17](/uploads/17531abdedd9adfb1e9fbdd46f628eaa/17.png) |
-| ![18](/uploads/8c09289401cdbcb1e501c743eda7f95d/18.png) | ![19](/uploads/da9a720d7235dcd7cdd9d06ccb422496/19.png) |
-| ![20](/uploads/57e1d88ced60884f3fccdf2d2023e3a1/20.png) | |
-### 같이하기
-
-- 1:1 화상으로 연기 배틀을 진행하세요!
-- 한국인 감정을 학습한 AI모델이 연기를 채점합니다!
-- 여러분의 음성을 텍스트로 변환하여 점수에 반영해요!
-- 상대와 경쟁하여 높은 등급을 달성하세요!
-
-### 혼자하기
-
-- 사람들과 같이 하기 부담스러우신가요? 혼자 연습하고 싶으신가요?
-- 혼자하기 기능을 통해 원하는 작품을 선택하여 연기 점수를 확인할 수 있어요!
-
-### 투표해줘
-
-- 연기가 마음에 드셨나요?!
-- 연기 배틀을 종료하고, 여러분의 연기를 저장할 수 있어요!
-- 저장한 연기 영상을 다른 사람과 공유해요!
-- 많은 사랑을 받은 연기는 REON 인기 영상으로 진입합니다!
-
-# 시스템 구조도🏗️
-
-![캡처](/uploads/e881beaad267ed3bb739d0050a17715c/캡처.PNG)
-
-# 개발 스택🔧
-- Java, Spring, MySQL, Spring Security, JWT, Redis
-- React, HTML, CSS, OpenVidu, JavaScript
-- Pytorch, ONNX
 
 #  RE:ON 문화 :passport_control:
 
