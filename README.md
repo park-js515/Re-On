@@ -154,10 +154,10 @@ SNS와 유튜브 등에서 밈과 성대모사가 활발하게 퍼져나가고 �
 # 개발 스택🔧
 
 ## Frontend
-![frontend](/uploads/0451d15c19e00004331111405343836d/frontend.PNG)
+![frontend](/uploads/0451d15c19e00004331111405343836d/frontend.PNG){: width="600" height=""}
 
 ## Backend
-![backend](/uploads/331eab97d023d514efb82463d18e2393/backend.PNG)
+![backend](/uploads/331eab97d023d514efb82463d18e2393/backend.PNG){: width="600" height=""}
 
 ## Infra
 ![INFRA](/uploads/b6b5d6907c3e8e4f66e55d6817ad8f00/INFRA.PNG)
@@ -166,7 +166,7 @@ SNS와 유튜브 등에서 밈과 성대모사가 활발하게 퍼져나가고 �
 ![AI](/uploads/3861f1c15859e65b30f87700331cb2fc/AI.PNG)
 
 ## Tool
-![REON_TOOL](/uploads/1f5409860a6bcbbd790eacefae9e4219/REON_TOOL.PNG)
+![REON_TOOL](/uploads/1f5409860a6bcbbd790eacefae9e4219/REON_TOOL.PNG){: width="500" height=""}
 
 # 팀원소개 🤝
 
