@@ -31,7 +31,7 @@
 
   - Springboot, Spring Security, JPA, JWT Authentication, OAuth, REST API, Swagger
   
-  - React.js, Tailwind, Node.js, Tailwind, MUI
+  - React.js, Node.js, Tailwind, MUI
 
   - Face API, ONNX, axios
 
