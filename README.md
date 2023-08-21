@@ -157,7 +157,7 @@ SNS와 유튜브 등에서 밈과 성대모사가 활발하게 퍼져나가고 �
 ![frontend](/uploads/0451d15c19e00004331111405343836d/frontend.PNG)
 
 ## Backend
-![backend](/uploads/542251b63277223f0b94c73ae24c1b8f/backend.PNG)
+![backend](/uploads/331eab97d023d514efb82463d18e2393/backend.PNG)
 
 ## Infra
 ![INFRA](/uploads/b6b5d6907c3e8e4f66e55d6817ad8f00/INFRA.PNG)
