@@ -143,7 +143,11 @@ SNS와 유튜브 등에서 밈과 성대모사가 활발하게 퍼져나가고 �
 
 
 # AI 소개🛴
-## ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ 수정 ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ
+### 사용자의 연기 영상을 원본 영상(배우의 연기 영상) 과 비교하여 점수를 산출합니다.
+- 비교 방법은 감정 분류를 통해 나온 감정 확률 값의 차이를 이용합니다.
+- 감정 분류는 얼굴 검출과 이미지 분류, 2가지 Task로 구성됩니다.
+- ![taskdescribe](/uploads/17c81f501ae6e930d2dca30bf65a0dc0/task_describe.png)
+- AI 모델 설정과 학습에 대한 상세한 설명은 [Chorong.md](https://lab.ssafy.com/s09-webmobile1-sub2/S09P12C203/-/blob/dev/Chorong.md).
 
 # API 연동 규격서 
 https://i9c203.p.ssafy.io/swagger-ui/index.html#/
@@ -225,7 +229,7 @@ https://i9c203.p.ssafy.io/swagger-ui/index.html#/
             <a href="https://github.com/skqlck">
               <img src="https://avatars.githubusercontent.com/u/95553204?v=4" width="200">
               <br />
-              <b>skqlck</b>
+              <b>skqlck-</b>
             </a> 
         </td>
         <td style="min-width: 150px;">
