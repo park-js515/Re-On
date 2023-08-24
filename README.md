@@ -18,7 +18,6 @@
 ## 프로젝트 소개
 
 * 프로젝트명: RE:ON (레온) AI를 활용한 연기 플랫폼
-* 서비스 특징: 웹/모바일(웹 기술) 프로젝트를 위한 스켈레톤 프로젝트
 * 주요 기능
   - 연기 배틀 (1vs1로 연기 배틀)
   - 연기 연습 (제공되는 영상으로 연기 연습 가능)
@@ -29,7 +28,7 @@
   
   - EC2, GCP(Google Cloud Platform)
 
-  - Springboot, Spring Security, JPA, JWT Authentication, OAuth, REST API, Swagger
+  - Springboot, Spring Security, JPA, QueryDSL, JWT Authentication, OAuth, REST API, Swagger
   
   - React.js, Tailwind, Node.js, Tailwind, MUI
 
@@ -95,6 +94,7 @@ SNS와 유튜브 등에서 밈과 성대모사가 활발하게 퍼져나가고 �
 - 저장한 연기 영상을 공유하여 다른 사용자들과 소통하고 평가할 수 있습니다.
 - 많은 사랑을 받은 연기는 REON 인기 영상으로 진입합니다.
 
+### 시연 시나리오
 
 |메인페이지|메인페이지|
 |:---:|:---:|
