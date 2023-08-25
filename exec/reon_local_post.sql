@@ -1,0 +1,63 @@
+-- MySQL dump 10.13  Distrib 8.0.34, for Win64 (x86_64)
+--
+-- Host: 127.0.0.1    Database: reon_local
+-- ------------------------------------------------------
+-- Server version	8.0.33
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!50503 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `post`
+--
+
+DROP TABLE IF EXISTS `post`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `post` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `create_date` datetime(6) DEFAULT NULL,
+  `modify_date` datetime(6) DEFAULT NULL,
+  `action_path` varchar(255) DEFAULT NULL,
+  `content` text,
+  `deleted` int NOT NULL,
+  `scope` varchar(255) DEFAULT NULL,
+  `title` varchar(50) DEFAULT NULL,
+  `member_id` bigint DEFAULT NULL,
+  `video_id` bigint DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FK83s99f4kx8oiqm3ro0sasmpww` (`member_id`),
+  KEY `FKmmwakoyvlv03v2syblbq7gj2p` (`video_id`),
+  CONSTRAINT `FK83s99f4kx8oiqm3ro0sasmpww` FOREIGN KEY (`member_id`) REFERENCES `member` (`id`),
+  CONSTRAINT `FKmmwakoyvlv03v2syblbq7gj2p` FOREIGN KEY (`video_id`) REFERENCES `video` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `post`
+--
+
+LOCK TABLES `post` WRITE;
+/*!40000 ALTER TABLE `post` DISABLE KEYS */;
+INSERT INTO `post` VALUES (1,'2023-08-14 16:37:23.429194','2023-08-14 17:04:32.781327','fb212b90-584d-4a3c-905f-fd98254c8499','업데이트 ',0,'PUBLIC','타이틀업데이트했다',1,1),(2,'2023-08-14 16:38:52.079004','2023-08-14 17:05:40.509759','227c475d-0bbe-4478-83a1-14d04bf9598f',NULL,0,'PRIVATE','롤의 신 홍 진 식',1,1),(3,'2023-08-14 16:38:54.132367','2023-08-14 16:38:54.132367','a831c83f-9405-43d4-b7ec-52497525b227',NULL,0,'PRIVATE',NULL,1,1),(4,'2023-08-14 16:38:57.154777','2023-08-14 16:38:57.154777','cd4e269a-a0d1-4c10-9762-82c9d22b5a37',NULL,0,'PRIVATE',NULL,1,1),(5,'2023-08-14 16:46:53.975992','2023-08-14 16:53:05.118630','98451949-e2c5-4a3f-bcdf-db037732562b',NULL,0,'PRIVATE','롤의 신 홍 진 식',2,1),(6,'2023-08-14 16:46:58.751344','2023-08-14 16:46:58.751344','6afed94c-8eac-4f25-85be-9359d47e3931',NULL,0,'PRIVATE',NULL,2,1),(7,'2023-08-14 16:47:01.857929','2023-08-14 16:47:01.857929','390bdb75-3a53-43d2-812b-9941ebfbb3e1',NULL,0,'PRIVATE',NULL,2,1);
+/*!40000 ALTER TABLE `post` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2023-08-18 12:09:16
