@@ -59,6 +59,11 @@
 ## [RE:ON](https://i9c203.p.ssafy.io/) :film_frames:
 연기를 쉽고 재밌게!!:cool: <br>
 
+![이미지](./assets/gif/같이하기-배틀룸GIF.gif)
+
+![이미지](./assets/images/REON_AI.PNG)
+
+<img src = "./assets/images/REON_AI.PNG">
 
 </div>
 
