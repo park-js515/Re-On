@@ -52,7 +52,7 @@
 <div align=center>
 
 
-![로고](./assets/images/logo.png){: width="600" height=""}
+![로고](./assets/images/logo.png){: width="800" height=""}
 
 :alarm_clock: 프로젝트 기간  : 2023-07-04 ~ 2023-08-18
 
