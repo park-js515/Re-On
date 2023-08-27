@@ -110,10 +110,6 @@
     ![reon-result-1](./assets/AI/AI_reon-result-1.png)
 
     ![reon-info-1](./assets/AI/AI_reon-info-1.png)
-
-    ![Untitled](/uploads/518a460362aa65e2463abc1bf0ccd796/reon-result-1.png)
-    
-    ![info.PNG](/uploads/d7ccad048f8e06d454a73a8df74ca881/reon-info-1.png)
     
     - 종합평가
         - 학습 데이터와 검증 데이터에 대해 모두 좋은 결과를 얻었다. 데이터 2,3,4 분할로 조금 더 학습시키면 좋은 결과를 얻을 수 있을 듯 하다. 4epoch부터 다소 그래프가 평평해진 모습으로 보았을 때, 배치사이즈와 학습률을 낮춰서 다음 학습을 진행시키면 될 듯 하다.
@@ -128,10 +124,6 @@
 
     ![reon-info-2](./assets/AI/AI_reon-info-2.png)
     
-    ![Untitled](/uploads/f722dd9de221eeab31244ca80b172cae/reon-result-2.png)
-    
-    ![result-2-info2.PNG](/uploads/1ec5fbb49125a262a7395b3657bd6c0c/reon-info-2.png)
-    
     - 종합평가
         - 데이터 1분할에 비해 크게 나아진 점은 없다. 좋은 점이라면 새로운 데이터(2분할 데이터)에 대해서 예측 성능이 떨어지지 않았다는 점이고, 나쁜 점이라면, 새로운 학습에 대해서 예측 성능이 나아지지 않았다는 것이다. 일단 3분할 4분할 데이터에 대해서도 학습을 진행
         - 배치와 학습률 낮춰서 다음 학습 진행
@@ -145,10 +137,6 @@
     ![reon-result-3](./assets/AI/AI_reon-result-3.png)
 
     ![reon-info-3](./assets/AI/AI_reon-info-3.png)
-
-    ![Untitled](/uploads/aa8e3be86eae569dcdff74c697b81166/reon-result-3.png)
-    
-    ![reon-info-3.PNG](/uploads/524aa266265e0e616f45078c29875587/reon-info-3.png)
     
     - 종합 평가
         - 정확도가 오르긴 했지만, 과적합 된 상황이 눈에 띈다. 정확도는 10epoch 이후에 크게 달라진 점이 없고, Loss는 점점 증가하는 추세다.
@@ -163,10 +151,6 @@
     ![reon-result-4](./assets/AI/AI_reon-result-4.png)
 
     ![reon-info-4](./assets/AI/AI_reon-info-4.png)
-
-    ![Untitled](/uploads/8ebb3b329dccef1ebe397921ac01df69/reon-result-4.png)
-    
-    ![result-4-info.PNG](/uploads/b652dfe312412eb09fe8fc0450862154/reon-info-4.png)
     
     - 종합평가
         - 항상 검증 데이터에 대한 정확도는 상한이 80이고, 손실은 0.6정도가 하한이다. 일정 수준에서 항상 못벗어나는 모습을 보이는데, 아마 local minima에 갇힌 듯 보인다. 2분할 학습으로 돌아가거나 처음부터 AdamW를 활용해서 학습을 해도 되겠지만, 프로젝트 기간 상 여기서 학습을 종료한다.
@@ -177,8 +161,6 @@
     - 데이터 분할 학습은 처음이라 다소 부족한 부분이 있었을 것이다. 하지만 처음 사용에 염두에 두었던 모델에 비해 훨씬 좋은 성능을 보였고, 서비스를 제공하는 데에 문제는 없을 듯 하다.
     
     ![beforeafter](./assets/AI/AI_beforeafter.png)
-
-    ![Untitled](/uploads/a4f86dca19abf46147b2d3bae39ee885/beforeafter.png)
     
 - Bad
     - 학습 후에 결과에 대한 저장이나 관리가 다소 소홀했다. 결과 그래프나 다른 부분들을 자주 놓쳐서 다시 학습하는 일도 발생했다.
