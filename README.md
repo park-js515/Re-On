@@ -145,7 +145,9 @@ SNS와 유튜브 등에서 밈과 성대모사가 활발하게 퍼져나가고 �
 ### 사용자의 연기 영상을 원본 영상(배우의 연기 영상) 과 비교하여 점수를 산출합니다.
 - 비교 방법은 감정 분류를 통해 나온 감정 확률 값의 차이를 이용합니다.
 - 감정 분류는 얼굴 검출과 이미지 분류, 2가지 Task로 구성됩니다.
-- ![taskdescribe](/uploads/17c81f501ae6e930d2dca30bf65a0dc0/task_describe.png)
+- ![taskdescribe](./assets/AI/AI_task_describe.png)
+
+
 - AI 모델 설정과 학습에 대한 상세한 설명은 [Chorong.md](https://lab.ssafy.com/s09-webmobile1-sub2/S09P12C203/-/blob/dev/Chorong.md).
 
 # API 연동 규격서 
